@@ -31,10 +31,10 @@ function plugin_tag_check_config($verbose=false) {
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
    
-   $PLUGIN_HOOKS['csrf_compliant']['formcreator'] = true;
+   $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
 
    // Add specific CSS
-   //$PLUGIN_HOOKS['add_css']['formcreator'][] = "css/styles.css";
+   //$PLUGIN_HOOKS['add_css']['tag'][] = "css/styles.css";
 
    if (strpos($_SERVER['REQUEST_URI'], "front/helpdesk.public.php") !== false) {
       $PLUGIN_HOOKS['add_javascript']['pdf'][] = 'scripts/helpdesk.js';
