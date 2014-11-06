@@ -35,41 +35,36 @@ function plugin_tag_check_prerequisites() {
  * @param string $verbose Set true to show all messages (false by default)
  * @return boolean
  */
-function plugin_tag_check_config($verbose=false)
-{
+function plugin_tag_check_config($verbose=false) {
    return true;
 }
 
 /**
  * Initialize all classes and generic variables of the plugin
  */
-function plugin_init_tag()
-{
+function plugin_init_tag() {
    global $PLUGIN_HOOKS;
+   
+   $PLUGIN_HOOKS['csrf_compliant']['formcreator'] = true;
 
    // Add specific CSS
-   $PLUGIN_HOOKS['add_css']['formcreator'][]="css/styles.css";
+   //$PLUGIN_HOOKS['add_css']['formcreator'][] = "css/styles.css";
 
    if (strpos($_SERVER['REQUEST_URI'], "front/helpdesk.public.php") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['formcreator'][] = 'scripts/helpdesk.js';
+      $PLUGIN_HOOKS['add_javascript']['pdf'][] = 'scripts/helpdesk.js';
    } elseif(strpos($_SERVER['REQUEST_URI'], "front/central.php") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['formcreator'][] = 'scripts/homepage.js';
+      $PLUGIN_HOOKS['add_javascript']['pdf'][] = 'scripts/homepage.js';
    }
 
    if (isset($_SESSION['glpiactiveprofile'])) {
       if ($_SESSION['glpiactiveprofile']['interface'] == 'helpdesk') {
-         $PLUGIN_HOOKS['add_javascript']['formcreator'][] = 'scripts/helpdesk-menu.js';
+         $PLUGIN_HOOKS['add_javascript']['pdf'][] = 'scripts/helpdesk-menu.js';
       }
    }
    $PLUGIN_HOOKS['add_javascript']['formcreator'][] = 'scripts/forms-validation.js.php';
 
-   // Set the plugin CSRF compliance (required in GLPI 0.84)
-   $PLUGIN_HOOKS['csrf_compliant']['formcreator'] = true;
-
-
    // Add a link in the main menu plugins for technician and admin panel
    $PLUGIN_HOOKS['menu_entry']['formcreator'] = 'front/formlist.php';
-
 
    // Config page
    $plugin = new Plugin();
