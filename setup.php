@@ -20,7 +20,7 @@ function plugin_version_tag()
  *
  * @return boolean
  */
-function plugin_formcreator_check_prerequisites ()
+function plugin_tag_check_prerequisites ()
 {
    if (version_compare(GLPI_VERSION,'0.84','lt') || version_compare(GLPI_VERSION,'0.85','ge')) {
       echo __('This plugin requires GLPI >= 0.84 and GLPI < 0.85', 'formcreator');
@@ -36,21 +36,15 @@ function plugin_formcreator_check_prerequisites ()
  * @param string $verbose Set true to show all messages (false by default)
  * @return boolean
  */
-function plugin_formcreator_check_config($verbose=false)
+function plugin_tag_check_config($verbose=false)
 {
-   if (true) { // Your configuration check
-      return true;
-   }
-   if ($verbose) {
-      echo _x('plugin', 'Installed / not configured');
-   }
-   return false;
+   return true;
 }
 
 /**
  * Initialize all classes and generic variables of the plugin
  */
-function plugin_init_formcreator ()
+function plugin_init_tag()
 {
    global $PLUGIN_HOOKS;
 
