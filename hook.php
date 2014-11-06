@@ -4,8 +4,7 @@
  *
  * @return boolean True if success
  */
-function plugin_formcreator_install()
-{
+function plugin_tag_install() {
    $version   = plugin_version_tag();
    $migration = new Migration($version['version']);
 
@@ -21,8 +20,7 @@ function plugin_formcreator_install()
          }
       }
    }
-
-   return true ;
+   return true;
 }
 
 /**
@@ -30,8 +28,7 @@ function plugin_formcreator_install()
  *
  * @return boolean True if success
  */
-function plugin_formcreator_uninstall()
-{
+function plugin_tag_uninstall() {
    // Parse inc directory
    foreach (glob(dirname(__FILE__).'/inc/*') as $filepath) {
       // Load *.class.php files and get the class name
@@ -44,16 +41,14 @@ function plugin_formcreator_uninstall()
          }
       }
    }
-   return true ;
+   return true;
 }
 
 /**
  * Define Dropdown tables to be manage in GLPI :
  */
-function plugin_formcreator_getDropdown()
-{
-   return array(
-       'PluginFormcreatorHeader'   => _n('Header', 'Headers', 2, 'formcreator'),
+function plugin_tag_getDropdown() {
+   return array('PluginFormcreatorHeader'   => _n('Header', 'Headers', 2, 'formcreator'),
        'PluginFormcreatorCategory' => _n('Form category', 'Form categories', 2, 'formcreator'),
    );
 }

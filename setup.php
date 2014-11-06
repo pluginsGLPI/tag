@@ -20,8 +20,7 @@ function plugin_version_tag()
  *
  * @return boolean
  */
-function plugin_tag_check_prerequisites ()
-{
+function plugin_tag_check_prerequisites() {
    if (version_compare(GLPI_VERSION,'0.84','lt') || version_compare(GLPI_VERSION,'0.85','ge')) {
       echo __('This plugin requires GLPI >= 0.84 and GLPI < 0.85', 'formcreator');
    } else {
