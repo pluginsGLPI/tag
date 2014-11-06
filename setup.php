@@ -1,24 +1,16 @@
 <?php
-/**
- * Define the plugin's version and informations
- *
- * @return Array [name, version, author, homepage, license, minGlpiVersion]
- */
-function plugin_version_tag()
-{
+
+function plugin_version_tag() {
    return array('name'       => _n('Form', 'Forms', 2, 'formcreator'),
             'version'        => '0.84-2.0',
-            'author'         => '<a href="mailto:jmoreau@teclib.com">Jérémy MOREAU</a>
-                                  - <a href="http://www.teclib.com">Teclib\'</a>',
+            'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
             'homepage'       => 'http://www.teclib.com',
-            'license'        => '<a href="../plugins/formcreator/LICENSE" target="_blank">GPLv2</a>',
+            'license'        => '',
             'minGlpiVersion' => "0.84");
 }
 
 /**
  * Check plugin's prerequisites before installation
- *
- * @return boolean
  */
 function plugin_tag_check_prerequisites() {
    if (version_compare(GLPI_VERSION,'0.84','lt') || version_compare(GLPI_VERSION,'0.85','ge')) {
@@ -31,17 +23,11 @@ function plugin_tag_check_prerequisites() {
 
 /**
  * Check plugin's config before activation
- *
- * @param string $verbose Set true to show all messages (false by default)
- * @return boolean
  */
 function plugin_tag_check_config($verbose=false) {
    return true;
 }
 
-/**
- * Initialize all classes and generic variables of the plugin
- */
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
    
