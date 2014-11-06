@@ -1,8 +1,8 @@
 <?php
 
 function plugin_version_tag() {
-   return array('name'       => _n('Form', 'Forms', 2, 'formcreator'),
-            'version'        => '0.84-2.0',
+   return array('name'       => __('Gestion des tags', 'tag'), //_n('Form', 'Forms', 2, 'formcreator'),
+            'version'        => '0.1',
             'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '',
