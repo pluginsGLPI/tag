@@ -26,7 +26,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    
    return $sopt;
 }
-
+/*
 function casParticulier() {
    if (isset($_REQUEST["contains"]) && isset($_REQUEST["field"])) {
       foreach ($_REQUEST["field"] as $index => $field) {
@@ -60,7 +60,7 @@ function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
   
    return "$link ( `glpi_plugin_tag_etiquettes`.`entities_id` IS NOT NULL)";
 }
-
+*/
 /**
  * Install all necessary elements for the plugin
  *

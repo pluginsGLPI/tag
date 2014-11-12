@@ -115,7 +115,7 @@ class PluginTagEtiquette extends CommonDropdown {
       return $input;
    }*/
 
-   public static function install(Migration $migration) { // OK
+   public static function install(Migration $migration) {
       $table = getTableForItemType(__CLASS__);
       if (!TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
@@ -129,26 +129,17 @@ class PluginTagEtiquette extends CommonDropdown {
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       }
-
-      /*
-      // Migration from previous version
-      if (TableExists('glpi_plugin_formcreator_titles')) {
-         $query = "INSERT INTO `$table` (`id`, `name`, `comment`)
-                     SELECT `id`, CONCAT('Header ', `id`) AS name, `name` AS comment FROM glpi_plugin_formcreator_titles";
-         $GLOBALS['DB']->query($query);
-         $GLOBALS['DB']->query("DROP TABLE glpi_plugin_formcreator_titles");
-      }*/
       
       return true;
       }
 
-   public static function uninstall() { // OK
+   public static function uninstall() {
       $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
       return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
    }
    
    public function cleanDBonPurge() { //nom de la fonction correct ?
-      Toolbox::logDebug("cleanDBonPurge()");
+      Toolbox::logDebug("cleanDBonPurge()"); //DEBUG
       //TODO : Coder cette partie
    }
 }
