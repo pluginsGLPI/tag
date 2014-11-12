@@ -23,6 +23,35 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    
    return $sopt;
 }
+
+function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
+   global $CFG_GLPI, $INFOFORM_PAGES;
+
+   Toolbox::logDebug("giveItem : ".$field);
+   switch ($field) {
+      case "glpi_plugin_example.name" :
+         $out= "<a href=\"".$CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$type]."?ID=".$data['ID']."\">";
+         $out.= $data["ITEM_$num"];
+         if ($CFG_GLPI["view_ID"]||empty($data["ITEM_$num"])) $out.= " (".$data["ID"].")";
+         $out.= "</a>";
+         return $out;
+         break;
+      case "10500":
+         $tab = array();
+         //tag3$$3$$$$tag2$$2
+         $tags = explode("$$$$", $data["ITEM_$num"]);
+         //array(tag3$$3, tag2$$2)
+         foreach ($tags as $tag) {
+            $tmp = explode("$$", $tag);
+            $tab[] = $tmp[0];
+         }
+         $out = "<span class='tag_list'>" . implode(",", $tab). "</span>";
+         return $out;
+         break;
+   }
+   return "";
+}
+
 /*
 function casParticulier() {
    if (isset($_REQUEST["contains"]) && isset($_REQUEST["field"])) {
