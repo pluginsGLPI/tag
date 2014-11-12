@@ -41,7 +41,6 @@ function plugin_init_tag() {
       'js/chosen.native.js', 'js/mask_line.js');
    }
    
-   // #4 : Spec : Les tags sont modifiables
    /*
    $PLUGIN_HOOKS['item_add']['tag']    = 'plugin_item_add_tag';
    $PLUGIN_HOOKS['item_update']['tag'] = 'plugin_item_update_tag';
@@ -49,22 +48,13 @@ function plugin_init_tag() {
    */
    //$PLUGIN_HOOKS['item_purge']['tag'] = 'plugin_item_purge_tag';
    //$PLUGIN_HOOKS['item_restore']['tag'] = 'plugin_item_restore_tag';
-   
-   //$PLUGIN_HOOKS['item_restore']['PLUGIN_NAME'] = 'plugin_item_restore_PLUGIN_NAME';
-
-   /*
-   if (isset($_SESSION['glpiactiveprofile'])) {
-      if ($_SESSION['glpiactiveprofile']['interface'] == 'helpdesk') {
-         $PLUGIN_HOOKS['add_javascript']['tag'][] = 'scripts/helpdesk-menu.js';
-      }
-   } */
 
    // Add a link in the main menu plugins for technician and admin panel
    $PLUGIN_HOOKS['menu_entry']['tag'] = 'front/formlist.php';
 
    // Config page
-   $plugin = new Plugin();
    $links  = array();
+   $plugin = new Plugin();
    if (Session::haveRight('config','w') && $plugin->isActivated("tag")) {
       $PLUGIN_HOOKS['config_page']['tag'] = 'front/form.php';
       $links['config'] = '/plugins/formcreator/front/form.php';

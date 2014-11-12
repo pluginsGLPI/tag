@@ -14,11 +14,3 @@ Ext.onReady(function() {
       }
    });
 });
-
-/*
-$(document).ready(function() {
-   var resultat = $("#mainformtable tr").eq(0).after(html_code_ticket);
-   if (resultat.length == 0) {
-      console.log('FAIL to add tr');
-   }
-*/

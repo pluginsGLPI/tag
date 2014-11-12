@@ -6,31 +6,6 @@ function getNumColonne() {
       }
    }
 }
-/*
-function getUrlParameters()
-{
-   //Analyse de l'URL :
-   var sPageURL = window.location.search.substring(1);
-   var sURLVariables = sPageURL.split('&'); var tab = [];
-   for (var i = 0; i < sURLVariables.length; i++) 
-   {
-      var sParameterName = sURLVariables[i].split('=');
-      tab[i] = sParameterName[1];
-   }
-   return tab;
-}
-
-function getActiveFilters() {
-   
-   var parameters = getParameters(); //getUrlParameters();
-   var tab = [];
-   while (parameters.indexOf("10500") != -1) {
-      index = parameters.indexOf("10500");
-      tab.push( parameters[index+2]);
-      parameters[index] = "";
-   }
-   return tab;
-}*/
 
 function getActiveFilters() {
    var tab = [];
@@ -66,7 +41,7 @@ function mask() {
       var text = $(".tab_cadrehov .tab_bg_1:eq("+i+") td:eq("+num_colonne+")").text();
       var str_tab = text.split(",");
       if (! arrayInArray(filters, str_tab)) {
-         //Mask the line i
+         //Mask the line i :
          $(".tab_cadrehov .tab_bg_1:eq("+i+")").hide();
          haveMaskColonns = true;
       }
@@ -77,6 +52,6 @@ function mask() {
    }
 }
 
-$(document).ready(function() {
+$(document).ready(function() { //Ext.onReady(function() {
    mask();
 });

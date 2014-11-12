@@ -1,14 +1,11 @@
 <?php
 
 function plugin_tag_getAddSearchOptions($itemtype) {
-   //global $LANG;
-
    $sopt = array();
-   
-   //$sopt[strtolower($itemtype)] = self::getTypeName(2);
    
    //Reserved Range 10500-10530
    $rng1 = 10500;
+   //$sopt[strtolower($itemtype)] = self::getTypeName(2);
 
    $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes';
    $sopt[$rng1]['field']     = 'name';
@@ -27,15 +24,8 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    //$sopt[$rng1]['massiveaction'] = false;
    $sopt[$rng1]['joinparams']    = array('jointype' => 'items_id'); //itemtype_item
    
-   
-   
    return $sopt;
 }
-/*
-function plugin_tag_forceGroupBy($type) {
-   //return " GROUP BY `glpi_tickets`.id ";
-   return true;
-}*/
 
 function casParticulier() {
    if (isset($_REQUEST["contains"]) && isset($_REQUEST["field"])) {
@@ -49,90 +39,28 @@ function casParticulier() {
 }
 
 function plugin_tag_addSelect($type, $id, $num) {
-   Toolbox::logDebug("addSelect", $type, $id, $num);
-
-   //$searchopt = &Search::getOptions($type);
-   //$table = $searchopt[$id]["table"];
-   //$field = $searchopt[$id]["field"];
-
-   switch ($type) {
-      default:
-         if (casParticulier()) {
-            return "'' as ITEM_$num, ";
-         }
-         return "GROUP_CONCAT(`glpi_plugin_tag_etiquettes`.`name`) AS ITEM_$num, ";
+   if (casParticulier()) {
+      return "'' as ITEM_$num, ";
    }
+   return "GROUP_CONCAT(`glpi_plugin_tag_etiquettes`.`name`) AS ITEM_$num, ";
 }
 
 function plugin_tag_addLeftJoin($itemtype, $ref_table, $new_table, $linkfield,
       &$already_link_tables) {
    
-   switch ($itemtype) { //echo $new_table.".".$linkfield."<br/>";
-      default :
-         return "LEFT JOIN `glpi_plugin_tag_etiquetteitems` ON (`glpi_".strtolower($itemtype)."s`.`id` = `glpi_plugin_tag_etiquetteitems`.`items_id`) 
-                  LEFT JOIN `glpi_plugin_tag_etiquettes` ON (`glpi_plugin_tag_etiquettes`.`id` = `glpi_plugin_tag_etiquetteitems`.`plugin_tag_etiquettes_id`) ";
-   }
+   return "LEFT JOIN `glpi_plugin_tag_etiquetteitems` ON (`glpi_".strtolower($itemtype)."s`.`id` = `glpi_plugin_tag_etiquetteitems`.`items_id`) 
+            LEFT JOIN `glpi_plugin_tag_etiquettes` ON (`glpi_plugin_tag_etiquettes`.`id` = `glpi_plugin_tag_etiquetteitems`.`plugin_tag_etiquettes_id`) ";
 }
-/*
-function plugin_tag_addDefaultWhere($type) {
-   return "`glpi_plugin_tag_etiquettes`.`name` IN ('tag3', 'tag2')";
-   //if ($type == 'PluginFusioninventoryTaskjob') {
-      return " ( select count(*) FROM `glpi_plugin_fusioninventory_taskjobstates`
-         WHERE plugin_fusioninventory_taskjobs_id= `glpi_plugin_fusioninventory_taskjobs`.`id`
-         AND `state`!='3' )";
-   //}
-}
-*/
 
 function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
-
-   $searchopt = &Search::getOptions($type);
-   $table = $searchopt[$id]["table"];
-   $field = $searchopt[$id]["field"];
-   
-   //Toolbox::logDebug("searchopt :");
-   //Toolbox::logDebug($searchopt);
-   
-   Toolbox::logDebug($link, $nott, $type, $id, $val);
-   
-   //echo "link";
-   //print_r($link);
-   //echo "/link";
-   
-   //if ($link == ' ')
       
    if ($link == ' OR') {
       $link = ' AND';
    }
-   
-   /*
-   $ids = explode(',', $val);
-   if (count($ids) >= 1) {
-      return $link." `$table`.`id` IN (".implode(',', $ids).")";
-   } else {
-      return "";
-   }*/
-
-   switch ($type) {
-      default:
-         return "$link ( `glpi_plugin_tag_etiquettes`.`entities_id` IS NOT NULL)";
-         return "$link `glpi_plugin_tag_etiquettes`.`name` IN ('$val')";
-   }
+  
+   return "$link ( `glpi_plugin_tag_etiquettes`.`entities_id` IS NOT NULL)";
 }
 
-/*
- function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
-
-//$searchopt = &Search::getOptions($type);
-//$table = $searchopt[$id]["table"];
-//$field = $searchopt[$id]["field"];
-
-switch ($type) {
-default:
-return "1=1";
-}
-}*/
-   
 /**
  * Install all necessary elements for the plugin
  *
@@ -158,6 +86,15 @@ function plugin_tag_install() {
 }
 
 /**
+ * Define Dropdown tables to be manage in GLPI :
+ */
+function plugin_tag_getDropdown() {
+   return array('PluginTagEtiquette'   => __('Etiquette', 'tag'),
+         'PluginEtiquetteItem' => _n('Etiquette item', 'Etiquette items', 2, 'formcreator'),
+   );
+}
+
+/**
  * Uninstall previously installed elements of the plugin
  *
  * @return boolean True if success
@@ -176,13 +113,4 @@ function plugin_tag_uninstall() {
       }
    }
    return true;
-}
-
-/**
- * Define Dropdown tables to be manage in GLPI :
- */
-function plugin_tag_getDropdown() {
-   return array('PluginTagEtiquette'   => __('Etiquette', 'tag'),
-         'PluginEtiquetteItem' => _n('Etiquette item', 'Etiquette items', 2, 'formcreator'),
-   );
 }
