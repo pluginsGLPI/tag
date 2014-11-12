@@ -34,9 +34,11 @@ function plugin_init_tag() {
    
    if (strpos($_SERVER['REQUEST_URI'], "/plugins/") === false
       && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array('js/jquery-1.11.1.min.js', 'js/show_tags.js.php');
+      $PLUGIN_HOOKS['add_javascript']['tag'] = array('js/jquery-1.11.1.min.js',
+       'js/chosen.native.js', 'js/show_tags.js.php');
    } elseif (strpos($_SERVER['REQUEST_URI'], "/front/ticket.php") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array('js/jquery-1.11.1.min.js', 'js/mask_line.js');
+      $PLUGIN_HOOKS['add_javascript']['tag'] = array('js/jquery-1.11.1.min.js', 
+      'js/chosen.native.js', 'js/mask_line.js');
    }
    
    // #4 : Spec : Les tags sont modifiables

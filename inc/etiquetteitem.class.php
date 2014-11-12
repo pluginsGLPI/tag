@@ -1,15 +1,17 @@
 <?php
 include ('../../../inc/includes.php');
 
-class PluginTagEtiquetteItem extends CommonDBTM {
+class PluginTagEtiquetteItem extends CommonDBRelation {
    
-   static function canCreate() {
-      return Session::haveRight('config', 'w');
-   }
+   // From CommonDBRelation
+   static public $itemtype_1    = 'PluginTagEtiquette';
+   static public $items_id_1    = 'plugin_tag_etiquettes_id';
+   static public $take_entity_1 = true;
    
-   static function canView() {
-      return Session::haveRight('config', 'r');
-   }
+   static public $itemtype_2    = 'itemtype';
+   static public $items_id_2    = 'items_id';
+   static public $take_entity_2 = false;
+    
    
    public static function getTypeName($nb=1) {
       return _n('Etiquette', 'Etiquettes', 'tag'); //_n('Header', 'Headers', $nb, 'formcreator');

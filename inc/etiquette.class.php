@@ -1,13 +1,5 @@
 <?php
 class PluginTagEtiquette extends CommonDropdown {
-   
-   static function canCreate() {
-      return Session::haveRight('config', 'w');
-   }
-
-   static function canView() {
-      return Session::haveRight('config', 'r');
-   }
 
    public static function getTypeName($nb=1) {
       return _n('Etiquette', 'Etiquettes', 'tag'); //_n('Header', 'Headers', $nb, 'formcreator');
@@ -153,5 +145,10 @@ class PluginTagEtiquette extends CommonDropdown {
    public static function uninstall() { // OK
       $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
       return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
+   }
+   
+   public static function cleanDBonPurge() { //nom de la fonction correct ?
+      Toolbox::logDebug("cleanDBonPurge()");
+      //TODO : Coder cette partie
    }
 }
