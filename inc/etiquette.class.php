@@ -147,7 +147,7 @@ class PluginTagEtiquette extends CommonDropdown {
       return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
    }
    
-   public static function cleanDBonPurge() { //nom de la fonction correct ?
+   public function cleanDBonPurge() { //nom de la fonction correct ?
       Toolbox::logDebug("cleanDBonPurge()");
       //TODO : Coder cette partie
    }
