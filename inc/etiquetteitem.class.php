@@ -30,7 +30,7 @@ class PluginTagEtiquetteItem extends CommonDBTM {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
             	`id` INT(11) NOT NULL AUTO_INCREMENT,
             	`plugin_tag_etiquettes_id` INT(11) NOT NULL DEFAULT '0',
-            	`glpiobject_id` TINYINT(1) NOT NULL DEFAULT '1',
+            	`items_id` TINYINT(1) NOT NULL DEFAULT '1',
             	`itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
             	`comment` TEXT NULL COLLATE 'utf8_unicode_ci',
             	`last_edited` DATETIME NULL DEFAULT NULL,
@@ -54,7 +54,7 @@ class PluginTagEtiquetteItem extends CommonDBTM {
       $etiquette_items = array();
       $query = "SELECT *
                FROM `glpi_plugin_tag_etiquetteitems`
-               WHERE itemtype='$itemtype' AND glpiobject_id=$id_glpi_obj";
+               WHERE itemtype='$itemtype' AND items_id=$id_glpi_obj";
    
       $result = $DB->query($query);
       

@@ -58,7 +58,7 @@ function plugin_tag_addLeftJoin($itemtype, $ref_table, $new_table, $linkfield,
    
    switch ($itemtype) { //echo $new_table.".".$linkfield."<br/>";
       default :
-         return "LEFT JOIN `glpi_plugin_tag_etiquetteitems` ON (`glpi_".strtolower($itemtype)."s`.`id` = `glpi_plugin_tag_etiquetteitems`.`glpiobject_id`) 
+         return "LEFT JOIN `glpi_plugin_tag_etiquetteitems` ON (`glpi_".strtolower($itemtype)."s`.`id` = `glpi_plugin_tag_etiquetteitems`.`items_id`) 
                   LEFT JOIN `glpi_plugin_tag_etiquettes` ON (`glpi_plugin_tag_etiquettes`.`id` = `glpi_plugin_tag_etiquetteitems`.`plugin_tag_etiquettes_id`) ";
    }
 }
