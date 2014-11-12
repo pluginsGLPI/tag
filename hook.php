@@ -87,6 +87,28 @@ function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
    return "$link ( `glpi_plugin_tag_etiquettes`.`entities_id` IS NOT NULL)";
 }
 */
+/*
+function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
+
+   //"$link HAVING (`ITEM_4` LIKE '%tag3%' OR `ITEM_4` LIKE '%tag2%')";
+   if ($link == ' OR' || $link == " AND") {
+      return "$link `ITEM_4` LIKE '%tag2%'";
+   }
+
+   return " `ITEM_4` LIKE '%tag3%'";
+}*/
+
+function plugin_tag_addHaving($link, $nott, $type, $id, $val) {
+
+   $valeurs = explode(",", $val);
+   $out = "$link `ITEM_4` LIKE '%".$valeurs[0]."%'";
+   array_shift($valeurs);
+   foreach ($valeurs as $valeur) {
+      $out .= " AND `ITEM_4` LIKE '%$valeur%'";
+   }
+   return $out;
+}
+
 /**
  * Install all necessary elements for the plugin
  *
