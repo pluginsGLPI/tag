@@ -5,24 +5,21 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    
    //Reserved Range 10500-10530
    $rng1 = 10500;
-   //$sopt[strtolower($itemtype)] = self::getTypeName(2);
+   $sopt[strtolower($itemtype)] = //self::getTypeName(2);
 
-   $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes';
+   $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes'; //'glpi_plugin_tag_etiquettes';
    $sopt[$rng1]['field']     = 'name';
-   //$sopt[$rng1]['linkfield'] = 'id';
    $sopt[$rng1]['name']      = 'Tag';
-   $sopt[$rng1]['datatype']  = 'string'; //'bool';
+   $sopt[$rng1]['datatype']  = 'string';
    $sopt[$rng1]['searchtype'] = "contains";
    $sopt[$rng1]['massiveaction'] = false;
-   
-   //$sopt[$rng1]['table']         = 'glpi_documents_items';
-   //$sopt[$rng1]['field']         = 'count';
-   //$sopt[$rng1]['name']          = _x('quantity', 'Number of documents');
    $sopt[$rng1]['forcegroupby']  = true;
    $sopt[$rng1]['usehaving']     = true;
-   //$sopt[$rng1]['datatype']      = 'number';
-   //$sopt[$rng1]['massiveaction'] = false;
-   $sopt[$rng1]['joinparams']    = array('jointype' => 'items_id'); //itemtype_item
+   $sopt[$rng1]['joinparams']    = array('beforejoin' => array('table'      => 'glpi_plugin_tag_etiquetteitems',
+                                                               'joinparams' => array('jointype' => "itemtype_item")));
+   
+   
+   //array('jointype' => "itemtype_item");
    
    return $sopt;
 }
