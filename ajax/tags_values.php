@@ -20,7 +20,7 @@ $html_input = '<select data-placeholder="Choisir les tags associés..." style="w
 $html_input .= '<option value=""></option>';
 
 $etiquette = new PluginTagEtiquette();
-$found = $etiquette->find("1=1");
+$found = $etiquette->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"');
 foreach ($found as $label) {
    $html_input .= '<option value="'.$label['name'].'">'.$label['name'].'</option>';
 }
