@@ -9,7 +9,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    
    //Reserved Range 10500-10530
    $rng1 = 10500;
-   $sopt[strtolower($itemtype)] = //self::getTypeName(2);
+   //$sopt[strtolower($itemtype)] = //self::getTypeName(2);
 
    $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes'; //'glpi_plugin_tag_etiquettes';
    $sopt[$rng1]['field']     = 'name';
