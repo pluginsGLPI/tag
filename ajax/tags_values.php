@@ -13,16 +13,24 @@ if ($_REQUEST['itemtype'] == 'ticket') {
    $class = "tab_bg_1";
 }
 
-$value = PluginTagEtiquetteItem::getValue($_REQUEST['id'], $_REQUEST['itemtype']);
-$html_input = "<input type='text' name='_plugin_tag_etiquette_value' value='$value' placeholder='Etiquette(s)' $params>";
-$html_input = '<select data-placeholder="Choisir les tags associés..." style="width:350px;"
-                multiple class="chosen-select-no-results">';
-$html_input .= '<option value=""></option>';
+$selected_id = array();
+$etiquette_item = new PluginTagEtiquetteItem();
+$found_items = $etiquette_item->find('items_id='.$_REQUEST['id'].' AND itemtype="'.$_REQUEST['itemtype'].'"');
+
+foreach ($found_items as $found_item) {
+   $selected_id[] = $found_item['plugin_tag_etiquettes_id'];
+}
 
 $etiquette = new PluginTagEtiquette();
 $found = $etiquette->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"');
+
+$html_input = '<select data-placeholder="Choisir les tags associés..." name="_plugin_tag_etiquette_values[]" style="width:350px;"
+                multiple class="chosen-select-no-results" '.$params.' >';
+$html_input .= '<option value=""></option>';
+
 foreach ($found as $label) {
-   $html_input .= '<option value="'.$label['name'].'">'.$label['name'].'</option>';
+   $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
+   $html_input .= '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
 }
 
 echo "<tr class='$class'>

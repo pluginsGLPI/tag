@@ -1,5 +1,51 @@
 <?php
 
+function plugin_pre_item_update_tag($parm) {
+   global $DB;
+   
+   if (! isset($_REQUEST['_plugin_tag_etiquette_values'])) { //if no value is selected in HTML '<select>'
+      return $parm;
+   }
+   
+   $plugin = new Plugin();
+   if ($plugin->isActivated('tag')) {
+      $item = new PluginTagEtiquetteItem();
+      //Delete into base all tags :
+      $DB->query("DELETE FROM `glpi_plugin_tag_etiquetteitems`
+         WHERE `items_id`=".$_REQUEST['plugin_tag_etiquette_id']." 
+            AND `itemtype` = '".$_REQUEST['plugin_tag_etiquette_itemtype']."'");
+      
+      //Insert into base the tags :
+      foreach ($_REQUEST['_plugin_tag_etiquette_values'] as $etiquette_id) {
+         $item->add(array(
+               'plugin_tag_etiquettes_id' => $etiquette_id,
+               'items_id' => $_REQUEST['plugin_tag_etiquette_id'],
+               'itemtype' => $_REQUEST['plugin_tag_etiquette_itemtype'], //get_class($parm)
+         ));
+      }
+   }
+   return $parm;
+}
+
+/*
+function plugin_item_add_tag($parm) {
+   echo '<pre>'; print_r($_REQUEST); echo "</pre>";
+   foreach ($_REQUEST['_plugin_tag_etiquette_values'] as $id) {
+      //Insert into base :
+      $tab = array(
+            'plugin_tag_etiquettes_id' => $id,
+            'items_id' => $_REQUEST['plugin_tag_etiquette_id'],
+            'itemtype' => $_REQUEST['plugin_tag_etiquette_itemtype'],
+            );
+      
+      $item = new PluginTagEtiquetteItem();
+      $item->add($tab);
+   }
+   
+   exit; //DEBUG
+   return $parm;
+}*/
+
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
@@ -29,27 +75,24 @@ function plugin_tag_getAddSearchOptions($itemtype) {
 }
 
 function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
-   global $CFG_GLPI, $INFOFORM_PAGES;
 
-   Toolbox::logDebug("giveItem : ".$field);
+   if ($data["ITEM_$num"] == '') {
+      return "";
+   }
+   
    switch ($field) {
-      case "glpi_plugin_example.name" :
-         $out= "<a href=\"".$CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$type]."?ID=".$data['ID']."\">";
-         $out.= $data["ITEM_$num"];
-         if ($CFG_GLPI["view_ID"]||empty($data["ITEM_$num"])) $out.= " (".$data["ID"].")";
-         $out.= "</a>";
-         return $out;
-         break;
       case "10500":
-         $tab = array();
          //tag3$$3$$$$tag2$$2
          $tags = explode("$$$$", $data["ITEM_$num"]);
-         //array(tag3$$3, tag2$$2)
+         //array('tag3$$3', 'tag2$$2')
+         $out = '<div class="chzn-container chzn-container-multi" title="">
+               <ul class="chzn-choices">';
          foreach ($tags as $tag) {
             $tmp = explode("$$", $tag);
-            $tab[] = $tmp[0];
+            $out .= '<li class="search-choice"><span>'.$tmp[0].'</span></li>';
          }
-         $out = "<span class='tag_list'>" . implode(",", $tab). "</span>";
+         $out .= '</ul>
+               </div>';
          return $out;
          break;
    }

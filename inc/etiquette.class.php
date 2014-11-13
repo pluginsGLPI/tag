@@ -102,19 +102,6 @@ class PluginTagEtiquette extends CommonDropdown {
       return true;
    }
 
-   
-   /*
-   public function prepareInputForAdd($input) {
-      $etiquette = new self();
-      $founded = $etiquette->find('entities_id = ' . $input['entities_id']);
-      if (count($founded) > 0) {
-         Session::addMessageAfterRedirect(__('A tag already exists for this entity! You can have only one header per entity.', 'formcreator'), false, ERROR);
-         return array();
-      }
-
-      return $input;
-   }*/
-
    public static function install(Migration $migration) {
       $table = getTableForItemType(__CLASS__);
       if (!TableExists($table)) {

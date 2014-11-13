@@ -27,13 +27,21 @@ function plugin_tag_check_config($verbose=false) {
    return true;
 }
 
+function getItemtypes() {
+   return array('Computer', 'Monitor', 'Software', 'Networkequipment', 'Peripheral', 'Printer', 
+               'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
+               'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Notes', 'RSSFeed', 'User',
+               'Group', 'Entity', 'Profile');
+}
+
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
    
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
    
    if (strpos($_SERVER['REQUEST_URI'], "/plugins/") === false
-      && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false) {
+      && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false
+      && strpos($_SERVER['REQUEST_URI'], "id=-1") === false) { //this line is for Computer
       $PLUGIN_HOOKS['add_javascript']['tag'] = array('js/jquery-1.11.1.min.js',
        'js/chosen/chosen.native.min.js', 'js/show_tags.js');
    } elseif (strpos($_SERVER['REQUEST_URI'], "/front/ticket.php") !== false) {
@@ -43,8 +51,22 @@ function plugin_init_tag() {
    
    $PLUGIN_HOOKS['add_css']['tag'][] = "js/chosen/chosen.css";
    
+   
+   //$PLUGIN_HOOKS['item_add']['tag']    = 'plugin_item_add_tag';
+   
+   //$PLUGIN_HOOKS['item_add']['tag'] = array(
+   //      'User'  => 'plugin_calltoclick_item_add_user'
+   //);
+   
+   $itemtypes = getItemtypes(); //TODO
+   foreach ($itemtypes as $itemtype) {
+      //$PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = 'plugin_item_add_tag';
+      $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype]='plugin_pre_item_update_tag';
+      //$PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = array(//"PluginFieldsContainer",
+      //                                                                    "preItemPurge");
+   }
+   
    /*
-   $PLUGIN_HOOKS['item_add']['tag']    = 'plugin_item_add_tag';
    $PLUGIN_HOOKS['item_update']['tag'] = 'plugin_item_update_tag';
    $PLUGIN_HOOKS['item_delete']['tag'] = 'plugin_item_delete_tag';
    */
