@@ -104,6 +104,7 @@ function plugin_tag_addHaving($link, $nott, $type, $id, $val) {
    $out = "$link `ITEM_4` LIKE '%".$valeurs[0]."%'";
    array_shift($valeurs);
    foreach ($valeurs as $valeur) {
+      $valeur = trim($valeur);
       $out .= " AND `ITEM_4` LIKE '%$valeur%'";
    }
    return $out;
