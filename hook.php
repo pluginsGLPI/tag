@@ -3,6 +3,10 @@
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
+   if (strpos($itemtype, 'Plugin') !== false) { //'PluginTagEtiquette'
+      return $sopt;
+   }
+   
    //Reserved Range 10500-10530
    $rng1 = 10500;
    $sopt[strtolower($itemtype)] = //self::getTypeName(2);
