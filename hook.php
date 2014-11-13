@@ -9,9 +9,9 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    
    //Reserved Range 10500-10530
    $rng1 = 10500;
-   //$sopt[strtolower($itemtype)] = //self::getTypeName(2);
+   //$sopt[strtolower($itemtype)] = ''; //self::getTypeName(2);
 
-   $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes'; //'glpi_plugin_tag_etiquettes';
+   $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes';
    $sopt[$rng1]['field']     = 'name';
    $sopt[$rng1]['name']      = 'Tag';
    $sopt[$rng1]['datatype']  = 'string';
@@ -56,60 +56,14 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    return "";
 }
 
-/*
-function casParticulier() {
-   if (isset($_REQUEST["contains"]) && isset($_REQUEST["field"])) {
-      foreach ($_REQUEST["field"] as $index => $field) {
-         if ($field == "10500" && $_REQUEST["contains"][$index] == "") {
-            return false;
-         }
-      }
-   }
-   return false;
-}
-
-function plugin_tag_addSelect($type, $id, $num) {
-   if (casParticulier()) {
-      return "'' as ITEM_$num, ";
-   }
-   return "GROUP_CONCAT(`glpi_plugin_tag_etiquettes`.`name`) AS ITEM_$num, ";
-}
-
-function plugin_tag_addLeftJoin($itemtype, $ref_table, $new_table, $linkfield,
-      &$already_link_tables) {
-   
-   return "LEFT JOIN `glpi_plugin_tag_etiquetteitems` ON (`glpi_".strtolower($itemtype)."s`.`id` = `glpi_plugin_tag_etiquetteitems`.`items_id`) 
-            LEFT JOIN `glpi_plugin_tag_etiquettes` ON (`glpi_plugin_tag_etiquettes`.`id` = `glpi_plugin_tag_etiquetteitems`.`plugin_tag_etiquettes_id`) ";
-}
-
-function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
-      
-   if ($link == ' OR') {
-      $link = ' AND';
-   }
-  
-   return "$link ( `glpi_plugin_tag_etiquettes`.`entities_id` IS NOT NULL)";
-}
-*/
-/*
-function plugin_tag_addWhere($link, $nott, $type, $id, $val) {
-
-   //"$link HAVING (`ITEM_4` LIKE '%tag3%' OR `ITEM_4` LIKE '%tag2%')";
-   if ($link == ' OR' || $link == " AND") {
-      return "$link `ITEM_4` LIKE '%tag2%'";
-   }
-
-   return " `ITEM_4` LIKE '%tag3%'";
-}*/
-
-function plugin_tag_addHaving($link, $nott, $type, $id, $val) {
+function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
 
    $valeurs = explode(",", $val);
-   $out = "$link `ITEM_4` LIKE '%".$valeurs[0]."%'";
+   $out = "$link `ITEM_$num` LIKE '%".$valeurs[0]."%'";
    array_shift($valeurs);
    foreach ($valeurs as $valeur) {
       $valeur = trim($valeur);
-      $out .= " AND `ITEM_4` LIKE '%$valeur%'";
+      $out .= " AND `ITEM_$num` LIKE '%$valeur%'";
    }
    return $out;
 }
