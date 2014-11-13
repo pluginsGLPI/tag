@@ -11,6 +11,15 @@ Ext.onReady(function() {
       success: function(data) {
          //Ext.select('#mainformtable tr').insertHtml('afterEnd', data.responseText);
          $("#mainformtable tr").eq(0).after(data.responseText + hidden_fields);
+         
+         //$(".chosen-select").chosen(); //Active the lib
+         //$(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
+         
+         var elements = document.querySelectorAll('.chosen-select-no-results');
+         for (var i = 0; i < elements.length; i++) {
+            new Chosen(elements[i], {no_results_text: "Aucun tag trouvé."});
+         }
+         
       }
    });
 });
