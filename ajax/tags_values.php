@@ -29,6 +29,12 @@ foreach ($found_items as $found_item) {
    $selected_id[] = $found_item['plugin_tag_etiquettes_id'];
 }
 
+$itemtype = $_REQUEST['itemtype'];
+$obj = new $itemtype();
+if (! $obj->canUpdate()) {
+   $params .= ' disabled ';
+}
+
 $etiquette = new PluginTagEtiquette();
 $found = $etiquette->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"');
 

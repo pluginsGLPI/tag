@@ -293,19 +293,6 @@ class PluginTagEtiquette extends CommonDropdown {
       return $ong;
    }
    
-   /*
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-   
-      echo "displayTabContentForItem()"; //DEBUG
-      if ($item->getType() == 'Profile') {
-         $prof = new self();
-         $ID = $item->getField('id');
-         // j'affiche le formulaire
-         $prof->showForm($ID);
-      }
-      return true;
-   }*/
-   
    public function cleanDBonPurge() {
       global $DB;
       

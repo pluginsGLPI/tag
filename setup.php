@@ -30,7 +30,7 @@ function plugin_tag_check_config($verbose=false) {
 function getItemtypes() {
    return array('Computer', 'Monitor', 'Software', 'Networkequipment', 'Peripheral', 'Printer', 
                'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
-               'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Notes', 'RSSFeed', 'User',
+               'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
                'Group', 'Entity', 'Profile', ); //, 'KnowbaseItem'
 }
 
