@@ -11,66 +11,6 @@ class PluginTagEtiquette extends CommonDropdown {
       return $etiquette_obj->fields['name'];
    }
 
-   public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
-      if ($item->getType() != "PluginFormcreatorConfig") {
-         return '';
-      }
-      $env       = new self;
-      $found_env = $env->find();
-      $nb        = count($found_env);
-      return self::createTabEntry(self::getTypeName($nb), $nb);
-   }
-
-   public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
-
-      $header  = new self();
-      $founded = $header->find('entities_id = ' . $_SESSION['glpiactive_entity']);
-      if (count($founded) > 0) {
-         echo '<div class="tab_cadre_pager" style="padding: 2px; margin: 5px 0">
-            <h3 class="tab_bg_2" style="padding: 5px">
-                <img src="' . $GLOBALS['CFG_GLPI']['root_doc'] . '/pics/menu_add_off.png" alt="+" align="absmiddle" />
-                ' . __('Add an header', 'formcreator') . '<br /><br />
-               <em><i><img src="' . $GLOBALS['CFG_GLPI']['root_doc'] . '/pics/warning.png" alt="/!\" align="absmiddle" height="16" />&nbsp;
-               ' . __('An header already exists for this entity! You can have only one header per entity.', 'formcreator') . '</i></em>
-            </h3>
-         </div>';
-      } else {
-
-         $table   = getTableForItemType('PluginFormcreatorHeader');
-         $where   = getEntitiesRestrictRequest( "", $table, "", "", true, false);
-         $founded = $header->find($where);
-
-         if (count($founded) > 0) {
-            echo '<div class="tab_cadre_pager" style="padding: 2px; margin: 5px 0">
-               <h3 class="tab_bg_2" style="padding: 5px">
-              <a href="' . Toolbox::getItemTypeFormURL(__CLASS__) .  '" class="submit">
-                   <img src="' . $GLOBALS['CFG_GLPI']['root_doc'] . '/pics/menu_add.png" alt="+" align="absmiddle" />
-                   ' . __('Add an header', 'formcreator') . '
-               </a><br /><br />
-                  <em><i><img src="' . $GLOBALS['CFG_GLPI']['root_doc'] . '/pics/warning.png" alt="/!\" align="absmiddle" height="16" />&nbsp;
-                  ' . __('An header exists for a parent entity! Another header will overwrite the previous one.', 'formcreator') . '</i></em>
-               </h3>
-            </div>';
-         } else {
-            echo '<div class="tab_cadre_pager" style="padding: 2px; margin: 5px 0">
-               <h3 class="tab_bg_2" style="padding: 5px">
-                 <a href="' . Toolbox::getItemTypeFormURL(__CLASS__) .  '" class="submit">
-                      <img src="' . $GLOBALS['CFG_GLPI']['root_doc'] . '/pics/menu_add.png" alt="+" align="absmiddle" />
-                      ' . __('Add an header', 'formcreator') . '
-                  </a>
-               </h3>
-            </div>';
-         }
-      }
-      $params['sort']  = (!empty($_POST['sort'])) ? (int) $_POST['sort'] : 0;
-      $params['order'] = (!empty($_POST['order']) && in_array($_POST['order'], array('ASC', 'DESC')))
-                           ? $_POST['order'] : 'ASC';
-      $params['start'] = (!empty($_POST['start'])) ? (int) $_POST['start'] : 0;
-      Search::manageGetValues(__CLASS__);
-      //Search::showGenericSearch(__CLASS__, $_GET);
-      Search::showList(__CLASS__, $params);
-   }
-
    public function showForm($ID, $options = array()) {
       if (!$this->isNewID($ID)) {
          $this->check($ID, 'r');

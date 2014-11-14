@@ -8,7 +8,7 @@ function plugin_pre_item_update_tag($parm) {
    }
    
    $plugin = new Plugin();
-   if ($plugin->isActivated('tag')) {
+   //if ($plugin->isActivated('tag')) {
       $item = new PluginTagEtiquetteItem();
       //Delete into base all tags :
       $DB->query("DELETE FROM `glpi_plugin_tag_etiquetteitems`
@@ -23,7 +23,7 @@ function plugin_pre_item_update_tag($parm) {
                'itemtype' => $_REQUEST['plugin_tag_etiquette_itemtype'], //get_class($parm)
          ));
       }
-   }
+   //}
    return $parm;
 }
 

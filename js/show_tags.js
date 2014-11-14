@@ -1,3 +1,7 @@
+function insertAfter(newNode, referenceNode) {
+   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
 Ext.onReady(function() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
    var id = str.substr(str.search('id=') + 3)
@@ -10,10 +14,11 @@ Ext.onReady(function() {
       url: "../plugins/tag/ajax/tags_values.php?id=" + id + "&itemtype=" + itemtype,
       success: function(data) {
          //Ext.select('#mainformtable tr').insertHtml('afterEnd', data.responseText);
-         $("#mainformtable tr").eq(0).after(data.responseText + hidden_fields);
+         //$("#mainformtable tr").eq(0).after(data.responseText + hidden_fields);
          
-         //$(".chosen-select").chosen(); //Active the lib
-         //$(".chosen-select").chosen({no_results_text: "Oops, nothing found!"});
+         var tr = document.createElement('tr');
+         tr.innerHTML = data.responseText + hidden_fields;
+         insertAfter(tr, document.querySelectorAll("tr.headerRow")[0]);
          
          var elements = document.querySelectorAll('.chosen-select-no-results');
          for (var i = 0; i < elements.length; i++) {
