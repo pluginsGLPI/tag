@@ -31,7 +31,7 @@ function getItemtypes() {
    return array('Computer', 'Monitor', 'Software', 'Networkequipment', 'Peripheral', 'Printer', 
                'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
                'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Notes', 'RSSFeed', 'User',
-               'Group', 'Entity', 'Profile');
+               'Group', 'Entity', 'Profile', ); //, 'KnowbaseItem'
 }
 
 function plugin_init_tag() {
@@ -39,6 +39,7 @@ function plugin_init_tag() {
    
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
    
+   //if (in_array($itemtype, getItemtypes()))
    if (strpos($_SERVER['REQUEST_URI'], "/plugins/") === false
       && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false
       && strpos($_SERVER['REQUEST_URI'], "id=-1") === false) { //line/condition for Computer
@@ -48,6 +49,14 @@ function plugin_init_tag() {
       $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.min.js');
       $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    }
+   
+   //Plugin::registerClass('PluginTagEtiquetteItem',
+   //         array('addtabon' => PluginTagEtiquetteItem::getTabNameForItem()) //getTabNameForItem //showForm($ID, $options=array()) {
+   //         );
+   
+   Plugin::registerClass('PluginTagEtiquetteItem',
+            array('addtabon' => array('PluginTagEtiquette')));
+    
    
    $itemtypes = getItemtypes(); //TODO
    foreach ($itemtypes as $itemtype) {

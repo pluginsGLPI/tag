@@ -15,54 +15,6 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
       return _n('Etiquette', 'Etiquettes', 'tag'); //_n('Header', 'Headers', $nb, 'formcreator');
    }
    
-   /* //Old :
-   public static function getValue($id, $itemtype) {
-      $names = array();
-      $etiquette_items = PluginTagEtiquetteItem::getEtiquette_items($id, $itemtype);
-      foreach ($etiquette_items as $key => $id_etiquette) {
-         $names[] = PluginTagEtiquette::getTagName($id_etiquette);
-      }
-      return implode(", ", $names);   
-   }
-   */
-   
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      
-      echo $item->getType(); //TODO
-   
-      switch ($item->getType()) {
-         case 'Document' :
-            $ong = array();
-            if ($_SESSION['glpishow_count_on_tabs']) {
-               $ong[1] = self::createTabEntry(_n('Associated item', 'Associated items',
-                     self::countForDocument($item)));
-            }
-            $ong[1] = _n('Associated item', 'Associated items', 2);
-   
-            if ($_SESSION['glpishow_count_on_tabs']) {
-               $ong[2] = Document::createTabEntry(Document::getTypeName(2),
-                     self::countForItem($item));
-            }
-            $ong[2] = Document::getTypeName(2);
-            return $ong;
-   
-         default :
-            // Can exist for template
-            if (Session::haveRight("document","r")
-            || ($item->getType() == 'Ticket')
-            || ($item->getType() == 'Reminder')
-            || ($item->getType() == 'KnowbaseItem')) {
-   
-               if ($_SESSION['glpishow_count_on_tabs']) {
-                  return Document::createTabEntry(Document::getTypeName(2),
-                        self::countForItem($item));
-               }
-               return Document::getTypeName(2);
-            }
-      }
-      return '';
-   }
-   
    public static function install(Migration $migration) {
       $table = getTableForItemType(__CLASS__);
       if (!TableExists($table)) {
@@ -104,9 +56,5 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
       }
       return $IDs;
    }
-   /*
-   public function prepareInputForAdd($input) {
-      return $input;
-   }*/
 
 }

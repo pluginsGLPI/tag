@@ -4,6 +4,14 @@ include ('../../../inc/includes.php');
 $class = '';
 $params = '';
 
+function in_arrayi($needle, $haystack) {
+   return in_array(strtolower($needle), array_map('strtolower', $haystack));
+}
+
+if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
+   return '';
+}
+
 if ($_REQUEST['itemtype'] == 'ticket') {
    $ticket = new Ticket();
    $ticket->getFromDB($_REQUEST['id']);
