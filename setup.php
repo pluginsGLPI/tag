@@ -42,14 +42,10 @@ function plugin_init_tag() {
    if (strpos($_SERVER['REQUEST_URI'], "/plugins/") === false
       && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false
       && strpos($_SERVER['REQUEST_URI'], "id=-1") === false) { //line/condition for Computer
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array(
-            'js/jquery-1.11.1.min.js',
-       'lib/chosen/chosen.native.min.js', 'js/show_tags.js');
+      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.min.js', 'js/show_tags.js');
       $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    } elseif (strpos($_SERVER['REQUEST_URI'], "/front/ticket.php") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array(
-            'js/jquery-1.11.1.min.js', 
-      'lib/chosen/chosen.native.min.js');
+      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.min.js');
       $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    }
    
