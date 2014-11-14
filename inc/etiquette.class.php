@@ -10,6 +10,11 @@ class PluginTagEtiquette extends CommonDropdown {
       $etiquette_obj->getFromDB($id_etiquette);
       return $etiquette_obj->fields['name'];
    }
+   
+   //public static function canUpdate() {
+      //parent::canUpdate();
+      
+   //}
 
    public function showForm($ID, $options = array()) {
       if (!$this->isNewID($ID)) {
@@ -91,21 +96,30 @@ class PluginTagEtiquette extends CommonDropdown {
    
    static function showForTag(PluginTagEtiquette $etiquette) {
       global $DB, $CFG_GLPI;
-      
-      print_r(getItemtypes());
    
       $instID = $etiquette->fields['id'];
       if (!$etiquette->can($instID,"r")) {
          return false;
       }
+      
       $canedit = $etiquette->can($instID,'w');
+      
+      $itemtypes = getItemtypes();
+      
+      foreach ($itemtypes as $key => $itemtype) {
+         if ($itemtype == 'Notes') {
+            $itemtype = 'Reminder';
+         }
+         $obj = new $itemtype();
+         if (! $obj->canUpdate()) {
+            unset($itemtypes[$key]);
+         }
+      }
    
-      $query = "SELECT DISTINCT `itemtype`
-      FROM `glpi_plugin_tag_etiquetteitems`
-      WHERE `glpi_plugin_tag_etiquetteitems`.`plugin_tag_etiquettes_id` = '$instID'
-      ORDER BY `itemtype`";
-   
-      $result = $DB->query($query);
+      $result = $DB->query("SELECT DISTINCT `itemtype`
+         FROM `glpi_plugin_tag_etiquetteitems`
+         WHERE `glpi_plugin_tag_etiquetteitems`.`plugin_tag_etiquettes_id` = '$instID'
+         ORDER BY `itemtype`");
       $number = $DB->numrows($result);
       $rand   = mt_rand();
    
@@ -120,7 +134,7 @@ class PluginTagEtiquette extends CommonDropdown {
          echo "<tr class='tab_bg_1'><td class='right'>";
                   Dropdown::showAllItems("items_id", 0, 0,
                   ($etiquette->fields['is_recursive']?-1:$etiquette->fields['entities_id']),
-                        getItemtypes(), false, true);
+                        $itemtypes, false, true);
          echo "</td><td class='center'>";
          echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
          echo "<input type='hidden' name='plugin_tag_etiquettes_id' value='$instID'>";
@@ -129,6 +143,9 @@ class PluginTagEtiquette extends CommonDropdown {
          Html::closeForm();
          echo "</div>";
       }
+      
+      //TODO : Implement 'save' of massive actions and right verification
+      $canedit = false;
    
       echo "<div class='spaced'>";
       if ($canedit && $number) {

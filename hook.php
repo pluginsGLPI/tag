@@ -27,25 +27,6 @@ function plugin_pre_item_update_tag($parm) {
    return $parm;
 }
 
-/*
-function plugin_item_add_tag($parm) {
-   echo '<pre>'; print_r($_REQUEST); echo "</pre>";
-   foreach ($_REQUEST['_plugin_tag_etiquette_values'] as $id) {
-      //Insert into base :
-      $tab = array(
-            'plugin_tag_etiquettes_id' => $id,
-            'items_id' => $_REQUEST['plugin_tag_etiquette_id'],
-            'itemtype' => $_REQUEST['plugin_tag_etiquette_itemtype'],
-            );
-      
-      $item = new PluginTagEtiquetteItem();
-      $item->add($tab);
-   }
-   
-   exit; //DEBUG
-   return $parm;
-}*/
-
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
