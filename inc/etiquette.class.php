@@ -65,8 +65,11 @@ class PluginTagEtiquette extends CommonDropdown {
       return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
    }
    
-   public function cleanDBonPurge() { //nom de la fonction correct ?
-      Toolbox::logDebug("cleanDBonPurge()"); //DEBUG
-      //TODO : Coder cette partie
+   public function cleanDBonPurge() {
+      global $DB;
+      
+      $query = "DELETE FROM `glpi_plugin_tag_etiquetteitems`
+                WHERE `plugin_tag_etiquettes_id`=".$this->fields['id'];
+      $DB->query($query);
    }
 }
