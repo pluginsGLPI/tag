@@ -25,7 +25,7 @@ foreach ($found_items as $found_item) {
    $selected_id[] = $found_item['plugin_tag_tags_id'];
 }
 
-$params = $obj->canUpdate() ? '' : ' disabled ';
+$params = $obj->canUpdateItem() ? '' : ' disabled ';
 
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
 echo "<tr class='$class'>
