@@ -37,7 +37,7 @@ class PluginTagEtiquette extends CommonDropdown {
       echo "<tr class='line1'><td>" . __('Description') . "</td>";
       echo "<td>";
       echo "<textarea name='comment' id ='comment' >" . $this->fields['comment'] . "</textarea>";
-      Html::initEditorSystem('comment');
+      //Html::initEditorSystem('comment');
       echo "</td>";
       echo "</tr>";
 
