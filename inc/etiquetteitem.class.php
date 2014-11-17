@@ -12,7 +12,7 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
     
    
    public static function getTypeName($nb=1) {
-      return _n('Etiquette', 'Etiquettes', 'tag'); //_n('Header', 'Headers', $nb, 'formcreator');
+      return _n('Tag', 'Tags', 'tag');
    }
    
    public static function install(Migration $migration) {
@@ -61,41 +61,10 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
     * @see CommonDBTM::doSpecificMassiveActions()
     **/
    function doSpecificMassiveActions($input=array()) {
-       
       $res = array('ok'      => 0,
             'ko'      => 0,
             'noright' => 0);
-      echo "here ";
-      Toolbox::logDebug($input['action']);
       switch ($input['action']) {
-         /*
-          case "connect" :
-         $ci = new Computer_Item();
-         return $ci->doSpecificMassiveActions($input);
-          
-         case "install" :
-         if (isset($input['softwareversions_id']) && ($input['softwareversions_id'] > 0)) {
-         $inst = new Computer_SoftwareVersion();
-         foreach ($input['item'] as $key => $val) {
-         if ($val == 1) {
-         $input2 = array('computers_id'        => $key,
-               'softwareversions_id' => $input['softwareversions_id']);
-         if ($inst->can(-1, 'w', $input2)) {
-         if ($inst->add($input2)) {
-         $res['ok']++;
-         } else {
-         $res['ko']++;
-         }
-         } else {
-         $res['noright']++;
-         }
-         }
-         }
-         } else {
-         $res['ko']++;
-         }
-         break;
-         */
          default :
             return parent::doSpecificMassiveActions($input);
       }
@@ -103,9 +72,6 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
    }
    
    function getAllMassiveActions($is_deleted=0, $checkitem=NULL) {
-      //$actions['update'] = _x('button', 'Update');
-      //$actions += $this->getSpecificMassiveActions($checkitem);
-      
       if ($this->maybeDeleted()
             && !$this->useDeletedToLockIfDynamic()) {
                $actions['delete'] = _x('button', 'Put in dustbin');
@@ -130,13 +96,13 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
       $tab[1]['table']           = $this->getTable();
       $tab[1]['field']           = 'name';
       $tab[1]['name']            = __('Name');
-      $tab[1]['massiveaction']   = true; // implicit key==1
+      $tab[1]['massiveaction']   = true;
       $tab[1]['datatype']        = 'itemlink';
    
       $tab[2]['table']           = $this->getTable();
       $tab[2]['field']           = 'comment';
       $tab[2]['name']            = __('Description');
-      $tab[2]['massiveaction']   = true; // implicit field is id
+      $tab[2]['massiveaction']   = true;
       $tab[2]['datatype']        = 'string';
       return $tab;
    }
@@ -173,7 +139,7 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
       if ($canedit) {
          echo "<div class='firstbloc'>";
          echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post'
-         action='".Toolbox::getItemTypeFormURL('PluginTagEtiquette')."'>"; //__CLASS__
+         action='".Toolbox::getItemTypeFormURL('PluginTagEtiquette')."'>";
          
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
@@ -219,10 +185,6 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
    
          if ($item->canView()) {
             $column = "name";
-            //if ($itemtype == 'ticket') {
-            //$column = "id";
-            //}
-            
             $itemtable = getTableForItemType($itemtype);
             $query     = "SELECT `$itemtable`.*, `glpi_plugin_tag_etiquetteitems`.`id` AS IDD, ";
       
@@ -275,10 +237,6 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
                   if ($DB->numrows($result_linked)) {
       
                      while ($data = $DB->fetch_assoc($result_linked)) {
-                  
-                     //if ($itemtype == 'ticket') {
-                     //$data["name"] = sprintf(__('%1$s: %2$s'), __('Ticket'), $data["id"]);
-                     //}
       
                      if ($itemtype == 'softwarelicense') {
                         $soft->getFromDB($data['softwares_id']);
@@ -295,18 +253,6 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
       
                      echo "<tr class='tab_bg_1'>";
                      
-                     /*
-                     exit;
-                     
-                     //canEditItem :
-                     //echo $item->getTypeName(1).", ".$data['IDD'];
-                     $s = $item->getTypeName(1)."";
-                     $t = new $s();
-                     //$t = new Computer();
-                     $t->getFromDB($data['IDD']);
-                     //$t->canUpdate()
-      
-                     if ($canedit && $t->canUpdate()) {*/
                      if ($canedit) {
                         echo "<td width='10'>";
                         if ($item->canUpdate()) {

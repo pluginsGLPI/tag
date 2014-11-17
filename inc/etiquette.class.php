@@ -2,7 +2,7 @@
 class PluginTagEtiquette extends CommonDropdown {
 
    public static function getTypeName($nb=1) {
-      return _n('Etiquette', 'Etiquettes', 'tag'); //_n('Header', 'Headers', $nb, 'formcreator');
+      return _n('Tag', 'Tags', 'tag');
    }
    
    public static function getTagName($id_etiquette) {
@@ -10,11 +10,6 @@ class PluginTagEtiquette extends CommonDropdown {
       $etiquette_obj->getFromDB($id_etiquette);
       return $etiquette_obj->fields['name'];
    }
-   
-   //public static function canUpdate() {
-      //parent::canUpdate();
-      
-   //}
 
    public function showForm($ID, $options = array()) {
       if (!$this->isNewID($ID)) {
@@ -75,10 +70,7 @@ class PluginTagEtiquette extends CommonDropdown {
     **/
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
    
-      //if ($item->getType() == 'ObjetDuCoeur') {
-         return _n('Associated item', 'Associated items', 2);
-      //}
-      //return '';
+      return _n('Associated item', 'Associated items', 2);
    }
    
    /**
@@ -86,20 +78,15 @@ class PluginTagEtiquette extends CommonDropdown {
     **/
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
    
-      //if ($item->getType() == 'ObjetDuCoeur') {
-         $monplugin = new PluginTagEtiquetteItem();
-         $ID = $item->getField('id');
-         $monplugin->showForTag($item);
-      //}
+      $monplugin = new PluginTagEtiquetteItem();
+      $ID = $item->getField('id');
+      $monplugin->showForTag($item);
       return true;
    }
    
    function defineTabs($options=array()){
       
       $ong = array();
-      //$ong[0]=_n('Associated item', 'Associated items', 2);
-      
-      //$this->addStandardTab('PluginTagEtiquetteitem', $ong, $options);
       $this->addStandardTab('PluginTagEtiquette', $ong, $options);
    
       return $ong;
@@ -117,16 +104,7 @@ class PluginTagEtiquette extends CommonDropdown {
     * @see CommonDBTM::getSpecificMassiveActions()
     **/
    function getSpecificMassiveActions($checkitem=NULL) {
-       
-      $isadmin = static::canUpdate();
-      //$actions = parent::getSpecificMassiveActions($checkitem);
-      $actions = CommonDBTM::getSpecificMassiveActions($checkitem);
-       
-      if ($isadmin) {
-         //$actions['edit'] = _x('button', 'Edit'); //COOL
-      }
-      
-      return $actions;
+      return CommonDBTM::getSpecificMassiveActions($checkitem);
    }
    
    /**
@@ -154,18 +132,6 @@ class PluginTagEtiquette extends CommonDropdown {
    function showSpecificMassiveActionsParameters($input=array()) {
    
       switch ($input['action']) {
-         /*
-         case "install" :
-            Software::dropdownSoftwareToInstall("softwareversions_id",
-            $_SESSION["glpiactive_entity"], 1);
-            echo "<br><br><input type='submit' name='massiveaction' class='submit' value='".
-                  __s('Install')."'>";
-            return true;
-   
-         case "connect" :
-            $ci = new Computer_Item();
-            return $ci->showSpecificMassiveActionsParameters($input);
-   */
          default :
             return parent::showSpecificMassiveActionsParameters($input);
       }
@@ -182,34 +148,6 @@ class PluginTagEtiquette extends CommonDropdown {
             'ko'      => 0,
             'noright' => 0);
       switch ($input['action']) {
-         /*
-         case "connect" :
-            $ci = new Computer_Item();
-            return $ci->doSpecificMassiveActions($input);
-   
-         case "install" :
-            if (isset($input['softwareversions_id']) && ($input['softwareversions_id'] > 0)) {
-               $inst = new Computer_SoftwareVersion();
-               foreach ($input['item'] as $key => $val) {
-                  if ($val == 1) {
-                     $input2 = array('computers_id'        => $key,
-                           'softwareversions_id' => $input['softwareversions_id']);
-                     if ($inst->can(-1, 'w', $input2)) {
-                        if ($inst->add($input2)) {
-                           $res['ok']++;
-                        } else {
-                           $res['ko']++;
-                        }
-                     } else {
-                        $res['noright']++;
-                     }
-                  }
-               }
-            } else {
-               $res['ko']++;
-            }
-            break;
-   */
          default :
             return parent::doSpecificMassiveActions($input);
       }
@@ -226,13 +164,13 @@ class PluginTagEtiquette extends CommonDropdown {
       $tab[1]['table']           = $this->getTable();
       $tab[1]['field']           = 'name';
       $tab[1]['name']            = __('Name');
-      $tab[1]['massiveaction']   = true; // implicit key==1
+      $tab[1]['massiveaction']   = true;
       $tab[1]['datatype']        = 'itemlink';
       
       $tab[2]['table']           = $this->getTable();
       $tab[2]['field']           = 'comment';
       $tab[2]['name']            = __('Description');
-      $tab[2]['massiveaction']   = true; // implicit field is id
+      $tab[2]['massiveaction']   = true;
       $tab[2]['datatype']        = 'string';
       return $tab;
    }

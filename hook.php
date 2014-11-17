@@ -34,7 +34,6 @@ function plugin_tag_getAddSearchOptions($itemtype) {
       return $sopt;
    }
    
-   //Reserved Range 10500-10530
    $rng1 = 10500;
    //$sopt[strtolower($itemtype)] = ''; //self::getTypeName(2);
 
@@ -121,7 +120,7 @@ function plugin_tag_install() {
  */
 function plugin_tag_getDropdown() {
    return array('PluginTagEtiquette'   => __('Etiquette', 'tag'),
-         'PluginEtiquetteItem' => _n('Etiquette item', 'Etiquette items', 2, 'formcreator'),
+         'PluginEtiquetteItem' => _n('Tag item', 'Tag items', 2, 'tag'),
    );
 }
 
@@ -135,7 +134,7 @@ function plugin_tag_uninstall() {
    foreach (glob(dirname(__FILE__).'/inc/*') as $filepath) {
       // Load *.class.php files and get the class name
       if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-         $classname = 'PluginFormcreator' . ucfirst($matches[1]);
+         $classname = 'PluginTag' . ucfirst($matches[1]);
          include_once($filepath);
          // If the install method exists, load it
          if (method_exists($classname, 'uninstall')) {
