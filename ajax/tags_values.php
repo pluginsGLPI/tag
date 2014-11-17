@@ -13,7 +13,7 @@ function in_arrayi($needle, $haystack) {
 $itemtype = $_REQUEST['itemtype'];
 $obj = new $itemtype();
 
-if (! is_subclass_of($obj, 'CommonDBTM')) {
+if ($itemtype == 'knowbaseitem' || (!is_subclass_of($obj, 'CommonDBTM'))) {
    return;
 }
 
