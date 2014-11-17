@@ -4,8 +4,10 @@ function insertAfter(newNode, referenceNode) {
 
 Ext.onReady(function() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
-   var id = str.substr(str.search('id=') + 3)
    var itemtype = str.substr(0, str.search('.form.php'));
+   
+   var str = document.location.search;
+   var id = str.substr(str.search('id=') + 3);
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
