@@ -11,7 +11,7 @@ Ext.onReady(function() {
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
    
    Ext.Ajax.request({
-      url: "../plugins/tag/ajax/tags_values.php?id=" + id + "&itemtype=" + itemtype,
+      url: "../plugins/tag/ajax/tags_values.php?itemtype=" + itemtype + "&id=" + id,
       success: function(data) {
          //Ext.select('#mainformtable tr').insertHtml('afterEnd', data.responseText);
          //$("#mainformtable tr").eq(0).after(data.responseText + hidden_fields);
