@@ -3,24 +3,24 @@
 function plugin_pre_item_update_tag($parm) {
    global $DB;
    
-   if (! isset($_REQUEST['_plugin_tag_etiquette_values'])) { //if no value is selected in HTML '<select>'
+   if (! isset($_REQUEST['_plugin_tag_tag_values'])) { //if no value is selected in HTML '<select>'
       return $parm;
    }
    
    $plugin = new Plugin();
    //if ($plugin->isActivated('tag')) {
-      $item = new PluginTagEtiquetteItem();
+      $item = new PluginTagTagItem();
       //Delete into base all tags :
-      $DB->query("DELETE FROM `glpi_plugin_tag_etiquetteitems`
-         WHERE `items_id`=".$_REQUEST['plugin_tag_etiquette_id']." 
-            AND `itemtype` = '".$_REQUEST['plugin_tag_etiquette_itemtype']."'");
+      $DB->query("DELETE FROM `glpi_plugin_tag_tagitems`
+         WHERE `items_id`=".$_REQUEST['plugin_tag_tag_id']." 
+            AND `itemtype` = '".$_REQUEST['plugin_tag_tag_itemtype']."'");
       
       //Insert into base the tags :
-      foreach ($_REQUEST['_plugin_tag_etiquette_values'] as $tag_id) {
+      foreach ($_REQUEST['_plugin_tag_tag_values'] as $tag_id) {
          $item->add(array(
-               'plugin_tag_etiquettes_id' => $tag_id,
-               'items_id' => $_REQUEST['plugin_tag_etiquette_id'],
-               'itemtype' => $_REQUEST['plugin_tag_etiquette_itemtype'], //get_class($parm)
+               'plugin_tag_tags_id' => $tag_id,
+               'items_id' => $_REQUEST['plugin_tag_tag_id'],
+               'itemtype' => $_REQUEST['plugin_tag_tag_itemtype'], //get_class($parm)
          ));
       }
    //}
@@ -30,14 +30,14 @@ function plugin_pre_item_update_tag($parm) {
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
-   if (strpos($itemtype, 'Plugin') !== false) { //'PluginTagEtiquette'
+   if (strpos($itemtype, 'Plugin') !== false) { //'PluginTagTag'
       return $sopt;
    }
    
    $rng1 = 10500;
    //$sopt[strtolower($itemtype)] = ''; //self::getTypeName(2);
 
-   $sopt[$rng1]['table']     = 'glpi_plugin_tag_etiquettes';
+   $sopt[$rng1]['table']     = 'glpi_plugin_tag_tags';
    $sopt[$rng1]['field']     = 'name';
    $sopt[$rng1]['name']      = 'Tag';
    $sopt[$rng1]['datatype']  = 'string';
@@ -45,7 +45,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt[$rng1]['massiveaction'] = false;
    $sopt[$rng1]['forcegroupby']  = true;
    $sopt[$rng1]['usehaving']     = true;
-   $sopt[$rng1]['joinparams']    = array('beforejoin' => array('table'      => 'glpi_plugin_tag_etiquetteitems',
+   $sopt[$rng1]['joinparams']    = array('beforejoin' => array('table'      => 'glpi_plugin_tag_tagitems',
                                                                'joinparams' => array('jointype' => "itemtype_item")));
    
    
@@ -119,8 +119,8 @@ function plugin_tag_install() {
  * Define Dropdown tables to be manage in GLPI :
  */
 function plugin_tag_getDropdown() {
-   return array('PluginTagEtiquette'   => __('Etiquette', 'tag'),
-         'PluginEtiquetteItem' => _n('Tag item', 'Tag items', 2, 'tag'),
+   return array('PluginTagTag'   => __('Tag', 'tag'),
+         'PluginTagItem' => _n('Tag item', 'Tag items', 2, 'tag'),
    );
 }
 

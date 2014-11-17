@@ -5,10 +5,10 @@ Session::checkRight("config", "w");
 
 Plugin::load('tag', true);
 
-$dropdown = new PluginTagEtiquette();
+$dropdown = new PluginTagTag();
 
 if (isset($_POST['add'])) {
-   $item = new PluginTagEtiquetteItem();
+   $item = new PluginTagTagItem();
    $_REQUEST['itemtype'] = strtolower($_REQUEST['itemtype']);
    $item->add($_REQUEST);
 }

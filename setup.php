@@ -50,8 +50,8 @@ function plugin_init_tag() {
       $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    }
    
-   Plugin::registerClass('PluginTagEtiquetteItem',
-            array('addtabon' => array('PluginTagEtiquette')));
+   Plugin::registerClass('PluginTagTagItem',
+            array('addtabon' => array('PluginTagTag')));
    
    $itemtypes = getItemtypes(); //TODO
    foreach ($itemtypes as $itemtype) {

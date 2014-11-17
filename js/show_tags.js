@@ -7,8 +7,8 @@ Ext.onReady(function() {
    var id = str.substr(str.search('id=') + 3)
    var itemtype = str.substr(0, str.search('.form.php'));
    
-   var hidden_fields = "<input type='hidden' name='plugin_tag_etiquette_id' value='"+id+"'>" +
-      "<input type='hidden' name='plugin_tag_etiquette_itemtype' value='"+itemtype+"'>";
+   var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
+      "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
    
    Ext.Ajax.request({
       url: "../plugins/tag/ajax/tags_values.php?id=" + id + "&itemtype=" + itemtype,
