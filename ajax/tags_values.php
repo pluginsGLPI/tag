@@ -5,8 +5,16 @@ function in_arrayi($needle, $haystack) {
    return in_array(strtolower($needle), array_map('strtolower', $haystack));
 }
 
-if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
-   return '';
+// Old :
+//if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
+//   return '';
+//}
+
+$itemtype = $_REQUEST['itemtype'];
+$obj = new $itemtype();
+
+if (! is_subclass_of($obj, 'CommonDBTM')) {
+   return;
 }
 
 $selected_id = array();
@@ -17,8 +25,6 @@ foreach ($found_items as $found_item) {
    $selected_id[] = $found_item['plugin_tag_tags_id'];
 }
 
-$itemtype = $_REQUEST['itemtype'];
-$obj = new $itemtype();
 $params = $obj->canUpdate() ? '' : ' disabled ';
 
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
