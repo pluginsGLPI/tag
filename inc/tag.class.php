@@ -2,7 +2,8 @@
 class PluginTagTag extends CommonDropdown {
 
    public static function getTypeName($nb=1) {
-      return _n('Tag', 'Tags', 'tag');
+      return __('Tag', 'tag');
+      //return _n('Tag', 'Tags', 'tag');
    }
    
    public static function getTagName($id_tag) {
