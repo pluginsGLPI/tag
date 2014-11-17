@@ -41,7 +41,6 @@ class PluginTagEtiquetteItem extends CommonDBRelation {
    
    static function getEtiquette_items($id_glpi_obj, $itemtype) {
       global $DB;
-      $etiquette_items = array();
       $query = "SELECT *
                FROM `glpi_plugin_tag_etiquetteitems`
                WHERE itemtype='$itemtype' AND items_id=$id_glpi_obj";

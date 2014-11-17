@@ -10,8 +10,8 @@ if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
 }
 
 $selected_id = array();
-$etiquette_item = new PluginTagEtiquetteItem();
-$found_items = $etiquette_item->find('items_id='.$_REQUEST['id'].' AND itemtype="'.$_REQUEST['itemtype'].'"');
+$tag_item = new PluginTagEtiquetteItem();
+$found_items = $tag_item->find('items_id='.$_REQUEST['id'].' AND itemtype="'.$_REQUEST['itemtype'].'"');
 
 foreach ($found_items as $found_item) {
    $selected_id[] = $found_item['plugin_tag_etiquettes_id'];
@@ -21,9 +21,6 @@ $itemtype = $_REQUEST['itemtype'];
 $obj = new $itemtype();
 $params = $obj->canUpdate() ? '' : ' disabled ';
 
-$etiquette = new PluginTagEtiquette();
-$found = $etiquette->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"');
-
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
 echo "<tr class='$class'>
          <th>Tags</th>
@@ -31,6 +28,9 @@ echo "<tr class='$class'>
             <select data-placeholder='Choisir les tags associés...' name='_plugin_tag_etiquette_values[]'
                 style='width:350px;' multiple class='chosen-select-no-results' $params >
              <option value=''></option>";
+
+$tag = new PluginTagEtiquette();
+$found = $tag->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"');
 
 foreach ($found as $label) {
    $param = in_array($label['id'], $selected_id) ? ' selected ' : '';

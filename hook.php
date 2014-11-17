@@ -16,9 +16,9 @@ function plugin_pre_item_update_tag($parm) {
             AND `itemtype` = '".$_REQUEST['plugin_tag_etiquette_itemtype']."'");
       
       //Insert into base the tags :
-      foreach ($_REQUEST['_plugin_tag_etiquette_values'] as $etiquette_id) {
+      foreach ($_REQUEST['_plugin_tag_etiquette_values'] as $tag_id) {
          $item->add(array(
-               'plugin_tag_etiquettes_id' => $etiquette_id,
+               'plugin_tag_etiquettes_id' => $tag_id,
                'items_id' => $_REQUEST['plugin_tag_etiquette_id'],
                'itemtype' => $_REQUEST['plugin_tag_etiquette_itemtype'], //get_class($parm)
          ));

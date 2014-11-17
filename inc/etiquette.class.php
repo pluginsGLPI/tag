@@ -6,9 +6,9 @@ class PluginTagEtiquette extends CommonDropdown {
    }
    
    public static function getTagName($id_etiquette) {
-      $etiquette_obj = new self();
-      $etiquette_obj->getFromDB($id_etiquette);
-      return $etiquette_obj->fields['name'];
+      $obj = new self();
+      $obj->getFromDB($id_etiquette);
+      return $obj->fields['name'];
    }
 
    public function showForm($ID, $options = array()) {
