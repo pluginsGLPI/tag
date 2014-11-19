@@ -23,7 +23,6 @@ class PluginTagTagItem extends CommonDBRelation {
             	`plugin_tag_tags_id` INT(11) NOT NULL DEFAULT '0',
             	`items_id` TINYINT(1) NOT NULL DEFAULT '1',
             	`itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-            	`comment` TEXT NULL COLLATE 'utf8_unicode_ci',
             	PRIMARY KEY (`id`),
             	INDEX `name` (`itemtype`)
             )
