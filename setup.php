@@ -45,16 +45,15 @@ function plugin_init_tag() {
       && strpos($_SERVER['REQUEST_URI'], "id=-1") === false) { //line/condition for Computer
       $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.min.js', 'js/show_tags.js');
       $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
-   } elseif (strpos($_SERVER['REQUEST_URI'], "/front/ticket.php") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.min.js');
-      $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    }
    
    Plugin::registerClass('PluginTagTagItem',
             array('addtabon' => array('PluginTagTag')));
    
-   $itemtypes = getItemtypes(); //TODO
-   foreach ($itemtypes as $itemtype) {
+   foreach (getItemtypes() as $itemtype) {
+      if (strpos($_SERVER['REQUEST_URI'], "/front/".strtolower($itemtype).".php") !== false) {
+         $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+      }
       $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
    }
 
