@@ -46,7 +46,7 @@ foreach ($found as $label) {
 echo '</select>';
 echo     "</td>";
 // Show '+' button : 
-if (Session::haveRight("config", "w")) {
+if (PluginTagTag::canCreate()) {
    global $CFG_GLPI;
    echo "<td><a href='".$CFG_GLPI['url_base']."/plugins/tag/front/tag.form.php'>
          <img src='../pics/add_dropdown.png' alt='Add' /></a></td>";
