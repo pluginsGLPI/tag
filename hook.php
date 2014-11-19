@@ -3,10 +3,6 @@
 function plugin_pre_item_update_tag($parm) {
    global $DB;
    
-   if (! isset($_REQUEST['_plugin_tag_tag_values'])) { //if no value is selected in HTML '<select>'
-      return $parm;
-   }
-   
    $plugin = new Plugin();
    //if ($plugin->isActivated('tag')) {
       $item = new PluginTagTagItem();
@@ -15,13 +11,15 @@ function plugin_pre_item_update_tag($parm) {
          WHERE `items_id`=".$_REQUEST['plugin_tag_tag_id']." 
             AND `itemtype` = '".$_REQUEST['plugin_tag_tag_itemtype']."'");
       
-      //Insert into base the tags :
-      foreach ($_REQUEST['_plugin_tag_tag_values'] as $tag_id) {
-         $item->add(array(
-               'plugin_tag_tags_id' => $tag_id,
-               'items_id' => $_REQUEST['plugin_tag_tag_id'],
-               'itemtype' => $_REQUEST['plugin_tag_tag_itemtype'], //get_class($parm)
-         ));
+      if (isset($_REQUEST['_plugin_tag_tag_values'])) { //if no value is selected in HTML '<select>'
+         //Insert into base the tags :
+         foreach ($_REQUEST['_plugin_tag_tag_values'] as $tag_id) {
+            $item->add(array(
+                  'plugin_tag_tags_id' => $tag_id,
+                  'items_id' => $_REQUEST['plugin_tag_tag_id'],
+                  'itemtype' => $_REQUEST['plugin_tag_tag_itemtype'], //get_class($parm)
+            ));
+         }
       }
    //}
    return $parm;
