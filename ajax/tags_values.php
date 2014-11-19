@@ -10,6 +10,8 @@ function in_arrayi($needle, $haystack) {
 //   return '';
 //}
 
+global $CFG_GLPI;
+
 $itemtype = $_REQUEST['itemtype'];
 $obj = new $itemtype();
 
@@ -25,6 +27,7 @@ foreach ($found_items as $found_item) {
    $selected_id[] = $found_item['plugin_tag_tags_id'];
 }
 
+$obj->getFromDB($_REQUEST['id']);
 $params = $obj->canUpdateItem() ? '' : ' disabled ';
 
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
@@ -47,7 +50,6 @@ echo '</select>';
 echo     "</td>";
 // Show '+' button : 
 if (PluginTagTag::canCreate()) {
-   global $CFG_GLPI;
    echo "<td><a href='".$CFG_GLPI['url_base']."/plugins/tag/front/tag.form.php'>
          <img src='../pics/add_dropdown.png' alt='Add' /></a></td>";
 }
