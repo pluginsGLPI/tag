@@ -2,12 +2,18 @@ function insertAfter(newNode, referenceNode) {
    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
+function getParamValue(param,url) {
+   var u = url == undefined ? document.location.href : url;
+   var reg = new RegExp('(\\?|&|^)'+param+'=(.*?)(&|$)');
+   matches = u.match(reg);
+   return matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
+}
+
 Ext.onReady(function() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
    var itemtype = str.substr(0, str.search('.form.php'));
    
-   var str = document.location.search;
-   var id = str.substr(str.search('id=') + 3);
+   var id = getParamValue('id');
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
