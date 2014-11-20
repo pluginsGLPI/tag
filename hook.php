@@ -3,17 +3,27 @@
 function plugin_pre_item_update_tag($parm) {
    global $DB;
    
-   $plugin = new Plugin();
-   //if ($plugin->isActivated('tag')) {
+   if (isset($_REQUEST['plugin_tag_tag_id']) && isset($_REQUEST['plugin_tag_tag_itemtype'])) {
       $item = new PluginTagTagItem();
-      //Delete into base all tags :
-      $DB->query("DELETE FROM `glpi_plugin_tag_tagitems`
-         WHERE `items_id`=".$_REQUEST['plugin_tag_tag_id']." 
-            AND `itemtype` = '".$_REQUEST['plugin_tag_tag_itemtype']."'");
       
-      if (isset($_REQUEST['_plugin_tag_tag_values'])) { //if no value is selected in HTML '<select>'
-         //Insert into base the tags :
-         foreach ($_REQUEST['_plugin_tag_tag_values'] as $tag_id) {
+      $already_present = array();
+
+      $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']." 
+               AND `itemtype` = '".$_REQUEST['plugin_tag_tag_itemtype']."'";
+      
+      $tag_values = (isset($_REQUEST["_plugin_tag_tag_values"])) ? $_REQUEST["_plugin_tag_tag_values"] : array(); 
+      
+      foreach ($item->find($query_part) as $indb) {
+         if (in_array($indb["plugin_tag_tags_id"], $tag_values)) {
+            $already_present[] = $indb["plugin_tag_tags_id"];
+         } else {
+            $item->delete(array("id" => $indb['id']));
+         }
+         
+      }
+   
+      foreach ($tag_values as $tag_id) {
+         if (!in_array($tag_id, $already_present)) {
             $item->add(array(
                   'plugin_tag_tags_id' => $tag_id,
                   'items_id' => $_REQUEST['plugin_tag_tag_id'],
@@ -21,7 +31,7 @@ function plugin_pre_item_update_tag($parm) {
             ));
          }
       }
-   //}
+   }
    return $parm;
 }
 
