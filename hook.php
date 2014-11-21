@@ -77,7 +77,11 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
                <ul class="chzn-choices">';
          foreach ($tags as $tag) {
             $tmp = explode("$$", $tag);
-            $out .= '<li class="search-choice"><span>'.$tmp[0].'</span></li>';
+            $out .= '<li class="search-choice">'.$tmp[0];
+            if ($tag !== end($tags)) {
+               $out .= '<span style="display:none;">'.$_SESSION["glpicsv_delimiter"].'</span>';
+            }
+            $out .= '</li>';
          }
          $out .= '</ul>
                </div>';
