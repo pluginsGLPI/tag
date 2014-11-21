@@ -36,7 +36,6 @@ class PluginTagTag extends CommonDropdown {
       //Html::initEditorSystem('comment');
       echo "</td>";
       echo "</tr>";
-
       $this->showFormButtons($options);
       $this->addDivForTabs();
 
@@ -161,7 +160,7 @@ class PluginTagTag extends CommonDropdown {
    
       $tab                       = array();
       $tab['common']             = __('Characteristics');
-   
+
       $tab[1]['table']           = $this->getTable();
       $tab[1]['field']           = 'name';
       $tab[1]['name']            = __('Name');
@@ -173,6 +172,23 @@ class PluginTagTag extends CommonDropdown {
       $tab[2]['name']            = __('Description');
       $tab[2]['massiveaction']   = true;
       $tab[2]['datatype']        = 'string';
+      
+      $tab[3]['table']           = $this->getTable();
+      $tab[3]['field']           = 'id';
+      $tab[3]['name']            = __('ID');
+      $tab[3]['massiveaction']   = false;
+      $tab[3]['datatype']        = 'number';
+
+      $tab[4]['table']           = 'glpi_entities';
+      $tab[4]['field']           = 'completename';
+      $tab[4]['linkfield']       = 'entities_id';
+      $tab[4]['name']            = __('Entity');
+      
+      $tab[5]['table']           = $this->getTable();
+      $tab[5]['field']           = 'is_recursive';
+      $tab[5]['name']            = __('Child entities');
+      $tab[5]['datatype']        = 'bool';
+      
       return $tab;
    }
 }
