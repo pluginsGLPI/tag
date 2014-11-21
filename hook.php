@@ -47,7 +47,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
 
    $sopt[$rng1]['table']     = 'glpi_plugin_tag_tags';
    $sopt[$rng1]['field']     = 'name';
-   $sopt[$rng1]['name']      = 'Tag';
+   $sopt[$rng1]['name']      = _n('Tag', 'Tag', 2, 'tag');
    $sopt[$rng1]['datatype']  = 'string';
    $sopt[$rng1]['searchtype'] = "contains";
    $sopt[$rng1]['massiveaction'] = false;

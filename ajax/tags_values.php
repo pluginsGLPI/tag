@@ -32,7 +32,7 @@ $params = $obj->canUpdateItem() ? '' : ' disabled ';
 
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
 echo "<tr class='$class'>
-         <th>Tags</th>
+         <th>"._n('Tag', 'Tags', 2, 'tag')."</th>
          <td>
             <select data-placeholder='Choisir les tags associés...' name='_plugin_tag_tag_values[]'
                 style='width:350px;' multiple class='chosen-select-no-results' $params >
