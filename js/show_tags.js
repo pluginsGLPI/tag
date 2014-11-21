@@ -13,6 +13,11 @@ Ext.onReady(function() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
    var itemtype = str.substr(0, str.search('.form.php'));
    
+   // Don't show in notification :
+   if (itemtype == 'notification') {
+      return;
+   }
+   
    var id = getParamValue('id');
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
