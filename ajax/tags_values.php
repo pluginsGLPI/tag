@@ -43,7 +43,8 @@ echo "<tr class='$class'>
              <option value=''></option>";
 
 $tag = new PluginTagTag();
-$found = $tag->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"');
+$found = $tag->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"
+                     AND is_recursive = 1');
 
 foreach ($found as $label) {
    $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
