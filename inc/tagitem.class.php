@@ -142,9 +142,10 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
          
          echo "<tr class='tab_bg_1'><td class='right'>";
-                  Dropdown::showAllItems("items_id", 0, 0,
-                  ($tag->fields['is_recursive']?-1:$tag->fields['entities_id']),
-                        $itemtypes, false, true);
+         Dropdown::showAllItems("items_id", 0, 0,
+            ($tag->fields['is_recursive']?-1:$tag->fields['entities_id']),
+            $itemtypes, false, true
+         );
          echo "</td><td class='center'>";
          echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
          echo "<input type='hidden' name='plugin_tag_tags_id' value='$instID'>";
@@ -195,6 +196,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   AND ";
                   break;
                case 'Profile':
+               case 'RSSFeed':
                   //Possible to add (in code) condition to visibility :
                   $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
@@ -235,6 +237,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   //TODO : Vérifier aussi ici majuscule ?
                   case 'knowbaseitem':
                   case 'Profile':
+                  case 'RSSFeed':
                      $query .= " ORDER BY `$itemtable`.`$column`";
                      break;
                   default:
@@ -291,7 +294,7 @@ class PluginTagTagItem extends CommonDBRelation {
          }
          echo "</table>";
          if ($canedit && $number) {
-            $massiveactionparams['ontop'] =false;
+            $massiveactionparams['ontop'] = false;
             Html::showMassiveActions(__CLASS__, $massiveactionparams);
             Html::closeForm();
          }

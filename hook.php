@@ -56,7 +56,6 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt[$rng1]['joinparams']    = array('beforejoin' => array('table'      => 'glpi_plugin_tag_tagitems',
                                                                'joinparams' => array('jointype' => "itemtype_item")));
    
-   
    //array('jointype' => "itemtype_item");
    
    return $sopt;
@@ -70,9 +69,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    
    switch ($field) {
       case "10500":
-         //tag3$$3$$$$tag2$$2
          $tags = explode("$$$$", $data["ITEM_$num"]);
-         //array('tag3$$3', 'tag2$$2')
          $out = '<div class="chzn-container chzn-container-multi" title="">
                <ul class="chzn-choices">';
          foreach ($tags as $tag) {
@@ -106,7 +103,7 @@ function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
 /**
  * Install all necessary elements for the plugin
  *
- * @return boolean True if success
+ * @return boolean (True if success)
  */
 function plugin_tag_install() {
    $version   = plugin_version_tag();
