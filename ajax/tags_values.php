@@ -31,11 +31,15 @@ $obj->getFromDB($_REQUEST['id']);
 $params = $obj->canUpdateItem() ? '' : ' disabled ';
 
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
+$width = '350px';
+if ($itemtype == 'group') {
+   $width = '177px';
+}
 echo "<tr class='$class'>
          <th>"._n('Tag', 'Tags', 2, 'tag')."</th>
          <td>
             <select data-placeholder='Choisir les tags associés...' name='_plugin_tag_tag_values[]'
-                style='width:350px;' multiple class='chosen-select-no-results' $params >
+                style='width:$width;' multiple class='chosen-select-no-results' $params >
              <option value=''></option>";
 
 $tag = new PluginTagTag();
