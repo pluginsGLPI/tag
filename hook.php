@@ -38,18 +38,18 @@ function plugin_pre_item_update_tag($parm) {
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
-   if (strpos($itemtype, 'Plugin') !== false) { //'PluginTagTag'
+   if (strpos($itemtype, 'Plugin') !== false && strpos($itemtype, 'CronTask') !== false) {
       return $sopt;
    }
    
    $rng1 = 10500;
    //$sopt[strtolower($itemtype)] = ''; //self::getTypeName(2);
 
-   $sopt[$rng1]['table']     = 'glpi_plugin_tag_tags';
-   $sopt[$rng1]['field']     = 'name';
-   $sopt[$rng1]['name']      = _n('Tag', 'Tag', 2, 'tag');
-   $sopt[$rng1]['datatype']  = 'string';
-   $sopt[$rng1]['searchtype'] = "contains";
+   $sopt[$rng1]['table']         = getTableForItemType('PluginTagTag');
+   $sopt[$rng1]['field']         = 'name';
+   $sopt[$rng1]['name']          = _n('Tag', 'Tag', 2, 'tag');
+   $sopt[$rng1]['datatype']      = 'string';
+   $sopt[$rng1]['searchtype']    = "contains";
    $sopt[$rng1]['massiveaction'] = false;
    $sopt[$rng1]['forcegroupby']  = true;
    $sopt[$rng1]['usehaving']     = true;
@@ -98,7 +98,7 @@ function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
    array_shift($valeurs);
    foreach ($valeurs as $valeur) {
       $valeur = trim($valeur);
-      $out .= " AND `ITEM_$num` LIKE '%$valeur%'";
+      $out .= " OR `ITEM_$num` LIKE '%$valeur%'";
    }
    return $out;
 }

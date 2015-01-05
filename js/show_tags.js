@@ -14,7 +14,7 @@ Ext.onReady(function() {
    var itemtype = str.substr(0, str.search('.form.php'));
    
    // Don't show in notification :
-   if (itemtype == 'notification') {
+   if (itemtype == 'notification' || itemtype == 'crontask') {
       return;
    }
    

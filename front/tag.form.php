@@ -12,11 +12,15 @@ if (isset($_POST['add'])) {
    //$_REQUEST['itemtype'] = strtolower($_REQUEST['itemtype']);
    
    // Check unicity :
-   $found = $item->find('plugin_tag_tags_id = '. $_REQUEST['plugin_tag_tags_id'] .'
-         AND items_id = ' . $_REQUEST['items_id'].'
-         AND itemtype = "' . $_REQUEST['itemtype'].'"');
-   
-   if (count($found) == 0) {
+   if (isset($_REQUEST['plugin_tag_tags_id'])) {
+      $found = $item->find('plugin_tag_tags_id = '. $_REQUEST['plugin_tag_tags_id'] .'
+            AND items_id = ' . $_REQUEST['items_id'].'
+            AND itemtype = "' . $_REQUEST['itemtype'].'"');
+      
+      if (count($found) == 0) {
+         $item->add($_REQUEST);
+      }
+   } else {
       $item->add($_REQUEST);
    }
 }
