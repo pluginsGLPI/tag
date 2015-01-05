@@ -43,8 +43,7 @@ echo "<tr class='$class'>
              <option value=''></option>";
 
 $tag = new PluginTagTag();
-$found = $tag->find('entities_id LIKE "' . $_SESSION['glpiactive_entity'] . '"
-                     AND is_recursive = 1');
+$found = $tag->find(getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true));
 
 foreach ($found as $label) {
    $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
@@ -52,11 +51,10 @@ foreach ($found as $label) {
 }
 
 echo '</select>';
-echo     "</td>";
+echo "</td>";
 // Show '+' button : 
 if (PluginTagTag::canCreate()) {
    echo "<td><a href='".$CFG_GLPI['url_base']."/plugins/tag/front/tag.form.php'>
          <img src='../pics/add_dropdown.png' alt='Add' /></a></td>";
 }
-echo  "</tr>";
-
+echo "</tr>";
