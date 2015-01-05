@@ -129,8 +129,7 @@ class PluginTagTagItem extends CommonDBRelation {
    
       $result = $DB->query("SELECT DISTINCT `itemtype`
          FROM `glpi_plugin_tag_tagitems`
-         WHERE `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID'
-         ORDER BY `itemtype`");
+         WHERE `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID'");
       $number = $DB->numrows($result);
       $rand   = mt_rand();
    
@@ -196,6 +195,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   AND ";
                   break;
                case 'Profile':
+                  //Possible to add (in code) condition to visibility :
                   $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
                   WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
