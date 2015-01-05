@@ -186,19 +186,29 @@ class PluginTagTagItem extends CommonDBRelation {
             $itemtable = getTableForItemType($itemtype);
             $query     = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
       
-            if ($itemtype == 'knowbaseitem') {
+            switch ($itemtype) {
+               //TODO : Vérifier si on doit le mettre en majuscule
+               case 'knowbaseitem':
                $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
                   ".KnowbaseItem::addVisibilityJoins()."
                   WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
                   AND ";
-            } else {
+                  break;
+               case 'Profile':
+                  $query .= "-1 AS entity
+                  FROM `glpi_plugin_tag_tagitems`, `$itemtable`
+                  WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
+                  AND ";
+                  break;
+               default:
                $query .= "`glpi_entities`.`id` AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
                   LEFT JOIN `glpi_entities`
                   ON (`glpi_entities`.`id` = `$itemtable`.`entities_id`)
                   WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
                   AND ";
+                  break;
             }
             $query .= "`glpi_plugin_tag_tagitems`.`itemtype` = '$itemtype'
                AND `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID' ";
@@ -221,18 +231,23 @@ class PluginTagTagItem extends CommonDBRelation {
                   $query .= " AND `$itemtable`.`is_template` = '0'";
                }
    
-               if ($itemtype == 'knowbaseitem') {
-                  $query .= " ORDER BY `$itemtable`.`$column`";
-               } else {
-                  $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
-               }
-   
-               if ($itemtype == 'softwarelicense') {
-                  $soft = new Software();
+               switch ($itemtype) {
+                  //TODO : Vérifier aussi ici majuscule ?
+                  case 'knowbaseitem':
+                  case 'Profile':
+                     $query .= " ORDER BY `$itemtable`.`$column`";
+                     break;
+                  default:
+                     $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
+                     break;
                }
       
                if ($result_linked = $DB->query($query)) {
                   if ($DB->numrows($result_linked)) {
+                     
+                     if ($itemtype == 'softwarelicense') {
+                        $soft = new Software();
+                     }
       
                      while ($data = $DB->fetch_assoc($result_linked)) {
       
