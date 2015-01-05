@@ -36,6 +36,14 @@ class PluginTagTag extends CommonDropdown {
       //Html::initEditorSystem('comment');
       echo "</td>";
       echo "</tr>";
+
+      //TODO : Inclure bibliothèque JS d'Alex qui gère les couleurs.
+      echo "<tr class='line1'><td>" . __('Color', 'tag') . "</td>";
+      echo "<td>";
+      echo "<textarea name='color' id ='color' cols='45' rows='2' >" . $this->fields['color'] . "</textarea>";
+      echo "</td>";
+      echo "</tr>";
+      
       $this->showFormButtons($options);
       $this->addDivForTabs();
 
@@ -51,6 +59,7 @@ class PluginTagTag extends CommonDropdown {
                      `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
                      `name` varchar(255) NOT NULL DEFAULT '',
                      `comment` text collate utf8_unicode_ci,
+                     `color` varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
                      PRIMARY KEY (`id`),
                      KEY `name` (`name`)
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
