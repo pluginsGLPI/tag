@@ -153,3 +153,4 @@ function plugin_tag_uninstall() {
    }
    return true;
 }
+

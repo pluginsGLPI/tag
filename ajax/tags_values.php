@@ -1,12 +1,9 @@
 <?php
 include ('../../../inc/includes.php');
 
-function in_arrayi($needle, $haystack) {
-   return in_array(strtolower($needle), array_map('strtolower', $haystack));
-}
-
-// Old :
-if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
+// check if itemtype can display tag control
+if (in_array(strtolower($_REQUEST['itemtype']), 
+             array_map('strtolower', getBlacklistItemtype()))) {
    return '';
 }
 

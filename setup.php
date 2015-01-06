@@ -27,11 +27,8 @@ function plugin_tag_check_config($verbose=false) {
    return true;
 }
 
-function getItemtypes() {
-   return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
-               'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
-               'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
-               'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+function getBlacklistItemtype() {
+   return array('KnowbaseItem', 'Tag');
 }
 
 function plugin_init_tag() {
@@ -39,17 +36,31 @@ function plugin_init_tag() {
    
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
 
-   // charge chosen component when needed
-   $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
-   if (strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 'js/show_tags.js');
-   }
-   
    Plugin::registerClass('PluginTagTagItem',
             array('addtabon' => array('PluginTagTag')));
-   
-   foreach (getItemtypes() as $itemtype) {
-      $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
-   }
 
+   // charge chosen css when needed
+   $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+
+   // only on itemtype form
+   if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
+
+      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 
+                                                     'js/show_tags.js');
+
+      if (isset($matches[1][0])) {
+         $itemtype = $matches[1][0];
+
+         // stop on blaclisted itemtype
+         if (in_array($itemtype, array_map('strtolower', getBlacklistItemtype()))) {
+            return '';
+         }
+
+         //normalize classname case
+         $obj = new $itemtype;
+         $itemtype = get_class($obj);
+
+         $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+      }
+   }
 }
