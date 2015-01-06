@@ -187,8 +187,7 @@ class PluginTagTagItem extends CommonDBRelation {
             $query     = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
       
             switch ($itemtype) {
-               //TODO : Vérifier si on doit le mettre en majuscule
-               case 'knowbaseitem':
+               case 'KnowbaseItem':
                $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
                   ".KnowbaseItem::addVisibilityJoins()."
@@ -216,7 +215,7 @@ class PluginTagTagItem extends CommonDBRelation {
             $query .= "`glpi_plugin_tag_tagitems`.`itemtype` = '$itemtype'
                AND `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID' ";
    
-            if ($itemtype =='knowbaseitem') {
+            if ($itemtype =='KnowbaseItem') {
                if (Session::getLoginUserID()) {
                   $where = "AND ".KnowbaseItem::addVisibilityRestrict();
                   } else {
@@ -235,8 +234,7 @@ class PluginTagTagItem extends CommonDBRelation {
                }
    
                switch ($itemtype) {
-                  //TODO : Vérifier aussi ici majuscule ?
-                  case 'knowbaseitem':
+                  case 'KnowbaseItem':
                   case 'Profile':
                   case 'RSSFeed':
                   case 'Reminder':
