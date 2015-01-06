@@ -104,6 +104,13 @@ class PluginTagTagItem extends CommonDBRelation {
       $tab[2]['datatype']        = 'string';
       return $tab;
    }
+
+   static function getItemtypes() {
+      return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
+                  'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
+                  'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
+                  'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+   }
    
    static function showForTag(PluginTagTag $tag) {
       global $DB, $CFG_GLPI;
@@ -115,7 +122,7 @@ class PluginTagTagItem extends CommonDBRelation {
       
       $canedit = $tag->can($instID,'w');
       
-      $itemtypes = getItemtypes();
+      $itemtypes = self::getItemtypes();
       
       foreach ($itemtypes as $key => $itemtype) {
          if ($itemtype == 'Notes') {

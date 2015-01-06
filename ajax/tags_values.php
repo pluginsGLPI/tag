@@ -1,12 +1,9 @@
 <?php
 include ('../../../inc/includes.php');
 
-function in_arrayi($needle, $haystack) {
-   return in_array(strtolower($needle), array_map('strtolower', $haystack));
-}
-
-// Old :
-if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
+// check if itemtype can display tag control
+if (in_array(strtolower($_REQUEST['itemtype']), 
+             array_map('strtolower', getBlacklistItemtype()))) {
    return '';
 }
 
@@ -44,15 +41,11 @@ echo "<tr class='$class'>
              <option value=''></option>";
 
 $tag = new PluginTagTag();
-switch ($itemtype) {
-   case 'reminder':
-   case 'rssfeed':
-      $found = $tag->find('1=1');
-      break;
-   default:
-      $found = $tag->find(getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true));
-      break;
+$where = "";
+if (isset($obj->fields['entities_id'])) {
+   $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true);
 }
+$found = $tag->find($where);
 
 foreach ($found as $label) {
    $param = in_array($label['id'], $selected_id) ? ' selected ' : '';

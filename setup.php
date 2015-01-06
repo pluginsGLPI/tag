@@ -27,41 +27,52 @@ function plugin_tag_check_config($verbose=false) {
    return true;
 }
 
-function getItemtypes() {
-   return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
-               'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
-               'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
-               'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
-}
-
-function addChosen() {
-   global $PLUGIN_HOOKS;
-   $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 'js/show_tags.js');
-   $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+function getBlacklistItemtype() {
+   return array('KnowbaseItem', 'Tag');
 }
 
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
    
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
-   
-   //if (in_array($itemtype, getItemtypes()))
-   if (strpos($_SERVER['REQUEST_URI'], "/plugins/") === false
-      && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false
-      && strpos($_SERVER['REQUEST_URI'], "id=-1") === false) { //line/condition for Computer
-      addChosen();
-   } elseif (strpos($_SERVER['REQUEST_URI'], "front/allassets.php") !== false) { //Global
-      addChosen();
-   }
-   
+
    Plugin::registerClass('PluginTagTagItem',
             array('addtabon' => array('PluginTagTag')));
-   
-   foreach (getItemtypes() as $itemtype) {
-      if (strpos($_SERVER['REQUEST_URI'], "/front/".strtolower($itemtype).".php") !== false) {
-         $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
-      }
-      $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
-   }
 
+   // add link on plugin name in configuration > plugin 
+   $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
+
+   // charge chosen css when needed
+   $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+
+   // only on itemtype form
+   if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
+
+      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 
+                                                     'js/show_tags.js');
+
+      if (isset($matches[1][0])) {
+         $itemtype = $matches[1][0];
+
+         if (preg_match_all("/plugins\/(.*)\//U", $_SERVER['REQUEST_URI'], $matches_plugin) !== false) {
+            if (isset($matches_plugin[1][0])) {
+               $itemtype = "Plugin".$matches_plugin[1][0].$itemtype;
+            }
+         }
+
+         // stop on blaclisted itemtype
+         if (in_array($itemtype, array_map('strtolower', getBlacklistItemtype()))) {
+            return '';
+         }
+
+         if (class_exists($itemtype)) {
+            
+            //normalize classname case
+            $obj = new $itemtype;
+            $itemtype = get_class($obj);
+
+            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+         }
+      }
+   }
 }
