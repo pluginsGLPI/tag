@@ -27,7 +27,7 @@ function plugin_pre_item_update_tag($parm) {
             $item->add(array(
                   'plugin_tag_tags_id' => $tag_id,
                   'items_id' => $_REQUEST['plugin_tag_tag_id'],
-                  'itemtype' => $_REQUEST['plugin_tag_tag_itemtype'], //get_class($parm)
+                  'itemtype' => ucfirst($_REQUEST['plugin_tag_tag_itemtype']), //get_class($parm)
             ));
          }
       }
