@@ -44,15 +44,11 @@ echo "<tr class='$class'>
              <option value=''></option>";
 
 $tag = new PluginTagTag();
-switch ($itemtype) {
-   case 'reminder':
-   case 'rssfeed':
-      $found = $tag->find('1=1');
-      break;
-   default:
-      $found = $tag->find(getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true));
-      break;
+$where = "";
+if (isset($obj->fields['entities_id'])) {
+   $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true);
 }
+$found = $tag->find($where);
 
 foreach ($found as $label) {
    $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
