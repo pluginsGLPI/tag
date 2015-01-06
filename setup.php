@@ -54,16 +54,25 @@ function plugin_init_tag() {
       if (isset($matches[1][0])) {
          $itemtype = $matches[1][0];
 
+         if (preg_match_all("/plugins\/(.*)\//U", $_SERVER['REQUEST_URI'], $matches_plugin) !== false) {
+            if (isset($matches_plugin[1][0])) {
+               $itemtype = "Plugin".$matches_plugin[1][0].$itemtype;
+            }
+         }
+
          // stop on blaclisted itemtype
          if (in_array($itemtype, array_map('strtolower', getBlacklistItemtype()))) {
             return '';
          }
 
-         //normalize classname case
-         $obj = new $itemtype;
-         $itemtype = get_class($obj);
+         if (class_exists($itemtype)) {
+            
+            //normalize classname case
+            $obj = new $itemtype;
+            $itemtype = get_class($obj);
 
-         $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+         }
       }
    }
 }
