@@ -28,7 +28,7 @@ function plugin_tag_check_config($verbose=false) {
 }
 
 function getItemtypes() {
-   return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 
+   return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
                'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
                'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
                'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'

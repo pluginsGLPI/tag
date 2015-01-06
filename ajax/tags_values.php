@@ -1,23 +1,24 @@
 <?php
 include ('../../../inc/includes.php');
 
-//function in_arrayi($needle, $haystack) {
-//   return in_array(strtolower($needle), array_map('strtolower', $haystack));
-//}
+function in_arrayi($needle, $haystack) {
+   return in_array(strtolower($needle), array_map('strtolower', $haystack));
+}
 
 // Old :
-//if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
-//   return '';
-//}
+if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
+   return '';
+}
 
 global $CFG_GLPI;
 
 $itemtype = $_REQUEST['itemtype'];
 $obj = new $itemtype();
 
-if (!($obj instanceof CommonDBTM) || is_subclass_of($obj, 'CommonDBTM')) {
-   return;
-}
+// Warning : Ticket is need but parent class of Ticket isn't CommonDBTM
+//if (get_parent_class($obj) != 'CommonDBTM') {
+//   return;
+//}
 
 $selected_id = array();
 $tag_item = new PluginTagTagItem();
