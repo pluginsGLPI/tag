@@ -15,7 +15,9 @@ global $CFG_GLPI;
 $itemtype = $_REQUEST['itemtype'];
 $obj = new $itemtype();
 
-if ($itemtype == 'knowbaseitem' || (!is_subclass_of($obj, 'CommonDBTM'))) {
+if (!is_subclass_of($obj, 'CommonDBTM') || 
+   $itemtype == 'knowbaseitem' || 
+   $itemtype == 'entity') {
    return;
 }
 

@@ -31,7 +31,7 @@ function getItemtypes() {
    return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 
                'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
                'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
-               'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+               'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
 }
 
 function plugin_init_tag() {
