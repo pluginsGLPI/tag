@@ -34,6 +34,12 @@ function getItemtypes() {
                'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
 }
 
+function addChosen() {
+   global $PLUGIN_HOOKS;
+   $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 'js/show_tags.js');
+   $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+}
+
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
    
@@ -43,8 +49,9 @@ function plugin_init_tag() {
    if (strpos($_SERVER['REQUEST_URI'], "/plugins/") === false
       && strpos($_SERVER['REQUEST_URI'], ".form.php?id=") !== false
       && strpos($_SERVER['REQUEST_URI'], "id=-1") === false) { //line/condition for Computer
-      $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 'js/show_tags.js');
-      $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+      addChosen();
+   } elseif (strpos($_SERVER['REQUEST_URI'], "front/allassets.php") !== false) { //Global
+      addChosen();
    }
    
    Plugin::registerClass('PluginTagTagItem',
