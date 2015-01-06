@@ -49,9 +49,6 @@ function plugin_init_tag() {
             array('addtabon' => array('PluginTagTag')));
    
    foreach (getItemtypes() as $itemtype) {
-      if (strpos($_SERVER['REQUEST_URI'], "/front/".strtolower($itemtype).".php") !== false) {
-         $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
-      }
       $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
    }
 
