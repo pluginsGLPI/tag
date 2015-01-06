@@ -197,6 +197,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   break;
                case 'Profile':
                case 'RSSFeed':
+               case 'Reminder':
                   //Possible to add (in code) condition to visibility :
                   $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
@@ -238,6 +239,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   case 'knowbaseitem':
                   case 'Profile':
                   case 'RSSFeed':
+                  case 'Reminder':
                      $query .= " ORDER BY `$itemtable`.`$column`";
                      break;
                   default:
