@@ -1,9 +1,9 @@
 <?php
 include ('../../../inc/includes.php');
 
-function in_arrayi($needle, $haystack) {
-   return in_array(strtolower($needle), array_map('strtolower', $haystack));
-}
+//function in_arrayi($needle, $haystack) {
+//   return in_array(strtolower($needle), array_map('strtolower', $haystack));
+//}
 
 // Old :
 //if (! in_arrayi($_REQUEST['itemtype'], getItemtypes()) ) {
@@ -15,9 +15,7 @@ global $CFG_GLPI;
 $itemtype = $_REQUEST['itemtype'];
 $obj = new $itemtype();
 
-if (!is_subclass_of($obj, 'CommonDBTM') || 
-   $itemtype == 'knowbaseitem' || 
-   $itemtype == 'entity') {
+if (!($obj instanceof CommonDBTM) || is_subclass_of($obj, 'CommonDBTM')) {
    return;
 }
 
