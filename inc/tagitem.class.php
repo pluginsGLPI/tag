@@ -190,9 +190,17 @@ class PluginTagTagItem extends CommonDBRelation {
    
          if ($item->canView()) {
             $column = "name";
-            $itemtable = getTableForItemType($itemtype);
+            
+            // For rules itemtypes (example : ruledictionnaryphonemodel) :
+            if (substr($itemtype, 0, 4) == 'rule') {
+               $itemtable = getTableForItemType('rule');
+            } else {
+               $itemtable = getTableForItemType($itemtype);
+            }
             $query     = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
-      
+            
+            $obj = new $itemtype();
+            
             switch ($itemtype) {
                case 'KnowbaseItem':
                $query .= "-1 AS entity
@@ -211,12 +219,19 @@ class PluginTagTagItem extends CommonDBRelation {
                   AND ";
                   break;
                default:
-               $query .= "`glpi_entities`.`id` AS entity
-                  FROM `glpi_plugin_tag_tagitems`, `$itemtable`
-                  LEFT JOIN `glpi_entities`
-                  ON (`glpi_entities`.`id` = `$itemtable`.`entities_id`)
-                  WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
-                  AND ";
+                  if (isset($obj->fields['entities_id'])) {
+                     $query .= "`glpi_entities`.`id` AS entity
+                        FROM `glpi_plugin_tag_tagitems`, `$itemtable`
+                        LEFT JOIN `glpi_entities`
+                        ON (`glpi_entities`.`id` = `$itemtable`.`entities_id`)
+                        WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
+                        AND ";
+                  } else {
+                     $query .= "-1 AS entity
+                        FROM `glpi_plugin_tag_tagitems`, `$itemtable`
+                        WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
+                        AND ";
+                  }
                   break;
             }
             $query .= "`glpi_plugin_tag_tagitems`.`itemtype` = '$itemtype'
@@ -248,7 +263,11 @@ class PluginTagTagItem extends CommonDBRelation {
                      $query .= " ORDER BY `$itemtable`.`$column`";
                      break;
                   default:
-                     $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
+                     if (isset($obj->fields['entities_id'])) {
+                        $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
+                     } else {
+                        $query .= " ORDER BY `$itemtable`.`$column`";
+                     }
                      break;
                }
       
