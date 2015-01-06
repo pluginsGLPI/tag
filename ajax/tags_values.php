@@ -54,9 +54,10 @@ foreach ($found as $label) {
 
 echo '</select>';
 echo "</td>";
-// Show '+' button : 
+
 if (PluginTagTag::canCreate()) {
+   // Show '+' button :
    echo "<td><a href='".$CFG_GLPI['url_base']."/plugins/tag/front/tag.form.php'>
-         <img src='../pics/add_dropdown.png' alt='Add' /></a></td>";
+         <img src='".$CFG_GLPI['root_doc']."/pics/add_dropdown.png' alt='Add' /></a></td>";
 }
 echo "</tr>";
