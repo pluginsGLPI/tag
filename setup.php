@@ -56,7 +56,7 @@ function plugin_init_tag() {
 
          if (preg_match_all("/plugins\/(.*)\//U", $_SERVER['REQUEST_URI'], $matches_plugin) !== false) {
             if (isset($matches_plugin[1][0])) {
-               $itemtype = "Plugin".$matches_plugin[1][0].$itemtype;
+               $itemtype = "Plugin" . ucfirst($matches_plugin[1][0]) . ucfirst($itemtype);
             }
          }
 
