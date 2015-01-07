@@ -90,7 +90,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
                $plugintagtag->getFromDB($tmp[1]);
                $color = $plugintagtag->fields["color"];
                if (! empty($color)) {
-                  $parms = "style='color:$color'";
+                  $parms = "style='border-color:$color;border-width: 2px;'";
               }
             }
             
