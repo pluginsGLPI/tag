@@ -50,6 +50,7 @@ function plugin_init_tag() {
 
       if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false && 
          strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false && 
+         strpos($_SERVER['REQUEST_URI'], "id=-1") === false && //for Computer
          strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false) {
          $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 
                                                         'js/show_tags.js');
