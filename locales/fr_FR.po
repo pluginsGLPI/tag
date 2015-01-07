@@ -35,3 +35,6 @@ msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiquette"
 msgstr[1] "Etiquettes"
+
+msgid "Choose tags..."
+msgstr "Choisir les tags associés..."

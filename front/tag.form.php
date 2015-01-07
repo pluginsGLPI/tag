@@ -23,6 +23,17 @@ if (isset($_POST['add'])) {
    } else {
       $item->add($_REQUEST);
    }
+
+   Toolbox::logDebug($_SESSION["glpipopup"]);
+
+   if (isset($_SESSION["glpipopup"]["rand"])) {
+      echo "<script type='text/javascript' >\n";
+      echo "console.log(window.opener);";
+      echo "window.opener.updateTagSelectResults_".$_SESSION["glpipopup"]["rand"]."();";
+      echo "</script>";
+   }
+
+   exit;
 }
 
 include (GLPI_ROOT . "/front/dropdown.common.form.php");

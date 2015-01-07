@@ -200,4 +200,74 @@ class PluginTagTag extends CommonDropdown {
       
       return $tab;
    }
+
+   static function tagDropdownMultiple($options = array()) {
+      global $CFG_GLPI;
+
+      //default options
+      $params['name']                = '_plugin_tag_tag_values';
+      $params['rand']                = mt_rand();
+
+      if (is_array($options) && count($options)) {
+         foreach ($options as $key => $val) {
+            $params[$key] = $val;
+         }
+      }
+
+      // multiple select : add [] to name
+      $params['name'].= "[]";
+
+      $itemtype = $_REQUEST['itemtype'];
+      $obj = new $itemtype();
+
+      // Object must be an instance of CommonDBTM (or inherint of this)
+      if (!$obj instanceof CommonDBTM) {
+        return;
+      }
+
+      $selected_id = array();
+      $tag_item = new PluginTagTagItem();
+      $found_items = $tag_item->find('items_id='.$_REQUEST['id'].' 
+                                      AND itemtype="'.$_REQUEST['itemtype'].'"');
+
+      foreach ($found_items as $found_item) {
+         $selected_id[] = $found_item['plugin_tag_tags_id'];
+      }
+
+      $obj->getFromDB($_REQUEST['id']);
+      $sel_attr = $obj->canUpdateItem() ? '' : ' disabled ';
+
+      $tag = new self();
+      $where = "";
+      // restrict tag by entity if current object has entity
+      if (isset($obj->fields['entities_id'])) {
+         $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true);
+      }
+      $found = $tag->find($where);
+
+      echo "<span style='width:80%'>";
+      echo "<select data-placeholder='".__('Choose tags...', 'tag')."' name='".$params['name']."'
+                id='tag_select' multiple class='chosen-select-no-results' $sel_attr >";
+      foreach ($found as $label) {
+         $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
+         echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
+      }
+      echo "</select>";
+      echo "</span>";
+
+      echo "<script type='text/javascript' >\n
+      window.updateTagSelectResults_".$params['rand']." = function () {
+         
+      }
+      </script>";
+
+      if (PluginTagTag::canCreate()) {
+         // Show '+' button :
+         echo "&nbsp;<img alt='' title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
+              "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;'
+              onClick=\"var w = window.open('".
+               $CFG_GLPI['url_base']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$params['rand']."', ".
+               "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";
+      }
+   }
 }
