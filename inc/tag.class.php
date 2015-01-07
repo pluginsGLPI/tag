@@ -64,7 +64,7 @@ JAVASCRIPT;
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line1'><td>" . __('Color', 'tag') . "</td>"; 
+      echo "<tr class='line1'><td>" . __('HTML color', 'tag') . "</td>"; 
       echo "<td>";
       //echo "<textarea name='color' id ='color' cols='45' rows='2' >" . $this->fields['color'] . "</textarea>";
       self::colorInput("color", $this->fields["color"]);
