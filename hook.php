@@ -79,7 +79,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    switch ($field) {
       case "10500":
          $tags = explode("$$$$", $data["ITEM_$num"]);
-         $out = '<div class="chzn-container chzn-container-multi" title="">
+         $out = '<div class="chzn-container chznT-container-multi" title="">
                <ul class="chzn-choices">';
          foreach ($tags as $tag) {
             $tmp = explode("$$", $tag);
