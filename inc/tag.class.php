@@ -227,7 +227,11 @@ JAVASCRIPT;
       
       return $tab;
    }
-
+   
+   static function cmp_Tag($a, $b) {
+      return strcmp($a["name"], $b["name"]);
+   }
+   
    static function tagDropdownMultiple($options = array()) {
       global $CFG_GLPI;
 
@@ -275,6 +279,9 @@ JAVASCRIPT;
       echo "<span style='width:80%'>";
       echo "<select data-placeholder='".__('Choose tags...', 'tag')."' name='".$params['name']."'
                 id='tag_select' multiple class='chosen-select-no-results' $sel_attr >";
+      
+      usort($found, array(__CLASS__, "cmp_Tag"));
+      
       foreach ($found as $label) {
          $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
          if (! empty($label['color'])) {
