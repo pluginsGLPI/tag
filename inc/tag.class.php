@@ -250,7 +250,10 @@ class PluginTagTag extends CommonDropdown {
                 id='tag_select' multiple class='chosen-select-no-results' $sel_attr >";
       foreach ($found as $label) {
          $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
-         echo '<option data-color-option="#C00" value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
+         if (! empty($label['color'])) {
+            $param .= 'data-color-option="'.$label['color'].'"';
+         }
+         echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
       }
       echo "</select>";
       echo "</span>";
