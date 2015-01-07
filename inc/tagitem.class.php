@@ -134,9 +134,12 @@ class PluginTagTagItem extends CommonDBRelation {
          }
       }
    
-      $result = $DB->query("SELECT DISTINCT `itemtype`, items_id
+      $result = $DB->query("SELECT DISTINCT `itemtype`
          FROM `glpi_plugin_tag_tagitems`
          WHERE `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID'");
+      $result2 = $DB->query("SELECT `itemtype`, items_id
+            FROM `glpi_plugin_tag_tagitems`
+            WHERE `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID'");
       $number = $DB->numrows($result);
       $rand   = mt_rand();
    
@@ -184,7 +187,7 @@ class PluginTagTagItem extends CommonDBRelation {
       
       for ($i=0 ; $i < $number ; $i++) {
          $itemtype=$DB->result($result, $i, "itemtype");
-         $item_id =$DB->result($result, $i, "items_id");
+         $item_id =$DB->result($result2, $i, "items_id");
          if (!($item = getItemForItemtype($itemtype))) {
             continue;
          }
@@ -214,6 +217,7 @@ class PluginTagTagItem extends CommonDBRelation {
                case 'Profile':
                case 'RSSFeed':
                case 'Reminder':
+               case 'Entity':
                   //Possible to add (in code) condition to visibility :
                   $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
@@ -262,6 +266,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   case 'Profile':
                   case 'RSSFeed':
                   case 'Reminder':
+                  case 'Entity':
                      $query .= " ORDER BY `$itemtable`.`$column`";
                      break;
                   default:

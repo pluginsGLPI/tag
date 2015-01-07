@@ -272,7 +272,11 @@ JAVASCRIPT;
       $where = "";
       // restrict tag by entity if current object has entity
       if (isset($obj->fields['entities_id'])) {
-         $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true);
+         if ($itemtype == 'entity') {
+            $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['id'], true);
+         } else {
+            $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true);
+         }
       }
       $found = $tag->find($where);
 
