@@ -43,6 +43,7 @@ function plugin_init_tag() {
    $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
    // charge chosen css when needed
+   $PLUGIN_HOOKS['add_css']['tag'][] = "tag.css";
    $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
 
    // only on itemtype form
