@@ -48,7 +48,10 @@ function plugin_init_tag() {
    // only on itemtype form
    if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
 
-      if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false) {
+      if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false && 
+         strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false && 
+         strpos($_SERVER['REQUEST_URI'], "id=-1") === false && //for Computer
+         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false) {
          $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 
                                                         'js/show_tags.js');
       }
@@ -73,7 +76,11 @@ function plugin_init_tag() {
             $obj = new $itemtype;
             $itemtype = get_class($obj);
 
-            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+            // Tag have no tag associated
+            if ($itemtype != 'PluginTagTag') {
+               $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+               $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype] = 'plugin_pre_item_purge_tag';
+            }
          }
       }
    }
