@@ -46,6 +46,8 @@ function plugin_init_tag() {
    $PLUGIN_HOOKS['add_css']['tag'][] = "tag.css";
    $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    
+   $PLUGIN_HOOKS['add_javascript']['tag'][] = 'lib/chosen/chosen.native.js';
+   
    // for choise color of a tag
    if (strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") !== false) {
       $PLUGIN_HOOKS['add_javascript']['tag'][]    = 'lib/colortools/ext.ux.color3.js';
@@ -59,8 +61,7 @@ function plugin_init_tag() {
          strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false && 
          strpos($_SERVER['REQUEST_URI'], "id=-1") === false && //for Computer
          strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false) {
-         $PLUGIN_HOOKS['add_javascript']['tag'] = array('lib/chosen/chosen.native.js', 
-                                                        'js/show_tags.js');
+         $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js';
       }
 
       if (isset($matches[1][0])) {

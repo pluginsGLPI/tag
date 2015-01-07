@@ -83,7 +83,18 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
                <ul class="chzn-choices">';
          foreach ($tags as $tag) {
             $tmp = explode("$$", $tag);
-            $out .= '<li class="search-choice">'.$tmp[0];
+            
+            $parms = '';
+            if (isset($tmp[1])) {
+               $plugintagtag = new PluginTagTag();
+               $plugintagtag->getFromDB($tmp[1]);
+               $color = $plugintagtag->fields["color"];
+               if (! empty($color)) {
+                  $parms = "style='color:$color'";
+              }
+            }
+            
+            $out .= '<li class="search-choice" '.$parms.'>'.$tmp[0];
             if ($tag !== end($tags)) {
                $out .= '<span style="display:none;">'.$_SESSION["glpicsv_delimiter"].'</span>';
             }
