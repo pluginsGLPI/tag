@@ -9,7 +9,6 @@ $dropdown = new PluginTagTag();
 
 if (isset($_POST['add'])) {
    $item = new PluginTagTagItem();
-   //$_REQUEST['itemtype'] = strtolower($_REQUEST['itemtype']);
    
    // Check unicity :
    if (isset($_REQUEST['plugin_tag_tags_id'])) {

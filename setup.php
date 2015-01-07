@@ -77,6 +77,7 @@ function plugin_init_tag() {
             $itemtype = get_class($obj);
 
             $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+            $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype] = 'plugin_pre_item_purge_tag';
          }
       }
    }
