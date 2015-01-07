@@ -45,6 +45,12 @@ function plugin_init_tag() {
    // charge chosen css when needed
    $PLUGIN_HOOKS['add_css']['tag'][] = "tag.css";
    $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
+   
+   // for choise color of a tag
+   if (strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") !== false) {
+      $PLUGIN_HOOKS['add_javascript']['tag'][]    = 'lib/colortools/ext.ux.color3.js';
+      $PLUGIN_HOOKS['add_css']['tag'][]           = 'lib/colortools/ext.ux.color3.css';
+   }
 
    // only on itemtype form
    if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {

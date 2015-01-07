@@ -12,6 +12,33 @@ class PluginTagTag extends CommonDropdown {
       return $obj->fields['name'];
    }
 
+   static function colorInput($name, $value) {
+      echo "<div id='$name' style='width:105px'></div>";
+   
+      $JS = <<<JAVASCRIPT
+      Ext.onReady(function() {
+         //extjs color picker
+         new Ext.Panel({
+            renderTo:document.getElementById('$name'),
+            plain:false,
+            header:false,
+            border:false,
+            items:[{
+                  xtype:'colorfield',
+                  hideLabel:true,
+                  value:'{$value}',
+                  name:'$name',
+                  colorSelector:'mixer'
+            }]
+         });
+      });
+JAVASCRIPT;
+   
+      echo "<script type='text/javascript'>";
+      echo $JS;
+      echo "</script>";
+   }
+   
    public function showForm($ID, $options = array()) {
       if (!$this->isNewID($ID)) {
          $this->check($ID, 'r');
@@ -37,10 +64,10 @@ class PluginTagTag extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
-      //TODO : Inclure bibliothèque JS d'Alex qui gère les couleurs.
-      echo "<tr class='line1'><td>" . __('Color', 'tag') . "</td>";
+      echo "<tr class='line1'><td>" . __('Color', 'tag') . "</td>"; 
       echo "<td>";
-      echo "<textarea name='color' id ='color' cols='45' rows='2' >" . $this->fields['color'] . "</textarea>";
+      //echo "<textarea name='color' id ='color' cols='45' rows='2' >" . $this->fields['color'] . "</textarea>";
+      self::colorInput("color", $this->fields["color"]);
       echo "</td>";
       echo "</tr>";
       
