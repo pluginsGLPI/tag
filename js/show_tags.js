@@ -1,12 +1,15 @@
 function insertAfter(newNode, referenceNode) {
-   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+   // For example : User with no right
+   if (typeof referenceNode === undefined) {
+      referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+   }
 }
 
 function getParamValue(param,url) {
    var u = url == undefined ? document.location.href : url;
    var reg = new RegExp('(\\?|&|^)'+param+'=(.*?)(&|$)');
    matches = u.match(reg);
-   return matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
+   return matches != null && matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
 }
 
 function upperFirst(str) {
