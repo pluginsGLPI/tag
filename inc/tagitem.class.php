@@ -295,7 +295,7 @@ class PluginTagTagItem extends CommonDBRelation {
                      
                      $linkname = $data[$column];
                      
-                     if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
+                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
                         $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
                      }
       
