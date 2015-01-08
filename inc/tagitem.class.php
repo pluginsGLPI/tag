@@ -193,7 +193,7 @@ class PluginTagTagItem extends CommonDBRelation {
          }
    
          if ($item->canView()) {
-            $column = "name";
+            $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
             
             // For rules itemtypes (example : ruledictionnaryphonemodel) :
             if (strtolower(substr($itemtype, 0, 4)) == 'rule') {
@@ -292,7 +292,9 @@ class PluginTagTagItem extends CommonDBRelation {
                         $data["name"] = sprintf(__('%1$s - %2$s'), $data["name"],
                               $soft->fields['name']);
                      }
-                     $linkname = $data["name"];
+                     
+                     $linkname = $data[$column];
+                     
                      if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
                         $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
                      }
