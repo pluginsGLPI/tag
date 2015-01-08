@@ -1,3 +1,10 @@
+<?php
+include ('../../../inc/includes.php');
+
+Plugin::load('tag', true);
+
+header('Content-Type: text/javascript');
+?>
 function insertAfter(newNode, referenceNode) {
    // For example : User with no right
    if (referenceNode !== undefined) {
@@ -54,7 +61,7 @@ Ext.onReady(function() {
          
          var elements = document.querySelectorAll('.chosen-select-no-results');
          for (var i = 0; i < elements.length; i++) {
-            new ChosenT(elements[i], {no_results_text: "Aucun tag trouvé."});
+            new ChosenT(elements[i], {no_results_text: "<?php echo __("No tag founded", 'tag'); ?>"});
          }
          
       }
