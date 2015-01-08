@@ -7,6 +7,13 @@ Plugin::load('tag', true);
 
 $dropdown = new PluginTagTag();
 
+if (isset($_POST['add']) || isset($_REQUEST['update'])) {
+   if (isset($_REQUEST['name']) && empty($_REQUEST['name'])) {
+      Session::addMessageAfterRedirect(__('Not saved : Name is a required field.', 'tag'), false, ERROR);
+      Html::back();
+   }
+}
+
 if (isset($_POST['add'])) {
    $item = new PluginTagTagItem();
    

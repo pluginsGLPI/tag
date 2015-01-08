@@ -51,7 +51,7 @@ JAVASCRIPT;
       $this->showFormHeader($options);
       echo '<table class="tab_cadre_fixe">';
 
-      echo "<tr class='line0'><td>" . __('Name') . "</td>";
+      echo "<tr class='line0'><td>" . __('Name') . " <span class='red'>*</span></td>";
       echo "<td>";
       Html::autocompletionTextField($this, "name");
       echo "</td>";
