@@ -1,6 +1,6 @@
 function insertAfter(newNode, referenceNode) {
    // For example : User with no right
-   if (typeof referenceNode === undefined) {
+   if (referenceNode !== undefined) {
       referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
    }
 }
