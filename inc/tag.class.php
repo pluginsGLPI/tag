@@ -219,6 +219,7 @@ JAVASCRIPT;
       $tab[4]['field']           = 'completename';
       $tab[4]['linkfield']       = 'entities_id';
       $tab[4]['name']            = __('Entity');
+      $tab[4]['datatype']        = 'dropdown';
       
       $tab[5]['table']           = $this->getTable();
       $tab[5]['field']           = 'is_recursive';
