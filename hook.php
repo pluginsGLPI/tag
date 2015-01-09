@@ -37,11 +37,13 @@ function plugin_pre_item_update_tag($parm) {
 
 function plugin_pre_item_purge_tag($object) {
    
-   $tagitem = new PluginTagTagItem();
-   $result = $tagitem->deleteByCriteria(array(
-      "items_id" => $object->fields["id"],
-      "itemtype" => ucfirst($object->input["plugin_tag_tag_itemtype"]),
-   ));
+   if (isset($object->input["plugin_tag_tag_itemtype"])) { // Example : TicketTask no have tag
+      $tagitem = new PluginTagTagItem();
+      $result = $tagitem->deleteByCriteria(array(
+         "items_id" => $object->fields["id"],
+         "itemtype" => ucfirst($object->input["plugin_tag_tag_itemtype"]),
+      ));
+   }
 }
 
 function plugin_tag_getAddSearchOptions($itemtype) {
