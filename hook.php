@@ -50,7 +50,11 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
    if (strpos($itemtype, 'Plugin') !== false && strpos($itemtype, 'CronTask') !== false) {
-      return $sopt;
+      return array();
+   }
+   
+   if ($itemtype === 'PluginTagTag') {
+      return array();
    }
    
    $rng1 = 10500;
