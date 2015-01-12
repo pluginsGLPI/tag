@@ -97,6 +97,15 @@ JAVASCRIPT;
       }
 
    public static function uninstall() {
+      $query = "DELETE FROM from glpi_logs WHERE itemtype_link='".__CLASS__."'";
+      $GLOBALS['DB']->query($query);
+      
+      $query = "DELETE FROM glpi_bookmarks WHERE itemtype='".__CLASS__."'";
+      $GLOBALS['DB']->query($query);
+      
+      $query = "DELETE FROM glpi_displaypreferences WHERE itemtype='".__CLASS__."' OR num=10500";
+      $GLOBALS['DB']->query($query);
+      
       $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
       return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
    }
