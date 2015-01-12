@@ -64,7 +64,9 @@ function plugin_init_tag() {
          strpos($_SERVER['REQUEST_URI'], "plugins/datainjection/front/model.form.php") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/webservices/front/client.form.php?new=1") === false &&
          strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false) {
-         $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js.php';
+         if (Session::haveRight("entity_dropdown", "r")) {
+            $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js.php';
+         }
       }
 
       if (isset($matches[1][0])) {

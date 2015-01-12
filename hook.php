@@ -49,6 +49,10 @@ function plugin_pre_item_purge_tag($object) {
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
+   if (! Session::haveRight("entity_dropdown", "r")) {
+      return array();
+   }
+   
    if (strpos($itemtype, 'Plugin') !== false && strpos($itemtype, 'CronTask') !== false) {
       return array();
    }
