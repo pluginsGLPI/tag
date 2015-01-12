@@ -61,7 +61,7 @@ Ext.onReady(function() {
          
          var elements = document.querySelectorAll('.chosen-select-no-results');
          for (var i = 0; i < elements.length; i++) {
-            new ChosenT(elements[i], {no_results_text: "<?php echo __("No tag founded", 'tag'); ?>"});
+            new ChosenT(elements[i], {no_results_text: "<?php echo __("No tag found", 'tag'); ?>"});
          }
          
       }
