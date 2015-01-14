@@ -19,6 +19,11 @@ function getParamValue(param,url) {
    return matches != null && matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
 }
 
+function getIdFromHeader(headerRow) {
+   var splited = headerRow.querySelectorAll("th")[0].textContent.split(" ");
+   return splited[splited.length - 1];
+}
+
 function upperFirst(str) {
    return str.charAt(0).toUpperCase() + str.substring(1);
 }
@@ -44,7 +49,14 @@ Ext.onReady(function() {
       return;
    }
    
+   var headerRow = document.querySelectorAll("tr.headerRow")[0];
+   
    var id = getParamValue('id');
+   
+   // For part of Mreporting plugin :
+   if (id == '') {
+      id = getIdFromHeader(headerRow);
+   }
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
@@ -57,7 +69,7 @@ Ext.onReady(function() {
          
          var tr = document.createElement('tr');
          tr.innerHTML = data.responseText + hidden_fields;
-         insertAfter(tr, document.querySelectorAll("tr.headerRow")[0]);
+         insertAfter(tr, headerRow);
          
          var elements = document.querySelectorAll('.chosen-select-no-results');
          for (var i = 0; i < elements.length; i++) {
