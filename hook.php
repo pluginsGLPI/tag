@@ -57,7 +57,8 @@ function plugin_tag_getAddSearchOptions($itemtype) {
       return array();
    }
    
-   if ($itemtype === 'PluginTagTag') {
+   if ($itemtype === 'PluginTagTag' 
+         || strpos($itemtype, 'PluginPrintercounters') !== false) {
       return array();
    }
    
