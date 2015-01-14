@@ -53,7 +53,8 @@ JAVASCRIPT;
 
       echo "<tr class='line0'><td>" . __('Name') . " <span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this, "name");
+      //Html::autocompletionTextField($this, "name");
+      echo '<input type="text" name="name" value="'.$this->fields['name'].'" size="40" required>';
       echo "</td>";
       echo "</tr>";
 
