@@ -19,7 +19,8 @@ function getParamValue(param,url) {
    return matches != null && matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
 }
 
-function getIdFromHeader(headerRow) {
+function getIdFromHeader() {
+   var headerRow = document.querySelectorAll("tr.headerRow")[0];
    var splited = headerRow.querySelectorAll("th")[0].textContent.split(" ");
    return splited[splited.length - 1];
 }
@@ -49,13 +50,11 @@ Ext.onReady(function() {
       return;
    }
    
-   var headerRow = document.querySelectorAll("tr.headerRow")[0];
-   
    var id = getParamValue('id');
    
    // For part of Mreporting plugin :
    if (id == '') {
-      id = getIdFromHeader(headerRow);
+      id = getIdFromHeader();
    }
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
@@ -64,12 +63,8 @@ Ext.onReady(function() {
    Ext.Ajax.request({
       url: urlAjax+"?itemtype=" + itemtype + "&id=" + id,
       success: function(data) {
-         //Ext.select('#mainformtable tr').insertHtml('afterEnd', data.responseText);
-         //$("#mainformtable tr").eq(0).after(data.responseText + hidden_fields);
          
-         var tr = document.createElement('tr');
-         tr.innerHTML = data.responseText + hidden_fields;
-         insertAfter(tr, headerRow);
+         Ext.select('#mainformtable tr:first').insertHtml('afterEnd', data.responseText + hidden_fields);
          
          var elements = document.querySelectorAll('.chosen-select-no-results');
          for (var i = 0; i < elements.length; i++) {
