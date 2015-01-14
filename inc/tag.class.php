@@ -317,7 +317,7 @@ JAVASCRIPT;
          echo "&nbsp;<img alt='' title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
               "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;'
               onClick=\"var w = window.open('".
-               $CFG_GLPI['url_base']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$params['rand']."', ".
+               $CFG_GLPI['root_doc']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$params['rand']."', ".
                "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";
       }
    }
