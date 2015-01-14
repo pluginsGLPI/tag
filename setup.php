@@ -65,7 +65,8 @@ function plugin_init_tag() {
          strpos($_SERVER['REQUEST_URI'], "plugins/webservices/front/client.form.php?new=1") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/printercounters/") === false &&
          isset ($_SESSION["glpiroot"]) && 
-         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false) {
+         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false && 
+         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/config.form.php") === false) { //for ?forcetab=PluginBehaviorsConfig%241
          if (Session::haveRight("entity_dropdown", "r")) {
             $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js.php';
          }
