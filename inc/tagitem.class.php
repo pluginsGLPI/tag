@@ -298,27 +298,34 @@ class PluginTagTagItem extends CommonDBRelation {
                   $link = Toolbox::getItemTypeFormURL($itemtype);
                   $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
                   
-                  if ($itemtype == "PluginMreportingConfig") {
-                     global $LANG;
-                     if (isset($LANG['plugin_mreporting']['Helpdesk'][$data['name']]['title'])) {
-                        $name .= " (" . $LANG['plugin_mreporting']['Helpdesk'][$data['name']]['title'] . ")";
-                     }
-                  }
-                  
-                  if ($itemtype == 'PluginProjetProjet') {
+                  if ($itemtype == 'PluginMreportingConfig' || $itemtype == 'PluginProjetProjet') {
                      
                      $datas = array(
-                        "currentuser" => "glpi",
-                        "entities_id" => $data["entity"],
-                        "is_recursive" => $data["is_recursive"],
-                        "ITEM_0" => $data["name"],
-                        "ITEM_0_2" => $data["id"],
-                        "id" => $data["id"],
-                        );
-                     
-                     if (function_exists('plugin_projet_giveItem')) {
-                        $name = plugin_projet_giveItem($itemtype, $data["id"], $datas, 0);
+                           //"currentuser" => "glpi",
+                           "entities_id" => $data["entity"],
+                           "ITEM_0" => $data["name"],
+                           "ITEM_0_2" => $data["id"],
+                           "id" => $data["id"],
+                     );
+                     if (isset($data["is_recursive"])) {
+                        $datas["is_recursive"] = $data["is_recursive"];
                      }
+                     
+                     switch ($itemtype) {
+                        case "PluginMreportingConfig":
+                           Plugin::load('mreporting', true);
+                           if (function_exists('plugin_mreporting_giveItem')) { // For security
+                              $name = plugin_mreporting_giveItem($itemtype, 1, $datas, 0);
+                           }
+                           break;
+                        case "PluginProjetProjet":
+                           Plugin::load('project', true);
+                           if (function_exists('plugin_projet_giveItem')) { // For security
+                              $name = plugin_projet_giveItem($itemtype, 1, $datas, 0);
+                           }
+                           break;
+                     }
+                     
                   }
    
                   echo "<tr class='tab_bg_1'>";
