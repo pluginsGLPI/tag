@@ -57,7 +57,7 @@ Ext.onReady(function() {
    var id = getParamValue('id');
    
    if (id == '') {
-      id = getIdFromHeader(); //For part of Mreporting plugin
+      id = parseInt(getIdFromHeader()); //For part of Mreporting plugin
       
       // Security :
       if (! isInteger(id)) {
