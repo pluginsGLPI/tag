@@ -333,7 +333,19 @@ class PluginTagTagItem extends CommonDBRelation {
                      }
                      echo "</td>";
                   }
-                  echo "<td class='center'>".$item->getTypeName(1)."</td>";
+                  echo "<td class='center'>";
+                  
+                  // Show plugin name (is to delete remove any ambiguity) :
+                  $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                  if ($pieces[1] == 'Plugin') {
+                     $plugin_name = $pieces[2];
+                     if (function_exists($function_giveitem)) { // For security
+                        $tab = call_user_func("plugin_version_".$plugin_name);
+                     }
+                     echo $tab["name"]." : ";
+                  }
+                  
+                  echo $item->getTypeName(1)."</td>";
                   echo "<td ".(isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").
                   ">".$name."</td>";
                   echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities", $data['entity']);
