@@ -304,6 +304,22 @@ class PluginTagTagItem extends CommonDBRelation {
                         $name .= " (" . $LANG['plugin_mreporting']['Helpdesk'][$data['name']]['title'] . ")";
                      }
                   }
+                  
+                  if ($itemtype == 'PluginProjetProjet') {
+                     
+                     $datas = array(
+                        "currentuser" => "glpi",
+                        "entities_id" => $data["entity"],
+                        "is_recursive" => $data["is_recursive"],
+                        "ITEM_0" => $data["name"],
+                        "ITEM_0_2" => $data["id"],
+                        "id" => $data["id"],
+                        );
+                     
+                     if (function_exists('plugin_projet_giveItem')) {
+                        $name = plugin_projet_giveItem($itemtype, $data["id"], $datas, 0);
+                     }
+                  }
    
                   echo "<tr class='tab_bg_1'>";
                   
