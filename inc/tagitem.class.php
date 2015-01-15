@@ -283,7 +283,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   if ($itemtype == 'Softwarelicense') {
                      $soft = new Software();
                      $soft->getFromDB($data['softwares_id']);
-                     $data["name"] .= ' - ' . $soft->fields['name']; //This add name of software
+                     $data["name"] .= ' - ' . $soft->getName(); //This add name of software
                   } elseif ($itemtype == "PluginResourcesResource") {
                      $data["name"] = formatUserName($data["id"], "", $data["name"],
                                            $data["firstname"]);
@@ -301,6 +301,8 @@ class PluginTagTagItem extends CommonDBRelation {
                   if ($itemtype == 'PluginMreportingConfig' 
                         || $itemtype == 'PluginProjetProjet'
                         || $itemtype == 'PluginResourcesResource') {
+                     $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                     $plugin_name = $pieces[2];
                      
                      $datas = array(
                            //"currentuser" => "glpi",
@@ -314,25 +316,10 @@ class PluginTagTagItem extends CommonDBRelation {
                         $datas["is_recursive"] = $data["is_recursive"];
                      }
                      
-                     switch ($itemtype) {
-                        case "PluginMreportingConfig":
-                           Plugin::load('mreporting', true);
-                           if (function_exists('plugin_mreporting_giveItem')) { // For security
-                              $name = plugin_mreporting_giveItem($itemtype, 1, $datas, 0);
-                           }
-                           break;
-                        case "PluginProjetProjet":
-                           Plugin::load('project', true);
-                           if (function_exists('plugin_projet_giveItem')) { // For security
-                              $name = plugin_projet_giveItem($itemtype, 1, $datas, 0);
-                           }
-                           break;
-                        case "PluginResourcesResource":
-                           Plugin::load('resources', true);
-                           if (function_exists('plugin_resources_giveItem')) { // For security
-                              $name = plugin_resources_giveItem($itemtype, 1, $datas, 0);
-                           }
-                           break;
+                     Plugin::load(strtolower($plugin_name), true);
+                     $function_giveitem = 'plugin_'.strtolower($plugin_name).'_giveItem';
+                     if (function_exists($function_giveitem)) { // For security
+                        $name = call_user_func($function_giveitem, $itemtype, 1, $datas, 0);
                      }
                      
                   }
