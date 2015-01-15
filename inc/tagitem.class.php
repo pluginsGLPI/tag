@@ -125,9 +125,6 @@ class PluginTagTagItem extends CommonDBRelation {
       $itemtypes = self::getItemtypes();
       
       foreach ($itemtypes as $key => $itemtype) {
-         if ($itemtype == 'Notes') {
-            $itemtype = 'Reminder';
-         }
          $obj = new $itemtype();
          if (! $obj->canUpdate()) {
             unset($itemtypes[$key]);
