@@ -297,6 +297,13 @@ class PluginTagTagItem extends CommonDBRelation {
    
                   $link = Toolbox::getItemTypeFormURL($itemtype);
                   $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
+                  
+                  if ($itemtype == "PluginMreportingConfig") {
+                     global $LANG;
+                     if (isset($LANG['plugin_mreporting']['Helpdesk'][$data['name']]['title'])) {
+                        $name .= " (" . $LANG['plugin_mreporting']['Helpdesk'][$data['name']]['title'] . ")";
+                     }
+                  }
    
                   echo "<tr class='tab_bg_1'>";
                   
