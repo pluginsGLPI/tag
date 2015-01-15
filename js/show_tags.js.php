@@ -29,6 +29,10 @@ function upperFirst(str) {
    return str.charAt(0).toUpperCase() + str.substring(1);
 }
 
+function isInteger(x) {
+   return (typeof x === 'number') && (x % 1 === 0);
+}
+
 Ext.onReady(function() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
    var itemtype = str.substr(0, str.search('.form.php'));
@@ -52,9 +56,13 @@ Ext.onReady(function() {
    
    var id = getParamValue('id');
    
-   // For part of Mreporting plugin :
    if (id == '') {
-      id = getIdFromHeader();
+      id = getIdFromHeader(); //For part of Mreporting plugin
+      
+      // Security :
+      if (! isInteger(id)) {
+         return;
+      }
    }
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
