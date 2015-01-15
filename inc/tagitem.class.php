@@ -298,7 +298,9 @@ class PluginTagTagItem extends CommonDBRelation {
                   $link = Toolbox::getItemTypeFormURL($itemtype);
                   $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
                   
-                  if ($itemtype == 'PluginMreportingConfig' || $itemtype == 'PluginProjetProjet') {
+                  if ($itemtype == 'PluginMreportingConfig' 
+                        || $itemtype == 'PluginProjetProjet'
+                        || $itemtype == 'PluginResourcesResource') {
                      
                      $datas = array(
                            //"currentuser" => "glpi",
@@ -306,6 +308,7 @@ class PluginTagTagItem extends CommonDBRelation {
                            "ITEM_0" => $data["name"],
                            "ITEM_0_2" => $data["id"],
                            "id" => $data["id"],
+                           "META_0" => $data["name"], //for PluginResourcesResource"
                      );
                      if (isset($data["is_recursive"])) {
                         $datas["is_recursive"] = $data["is_recursive"];
@@ -322,6 +325,12 @@ class PluginTagTagItem extends CommonDBRelation {
                            Plugin::load('project', true);
                            if (function_exists('plugin_projet_giveItem')) { // For security
                               $name = plugin_projet_giveItem($itemtype, 1, $datas, 0);
+                           }
+                           break;
+                        case "PluginResourcesResource":
+                           Plugin::load('resources', true);
+                           if (function_exists('plugin_resources_giveItem')) { // For security
+                              $name = plugin_resources_giveItem($itemtype, 1, $datas, 0);
                            }
                            break;
                      }
