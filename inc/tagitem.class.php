@@ -201,7 +201,7 @@ class PluginTagTagItem extends CommonDBRelation {
             } else {
                $itemtable = getTableForItemType($itemtype);
             }
-            $query     = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
+            $query = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
             
             $obj = new $itemtype();
             $obj->getFromDB($item_id);
@@ -246,98 +246,94 @@ class PluginTagTagItem extends CommonDBRelation {
             if ($itemtype =='KnowbaseItem') {
                if (Session::getLoginUserID()) {
                   $where = "AND ".KnowbaseItem::addVisibilityRestrict();
-                  } else {
-                     // Anonymous access
-                     if (Session::isMultiEntitiesMode()) {
-                        $where = " AND (`glpi_entities_knowbaseitems`.`entities_id` = '0'
-                        AND `glpi_entities_knowbaseitems`.`is_recursive` = '1')";
-                     }
-                  }
                } else {
-                  $query .= getEntitiesRestrictRequest(" AND ", $itemtable, '', '', $item->maybeRecursive());
+                  // Anonymous access
+                  if (Session::isMultiEntitiesMode()) {
+                     $where = " AND (`glpi_entities_knowbaseitems`.`entities_id` = '0'
+                     AND `glpi_entities_knowbaseitems`.`is_recursive` = '1')";
+                  }
                }
+            } else {
+               $query .= getEntitiesRestrictRequest(" AND ", $itemtable, '', '', $item->maybeRecursive());
+            }
    
-               if ($item->maybeTemplate()) {
-                  $query .= " AND `$itemtable`.`is_template` = '0'";
-               }
+            if ($item->maybeTemplate()) {
+               $query .= " AND `$itemtable`.`is_template` = '0'";
+            }
    
-               switch ($itemtype) {
-                  case 'KnowbaseItem':
-                  case 'Profile':
-                  case 'RSSFeed':
-                  case 'Reminder':
-                  case 'Entity':
+            switch ($itemtype) {
+               case 'KnowbaseItem':
+               case 'Profile':
+               case 'RSSFeed':
+               case 'Reminder':
+               case 'Entity':
+                  $query .= " ORDER BY `$itemtable`.`$column`";
+                  break;
+               default:
+                  if (isset($obj->fields['entities_id'])) {
+                     $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
+                  } else {
                      $query .= " ORDER BY `$itemtable`.`$column`";
-                     break;
-                  default:
-                     if (isset($obj->fields['entities_id'])) {
-                        $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
-                     } else {
-                        $query .= " ORDER BY `$itemtable`.`$column`";
-                     }
-                     break;
-               }
+                  }
+                  break;
+            }
       
-               if ($result_linked = $DB->query($query)) {
-                  if ($DB->numrows($result_linked)) {
-                     
-                     if ($itemtype == 'softwarelicense') {
-                        $soft = new Software();
+            if ($result_linked = $DB->query($query)) {
+               if ($DB->numrows($result_linked)) {
+                  
+                  while ($data = $DB->fetch_assoc($result_linked)) {
+   
+                  if ($itemtype == 'Softwarelicense') {
+                     $soft = new Software();
+                     $soft->getFromDB($data['softwares_id']);
+                     $data["name"] .= $soft->fields['name']; //This add name of software
+                  }
+                  
+                  if ($itemtype == "PluginResourcesResource") {
+                     $data["name"] .= " " . ucfirst($data["firstname"]);
+                  }
+                  
+                  $linkname = $data[$column];
+                  
+                  if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
+                     $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+                  }
+   
+                  $link = Toolbox::getItemTypeFormURL($itemtype);
+                  $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
+   
+                  echo "<tr class='tab_bg_1'>";
+                  
+                  if ($canedit) {
+                     echo "<td width='10'>";
+                     if ($item->canUpdate()) {
+                        Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
                      }
-      
-                     while ($data = $DB->fetch_assoc($result_linked)) {
-      
-                     if ($itemtype == 'softwarelicense') {
-                        $soft->getFromDB($data['softwares_id']);
-                        $data["name"] = sprintf(__('%1$s - %2$s'), $data["name"],
-                              $soft->fields['name']);
-                     }
-                     
-                     $linkname = $data[$column];
-                     if ($itemtype == "PluginResourcesResource") {
-                        $linkname .= " " . ucfirst($data["firstname"]);
-                     }
-                     
-                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
-                        $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
-                     }
-      
-                     $link = Toolbox::getItemTypeFormURL($itemtype);
-                     $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
-      
-                     echo "<tr class='tab_bg_1'>";
-                     
-                     if ($canedit) {
-                        echo "<td width='10'>";
-                        if ($item->canUpdate()) {
-                           Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
-                        }
-                        echo "</td>";
-                     }
-                     echo "<td class='center'>".$item->getTypeName(1)."</td>";
-                     echo "<td ".
-                     (isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").
-                     ">".$name."</td>";
-                     echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities", $data['entity']);
                      echo "</td>";
-                     echo "<td class='center'>".
-                            (isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
-                     echo "<td class='center'>".
-                            (isset($data["otherserial"])? "".$data["otherserial"]."" :"-")."</td>";
-                     echo "</tr>";
-                     }
+                  }
+                  echo "<td class='center'>".$item->getTypeName(1)."</td>";
+                  echo "<td ".(isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").
+                  ">".$name."</td>";
+                  echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities", $data['entity']);
+                  echo "</td>";
+                  echo "<td class='center'>".
+                         (isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
+                  echo "<td class='center'>".
+                         (isset($data["otherserial"])? "".$data["otherserial"]."" :"-")."</td>";
+                  echo "</tr>";
                   }
                }
             }
          }
-         echo "</table>";
-         if ($canedit && $number) {
-            $massiveactionparams['ontop'] = false;
-            Html::showMassiveActions(__CLASS__, $massiveactionparams);
-            Html::closeForm();
-         }
-         echo "</div>";
-   
       }
+      echo "</table>";
+      if ($canedit && $number) {
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         Html::closeForm();
+      }
+      echo "</div>";
+
+   }
 
 }
