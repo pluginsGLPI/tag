@@ -341,8 +341,8 @@ class PluginTagTagItem extends CommonDBRelation {
                      $plugin_name = $pieces[2];
                      if (function_exists($function_giveitem)) { // For security
                         $tab = call_user_func("plugin_version_".$plugin_name);
+                        echo $tab["name"]." : ";
                      }
-                     echo $tab["name"]." : ";
                   }
                   
                   echo $item->getTypeName(1)."</td>";
