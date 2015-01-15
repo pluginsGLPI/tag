@@ -283,7 +283,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   if ($itemtype == 'Softwarelicense') {
                      $soft = new Software();
                      $soft->getFromDB($data['softwares_id']);
-                     $data["name"] .= $soft->fields['name']; //This add name of software
+                     $data["name"] .= ' - ' . $soft->fields['name']; //This add name of software
                   } elseif ($itemtype == "PluginResourcesResource") {
                      $data["name"] = formatUserName($data["id"], "", $data["name"],
                                            $data["firstname"]);
