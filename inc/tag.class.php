@@ -299,9 +299,10 @@ JAVASCRIPT;
       
       foreach ($found as $label) {
          $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
-         if (! empty($label['color'])) {
-            $param .= 'data-color-option="'.$label['color'].'"';
+         if (is_null($label['color'])) {
+            $label['color'] = "";
          }
+         $param .= 'data-color-option="'.$label['color'].'"';
          echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
       }
       echo "</select>";

@@ -74,9 +74,10 @@ Ext.onReady(function() {
          
          Ext.select('#mainformtable tr:first').insertHtml('afterEnd', data.responseText + hidden_fields);
          
-         var elements = document.querySelectorAll('.chosen-select-no-results');
-         for (var i = 0; i < elements.length; i++) {
-            new ChosenT(elements[i], {no_results_text: "<?php echo __("No tag found", 'tag'); ?>"});
+         //var elements = document.querySelectorAll('.chosen-select-no-results');
+         var elements = Ext.select('.chosen-select-no-results');
+         for (var i = 0; i < elements.elements.length; i++) {
+            new ChosenT(elements.elements[i], {no_results_text: "<?php echo __("No tag found", 'tag'); ?>"});
          }
          
       }
