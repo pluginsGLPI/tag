@@ -339,7 +339,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   $pieces = preg_split('/(?=[A-Z])/', $itemtype);
                   if ($pieces[1] == 'Plugin') {
                      $plugin_name = $pieces[2];
-                     if (function_exists($function_giveitem)) { // For security
+                     if (function_exists("plugin_version_".$plugin_name)) { // For security
                         $tab = call_user_func("plugin_version_".$plugin_name);
                         echo $tab["name"]." : ";
                      }
