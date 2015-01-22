@@ -58,6 +58,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    }
    
    if ($itemtype === 'PluginTagTag' 
+         || $itemtype === 'TicketTemplate'
          || strpos($itemtype, 'PluginPrintercounters') !== false) {
       return array();
    }

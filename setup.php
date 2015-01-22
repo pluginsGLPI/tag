@@ -60,6 +60,7 @@ function plugin_init_tag() {
       if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false && 
          strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false && 
          strpos($_SERVER['REQUEST_URI'], "id=-1") === false && //for Computer
+         strpos($_SERVER['REQUEST_URI'], "withtemplate=") === false && //exclude template
          strpos($_SERVER['REQUEST_URI'], "?new=1") === false && //for exemple : for checklistconfig in plugin resources
          strpos($_SERVER['REQUEST_URI'], "popup=1&rand=") === false && //item no exist
          strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false && 
