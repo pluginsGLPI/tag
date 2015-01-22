@@ -4,7 +4,7 @@ function plugin_version_tag() {
             'version'        => '1.0',
             'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
             'homepage'       => 'http://www.teclib.com',
-            'license'        => '',
+            'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
             'minGlpiVersion' => "0.84");
 }
 
