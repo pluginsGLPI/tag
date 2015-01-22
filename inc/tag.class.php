@@ -98,7 +98,7 @@ JAVASCRIPT;
       }
 
    public static function uninstall() {
-      $query = "DELETE FROM from glpi_logs WHERE itemtype_link='".__CLASS__."'";
+      $query = "DELETE FROM glpi_logs WHERE itemtype_link='".__CLASS__."'";
       $GLOBALS['DB']->query($query);
       
       $query = "DELETE FROM glpi_bookmarks WHERE itemtype='".__CLASS__."'";
