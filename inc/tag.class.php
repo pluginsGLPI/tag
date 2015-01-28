@@ -1,5 +1,12 @@
 <?php
 class PluginTagTag extends CommonDropdown {
+   
+   const MNBSP = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
    public static function getTypeName($nb=1) {
       return __('Tag', 'tag');
@@ -292,7 +299,7 @@ JAVASCRIPT;
       $found = $tag->find($where);
 
       echo "<span style='width:80%'>";
-      echo "<select data-placeholder='".__('Choose tags...', 'tag')."' name='".$params['name']."'
+      echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='".$params['name']."'
                 id='tag_select' multiple class='chosen-select-no-results' $sel_attr >";
       
       usort($found, array(__CLASS__, "cmp_Tag"));
