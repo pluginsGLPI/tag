@@ -1,4 +1,4 @@
-Plugin Tag (pour glpi 0.84) :
+Plugin Tag (pour GLPI) :
 * Ajout de "tags" à n'importe quel objet de GLPI (étendant CommonDBTM).
 * Les tags sont administrables dans les intitulés.
 * Les tags sont visibles et modifiables en entête de l'objet (en dessous du titre).
