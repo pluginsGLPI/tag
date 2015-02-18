@@ -39,8 +39,11 @@ function plugin_init_tag() {
    Plugin::registerClass('PluginTagTagItem',
             array('addtabon' => array('PluginTagTag')));
 
-   // add link on plugin name in configuration > plugin 
-   $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
+   // add link on plugin name in Configuration > Plugin
+   $plugin = new Plugin();
+   if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
+      $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
+   }
 
    // charge chosen css when needed
    $PLUGIN_HOOKS['add_css']['tag'][] = "tag.css";
