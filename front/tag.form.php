@@ -5,6 +5,11 @@ Session::checkRight("config", "w");
 
 Plugin::load('tag', true);
 
+$plugin = new Plugin();
+if (! $plugin->isInstalled("tag") || ! $plugin->isActivated("tag")) {
+   Html::displayNotFoundError();
+}
+
 $dropdown = new PluginTagTag();
 
 if (isset($_POST['add']) || isset($_REQUEST['update'])) {
