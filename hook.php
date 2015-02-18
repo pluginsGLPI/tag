@@ -5,11 +5,12 @@ function plugin_pre_item_update_tag($parm) {
    
    if (isset($_REQUEST['plugin_tag_tag_id']) && isset($_REQUEST['plugin_tag_tag_itemtype'])) {
       $item = new PluginTagTagItem();
+      $itemtype = PluginTagTag::getItemtype($_REQUEST['plugin_tag_tag_itemtype'], $_REQUEST['plugin_tag_tag_id']);
       
       $already_present = array();
 
       $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']." 
-               AND `itemtype` = '".$_REQUEST['plugin_tag_tag_itemtype']."'";
+               AND `itemtype` = '".$itemtype."'";
       
       $tag_values = (isset($_REQUEST["_plugin_tag_tag_values"])) ? $_REQUEST["_plugin_tag_tag_values"] : array(); 
       
@@ -27,7 +28,7 @@ function plugin_pre_item_update_tag($parm) {
             $item->add(array(
                   'plugin_tag_tags_id' => $tag_id,
                   'items_id' => $_REQUEST['plugin_tag_tag_id'],
-                  'itemtype' => ucfirst($_REQUEST['plugin_tag_tag_itemtype']), //get_class($parm)
+                  'itemtype' => ucfirst($itemtype), //get_class($parm)
             ));
          }
       }

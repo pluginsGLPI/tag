@@ -250,6 +250,19 @@ JAVASCRIPT;
       return strcmp($a["name"], $b["name"]);
    }
    
+   /**
+    * For fixed the issue #1 on Github
+    */
+   static function getItemtype($itemtype, $id) {
+      // Specific for a webpage in GLPI
+      if ($itemtype == 'rule.generic') {
+         $rule = new Rule();
+         $rule->getFromDB($id);
+         return $rule->fields["sub_type"];
+      }
+      return $itemtype;
+   }
+   
    static function tagDropdownMultiple($options = array()) {
       global $CFG_GLPI;
 
@@ -265,8 +278,8 @@ JAVASCRIPT;
 
       // multiple select : add [] to name
       $params['name'].= "[]";
-
-      $itemtype = $_REQUEST['itemtype'];
+      
+      $itemtype = self::getItemtype($_REQUEST['itemtype'], $_REQUEST['id']);
       $obj = new $itemtype();
 
       // Object must be an instance of CommonDBTM (or inherint of this)
@@ -277,7 +290,7 @@ JAVASCRIPT;
       $selected_id = array();
       $tag_item = new PluginTagTagItem();
       $found_items = $tag_item->find('items_id='.$_REQUEST['id'].' 
-                                      AND itemtype="'.$_REQUEST['itemtype'].'"');
+                                      AND itemtype="'.$itemtype.'"');
 
       foreach ($found_items as $found_item) {
          $selected_id[] = $found_item['plugin_tag_tags_id'];
