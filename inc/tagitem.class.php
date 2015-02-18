@@ -193,7 +193,7 @@ class PluginTagTagItem extends CommonDBRelation {
             $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
             
             // For rules itemtypes (example : ruledictionnaryphonemodel) :
-            if (strtolower(substr($itemtype, 0, 4)) == 'rule') {
+            if (strtolower(substr($itemtype, 0, 4)) == 'rule' || $itemtype == "PluginResourcesRulechecklist") {
                $itemtable = getTableForItemType('Rule');
             } else {
                $itemtable = getTableForItemType($itemtype);
