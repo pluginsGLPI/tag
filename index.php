@@ -1,2 +1,2 @@
 <?php
-header('Location: front/form.php');
+header('Location: front/tag.php');
