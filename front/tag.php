@@ -9,4 +9,4 @@ if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
    include (GLPI_ROOT . "/front/dropdown.common.php");
 }
 
-Html::displayNotFoundError();
+//Html::displayNotFoundError();
