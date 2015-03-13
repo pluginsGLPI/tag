@@ -1,7 +1,7 @@
 <?php
 function plugin_version_tag() {
    return array('name'       => __('Tag Management', 'tag'),
-            'version'        => '1.0',
+            'version'        => '1.1',
             'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
