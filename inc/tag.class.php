@@ -9,52 +9,17 @@ class PluginTagTag extends CommonDropdown {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
    public static function getTypeName($nb=1) {
-      return __('Tag', 'tag');
-      //return _n('Tag', 'Tags', 'tag');
-   }
-   
-   public static function getTagName($id_tag) {
-      $obj = new self();
-      $obj->getFromDB($id_tag);
-      return $obj->fields['name'];
-   }
-
-   static function colorInput($name, $value) {
-      echo "<div id='$name' style='width:105px'></div>";
-   
-      $JS = <<<JAVASCRIPT
-      Ext.onReady(function() {
-         //extjs color picker
-         new Ext.Panel({
-            renderTo:document.getElementById('$name'),
-            plain:false,
-            header:false,
-            border:false,
-            items:[{
-                  xtype:'colorfield',
-                  hideLabel:true,
-                  value:'{$value}',
-                  name:'$name',
-                  colorSelector:'mixer'
-            }]
-         });
-      });
-JAVASCRIPT;
-   
-      echo "<script type='text/javascript'>";
-      echo $JS;
-      echo "</script>";
+      return _n('Tag', 'Tags', $nb, 'tag');
    }
    
    public function showForm($ID, $options = array()) {
       if (!$this->isNewID($ID)) {
-         $this->check($ID, 'r');
+         $this->check($ID, READ);
       } else {
-         $this->check(-1, 'w');
+         $this->check(-1, UPDATE);
       }
       $options['colspan'] = 2;
       $options['target']  = Toolbox::getItemTypeFormURL(__CLASS__);
-      $this->showTabs($options);
       $this->showFormHeader($options);
       echo '<table class="tab_cadre_fixe">';
 
@@ -67,24 +32,22 @@ JAVASCRIPT;
 
       echo "<tr class='line1'><td>" . __('Description') . "</td>";
       echo "<td>";
-      echo "<textarea name='comment' id ='comment' cols='45' rows='2' >" . $this->fields['comment'] . "</textarea>";
+      echo "<textarea name='comment' id ='comment' cols='45' rows='2'>" . $this->fields['comment'] . "</textarea>";
       //Html::initEditorSystem('comment');
       echo "</td>";
       echo "</tr>";
 
       echo "<tr class='line1'><td>" . __('HTML color', 'tag') . "</td>"; 
       echo "<td>";
-      //echo "<textarea name='color' id ='color' cols='45' rows='2' >" . $this->fields['color'] . "</textarea>";
-      self::colorInput("color", $this->fields["color"]);
+      Html::showColorField('color', array('value' => $this->fields['color']));
       echo "</td>";
       echo "</tr>";
       
       $this->showFormButtons($options);
-      $this->addDivForTabs();
 
       return true;
    }
-
+   
    public static function install(Migration $migration) {
       $table = getTableForItemType(__CLASS__);
       if (!TableExists($table)) {
@@ -102,7 +65,7 @@ JAVASCRIPT;
       }
       
       return true;
-      }
+   }
 
    public static function uninstall() {
       $query = "DELETE FROM glpi_logs WHERE itemtype_link='".__CLASS__."'";
@@ -122,35 +85,51 @@ JAVASCRIPT;
     * Définition du nom de l'onglet
     **/
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-   
-      return _n('Associated item', 'Associated items', 2);
+      $tab = array();
+      $tab[1] = __('Main');
+      $tab[2] = _n('Associated item', 'Associated items', 2);
+      return $tab;
    }
    
    /**
     * Définition du contenu de l'onglet
     **/
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-   
-      $monplugin = new PluginTagTagItem();
-      $ID = $item->getField('id');
-      $monplugin->showForTag($item);
+      switch ($item->getType()) {
+         case __CLASS__ :
+            switch ($tabnum) {
+               case 1 :
+                  $item->showForm($item->getID());
+                  break;
+               case 2 :
+                  $tagitem = new PluginTagTagItem();
+                  $ID = $item->getField('id');
+                  $tagitem->showForTag($item);
+                  break;
+            }
+      }
       return true;
    }
    
    function defineTabs($options=array()){
-      
       $ong = array();
-      $this->addStandardTab('PluginTagTag', $ong, $options);
-   
+      $this->addStandardTab(__CLASS__, $ong, $options);
       return $ong;
    }
    
    public function cleanDBonPurge() {
-      global $DB;
-      
-      $query = "DELETE FROM `glpi_plugin_tag_tagitems`
-                WHERE `plugin_tag_tags_id`=".$this->fields['id'];
-      $DB->query($query);
+      $GLOBALS['DB']->query("DELETE FROM `glpi_plugin_tag_tagitems`
+                WHERE `plugin_tag_tags_id`=".$this->fields['id']);
+   }
+   
+   // for massive actions
+   function haveChildren() {
+      $tagitems = new PluginTagTagItem();
+      $data = $tagitems->find("plugin_tag_tags_id = ".$this->fields['id']);
+      if (count($data) > 0) {
+         return true;
+      }
+      return false;
    }
    
    /**
@@ -167,15 +146,13 @@ JAVASCRIPT;
     * @since version 0.84.4
     **/
    function getLinkedItems() {
-      global $DB;
-   
       $query = "SELECT `itemtype`, `items_id`
               FROM `glpi_computers_items`
               WHERE `computers_id` = '" . $this->fields['id']."'";
       $tab = array();
-      foreach ($DB->request($query) as $data) {
+      foreach ($GLOBALS['DB']->request($query) as $data) {
          $tab[$data['itemtype']][$data['items_id']] = $data['items_id'];
-      };
+      }
       return $tab;
    }
    
@@ -183,7 +160,6 @@ JAVASCRIPT;
     * @see CommonDBTM::showSpecificMassiveActionsParameters()
     **/
    function showSpecificMassiveActionsParameters($input=array()) {
-   
       switch ($input['action']) {
          default :
             return parent::showSpecificMassiveActionsParameters($input);
@@ -196,10 +172,9 @@ JAVASCRIPT;
     * @see CommonDBTM::doSpecificMassiveActions()
     **/
    function doSpecificMassiveActions($input=array()) {
-   
       $res = array('ok'      => 0,
-            'ko'      => 0,
-            'noright' => 0);
+                  'ko'      => 0,
+                  'noright' => 0);
       switch ($input['action']) {
          default :
             return parent::doSpecificMassiveActions($input);
@@ -207,11 +182,9 @@ JAVASCRIPT;
       return $res;
    }
    
-   
    function getSearchOptions() {
-      global $CFG_GLPI;
-   
       $tab                       = array();
+      
       $tab['common']             = __('Characteristics');
 
       $tab[1]['table']           = $this->getTable();
@@ -267,8 +240,8 @@ JAVASCRIPT;
       global $CFG_GLPI;
 
       //default options
-      $params['name']                = '_plugin_tag_tag_values';
-      $params['rand']                = mt_rand();
+      $params['name'] = '_plugin_tag_tag_values';
+      $params['rand'] = mt_rand();
 
       if (is_array($options) && count($options)) {
          foreach ($options as $key => $val) {
@@ -289,10 +262,8 @@ JAVASCRIPT;
 
       $selected_id = array();
       $tag_item = new PluginTagTagItem();
-      $found_items = $tag_item->find('items_id='.$_REQUEST['id'].' 
-                                      AND itemtype="'.$itemtype.'"');
-
-      foreach ($found_items as $found_item) {
+      foreach ($tag_item->find('items_id='.$_REQUEST['id'].' 
+                                      AND itemtype="'.$itemtype.'"') as $found_item) {
          $selected_id[] = $found_item['plugin_tag_tags_id'];
       }
 
@@ -304,16 +275,17 @@ JAVASCRIPT;
       // restrict tag by entity if current object has entity
       if (isset($obj->fields['entities_id'])) {
          if ($itemtype == 'entity') {
-            $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['id'], true);
+            $field = 'id';
          } else {
-            $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields['entities_id'], true);
+            $field = 'entities_id';
          }
+         $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields[$field], true);
       }
       $found = $tag->find($where);
 
       echo "<span style='width:80%'>";
       echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='".$params['name']."'
-                id='tag_select' multiple class='chosen-select-no-results' $sel_attr >";
+                id='tag_select' multiple class='chosen-select-no-results' $sel_attr style='width:80%;' >";
       
       usort($found, array(__CLASS__, "cmp_Tag"));
       
@@ -328,16 +300,16 @@ JAVASCRIPT;
       echo "</select>";
       echo "</span>";
 
-      echo "<script type='text/javascript' >\n
-      window.updateTagSelectResults_".$params['rand']." = function () {
-         
-      }
+      echo "<script type='text/javascript'>\n
+         window.updateTagSelectResults_".$params['rand']." = function () {
+            
+         }
       </script>";
 
-      if (PluginTagTag::canCreate()) {
+      if (self::canCreate()) {
          // Show '+' button :
-         echo "&nbsp;<img alt='' title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
-              "/pics/add_dropdown.png' style='cursor:pointer; margin-left:2px;'
+         echo "&nbsp;<img title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
+              "/pics/add_dropdown.png' style='cursor:pointer;margin-left:2px;'
               onClick=\"var w = window.open('".
                $CFG_GLPI['root_doc']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$params['rand']."', ".
                "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";

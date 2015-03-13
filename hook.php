@@ -50,7 +50,7 @@ function plugin_pre_item_purge_tag($object) {
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
    
-   if (! Session::haveRight("entity_dropdown", "r")) {
+   if (! Session::haveRight("itilcategory", READ)) {
       return array();
    }
    
@@ -85,33 +85,29 @@ function plugin_tag_getAddSearchOptions($itemtype) {
 
 function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 
-   if ($data["ITEM_$num"] == '') {
+   if ($data['raw']["ITEM_$num"] == '') {
       return "";
    }
    
    switch ($field) {
       case "10500":
-         $tags = explode("$$$$", $data["ITEM_$num"]);
-         $out = '<div class="chzn-container chznT-container-multi" title="">
-               <ul class="chzn-choices">';
+         $tags = explode("$$$$", $data['raw']["ITEM_$num"]);
+         $out = '<div class="select2-container select2-container-multi chosen-select-no-results" id="s2id_tag_select" style="width: 100%;">
+                  <ul class="select2-choices">';
          foreach ($tags as $tag) {
             $tmp = explode("$$", $tag);
             
-            $parms = '';
+            $style = "padding-left:5px;"; //because we don't have 'x' before the tag
             if (isset($tmp[1])) {
                $plugintagtag = new PluginTagTag();
                $plugintagtag->getFromDB($tmp[1]);
                $color = $plugintagtag->fields["color"];
                if (! empty($color)) {
-                  $parms = "style='border-color:$color;border-width: 2px;'";
+                  $style .= "border-width:2px;border-color:$color;";
               }
             }
             
-            $out .= '<li class="search-choice" '.$parms.'>'.$tmp[0];
-            if ($tag !== end($tags)) {
-               $out .= '<span style="display:none;">'.$_SESSION["glpicsv_delimiter"].'</span>';
-            }
-            $out .= '</li>';
+            $out .= '<li class="select2-search-choice" style="'.$style.'">'.$tmp[0].'</li>';
          }
          $out .= '</ul>
                </div>';
@@ -123,14 +119,21 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 
 function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
 
-   $valeurs = explode(",", $val);
-   $out = "$link `ITEM_$num` LIKE '%".$valeurs[0]."%'";
-   array_shift($valeurs);
-   foreach ($valeurs as $valeur) {
-      $valeur = trim($valeur);
-      $out .= " OR `ITEM_$num` LIKE '%$valeur%'";
+   $values = explode(",", $val);
+   $out = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
+   array_shift($values);
+   foreach ($values as $value) {
+      $value = trim($value);
+      $out .= " OR `ITEM_$num` LIKE '%$value%'";
    }
    return $out;
+}
+
+/**
+ * Define Dropdown tables to be manage in GLPI :
+ */
+function plugin_tag_getDropdown() {
+   return array('PluginTagTag'   => PluginTagTag::getTypeName(2));
 }
 
 /**
@@ -158,15 +161,6 @@ function plugin_tag_install() {
 }
 
 /**
- * Define Dropdown tables to be manage in GLPI :
- */
-function plugin_tag_getDropdown() {
-   return array('PluginTagTag'   => __('Tag', 'tag'),
-         'PluginTagItem' => _n('Tag item', 'Tag items', 2, 'tag'),
-   );
-}
-
-/**
  * Uninstall previously installed elements of the plugin
  *
  * @return boolean True if success
@@ -186,4 +180,3 @@ function plugin_tag_uninstall() {
    }
    return true;
 }
-

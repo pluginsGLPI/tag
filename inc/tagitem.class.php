@@ -39,19 +39,13 @@ class PluginTagTagItem extends CommonDBRelation {
    }
    
    static function getTag_items($id_glpi_obj, $itemtype) {
-      global $DB;
-      $query = "SELECT *
-               FROM `glpi_plugin_tag_tagitems`
-               WHERE itemtype='$itemtype' AND items_id=$id_glpi_obj";
-   
-      $result = $DB->query($query);
+      $IDs = array(); //init
       
-      $IDs = array();
-      if ($DB->numrows($result) > 0) {
-         while($datas = $DB->fetch_assoc($result)) {
-            $IDs[] = $datas["plugin_tag_tags_id"];
-         }
+      $tagitems = new self();
+      foreach ($tagitems->find("itemtype = '$itemtype' AND items_id = $id_glpi_obj") as $tagitem) {
+         $IDs[] = $tagitem["plugin_tag_tags_id"];
       }
+      
       return $IDs;
    }
    
@@ -60,8 +54,8 @@ class PluginTagTagItem extends CommonDBRelation {
     **/
    function doSpecificMassiveActions($input=array()) {
       $res = array('ok'      => 0,
-            'ko'      => 0,
-            'noright' => 0);
+                  'ko'      => 0,
+                  'noright' => 0);
       switch ($input['action']) {
          default :
             return parent::doSpecificMassiveActions($input);
@@ -85,12 +79,11 @@ class PluginTagTagItem extends CommonDBRelation {
    }
    
    function getSearchOptions() {
-      global $CFG_GLPI;
-       
       $tab                       = array();
+      
       $tab['common']             = __('Characteristics');
       return $tab;
-       
+      /*
       $tab[1]['table']           = $this->getTable();
       $tab[1]['field']           = 'name';
       $tab[1]['name']            = __('Name');
@@ -103,6 +96,7 @@ class PluginTagTagItem extends CommonDBRelation {
       $tab[2]['massiveaction']   = true;
       $tab[2]['datatype']        = 'string';
       return $tab;
+      */
    }
 
    static function getItemtypes() {
@@ -112,15 +106,21 @@ class PluginTagTagItem extends CommonDBRelation {
                   'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
    }
    
+   /**
+    * 
+    * Note : can separe code of view list
+    * @param PluginTagTag $tag
+    * @return boolean
+    */
    static function showForTag(PluginTagTag $tag) {
-      global $DB, $CFG_GLPI;
+      global $DB;
    
       $instID = $tag->fields['id'];
-      if (!$tag->can($instID,"r")) {
+      if (!$tag->can($instID, READ)) {
          return false;
       }
       
-      $canedit = $tag->can($instID,'w');
+      $canedit = $tag->can($instID, UPDATE);
       
       $itemtypes = self::getItemtypes();
       
@@ -131,17 +131,19 @@ class PluginTagTagItem extends CommonDBRelation {
          }
       }
    
+      $table = getTableForItemType(__CLASS__);
       $result = $DB->query("SELECT DISTINCT `itemtype`
-         FROM `glpi_plugin_tag_tagitems`
-         WHERE `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID'");
+         FROM `$table`
+         WHERE `plugin_tag_tags_id` = '$instID'");
       $result2 = $DB->query("SELECT `itemtype`, items_id
-            FROM `glpi_plugin_tag_tagitems`
-            WHERE `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID'");
+            FROM `$table`
+            WHERE `plugin_tag_tags_id` = '$instID'");
       $number = $DB->numrows($result);
       $rand   = mt_rand();
    
       if ($canedit) {
          echo "<div class='firstbloc'>";
+         //can use standart GLPI function
          echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post'
          action='".Toolbox::getItemTypeFormURL('PluginTagTag')."'>";
          
@@ -150,12 +152,14 @@ class PluginTagTagItem extends CommonDBRelation {
          
          echo "<tr class='tab_bg_1'><td class='right'>";
          Dropdown::showAllItems("items_id", 0, 0,
-            ($tag->fields['is_recursive']?-1:$tag->fields['entities_id']),
+            ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
             $itemtypes, false, true
          );
+         echo "<style>.select2-container { text-align: left; } </style>"; //minor
          echo "</td><td class='center'>";
-         echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
          echo "<input type='hidden' name='plugin_tag_tags_id' value='$instID'>";
+         //Note : can use standart GLPI method
+         echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
          echo "</td></tr>";
          echo "</table>";
          Html::closeForm();
@@ -165,34 +169,33 @@ class PluginTagTagItem extends CommonDBRelation {
       echo "<div class='spaced'>";
       if ($canedit && $number) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         Html::showMassiveActions();
       }
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr>";
 
       if ($canedit && $number) {
-         echo "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand)."</th>";
+         echo "<th width='10'>" . Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand) . "</th>";
       }
    
-      echo "<th>".__('Type')."</th>";
-      echo "<th>".__('Name')."</th>";
-      echo "<th>".__('Entity')."</th>";
-      echo "<th>".__('Serial number')."</th>";
-      echo "<th>".__('Inventory number')."</th>";
+      echo  "<th>" . __('Type') . "</th>";
+      echo  "<th>" . __('Name') . "</th>";
+      echo  "<th>" . __('Entity') . "</th>";
+      echo  "<th>" . __('Serial number') . "</th>";
+      echo  "<th>" . __('Inventory number') . "</th>";
       echo "</tr>";
       
-      for ($i=0 ; $i < $number ; $i++) {
+      for ($i=0; $i < $number; $i++) {
          $itemtype=$DB->result($result, $i, "itemtype");
          $item_id =$DB->result($result2, $i, "items_id");
          if (!($item = getItemForItemtype($itemtype))) {
             continue;
          }
-   
+         
          if ($item->canView()) {
             $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
             
-            // For rules itemtypes (example : ruledictionnaryphonemodel) :
+            // For rules itemtypes (example : ruledictionnaryphonemodel)
             if (strtolower(substr($itemtype, 0, 4)) == 'rule' || $itemtype == "PluginResourcesRulechecklist") {
                $itemtable = getTableForItemType('Rule');
             } else {
@@ -210,6 +213,14 @@ class PluginTagTagItem extends CommonDBRelation {
                   ".KnowbaseItem::addVisibilityJoins()."
                   WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
                   AND ";
+               /*
+               if (Session::getLoginUserID()) {
+                  $where = "AND ".KnowbaseItem::addVisibilityRestrict();
+               } elseif (Session::isMultiEntitiesMode()) { // Anonymous access
+                  $where = " AND (`glpi_entities_knowbaseitems`.`entities_id` = '0'
+                              AND `glpi_entities_knowbaseitems`.`is_recursive` = '1')";
+               }
+               */
                   break;
                case 'Profile':
                case 'RSSFeed':
@@ -237,22 +248,11 @@ class PluginTagTagItem extends CommonDBRelation {
                   }
                   break;
             }
+            
             $query .= "`glpi_plugin_tag_tagitems`.`itemtype` = '$itemtype'
                AND `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID' ";
    
-            if ($itemtype =='KnowbaseItem') {
-               if (Session::getLoginUserID()) {
-                  $where = "AND ".KnowbaseItem::addVisibilityRestrict();
-               } else {
-                  // Anonymous access
-                  if (Session::isMultiEntitiesMode()) {
-                     $where = " AND (`glpi_entities_knowbaseitems`.`entities_id` = '0'
-                     AND `glpi_entities_knowbaseitems`.`is_recursive` = '1')";
-                  }
-               }
-            } else {
-               $query .= getEntitiesRestrictRequest(" AND ", $itemtable, '', '', $item->maybeRecursive());
-            }
+            $query .= getEntitiesRestrictRequest(" AND ", $itemtable, '', '', $item->maybeRecursive());
    
             if ($item->maybeTemplate()) {
                $query .= " AND `$itemtable`.`is_template` = '0'";
@@ -274,12 +274,12 @@ class PluginTagTagItem extends CommonDBRelation {
                   }
                   break;
             }
-      
+            
             if ($result_linked = $DB->query($query)) {
                if ($DB->numrows($result_linked)) {
                   
                   while ($data = $DB->fetch_assoc($result_linked)) {
-   
+                  
                   if ($itemtype == 'Softwarelicense') {
                      $soft = new Software();
                      $soft->getFromDB($data['softwares_id']);
@@ -294,9 +294,8 @@ class PluginTagTagItem extends CommonDBRelation {
                   if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
                      $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
                   }
-   
-                  $link = Toolbox::getItemTypeFormURL($itemtype);
-                  $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
+                  
+                  $name = "<a href=\"".Toolbox::getItemTypeFormURL($itemtype)."?id=".$data["id"]."\">".$linkname."</a>";
                   
                   if ($itemtype == 'PluginMreportingConfig' 
                         || $itemtype == 'PluginProjetProjet'
@@ -310,7 +309,7 @@ class PluginTagTagItem extends CommonDBRelation {
                            "ITEM_0" => $data["name"],
                            "ITEM_0_2" => $data["id"],
                            "id" => $data["id"],
-                           "META_0" => $data["name"], //for PluginResourcesResource"
+                           "META_0" => $data["name"], //for PluginResourcesResource
                      );
                      if (isset($data["is_recursive"])) {
                         $datas["is_recursive"] = $data["is_recursive"];
@@ -346,10 +345,8 @@ class PluginTagTagItem extends CommonDBRelation {
                   }
                   
                   echo $item->getTypeName(1)."</td>";
-                  echo "<td ".(isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").
-                  ">".$name."</td>";
-                  echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities", $data['entity']);
-                  echo "</td>";
+                  echo "<td ".(isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").">".$name."</td>";
+                  echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities", $data['entity'])."</td>";
                   echo "<td class='center'>".
                          (isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
                   echo "<td class='center'>".
@@ -363,7 +360,7 @@ class PluginTagTagItem extends CommonDBRelation {
       echo "</table>";
       if ($canedit && $number) {
          $massiveactionparams['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
       echo "</div>";

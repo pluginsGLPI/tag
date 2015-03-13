@@ -5,15 +5,15 @@ function plugin_version_tag() {
             'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
-            'minGlpiVersion' => "0.84");
+            'minGlpiVersion' => "0.85");
 }
 
 /**
  * Check plugin's prerequisites before installation
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.84','lt') || version_compare(GLPI_VERSION,'0.85','ge')) {
-      echo __('This plugin requires GLPI >= 0.84 and GLPI < 0.85', 'tag');
+   if (version_compare(GLPI_VERSION,'0.85','lt') || version_compare(GLPI_VERSION,'0.86','ge')) {
+      echo __('This plugin requires GLPI >= 0.85 and GLPI < 0.86', 'tag');
    } else {
       return true;
    }
@@ -44,19 +44,7 @@ function plugin_init_tag() {
    if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
    }
-
-   // charge chosen css when needed
-   $PLUGIN_HOOKS['add_css']['tag'][] = "tag.css";
-   $PLUGIN_HOOKS['add_css']['tag'][] = "lib/chosen/chosen.css";
    
-   $PLUGIN_HOOKS['add_javascript']['tag'][] = 'lib/chosen/chosen.native.js';
-   
-   // for choise color of a tag
-   if (strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") !== false) {
-      $PLUGIN_HOOKS['add_javascript']['tag'][]    = 'lib/colortools/ext.ux.color3.js';
-      $PLUGIN_HOOKS['add_css']['tag'][]           = 'lib/colortools/ext.ux.color3.css';
-   }
-
    // only on itemtype form
    if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
 
@@ -73,7 +61,7 @@ function plugin_init_tag() {
          isset ($_SESSION["glpiroot"]) && 
          strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false && 
          strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/config.form.php") === false) { //for ?forcetab=PluginBehaviorsConfig%241
-         if (Session::haveRight("entity_dropdown", "r")) {
+         if (Session::haveRight("itilcategory", READ)) {
             $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js.php';
          }
       }

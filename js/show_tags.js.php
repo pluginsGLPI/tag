@@ -5,13 +5,6 @@ Plugin::load('tag', true);
 
 header('Content-Type: text/javascript');
 ?>
-function insertAfter(newNode, referenceNode) {
-   // For example : User with no right
-   if (referenceNode !== undefined) {
-      referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-   }
-}
-
 function getParamValue(param,url) {
    var u = url == undefined ? document.location.href : url;
    var reg = new RegExp('(\\?|&|^)'+param+'=(.*?)(&|$)');
@@ -19,8 +12,9 @@ function getParamValue(param,url) {
    return matches != null && matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
 }
 
+// FAIL (with multiples entities) ?
 function getIdFromHeader() {
-   var headerRow = document.querySelectorAll("tr.headerRow")[0];
+   var headerRow = document.querySelectorAll("tr.headerRow")[0]; //or $("tr.headerRow:first");
    var splited = headerRow.querySelectorAll("th")[0].textContent.split(" ");
    return splited[splited.length - 1];
 }
@@ -33,7 +27,7 @@ function isInteger(x) {
    return (typeof x === 'number') && (x % 1 === 0);
 }
 
-Ext.onReady(function() {
+function showTags() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
    var itemtype = str.substr(0, str.search('.form.php'));
    
@@ -67,19 +61,23 @@ Ext.onReady(function() {
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
-   
-   Ext.Ajax.request({
-      url: urlAjax+"?itemtype=" + itemtype + "&id=" + id,
-      success: function(data) {
-         
-         Ext.select('#mainformtable tr:first').insertHtml('afterEnd', data.responseText + hidden_fields);
-         
-         //var elements = document.querySelectorAll('.chosen-select-no-results');
-         var elements = Ext.select('.chosen-select-no-results');
-         for (var i = 0; i < elements.elements.length; i++) {
-            new ChosenT(elements.elements[i], {no_results_text: "<?php echo __("No tag found", 'tag'); ?>"});
+   $.ajax({
+      type: "POST",
+      url: urlAjax,
+      data: "itemtype=" + itemtype + "&id=" + id,
+      success: function(msg){
+            $(".ui-tabs-panel:visible").find("#mainformtable tr:first").after(msg + hidden_fields);            
+            $(".ui-tabs-panel:visible").find('.chosen-select-no-results').select2();
          }
-         
-      }
+   });
+}
+
+$(document).ready(function() {
+   $(".ui-tabs-panel:visible").find(".headerRow:visible").ready(function() {
+      showTags();
+   });
+
+   $("#tabspanel + div.ui-tabs").on("tabsload", function( event, ui ) {
+      showTags();
    });
 });
