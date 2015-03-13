@@ -66,8 +66,10 @@ function showTags() {
       url: urlAjax,
       data: "itemtype=" + itemtype + "&id=" + id,
       success: function(msg){
-            $(".ui-tabs-panel:visible").find("#mainformtable tr:first").after(msg + hidden_fields);            
-            $(".ui-tabs-panel:visible").find('.chosen-select-no-results').select2();
+            if ($(".ui-tabs-panel:visible").find("[name='plugin_tag_tag_itemtype']").length == 0) {
+               $(".ui-tabs-panel:visible").find("#mainformtable tr:first").after(msg + hidden_fields);            
+               $(".ui-tabs-panel:visible").find('.chosen-select-no-results').select2();
+            }
          }
    });
 }
