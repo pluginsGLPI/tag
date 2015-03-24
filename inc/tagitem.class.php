@@ -346,7 +346,20 @@ class PluginTagTagItem extends CommonDBRelation {
                   
                   echo $item->getTypeName(1)."</td>";
                   echo "<td ".(isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").">".$name."</td>";
-                  echo "<td class='center'>".Dropdown::getDropdownName("glpi_entities", $data['entity'])."</td>";
+                  echo "<td class='center'>";
+                  
+                  $entity = $data['entity'];
+                  
+                  //for Plugins :
+                  if ($data["entity"] == -1) {
+                     $item->getFromDB($data['id']);
+                     if (isset($item->fields["entities_id"])) {
+                        $entity = $item->fields["entities_id"];
+                     }
+                  }
+                  echo Dropdown::getDropdownName("glpi_entities", $entity);
+                  
+                  echo "</td>";
                   echo "<td class='center'>".
                          (isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
                   echo "<td class='center'>".
