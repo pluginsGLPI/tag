@@ -1,11 +1,11 @@
 <root>
-   <name>Plugin tag</name>
+   <name>Tag</name>
    <key>tag</key>
    <state>stable</state>
-   <logo>http://www.teclib.com/images/logo.png</logo>
+   <logo>https://raw.githubusercontent.com/TECLIB/tag/master/icon.png</logo>
    <description>
       <short>
-         <fr>Ajout de "tags" à n'importe quel objet de GLPI</fr>
+         <fr>Ajout de tags sur n'importe quel objet de GLPI</fr>
       </short>
       <long>
          <fr>
@@ -22,7 +22,9 @@
    <issues>https://github.com/TECLIB/tag/issues</issues>
    <readme>https://github.com/TECLIB/tag/blob/master/README.md</readme>
    <authors>
-      <author>TECLIB' ehaguet@teclib.com</author>
+      <author>TECLIB'</author>
+      <author>contact@teclib.com</author>
+      <author>Emmanuel HAGUET</author>
    </authors>
    <versions>
       <version>
@@ -41,14 +43,23 @@
    <license>GPL v2+</license>
    <tags>
       <fr>
-         <tag>tag</tag>
-         <tag>étiquettes</tag>
-         <tag>intitulés</tag>
+         <tag>Tag</tag>
+         <tag>Etiquettes</tag>
+         <tag>Intitulés</tag>
+         <tag>Inventaire</tag>
+         <tag>Gestion</tag>
+         <tag>Ticket</tag>
+         <tag>Couleur</tag>
+         <tag>Utilisateur</tag>
       </fr>
       <en>
-         <tag>tag</tag>
+         <tag>Tag</tag>
+         <tag>Ticket</tag>
+         <tag>Color</tag>
+         <tag>User</tag>
       </en>
    </tags>
    <screenshots>
+      <screenshot>https://raw.githubusercontent.com/TECLIB/tag/master/screenshot.png</screenshot>
    </screenshots>
 </root>
