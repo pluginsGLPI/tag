@@ -4,12 +4,22 @@ include ('../../../inc/includes.php');
 Plugin::load('tag', true);
 
 header('Content-Type: text/javascript');
-?>
-function getParamValue(param,url) {
-   var u = url == undefined ? document.location.href : url;
-   var reg = new RegExp('(\\?|&|^)'+param+'=(.*?)(&|$)');
-   matches = u.match(reg);
-   return matches != null && matches[2] != undefined ? decodeURIComponent(matches[2]).replace(/\+/g,' ') : '';
+
+$JS = <<<JAVASCRIPT
+
+function parseUrl(val) {
+    var result = "Not found",
+        tmp = [];
+    location.search
+    //.replace ( "?", "" ) 
+    // this is better, there might be a question mark inside
+    .substr(1)
+        .split("&")
+        .forEach(function (item) {
+        tmp = item.split("=");
+        if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+    });
+    return result;
 }
 
 // FAIL (with multiples entities) ?
@@ -48,8 +58,7 @@ function showTags() {
       return;
    }
    
-   var id = getParamValue('id');
-   
+   var id = parseUrl('id');
    if (id == '') {
       id = parseInt(getIdFromHeader()); //For part of Mreporting plugin
       
@@ -66,9 +75,9 @@ function showTags() {
       url: urlAjax,
       data: "itemtype=" + itemtype + "&id=" + id,
       success: function(msg){
-            if ($(".ui-tabs-panel:visible").find("[name='plugin_tag_tag_itemtype']").length == 0) {
-               $(".ui-tabs-panel:visible").find("#mainformtable tr:first").after(msg + hidden_fields);            
-               $(".ui-tabs-panel:visible").find('.chosen-select-no-results').select2();
+            if ($("#mainformtable").find("[name='plugin_tag_tag_itemtype']").length == 0) {
+               $("#mainformtable tr:first").after(msg + hidden_fields);
+               $("#mainformtable .chosen-select-no-results").select2();
             }
          }
    });
@@ -83,3 +92,5 @@ $(document).ready(function() {
       showTags();
    });
 });
+JAVASCRIPT;
+echo $JS;

@@ -1,19 +1,19 @@
 <?php
 function plugin_version_tag() {
    return array('name'       => __('Tag Management', 'tag'),
-            'version'        => '1.1',
+            'version'        => '1.2',
             'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
-            'minGlpiVersion' => "0.85");
+            'minGlpiVersion' => "0.90");
 }
 
 /**
  * Check plugin's prerequisites before installation
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85','lt') || version_compare(GLPI_VERSION,'0.86','ge')) {
-      echo __('This plugin requires GLPI >= 0.85 and GLPI < 0.86', 'tag');
+   if (version_compare(GLPI_VERSION,'0.85','lt')) {
+      echo __('This plugin requires GLPI >= 0.85');
    } else {
       return true;
    }
