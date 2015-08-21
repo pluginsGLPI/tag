@@ -84,7 +84,6 @@ function showTags() {
       var color = option.element[0].getAttribute("data-color-option");
       if (color !== "") {
          var invertedcolor = idealTextColor(color);
-         console.log(color, invertedcolor);
       }
       
       var template = "";
