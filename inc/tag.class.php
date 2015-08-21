@@ -13,13 +13,7 @@ class PluginTagTag extends CommonDropdown {
    }
    
    public function showForm($ID, $options = array()) {
-      if (!$this->isNewID($ID)) {
-         $this->check($ID, READ);
-      } else {
-         $this->check(-1, UPDATE);
-      }
-      $options['colspan'] = 2;
-      $options['target']  = Toolbox::getItemTypeFormURL(__CLASS__);
+      $this->initForm($ID, $options);
       $this->showFormHeader($options);
       echo '<table class="tab_cadre_fixe">';
 
