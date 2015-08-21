@@ -67,6 +67,38 @@ function showTags() {
          return;
       }
    }
+
+   function idealTextColor(hexTripletColor) {
+      var nThreshold = 105;
+      hexTripletColor.replace(/^#/,'')
+      var components = {
+         R: parseInt(hexTripletColor.substring(0, 2), 16),
+         G: parseInt(hexTripletColor.substring(2, 4), 16),
+         B: parseInt(hexTripletColor.substring(4, 6), 16)
+      };
+      var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+      return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";   
+   }
+
+   function formatOption(option) {
+      var color = option.element[0].getAttribute("data-color-option");
+      if (color !== "") {
+         var invertedcolor = idealTextColor(color);
+         console.log(color, invertedcolor);
+      }
+      
+      var template = "";
+      template+= "<span style='padding: 2px; border-radius: 3px; "; 
+      if (color !== "") {
+         template+= " background-color: " + color + "; ";
+         template+= " color: " + invertedcolor + "; ";
+      }
+      template+= "'>";
+      template+= option.text;
+      template+= "</span>";
+
+      return template;
+   }
    
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
@@ -75,11 +107,14 @@ function showTags() {
       url: urlAjax,
       data: "itemtype=" + itemtype + "&id=" + id,
       success: function(msg){
-            if ($("#mainformtable").find("[name='plugin_tag_tag_itemtype']").length == 0) {
-               $("#mainformtable tr:first").after(msg + hidden_fields);
-               $("#mainformtable .chosen-select-no-results").select2();
-            }
+         if ($("#mainformtable").find("[name='plugin_tag_tag_itemtype']").length == 0) {
+            $("#mainformtable tr:first").after(msg + hidden_fields);
+            $("#mainformtable .chosen-select-no-results").select2({
+                'formatResult': formatOption,
+                'formatSelection': formatOption
+            });
          }
+      }
    });
 }
 
