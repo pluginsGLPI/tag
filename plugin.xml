@@ -2,7 +2,7 @@
    <name>Tag</name>
    <key>tag</key>
    <state>stable</state>
-   <logo>https://raw.githubusercontent.com/TECLIB/tag/master/icon.png</logo>
+   <logo>https://raw.githubusercontent.com/pluginsGLPI/tag/master/icon.png</logo>
    <description>
       <short>
          <fr>Ajout de tags sur n'importe quel objet de GLPI</fr>
@@ -17,15 +17,20 @@
          </fr>
       </long>
    </description>
-   <homepage>https://github.com/TECLIB/tag</homepage>
-   <download>https://github.com/TECLIB/tag/releases</download>
-   <issues>https://github.com/TECLIB/tag/issues</issues>
-   <readme>https://github.com/TECLIB/tag/blob/master/README.md</readme>
+   <homepage>https://github.com/pluginsGLPI/tag</homepage>
+   <download>https://github.com/pluginsGLPI/tag/releases</download>
+   <issues>https://github.com/pluginsGLPI/tag/issues</issues>
+   <readme>https://github.com/pluginsGLPI/tag/blob/master/README.md</readme>
    <authors>
       <author>TECLIB'</author>
       <author>Emmanuel HAGUET</author>
    </authors>
    <versions>
+      <version>
+         <num>1.2</num>
+         <compatibility>0.85</compatibility>
+         <compatibility>0.90</compatibility>
+      </version>
       <version>
          <num>1.1</num>
          <compatibility>0.85</compatibility>
@@ -59,6 +64,6 @@
       </en>
    </tags>
    <screenshots>
-      <screenshot>https://raw.githubusercontent.com/TECLIB/tag/master/screenshot.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/tag/master/screenshot.png</screenshot>
    </screenshots>
 </root>
