@@ -94,6 +94,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 
          $out = '<div id="s2id_tag_select" class="select2-container select2-container-multi chosen-select-no-results" style="width: 100%;">
                   <ul class="select2-choices">';
+         $separator = '';
 
          $plugintagtag = new PluginTagTag();
 
@@ -108,7 +109,11 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
                $style .= "border-width:2px; border-color:$color;";
             }
             
-            $out .= '<li class="select2-search-choice" style="padding-left:5px;'.$style.'">'.$name.'</li>';
+            //$out .= Search::LBBR;
+            //$out .= Search::LBHR;
+
+            $out .= '<li class="select2-search-choice" style="padding-left:5px;'.$style.'">'.$separator.$name.'</li>';
+            $separator = '<span style="display:none">, </span>'; //For export (CSV, PDF) of GLPI core
          }
          $out .= '</ul></div>';
          return $out;
