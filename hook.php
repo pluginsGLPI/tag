@@ -108,9 +108,6 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
             if (! empty($color)) {
                $style .= "border-width:2px; border-color:$color;";
             }
-            
-            //$out .= Search::LBBR;
-            //$out .= Search::LBHR;
 
             $out .= '<li class="select2-search-choice" style="padding-left:5px;'.$style.'">'.$separator.$name.'</li>';
             $separator = '<span style="display:none">, </span>'; //For export (CSV, PDF) of GLPI core
