@@ -90,27 +90,30 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    }
    
    switch ($field) {
-      case "10500":
-         $tags = explode("$$$$", $data['raw']["ITEM_$num"]);
-         $out = '<div class="select2-container select2-container-multi chosen-select-no-results" id="s2id_tag_select" style="width: 100%;">
+      case "10500": //Note : can declare a const for "10500"
+
+         $tags = explode(Search::LONGSEP, $data['raw']["ITEM_$num"]);
+         $out = '<div id="s2id_tag_select" class="select2-container select2-container-multi chosen-select-no-results" style="width: 100%;">
                   <ul class="select2-choices">';
+
+         $plugintagtag = new PluginTagTag();
+
          foreach ($tags as $tag) {
-            $tmp = explode("$$", $tag);
+            $style = "";
+
+            $tmp = explode(Search::SHORTSEP, $tag);
             
-            $style = "padding-left:5px;"; //because we don't have 'x' before the tag
-            if (isset($tmp[1])) {
-               $plugintagtag = new PluginTagTag();
+            if (isset($tmp[1])) { //"security"
                $plugintagtag->getFromDB($tmp[1]);
                $color = $plugintagtag->fields["color"];
                if (! empty($color)) {
-                  $style .= "border-width:2px;border-color:$color;";
+                  $style .= "border-width:2px; border-color:$color;";
               }
             }
             
-            $out .= '<li class="select2-search-choice" style="'.$style.'">'.$tmp[0].'</li>';
+            $out .= '<li class="select2-search-choice" style="padding-left:5px;'.$style.'">'.$tmp[0].'</li>';
          }
-         $out .= '</ul>
-               </div>';
+         $out .= '</ul></div>';
          return $out;
          break;
    }
