@@ -15,6 +15,7 @@ class PluginTagTag extends CommonDropdown {
    public function showForm($ID, $options = array()) {
       $this->initForm($ID, $options);
       $this->showFormHeader($options);
+
       echo '<table class="tab_cadre_fixe">';
 
       echo "<tr class='line0'><td>" . __('Name') . " <span class='red'>*</span></td>";
@@ -81,7 +82,7 @@ class PluginTagTag extends CommonDropdown {
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       $tab = array();
       $tab[1] = __('Main');
-      $tab[2] = _n('Associated item', 'Associated items', 2);
+      $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
       return $tab;
    }
    
@@ -97,7 +98,6 @@ class PluginTagTag extends CommonDropdown {
                   break;
                case 2 :
                   $tagitem = new PluginTagTagItem();
-                  $ID = $item->getField('id');
                   $tagitem->showForTag($item);
                   break;
             }
@@ -120,10 +120,10 @@ class PluginTagTag extends CommonDropdown {
    function haveChildren() {
       $tagitems = new PluginTagTagItem();
       $data = $tagitems->find("plugin_tag_tags_id = ".$this->fields['id']);
-      if (count($data) > 0) {
-         return true;
+      if (empty($data)) {
+         return false;
       }
-      return false;
+      return true;
    }
    
    /**
@@ -279,17 +279,17 @@ class PluginTagTag extends CommonDropdown {
       }
       echo "</select>";
 
-      $rand = mt_rand();
-
-      /*
-      echo "<script type='text/javascript'>\n
-         window.updateTagSelectResults_".$rand." = function () {
-            
-         }
-      </script>";
-      */
-
       if (self::canCreate()) {
+         $rand = mt_rand();
+
+         /*
+         echo "<script type='text/javascript'>\n
+            window.updateTagSelectResults_".$rand." = function () {
+               
+            }
+         </script>";
+         */
+
          // Show '+' button :
          self::showMoreButton($rand);
       }

@@ -18,9 +18,10 @@ function plugin_init_tag() {
    Plugin::registerClass('PluginTagTagItem',
             array('addtabon' => array('PluginTagTag')));
 
-   // add link on plugin name in Configuration > Plugin
    $plugin = new Plugin();
    if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
+
+      // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
    }
    
@@ -62,13 +63,13 @@ function plugin_init_tag() {
          if (class_exists($itemtype)) {
             
             //normalize classname case
-            $obj = new $itemtype;
+            $obj = new $itemtype();
             $itemtype = get_class($obj);
 
             // Tag have no tag associated
             if ($itemtype != 'PluginTagTag') {
-               $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
-               $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype] = 'plugin_pre_item_purge_tag';
+               $PLUGIN_HOOKS['pre_item_update']['tag'][$obj->getType()] = 'plugin_pre_item_update_tag';
+               $PLUGIN_HOOKS['pre_item_purge']['tag'][$obj->getType()]  = 'plugin_pre_item_purge_tag';
             }
          }
       }

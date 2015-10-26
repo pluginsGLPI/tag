@@ -18,6 +18,7 @@ class PluginTagTagItem extends CommonDBRelation {
    
    public static function install(Migration $migration) {
       $table = getTableForItemType(__CLASS__);
+      
       if (!TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
             	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -83,7 +84,9 @@ class PluginTagTagItem extends CommonDBRelation {
       $tab                       = array();
       
       $tab['common']             = __('Characteristics');
+
       return $tab;
+
       /*
       $tab[1]['table']           = $this->getTable();
       $tab[1]['field']           = 'name';
@@ -133,6 +136,7 @@ class PluginTagTagItem extends CommonDBRelation {
       }
    
       $table = getTableForItemType(__CLASS__);
+
       $result = $DB->query("SELECT DISTINCT `itemtype`
          FROM `$table`
          WHERE `plugin_tag_tags_id` = '$instID'");
@@ -147,8 +151,8 @@ class PluginTagTagItem extends CommonDBRelation {
       if ($canedit) {
          echo "<div class='firstbloc'>";
          //can use standart GLPI function
-         echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post'
-         action='".Toolbox::getItemTypeFormURL('PluginTagTag')."'>";
+         $target = Toolbox::getItemTypeFormURL('PluginTagTag');
+         echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post' action='".$target."'>";
          
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
@@ -190,10 +194,10 @@ class PluginTagTagItem extends CommonDBRelation {
       
       for ($i=0; $i < $number; $i++) {
          $itemtype = $DB->result($result, $i, "itemtype");
-         $item_id = $DB->result($result2, $i, "items_id");
          if (!($item = getItemForItemtype($itemtype))) {
             continue;
          }
+         $item_id = $DB->result($result2, $i, "items_id");
          
          if ($item->canView()) {
             $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
@@ -217,14 +221,6 @@ class PluginTagTagItem extends CommonDBRelation {
                   ".KnowbaseItem::addVisibilityJoins()."
                   WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
                   AND ";
-               /*
-               if (Session::getLoginUserID()) {
-                  $where = "AND ".KnowbaseItem::addVisibilityRestrict();
-               } elseif (Session::isMultiEntitiesMode()) { // Anonymous access
-                  $where = " AND (`glpi_entities_knowbaseitems`.`entities_id` = '0'
-                              AND `glpi_entities_knowbaseitems`.`is_recursive` = '1')";
-               }
-               */
                   break;
                case 'Profile':
                case 'RSSFeed':
@@ -307,14 +303,12 @@ class PluginTagTagItem extends CommonDBRelation {
                      $pieces = preg_split('/(?=[A-Z])/', $itemtype);
                      $plugin_name = $pieces[2];
                      
-                     $datas = array(
-                           //"currentuser" => "glpi",
-                           "entities_id" => $data["entity"],
-                           "ITEM_0" => $data["name"],
-                           "ITEM_0_2" => $data["id"],
-                           "id" => $data["id"],
-                           "META_0" => $data["name"], //for PluginResourcesResource
-                     );
+                     $datas = array("entities_id" => $data["entity"],
+                                    "ITEM_0" => $data["name"],
+                                    "ITEM_0_2" => $data["id"],
+                                    "id" => $data["id"],
+                                    "META_0" => $data["name"]); //for PluginResourcesResource
+                     
                      if (isset($data["is_recursive"])) {
                         $datas["is_recursive"] = $data["is_recursive"];
                      }
@@ -349,7 +343,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   }
                   
                   echo $item->getTypeName(1)."</td>";
-                  echo "<td ".(isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").">".$name."</td>";
+                  echo "<td ".(isset($data['is_deleted']) && $data['is_deleted'] ? "class='tab_bg_2_2'":"").">".$name."</td>";
                   echo "<td class='center'>";
                   
                   $entity = $data['entity'];
@@ -365,9 +359,9 @@ class PluginTagTagItem extends CommonDBRelation {
                   
                   echo "</td>";
                   echo "<td class='center'>".
-                         (isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
+                         (isset($data["serial"]) ? "".$data["serial"]."" :"-")."</td>";
                   echo "<td class='center'>".
-                         (isset($data["otherserial"])? "".$data["otherserial"]."" :"-")."</td>";
+                         (isset($data["otherserial"]) ? "".$data["otherserial"]."" :"-")."</td>";
                   echo "</tr>";
                   }
                }

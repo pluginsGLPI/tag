@@ -4,16 +4,15 @@ function plugin_pre_item_update_tag($parm) {
    global $DB;
    
    if (isset($_REQUEST['plugin_tag_tag_id']) && isset($_REQUEST['plugin_tag_tag_itemtype'])) {
-      $item = new PluginTagTagItem();
-      $itemtype = PluginTagTag::getItemtype($_REQUEST['plugin_tag_tag_itemtype'], $_REQUEST['plugin_tag_tag_id']);
       
       $already_present = array();
+
+      $itemtype = PluginTagTag::getItemtype($_REQUEST['plugin_tag_tag_itemtype'], $_REQUEST['plugin_tag_tag_id']);
 
       $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']." 
                AND `itemtype` = '".$itemtype."'";
       
-      $tag_values = (isset($_REQUEST["_plugin_tag_tag_values"])) ? $_REQUEST["_plugin_tag_tag_values"] : array(); 
-      
+      $item = new PluginTagTagItem();
       foreach ($item->find($query_part) as $indb) {
          if (in_array($indb["plugin_tag_tags_id"], $tag_values)) {
             $already_present[] = $indb["plugin_tag_tags_id"];
@@ -23,13 +22,15 @@ function plugin_pre_item_update_tag($parm) {
          
       }
    
-      foreach ($tag_values as $tag_id) {
-         if (!in_array($tag_id, $already_present)) {
-            $item->add(array(
-                  'plugin_tag_tags_id' => $tag_id,
-                  'items_id' => $_REQUEST['plugin_tag_tag_id'],
-                  'itemtype' => ucfirst($itemtype), //get_class($parm)
-            ));
+      if (isset($_REQUEST["_plugin_tag_tag_values"])) {
+         foreach ($_REQUEST["_plugin_tag_tag_values"] as $tag_id) {
+            if (!in_array($tag_id, $already_present)) {
+               $item->add(array(
+                     'plugin_tag_tags_id' => $tag_id,
+                     'items_id' => $_REQUEST['plugin_tag_tag_id'],
+                     'itemtype' => ucfirst($itemtype), //get_class($parm)
+               ));
+            }
          }
       }
    }
@@ -85,6 +86,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
 
 function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 
+   // If no data
    if ($data['raw']["ITEM_$num"] == '') {
       return "";
    }
@@ -116,26 +118,27 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
          return $out;
          break;
    }
+   
    return "";
 }
 
 function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
 
    $values = explode(",", $val);
-   $out = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
+   $where = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
    array_shift($values);
    foreach ($values as $value) {
       $value = trim($value);
-      $out .= " OR `ITEM_$num` LIKE '%$value%'";
+      $where .= " OR `ITEM_$num` LIKE '%$value%'";
    }
-   return $out;
+   return $where;
 }
 
 /**
  * Define Dropdown tables to be manage in GLPI :
  */
 function plugin_tag_getDropdown() {
-   return array('PluginTagTag'   => PluginTagTag::getTypeName(2));
+   return array('PluginTagTag' => PluginTagTag::getTypeName(2));
 }
 
 /**
