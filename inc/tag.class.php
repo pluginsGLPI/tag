@@ -229,9 +229,18 @@ class PluginTagTag extends CommonDropdown {
       }
       return $itemtype;
    }
+
+   static function showMoreButton($rand) {
+      global $CFG_GLPI;
+
+      echo "&nbsp;<img title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
+           "/pics/add_dropdown.png' style='cursor:pointer;margin-left:2px;'
+           onClick=\"var w = window.open('".
+            $CFG_GLPI['root_doc']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$rand."', ".
+            "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";
+   }
    
    static function tagDropdownMultiple($options = array()) {
-      global $CFG_GLPI;
 
       //default options
       $params['name'] = '_plugin_tag_tag_values';
@@ -254,6 +263,14 @@ class PluginTagTag extends CommonDropdown {
         return;
       }
 
+      echo "<span style='width:80%'>";
+
+      $obj->getFromDB($_REQUEST['id']);
+      $sel_attr = $obj->canUpdateItem() ? '' : ' disabled ';
+
+      echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='".$params['name']."'
+          id='tag_select' multiple class='chosen-select-no-results' ".$sel_attr." style='width:80%;' >";
+
       $selected_id = array();
       $tag_item = new PluginTagTagItem();
       foreach ($tag_item->find('items_id='.$_REQUEST['id'].' 
@@ -261,52 +278,42 @@ class PluginTagTag extends CommonDropdown {
          $selected_id[] = $found_item['plugin_tag_tags_id'];
       }
 
-      $obj->getFromDB($_REQUEST['id']);
-      $sel_attr = $obj->canUpdateItem() ? '' : ' disabled ';
-
-      $tag = new self();
-      $where = "";
       // restrict tag by entity if current object has entity
       if (isset($obj->fields['entities_id'])) {
-         if ($itemtype == 'entity') {
-            $field = 'id';
-         } else {
-            $field = 'entities_id';
-         }
+         $field = $obj->getType() == 'Entity' ? 'id' : 'entities_id';
          $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields[$field], true);
+      } else {
+         $where = "";
       }
+
+      $tag = new self();
       $found = $tag->find($where);
 
-      echo "<span style='width:80%'>";
-      echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='".$params['name']."'
-                id='tag_select' multiple class='chosen-select-no-results' $sel_attr style='width:80%;' >";
-      
       usort($found, array(__CLASS__, "cmp_Tag"));
       
       foreach ($found as $label) {
-         $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
          if (is_null($label['color'])) {
             $label['color'] = "";
          }
+
+         $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
          $param .= 'data-color-option="'.$label['color'].'"';
          echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
       }
       echo "</select>";
       echo "</span>";
 
+      /*
       echo "<script type='text/javascript'>\n
          window.updateTagSelectResults_".$params['rand']." = function () {
             
          }
       </script>";
+      */
 
       if (self::canCreate()) {
          // Show '+' button :
-         echo "&nbsp;<img title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
-              "/pics/add_dropdown.png' style='cursor:pointer;margin-left:2px;'
-              onClick=\"var w = window.open('".
-               $CFG_GLPI['root_doc']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$params['rand']."', ".
-               "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";
+         self::showMoreButton($params['rand']);
       }
    }
 }
