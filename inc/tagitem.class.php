@@ -1,4 +1,5 @@
 <?php
+
 class PluginTagTagItem extends CommonDBRelation {
    
    // From CommonDBRelation
@@ -135,9 +136,11 @@ class PluginTagTagItem extends CommonDBRelation {
       $result = $DB->query("SELECT DISTINCT `itemtype`
          FROM `$table`
          WHERE `plugin_tag_tags_id` = '$instID'");
+
       $result2 = $DB->query("SELECT `itemtype`, items_id
             FROM `$table`
             WHERE `plugin_tag_tags_id` = '$instID'");
+
       $number = $DB->numrows($result);
       $rand   = mt_rand();
    
@@ -186,8 +189,8 @@ class PluginTagTagItem extends CommonDBRelation {
       echo "</tr>";
       
       for ($i=0; $i < $number; $i++) {
-         $itemtype=$DB->result($result, $i, "itemtype");
-         $item_id =$DB->result($result2, $i, "items_id");
+         $itemtype = $DB->result($result, $i, "itemtype");
+         $item_id = $DB->result($result2, $i, "items_id");
          if (!($item = getItemForItemtype($itemtype))) {
             continue;
          }
@@ -201,11 +204,12 @@ class PluginTagTagItem extends CommonDBRelation {
             } else {
                $itemtable = getTableForItemType($itemtype);
             }
-            $query = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
             
             $obj = new $itemtype();
             $obj->getFromDB($item_id);
             
+            $query = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
+
             switch ($itemtype) {
                case 'KnowbaseItem':
                $query .= "-1 AS entity
