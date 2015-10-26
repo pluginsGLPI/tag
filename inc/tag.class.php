@@ -18,21 +18,21 @@ class PluginTagTag extends CommonDropdown {
 
       echo '<table class="tab_cadre_fixe">';
 
-      echo "<tr class='line0'><td>" . __('Name') . " <span class='red'>*</span></td>";
+      echo "<tr class='line0'><td><label for='name'>" . __('Name') . " <span class='red'>*</span></label></td>";
       echo "<td>";
       //Html::autocompletionTextField($this, "name");
-      echo '<input type="text" name="name" value="'.$this->fields['name'].'" size="40" required>';
+      echo '<input type="text" id="name" name="name" value="'.$this->fields['name'].'" size="40" required>';
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line1'><td>" . __('Description') . "</td>";
+      echo "<tr class='line1'><td><label for='comment'>" . __('Description') . "</label></td>";
       echo "<td>";
       echo "<textarea name='comment' id ='comment' cols='45' rows='2'>" . $this->fields['comment'] . "</textarea>";
       //Html::initEditorSystem('comment');
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line1'><td>" . __('HTML color', 'tag') . "</td>"; 
+      echo "<tr class='line1'><td><label>" . __('HTML color', 'tag') . "</label></td>"; 
       echo "<td>";
       Html::showColorField('color', array('value' => $this->fields['color']));
       echo "</td>";
@@ -105,7 +105,7 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
    
-   function defineTabs($options=array()){
+   function defineTabs($options=array()) {
       $ong = array();
       $this->addStandardTab(__CLASS__, $ong, $options);
       return $ong;
@@ -114,6 +114,23 @@ class PluginTagTag extends CommonDropdown {
    public function cleanDBonPurge() {
       $GLOBALS['DB']->query("DELETE FROM `glpi_plugin_tag_tagitems`
                 WHERE `plugin_tag_tags_id`=".$this->fields['id']);
+   }
+
+    /**
+    * Return the linked items (in computers_items)
+    *
+    * @return an array of linked items  like array('Computer' => array(1,2), 'Printer' => array(5,6))
+    * @since version 0.84.4
+    **/
+   function getLinkedItems() {
+      $query = "SELECT `itemtype`, `items_id`
+              FROM `glpi_computers_items`
+              WHERE `computers_id` = '" . $this->fields['id']."'";
+      $tab = array();
+      foreach ($GLOBALS['DB']->request($query) as $data) {
+         $tab[$data['itemtype']][$data['items_id']] = $data['items_id'];
+      }
+      return $tab;
    }
    
    // for massive actions
@@ -131,23 +148,6 @@ class PluginTagTag extends CommonDropdown {
     **/
    function getSpecificMassiveActions($checkitem=NULL) {
       return CommonDBTM::getSpecificMassiveActions($checkitem);
-   }
-   
-   /**
-    * Return the linked items (in computers_items)
-    *
-    * @return an array of linked items  like array('Computer' => array(1,2), 'Printer' => array(5,6))
-    * @since version 0.84.4
-    **/
-   function getLinkedItems() {
-      $query = "SELECT `itemtype`, `items_id`
-              FROM `glpi_computers_items`
-              WHERE `computers_id` = '" . $this->fields['id']."'";
-      $tab = array();
-      foreach ($GLOBALS['DB']->request($query) as $data) {
-         $tab[$data['itemtype']][$data['items_id']] = $data['items_id'];
-      }
-      return $tab;
    }
    
    /**
