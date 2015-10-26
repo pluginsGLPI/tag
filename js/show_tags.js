@@ -1,12 +1,3 @@
-<?php
-include ('../../../inc/includes.php');
-
-Plugin::load('tag', true);
-
-header('Content-Type: text/javascript');
-
-$JS = <<<JAVASCRIPT
-
 function parseUrl(val) {
     var result = "Not found",
         tmp = [];
@@ -126,5 +117,3 @@ $(document).ready(function() {
       showTags();
    });
 });
-JAVASCRIPT;
-echo $JS;
