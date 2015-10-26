@@ -229,7 +229,7 @@ class PluginTagTag extends CommonDropdown {
    static function showMoreButton($rand) {
       global $CFG_GLPI;
 
-      echo "&nbsp;<img title=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
+      echo "&nbsp;<img title=\"".__s('Add')."\" alt=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
            "/pics/add_dropdown.png' style='cursor:pointer;margin-left:2px;'
            onClick=\"var w = window.open('".
             $CFG_GLPI['root_doc']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$rand."', ".
