@@ -237,19 +237,6 @@ class PluginTagTag extends CommonDropdown {
    }
    
    static function tagDropdownMultiple($options = array()) {
-
-      //default options
-      $params['name'] = '_plugin_tag_tag_values';
-      $params['rand'] = mt_rand();
-
-      if (is_array($options) && count($options)) {
-         foreach ($options as $key => $val) {
-            $params[$key] = $val;
-         }
-      }
-
-      // multiple select : add [] to name
-      $params['name'].= "[]";
       
       $itemtype = self::getItemtype($_REQUEST['itemtype'], $_REQUEST['id']);
       $obj = new $itemtype();
@@ -259,12 +246,10 @@ class PluginTagTag extends CommonDropdown {
         return;
       }
 
-      echo "<span style='width:80%'>";
-
       $obj->getFromDB($_REQUEST['id']);
       $sel_attr = $obj->canUpdateItem() ? '' : ' disabled ';
 
-      echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='".$params['name']."'
+      echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='_plugin_tag_tag_values[]'
           id='tag_select' multiple class='chosen-select-no-results' ".$sel_attr." style='width:80%;' >";
 
       $selected_id = array();
@@ -293,11 +278,12 @@ class PluginTagTag extends CommonDropdown {
          echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
       }
       echo "</select>";
-      echo "</span>";
+
+      $rand = mt_rand();
 
       /*
       echo "<script type='text/javascript'>\n
-         window.updateTagSelectResults_".$params['rand']." = function () {
+         window.updateTagSelectResults_".$rand." = function () {
             
          }
       </script>";
@@ -305,7 +291,7 @@ class PluginTagTag extends CommonDropdown {
 
       if (self::canCreate()) {
          // Show '+' button :
-         self::showMoreButton($params['rand']);
+         self::showMoreButton($rand);
       }
    }
 }
