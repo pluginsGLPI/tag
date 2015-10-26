@@ -213,10 +213,6 @@ class PluginTagTag extends CommonDropdown {
       return $tab;
    }
    
-   static function cmp_Tag($a, $b) {
-      return strcmp($a["name"], $b["name"]);
-   }
-   
    /**
     * For fixed the issue #1 on Github
     */
@@ -287,11 +283,7 @@ class PluginTagTag extends CommonDropdown {
       }
 
       $tag = new self();
-      $found = $tag->find($where);
-
-      usort($found, array(__CLASS__, "cmp_Tag"));
-      
-      foreach ($found as $label) {
+      foreach ($tag->find($where, '`name`') as $label) {
          if (is_null($label['color'])) {
             $label['color'] = "";
          }
