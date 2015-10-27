@@ -27,10 +27,12 @@ class PluginTagTag extends CommonDropdown {
 
       echo "<tr class='line0'><td><label for='type_de_tag'>" . __('Type de tag', 'mreporting') . " <span class='red'>*</span></label></td>";
       echo "<td>";
-      //Html::autocompletionTextField($this, "tag_type");
-      //echo '<input type="text" id="tag_type" name="tag_type" value="'.$this->fields['tag_type'].'" size="40" required>';
-      //Dropdown::
-      PluginTagTagtype::dropdown();
+      //Html::autocompletionTextField($this, "plugin_tag_tagtypes_id");
+      //echo '<input type="text" id="plugin_tag_tagtypes_id" name="plugin_tag_tagtypes_id" value="'.$this->fields['plugin_tag_tagtypes_id'].'" size="40" required>';
+
+      //Note : il faudrait idéalement qu'ils soit classés par 'id'
+      PluginTagTagtype::dropdown(array('value' => $this->fields['plugin_tag_tagtypes_id']));
+
       echo "</td>";
       echo "</tr>";
 
@@ -67,6 +69,10 @@ class PluginTagTag extends CommonDropdown {
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       }
+      $query = "ALTER TABLE `$table`
+            ADD COLUMN `plugin_tag_tagtypes_id` VARCHAR(50) NOT NULL DEFAULT '' AFTER `color`,
+            ADD INDEX `plugin_tag_tagtypes_id` (`plugin_tag_tagtypes_id`);";
+      $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       
       return true;
    }
