@@ -11,7 +11,7 @@ function plugin_pre_item_update_tag($parm) {
 
       $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']." 
                AND `itemtype` = '".$itemtype."'";
-      
+
       $item = new PluginTagTagItem();
       foreach ($item->find($query_part) as $indb) {
          if (isset($_REQUEST["_plugin_tag_tag_values"]) &&
@@ -56,12 +56,13 @@ function plugin_tag_getAddSearchOptions($itemtype) {
       return array();
    }
    
-   if (strpos($itemtype, 'Plugin') !== false && strpos($itemtype, 'CronTask') !== false) {
+   if (strpos($itemtype, 'Plugin') !== false) {
       return array();
    }
    
    if ($itemtype === 'PluginTagTag' 
          || $itemtype === 'TicketTemplate'
+         || $itemtype === 'CronTask' //Because no have already tag in CronTask interface
          || strpos($itemtype, 'PluginPrintercounters') !== false) {
       return array();
    }
