@@ -14,7 +14,8 @@ function plugin_pre_item_update_tag($parm) {
       
       $item = new PluginTagTagItem();
       foreach ($item->find($query_part) as $indb) {
-         if (in_array($indb["plugin_tag_tags_id"], $tag_values)) {
+         if (isset($_REQUEST["_plugin_tag_tag_values"]) &&
+               in_array($indb["plugin_tag_tags_id"], $_REQUEST["_plugin_tag_tag_values"])) {
             $already_present[] = $indb["plugin_tag_tags_id"];
          } else {
             $item->delete(array("id" => $indb['id']));
