@@ -25,6 +25,15 @@ class PluginTagTag extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
+      echo "<tr class='line0'><td><label for='type_de_tag'>" . __('Type de tag', 'mreporting') . " <span class='red'>*</span></label></td>";
+      echo "<td>";
+      //Html::autocompletionTextField($this, "tag_type");
+      //echo '<input type="text" id="tag_type" name="tag_type" value="'.$this->fields['tag_type'].'" size="40" required>';
+      //Dropdown::
+      PluginTagTagtype::dropdown();
+      echo "</td>";
+      echo "</tr>";
+
       echo "<tr class='line1'><td><label for='comment'>" . __('Description') . "</label></td>";
       echo "<td>";
       echo "<textarea name='comment' id ='comment' cols='45' rows='2'>" . $this->fields['comment'] . "</textarea>";

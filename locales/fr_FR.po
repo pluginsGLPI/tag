@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2014 Taclib'
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Translators:
 # Jérémy MOREAU <jmoreau@teclib.com>, 2014
@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-30 16:13+0200\n"
-"PO-Revision-Date: 2015-09-18 12:57+0000\n"
+"PO-Revision-Date: 2015-10-27 10:03+0100\n"
 "Last-Translator: Jérémy MOREAU <jmoreau.dev@gmail.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/teclib/glpi-plugin-tag/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.7.5\n"
 
 msgid "No tag found"
 msgstr "Aucun tag trouvé"
@@ -44,3 +44,8 @@ msgstr[1] "Etiquettes"
 
 msgid "Choose tags..."
 msgstr "Choisir les tags associés..."
+
+msgid "Tag type"
+msgid_plural "Tag types"
+msgstr[0] "Type de tag"
+msgstr[1] "Types de tag"

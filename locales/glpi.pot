@@ -44,3 +44,8 @@ msgstr[1] ""
 
 msgid "Choose tags..."
 msgstr ""
+
+msgid "Tag type"
+msgid_plural "Tag types"
+msgstr[0] ""
+msgstr[1] ""

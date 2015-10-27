@@ -138,7 +138,8 @@ function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
  * Define Dropdown tables to be manage in GLPI :
  */
 function plugin_tag_getDropdown() {
-   return array('PluginTagTag' => PluginTagTag::getTypeName(2));
+   return array('PluginTagTag' => PluginTagTag::getTypeName(2),
+               'PluginTagTagtype' => PluginTagTagtype::getTypeName(2));
 }
 
 /**
