@@ -104,10 +104,19 @@ class PluginTagTagItem extends CommonDBRelation {
    }
 
    static function getItemtypes() {
-      return array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
+      $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
                   'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
                   'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
                   'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+
+      foreach ($itemtypes as $key => $itemtype) {
+         $obj = new $itemtype();
+         if (! $obj->canUpdate()) {
+            unset($itemtypes[$key]);
+         }
+      }
+
+      return $itemtypes;
    }
    
    /**
@@ -125,15 +134,6 @@ class PluginTagTagItem extends CommonDBRelation {
       }
       
       $canedit = $tag->can($instID, UPDATE);
-      
-      $itemtypes = self::getItemtypes();
-      
-      foreach ($itemtypes as $key => $itemtype) {
-         $obj = new $itemtype();
-         if (! $obj->canUpdate()) {
-            unset($itemtypes[$key]);
-         }
-      }
    
       $table = getTableForItemType(__CLASS__);
 
@@ -160,7 +160,7 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<tr class='tab_bg_1'><td class='right'>";
          Dropdown::showAllItems("items_id", 0, 0,
             ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
-            $itemtypes, false, true
+            self::getItemtypes(), false, true
          );
          echo "<style>.select2-container { text-align: left; } </style>"; //minor
          echo "</td><td class='center'>";
