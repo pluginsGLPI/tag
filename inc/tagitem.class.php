@@ -103,11 +103,32 @@ class PluginTagTagItem extends CommonDBRelation {
       */
    }
 
-   static function getItemtypes() {
-      $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
+   static function getItemtypes($tagtype_id) {
+      switch ($tagtype_id) {
+         case 1:
+            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'Cartridgeitem', 'Consumableitem', 'Phone');
+            break;
+         case 2:
+            $itemtypes = array('Ticket', 'Problem', 'TicketRecurrent'); //incomplet
+            break;
+         case 3:
+            $itemtypes = array('Budget', 'Supplier', 'Contact', 'Contract', 'Document');
+            break;
+         case 4:
+            $itemtypes = array('Reminder', 'RSSFeed');
+            break;
+         case 5:
+            $itemtypes = array('User', 'Group', 'Profile');
+         case 6:
+            $itemtypes = array('SLA');
+         
+         default:
+            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
                   'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
                   'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
                   'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+            break;
+      }
 
       foreach ($itemtypes as $key => $itemtype) {
          $obj = new $itemtype();
@@ -158,9 +179,10 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
          
          echo "<tr class='tab_bg_1'><td class='right'>";
+         //Note : this function is deprecated (and replace by an other)
          Dropdown::showAllItems("items_id", 0, 0,
             ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
-            self::getItemtypes(), false, true
+            self::getItemtypes($tag->fields['plugin_tag_tagtypes_id']), false, true
          );
          echo "<style>.select2-container { text-align: left; } </style>"; //minor
          echo "</td><td class='center'>";
