@@ -35,6 +35,7 @@ function plugin_init_tag() {
          strpos($_SERVER['REQUEST_URI'], "?new=1") === false && //for exemple : for checklistconfig in plugin resources
          strpos($_SERVER['REQUEST_URI'], "popup=1&rand=") === false && //item no exist
          strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false && 
+         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tagtype") === false && 
          strpos($_SERVER['REQUEST_URI'], "plugins/datainjection/front/model.form.php") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/webservices/front/client.form.php?new=1") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/printercounters/") === false &&
