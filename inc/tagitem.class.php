@@ -103,30 +103,64 @@ class PluginTagTagItem extends CommonDBRelation {
       */
    }
 
-   static function getItemtypes($tagtype_id) {
-      switch ($tagtype_id) {
-         case 1:
-            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'Cartridgeitem', 'Consumableitem', 'Phone');
+   static function getMenuNameByItemtype($itemtype) { //Note : can be name getItemtypesByMenu
+
+      $menu = Html::getMenuInfos();
+
+      if (isset($menu['helpdesk']['types']['Planning'])) {
+         unset($menu['helpdesk']['types']['Planning']);
+      }
+      if (isset($menu['helpdesk']['types']['Stat'])) {
+         unset($menu['helpdesk']['types']['Stat']);
+      }
+
+      $itemtypes['assets'] = $menu['assets']['types'];
+      $itemtypes['helpdesk'] = $menu['helpdesk']['types'];
+      $itemtypes['management'] = $menu['management']['types'];
+      $itemtypes['tools'] = array('Project', 'Reminder', 'RSSFeed');
+      $itemtypes['admin'] = array('User', 'Group', 'Entity', 'Profile'); //Manque les différentes Rules...
+
+      //Manque tout les intitulés, les composants, Notification -> Modèle de notifications, Notification -> Traduction de modèle (mais pas front/notification)
+      $itemtypes['config'] = array('SLA', 'SlaLevel', 'FieldUnicity', 'Link'); //Manque les différents intutulés, les Device*, 
+
+      foreach ($itemtypes as $key => $value) {
+         if (in_array($itemtype, $value)) {
+            return $key;
+         }
+      }
+      return '';
+   }
+
+   static function getItemtypes($menu_key) {
+      switch ($menu_key) {
+         //case 1:
+         case 'assets':
+            $itemtypes = array('Computer', 'Monitor', 'Software', 'NetworkEquipment', 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone');
             break;
-         case 2:
-            $itemtypes = array('Ticket', 'Problem', 'TicketRecurrent'); //incomplet
+         //case 2:
+         case 'helpdesk':
+            $itemtypes = array('Ticket', 'Problem', 'Change', 'TicketRecurrent'); //incomplet
             break;
-         case 3:
+         //case 3:
+         case 'management':
             $itemtypes = array('Budget', 'Supplier', 'Contact', 'Contract', 'Document');
             break;
-         case 4:
-            $itemtypes = array('Reminder', 'RSSFeed');
+         //case 4:
+         case 'tools':
+            $itemtypes = array('Project', 'Reminder', 'RSSFeed'); //KnowbaseItem
             break;
-         case 5:
-            $itemtypes = array('User', 'Group', 'Profile');
-         case 6:
-            $itemtypes = array('SLA');
+         //case 5:
+         case 'admin':
+            $itemtypes = array('User', 'Group', 'Entity', 'Profile');
+         //case 6:
+         case 'config':
+            $itemtypes = array('SLA', 'SlaLevel', 'Link'); //Inutile de mettre ici FieldUnicity
          
          default:
-            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'Link', 
-                  'Cartridgeitem', 'Consumableitem', 'Phone', 'Ticket', 'Problem', 'TicketRecurrent', 
-                  'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Reminder', 'RSSFeed', 'User',
-                  'Group', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'SlaLevel', 'Link', 
+                  'CartridgeItem', 'ConsumableItem', 'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent', 
+                  'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Project', 'Reminder', 'RSSFeed', 'User',
+                  'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
             break;
       }
 
@@ -180,9 +214,11 @@ class PluginTagTagItem extends CommonDBRelation {
          
          echo "<tr class='tab_bg_1'><td class='right'>";
          //Note : this function is deprecated (and replace by an other)
+         $itemtypes_to_show = self::getItemtypes($tag->fields['type_menu']);
+
          Dropdown::showAllItems("items_id", 0, 0,
             ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
-            self::getItemtypes($tag->fields['plugin_tag_tagtypes_id']), false, true
+            $itemtypes_to_show, false, true
          );
          echo "<style>.select2-container { text-align: left; } </style>"; //minor
          echo "</td><td class='center'>";
@@ -319,8 +355,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   
                   $name = "<a href=\"".Toolbox::getItemTypeFormURL($itemtype)."?id=".$data["id"]."\">".$linkname."</a>";
                   
-                  if ($itemtype == 'PluginMreportingConfig' 
-                        || $itemtype == 'PluginProjetProjet'
+                  if ($itemtype == 'PluginProjetProjet'
                         || $itemtype == 'PluginResourcesResource') {
                      $pieces = preg_split('/(?=[A-Z])/', $itemtype);
                      $plugin_name = $pieces[2];

@@ -25,14 +25,18 @@ class PluginTagTag extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td><label for='type_de_tag'>" . __('Type de tag', 'mreporting') . " <span class='red'>*</span></label></td>";
+      echo "<tr class='line0'><td><label for='type_de_tag'>" . _n('Tag type', 'Tag types', 1, 'tag') . "</label></td>";
       echo "<td>";
-      //Html::autocompletionTextField($this, "plugin_tag_tagtypes_id");
-      //echo '<input type="text" id="plugin_tag_tagtypes_id" name="plugin_tag_tagtypes_id" value="'.$this->fields['plugin_tag_tagtypes_id'].'" size="40" required>';
+      $values = array(0 => Dropdown::EMPTY_VALUE);
 
-      //Note : il faudrait idéalement qu'ils soit classés par 'id'
-      PluginTagTagtype::dropdown(array('value' => $this->fields['plugin_tag_tagtypes_id']));
-
+      $menus = Html::getMenuInfos();
+      foreach ($menus as $key => $value) {
+         if ($key != 'plugins' && $key != 'preference') {
+            $values[$key] = $menus[$key]['title'];
+         }
+      }      
+      Dropdown::showFromArray("type_menu", $values, array('value' => $this->fields['type_menu'],
+                                                                        'width' => '50%'));
       echo "</td>";
       echo "</tr>";
 
@@ -45,6 +49,7 @@ class PluginTagTag extends CommonDropdown {
 
       echo "<tr class='line1'><td><label>" . __('HTML color', 'tag') . "</label></td>"; 
       echo "<td>";
+      //Note : create some bugs
       Html::showColorField('color', array('value' => $this->fields['color']));
       echo "</td>";
       echo "</tr>";
@@ -69,10 +74,17 @@ class PluginTagTag extends CommonDropdown {
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       }
+
+      $migration->addField($table, 'type_menu', "VARCHAR(50) NOT NULL DEFAULT ''");
+      $migration->addKey($table, 'type_menu');
+      $migration->migrationOneTable($table);
+
+      /*
       $query = "ALTER TABLE `$table`
-            ADD COLUMN `plugin_tag_tagtypes_id` VARCHAR(50) NOT NULL DEFAULT '' AFTER `color`,
-            ADD INDEX `plugin_tag_tagtypes_id` (`plugin_tag_tagtypes_id`);";
+                  ADD COLUMN `type_menu` VARCHAR(50) NOT NULL DEFAULT '' AFTER `color`,
+                  ADD INDEX `type_menu` (`type_menu`);";
       $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
+      */
       
       return true;
    }
@@ -274,20 +286,18 @@ class PluginTagTag extends CommonDropdown {
          $selected_id[] = $found_item['plugin_tag_tags_id'];
       }
 
+      //filter by type
+      $menu_name = PluginTagTagItem::getMenuNameByItemtype($obj->getType());
+      $where = ($menu_name == '') ? "1=1 " : "type_menu = '".$menu_name."' OR type_menu = '' ";
+
       // restrict tag by entity if current object has entity
       if (isset($obj->fields['entities_id'])) {
          $field = $obj->getType() == 'Entity' ? 'id' : 'entities_id';
-         $where = getEntitiesRestrictRequest(" ", '', '', $obj->fields[$field], true);
-      } else {
-         $where = "";
+         $where .= getEntitiesRestrictRequest("AND", '', '', $obj->fields[$field], true);
       }
 
       $tag = new self();
-      foreach ($tag->find($where, '`name`') as $label) {
-         if (is_null($label['color'])) {
-            $label['color'] = "";
-         }
-
+      foreach ($tag->find($where, 'name') as $label) {
          $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
          $param .= 'data-color-option="'.$label['color'].'"';
          echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';

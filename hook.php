@@ -57,7 +57,6 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    }
    
    if ($itemtype === 'PluginTagTag' 
-         || $itemtype === 'PluginTagTagtype'
          || $itemtype === 'TicketTemplate'
          || $itemtype === 'CronTask' //Because no have already tag in CronTask interface
          || strpos($itemtype, 'PluginPrintercounters') !== false) {
@@ -117,6 +116,13 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
          return $out;
          break;
    }
+
+   if ($type == 'PluginTagTag' && $field == 6) {
+      $key = $data[$num][0]['name'];
+
+      $menu = Html::getMenuInfos();
+      return $menu[$key]['title'];
+   }
    
    return "";
 }
@@ -137,8 +143,7 @@ function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
  * Define Dropdown tables to be manage in GLPI :
  */
 function plugin_tag_getDropdown() {
-   return array('PluginTagTag' => PluginTagTag::getTypeName(2),
-               'PluginTagTagtype' => PluginTagTagtype::getTypeName(2));
+   return array('PluginTagTag' => PluginTagTag::getTypeName(2));
 }
 
 /**
