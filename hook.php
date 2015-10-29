@@ -56,11 +56,8 @@ function plugin_tag_getAddSearchOptions($itemtype) {
       return array();
    }
    
-   if (strpos($itemtype, 'Plugin') !== false) {
-      return array();
-   }
-   
    if ($itemtype === 'PluginTagTag' 
+         || $itemtype === 'PluginTagTagtype'
          || $itemtype === 'TicketTemplate'
          || $itemtype === 'CronTask' //Because no have already tag in CronTask interface
          || strpos($itemtype, 'PluginPrintercounters') !== false) {
