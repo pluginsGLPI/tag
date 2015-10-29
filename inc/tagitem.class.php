@@ -117,7 +117,7 @@ class PluginTagTagItem extends CommonDBRelation {
       $itemtypes['assets'] = $menu['assets']['types'];
       $itemtypes['helpdesk'] = $menu['helpdesk']['types'];
       $itemtypes['management'] = $menu['management']['types'];
-      $itemtypes['tools'] = array('Project', 'Reminder', 'RSSFeed');
+      $itemtypes['tools'] = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
       $itemtypes['admin'] = array('User', 'Group', 'Entity', 'Profile'); //Manque les différentes Rules...
 
       //Manque tout les intitulés, les composants, Notification -> Modèle de notifications, Notification -> Traduction de modèle (mais pas front/notification)
@@ -133,34 +133,35 @@ class PluginTagTagItem extends CommonDBRelation {
 
    static function getItemtypes($menu_key) {
       switch ($menu_key) {
-         //case 1:
          case 'assets':
             $itemtypes = array('Computer', 'Monitor', 'Software', 'NetworkEquipment', 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone');
             break;
-         //case 2:
+
          case 'helpdesk':
             $itemtypes = array('Ticket', 'Problem', 'Change', 'TicketRecurrent'); //incomplet
             break;
-         //case 3:
+
          case 'management':
             $itemtypes = array('Budget', 'Supplier', 'Contact', 'Contract', 'Document');
+
             break;
-         //case 4:
          case 'tools':
-            $itemtypes = array('Project', 'Reminder', 'RSSFeed'); //KnowbaseItem
+            $itemtypes = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
             break;
-         //case 5:
+
          case 'admin':
             $itemtypes = array('User', 'Group', 'Entity', 'Profile');
-         //case 6:
+            break;
+
          case 'config':
             $itemtypes = array('SLA', 'SlaLevel', 'Link'); //Inutile de mettre ici FieldUnicity
+            break;
          
          default:
             $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'SlaLevel', 'Link', 
                   'CartridgeItem', 'ConsumableItem', 'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent', 
                   'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Project', 'Reminder', 'RSSFeed', 'User',
-                  'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', ); //, 'KnowbaseItem'
+                  'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', 'KnowbaseItem');
             break;
       }
 

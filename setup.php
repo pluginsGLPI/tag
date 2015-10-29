@@ -7,7 +7,7 @@ function plugin_tag_check_config($verbose=false) {
 }
 
 function getBlacklistItemtype() {
-   return array('KnowbaseItem', 'Tag');
+   return array('Tag');
 }
 
 function plugin_init_tag() {
