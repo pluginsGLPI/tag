@@ -1,5 +1,8 @@
 <?php
 class PluginTagTag extends CommonDropdown {
+
+   // From CommonDBTM
+   public $dohistory = true;
    
    const MNBSP = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -127,6 +130,7 @@ class PluginTagTag extends CommonDropdown {
                   $tagitem = new PluginTagTagItem();
                   $tagitem->showForTag($item);
                   break;
+
             }
       }
       return true;
@@ -135,6 +139,7 @@ class PluginTagTag extends CommonDropdown {
    function defineTabs($options=array()) {
       $ong = array();
       $this->addStandardTab(__CLASS__, $ong, $options);
+      $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
    
