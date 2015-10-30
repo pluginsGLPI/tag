@@ -237,7 +237,45 @@ class PluginTagTag extends CommonDropdown {
       $tab[5]['name']            = __('Child entities');
       $tab[5]['datatype']        = 'bool';
       
+      $tab[6]['table']           = $this->getTable();
+      $tab[6]['field']           = 'type_menu';
+      $tab[6]['searchtype']      = array('equals', 'notequals');
+      $tab[6]['name']            = _n('Tag type', 'Tag types', 1, 'tag');
+      $tab[6]['massiveaction']   = true;
+
       return $tab;
+   }
+
+
+   /**
+    * @since version 0.84
+    *
+    * @param $field
+    * @param $name            (default '')
+    * @param $values          (default '')
+    * @param $options   array
+    **/
+   static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
+
+      if (!is_array($values)) {
+         $values = array($field => $values);
+      }
+      $options['display'] = false;
+      $options['value']   = $values[$field];
+      switch ($field) {
+         case 'type_menu':
+            $tab = array('' => Dropdown::EMPTY_VALUE);
+
+            $menus = Html::getMenuInfos();
+            foreach ($menus as $key => $value) {
+               if ($key != 'plugins' && $key != 'preference') {
+                  $tab[$key] = $menus[$key]['title'];
+               }
+            }
+            return Dropdown::showFromArray($name, $tab, $options);
+            break;
+      }
+      return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
    
    /**
