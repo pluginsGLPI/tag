@@ -92,8 +92,8 @@ function plugin_version_tag() {
  * Check plugin's prerequisites before installation
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85','lt')) {
-      echo __('This plugin requires GLPI >= 0.85');
+   if (version_compare(GLPI_VERSION,'0.90','lt')) {
+      echo __('This plugin requires GLPI >= 0.90');
    } else {
       return true;
    }
