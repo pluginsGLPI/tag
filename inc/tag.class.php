@@ -10,50 +10,85 @@ class PluginTagTag extends CommonDropdown {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+   
+   const TAG_SEARCH_NUM = 10500;
 
    public static function getTypeName($nb=1) {
       return _n('Tag', 'Tags', $nb, 'tag');
    }
    
    public function showForm($ID, $options = array()) {
+      global $CFG_GLPI;
+      
       $this->initForm($ID, $options);
       $this->showFormHeader($options);
 
       echo '<table class="tab_cadre_fixe">';
-
-      echo "<tr class='line0'><td><label for='name'>" . __('Name') . " <span class='red'>*</span></label></td>";
+      echo "<tr class='line0 tab_bg_2'><td><label for='name'>" . __('Name') . " <span class='red'>*</span></label></td>";
       echo "<td>";
-      //Html::autocompletionTextField($this, "name");
       echo '<input type="text" id="name" name="name" value="'.$this->fields['name'].'" size="40" required>';
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td><label for='type_de_tag'>" . _n('Tag type', 'Tag types', 1, 'tag') . "</label></td>";
+      echo "<tr class='line1 tab_bg_2'><td><label for='comment'>" . __('Description') . "</label></td>";
       echo "<td>";
-      $values = array(0 => Dropdown::EMPTY_VALUE);
+      echo "<textarea name='comment' id ='comment' cols='45' rows='2'>" . $this->fields['comment'] . "</textarea>";
+      echo "</td>";
+      echo "</tr>";
 
-      $menus = Html::getMenuInfos();
+      echo "<tr class='line1 tab_bg_2'><td><label>" . __('HTML color', 'tag') . "</label></td>"; 
+      echo "<td>";
+      //Note : create some bugs
+      Html::showColorField('color', array('value' => $this->fields['color']));
+      echo "</td>";
+      echo "</tr>";
+      
+      echo "<tr class='line0 tab_bg_2'>";
+      echo "<td colspan='2'>";
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tr class='line1 tab_bg_2'>";
+      echo "<th>"._n('Associated item type', 'Associated item types',2)."</th>";
+      echo "</tr>";
+      
+      echo "<tr class='line1 tab_bg_2'>";
+      echo "<td class='center'>";
+      echo _n('Tag type', 'Tag types', 1, 'tag')." ";
+      $values = array(0 => Dropdown::EMPTY_VALUE);
+      $menus  = Html::getMenuInfos();
       foreach ($menus as $key => $value) {
          if ($key != 'plugins' && $key != 'preference') {
             $values[$key] = $menus[$key]['title'];
          }
-      }      
-      Dropdown::showFromArray("type_menu", $values, array('value' => $this->fields['type_menu'],
-                                                                        'width' => '50%'));
+      }
+      $rand = Dropdown::showFromArray("type_menu", $values, array('value'     => $this->fields['type_menu'],
+                                                                  'width'     => '50%',
+                                                                  'on_change' => 'pluginTagSubType();'));
+
+      echo "<div id='plugin_tag_itemtype'></div><br>";
+      $JS = 'function pluginTagSubType(){';
+      $JS .= Ajax::updateItemJsCode('plugin_tag_itemtype', 
+                                    $CFG_GLPI['root_doc']."/plugins/tag/ajax/tag.php", 
+                                    array('action' => 'add_subtypes', 'type_menu' => '__VALUE__', 'rand' => $rand), 
+                                    "dropdown_type_menu$rand", false);
+      $JS .= '}';
+      $JS .= 'pluginTagSubType();';
+      echo Html::scriptBlock($JS);
+      
+      // Sub type choice
+      $itemtypes = array();
+      $selected  = array();
+      if (!empty($this->fields['type_menu'])) {
+         foreach (json_decode($this->fields['type_menu'], true) as $itemtype) {
+            $item                 = getItemForItemtype($itemtype);
+            $itemtypes[$itemtype] = $item->getTypeName();
+            $selected[]           = $itemtype;
+         }
+      }
+      Dropdown::showFromArray("subtypes", $itemtypes,
+                              array('values' => $selected, 'multiple' => true, 'rand' => $rand, 'width' => '100%'));
       echo "</td>";
       echo "</tr>";
-
-      echo "<tr class='line1'><td><label for='comment'>" . __('Description') . "</label></td>";
-      echo "<td>";
-      echo "<textarea name='comment' id ='comment' cols='45' rows='2'>" . $this->fields['comment'] . "</textarea>";
-      //Html::initEditorSystem('comment');
-      echo "</td>";
-      echo "</tr>";
-
-      echo "<tr class='line1'><td><label>" . __('HTML color', 'tag') . "</label></td>"; 
-      echo "<td>";
-      //Note : create some bugs
-      Html::showColorField('color', array('value' => $this->fields['color']));
+      echo "</table>";
       echo "</td>";
       echo "</tr>";
       
@@ -63,6 +98,8 @@ class PluginTagTag extends CommonDropdown {
    }
    
    public static function install(Migration $migration) {
+      global $DB;
+      
       $table = getTableForItemType(__CLASS__);
       if (!TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
@@ -77,18 +114,31 @@ class PluginTagTag extends CommonDropdown {
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       }
-
-      $migration->addField($table, 'type_menu', "VARCHAR(50) NOT NULL DEFAULT ''");
+      
+      $migration->addField($table, 'type_menu', "varchar(50) NOT NULL DEFAULT ''");
       $migration->addKey($table, 'type_menu');
       $migration->migrationOneTable($table);
-
-      /*
-      $query = "ALTER TABLE `$table`
-                  ADD COLUMN `type_menu` VARCHAR(50) NOT NULL DEFAULT '' AFTER `color`,
-                  ADD INDEX `type_menu` (`type_menu`);";
-      $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
-      */
       
+      // Version 0.90-1.1
+      $result = $DB->query("SHOW FIELDS FROM `$table` where Field ='type_menu'");
+      if ($result && $DB->numrows($result)) {
+         while ($data = $DB->fetch_assoc($result)) {
+            if (stristr($data["Type"], 'varchar') !== FALSE) {
+               $DB->query("ALTER TABLE `$table` DROP INDEX `type_menu`;");
+               $DB->query("ALTER TABLE `$table` MODIFY `type_menu` text COLLATE utf8_unicode_ci;");
+               
+               $datas = getAllDatasFromTable($table, "`type_menu` IS NOT NULL");
+               if (!empty($datas)) {
+                  foreach ($datas as $data) {
+                     $itemtypes = PluginTagTagItem::getItemtypes($data['type_menu']);
+                     $DB->query("UPDATE `$table` SET `type_menu` = '".json_encode($itemtypes)."' WHERE `id` = '".$data['id']."'");
+                  }
+               }
+               break;
+            }
+         }
+      }
+
       return true;
    }
 
@@ -99,7 +149,7 @@ class PluginTagTag extends CommonDropdown {
       $query = "DELETE FROM glpi_bookmarks WHERE itemtype='".__CLASS__."'";
       $GLOBALS['DB']->query($query);
       
-      $query = "DELETE FROM glpi_displaypreferences WHERE itemtype='".__CLASS__."' OR num=10500";
+      $query = "DELETE FROM glpi_displaypreferences WHERE itemtype='".__CLASS__."' OR num=".PluginTagTag::TAG_SEARCH_NUM;
       $GLOBALS['DB']->query($query);
       
       $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
@@ -325,25 +375,34 @@ class PluginTagTag extends CommonDropdown {
       $selected_id = array();
       $tag_item = new PluginTagTagItem();
       foreach ($tag_item->find('items_id='.$_REQUEST['id'].' 
-                                      AND itemtype="'.$itemtype.'"') as $found_item) {
+                                AND itemtype="'.$itemtype.'"') as $found_item) {
          $selected_id[] = $found_item['plugin_tag_tags_id'];
       }
 
-      //filter by type
-      $menu_name = PluginTagTagItem::getMenuNameByItemtype($obj->getType());
-      $where = ($menu_name == '') ? "1=1 " : "type_menu = '".$menu_name."' OR type_menu = '' ";
-
-      // restrict tag by entity if current object has entity
+      // Restrict tag by entity if current object has entity
+      $where = "1 ";
       if (isset($obj->fields['entities_id'])) {
          $field = $obj->getType() == 'Entity' ? 'id' : 'entities_id';
          $where .= getEntitiesRestrictRequest("AND", '', '', $obj->fields[$field], true);
       }
-
-      $tag = new self();
-      foreach ($tag->find($where, 'name') as $label) {
-         $param = in_array($label['id'], $selected_id) ? ' selected ' : '';
-         $param .= 'data-color-option="'.$label['color'].'"';
-         echo '<option value="'.$label['id'].'" '.$param.'>'.$label['name'].'</option>';
+      
+      $tag   = new self();
+      $items = $tag->find($where, 'name');
+      foreach ($items as $item) {
+         $param = in_array($item['id'], $selected_id) ? ' selected ' : '';
+         $param .= 'data-color-option="'.$item['color'].'"';
+         if (!empty($item['type_menu'])) {
+            // Allowed types
+            foreach (json_decode($item['type_menu'], true) as $subtype) {
+               if (strtolower($subtype) == $itemtype) {
+                  echo '<option value="'.$item['id'].'" '.$param.'>'.$item['name'].'</option>';
+                  break;
+               }
+            }
+            
+         } else {
+            echo '<option value="'.$item['id'].'" '.$param.'>'.$item['name'].'</option>';
+         }
       }
       echo "</select>";
 
@@ -361,5 +420,78 @@ class PluginTagTag extends CommonDropdown {
          // Show '+' button :
          self::showMoreButton($rand);
       }
+   }
+   
+  /** 
+   * Actions done before add
+   * 
+   * @param type $input
+   * @return type
+   */
+   function prepareInputForAdd($input) {
+      if (!$this->checkMandatoryFields($input)) {
+         return false;
+      }
+      
+      $input = $this->encodeSubtypes($input);
+      
+      return $input;
+   }
+   
+  /** 
+   * Actions done before update
+   * 
+   * @param type $input
+   * @return type
+   */
+   function prepareInputForUpdate($input) {
+      if (!$this->checkMandatoryFields($input)) {
+         return false;
+      }
+
+      $input = $this->encodeSubtypes($input);
+      
+      return $input;
+   }
+   
+  /** 
+   * Encode sub types
+   * 
+   * @param type $input
+   */
+   function encodeSubtypes($input) {
+      if (!empty($input['subtypes'])) {
+         $input['type_menu'] = json_encode($input['subtypes']);
+      }
+      
+      return $input;
+   }
+
+   /** 
+   * checkMandatoryFields 
+   * 
+   * @param type $input
+   * @return boolean
+   */
+   function checkMandatoryFields($input){
+      $msg     = array();
+      $checkKo = false;
+
+      $mandatory_fields = array('name'     => __('Name'));
+
+      foreach ($input as $key => $value) {
+         if (isset($mandatory_fields[$key])) {
+            if (empty($value)) {
+               $msg[]   = $mandatory_fields[$key];
+               $checkKo = true;
+            }
+         }
+      }
+
+      if ($checkKo) {
+         Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
+         return false;
+      }
+      return true;
    }
 }
