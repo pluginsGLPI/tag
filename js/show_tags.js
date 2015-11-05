@@ -39,9 +39,9 @@ function showTags() {
       
       itemtype = 'Plugin' + upperFirst(plugin_name) + upperFirst(itemtype);
       
-      urlAjax = "../../tag/ajax/tags_values.php";
+      urlAjax = "../../tag/ajax/tag.php";
    } else {
-      urlAjax = "../plugins/tag/ajax/tags_values.php";
+      urlAjax = "../plugins/tag/ajax/tag.php";
    }
    
    // Don't show in notification :
@@ -95,7 +95,9 @@ function showTags() {
    $.ajax({
       type: "POST",
       url: urlAjax,
-      data: "itemtype=" + itemtype + "&id=" + id,
+      data: {"itemtype" : itemtype, 
+             "id"       : id, 
+             "action"   : "tag_values"},
       success: function(msg){
          if ($("#mainformtable").find("[name='plugin_tag_tag_itemtype']").length == 0) {
             $("#mainformtable tr:first").after(msg + hidden_fields);
@@ -117,3 +119,4 @@ $(document).ready(function() {
       showTags();
    });
 });
+
