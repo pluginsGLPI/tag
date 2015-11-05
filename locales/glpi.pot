@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-05 14:05+0100\n"
+"POT-Creation-Date: 2015-11-05 14:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,24 +28,20 @@ msgstr[1] ""
 msgid "Tag Management"
 msgstr ""
 
-#: ajax/tag.php:33
+#: ajax/tag.php:32
 msgid "Add type"
 msgstr ""
 
-#: inc/tag.class.php:34 inc/tag.class.php:289
+#: inc/tag.class.php:39
+msgid "HTML color"
+msgstr ""
+
+#: inc/tag.class.php:55 inc/tag.class.php:295
 msgid "Tag type"
 msgid_plural "Tag types"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tag.class.php:61 inc/tag.class.php:469
-msgid "Type list"
-msgstr ""
-
-#: inc/tag.class.php:82
-msgid "HTML color"
-msgstr ""
-
-#: inc/tag.class.php:363
+#: inc/tag.class.php:369
 msgid "Choose tags..."
 msgstr ""

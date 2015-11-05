@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-05 14:05+0100\n"
-"PO-Revision-Date: 2015-11-05 14:06+0100\n"
+"POT-Creation-Date: 2015-11-05 14:58+0100\n"
+"PO-Revision-Date: 2015-11-05 14:58+0100\n"
 "Last-Translator: Jérémy MOREAU <jmoreau.dev@gmail.com>\n"
 "Language-Team: English (United Kingdom) (http://www.transifex.com/teclib/"
 "glpi-plugin-tag/language/en_GB/)\n"
@@ -33,27 +33,26 @@ msgstr[1] "Tags"
 msgid "Tag Management"
 msgstr "Tag Management"
 
-#: ajax/tag.php:33
+#: ajax/tag.php:32
 msgid "Add type"
 msgstr "Add type"
 
-#: inc/tag.class.php:34 inc/tag.class.php:289
+#: inc/tag.class.php:39
+msgid "HTML color"
+msgstr "HTML color"
+
+#: inc/tag.class.php:55 inc/tag.class.php:295
 msgid "Tag type"
 msgid_plural "Tag types"
 msgstr[0] "Tag type"
 msgstr[1] "Tag types"
 
-#: inc/tag.class.php:61 inc/tag.class.php:469
-msgid "Type list"
-msgstr "Type list"
-
-#: inc/tag.class.php:82
-msgid "HTML color"
-msgstr "HTML color"
-
-#: inc/tag.class.php:363
+#: inc/tag.class.php:369
 msgid "Choose tags..."
 msgstr "Choose tags..."
+
+#~ msgid "Type list"
+#~ msgstr "Type list"
 
 #~ msgid "No tag found"
 #~ msgstr "No tag found"

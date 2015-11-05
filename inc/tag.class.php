@@ -472,7 +472,7 @@ class PluginTagTag extends CommonDropdown {
       $checkKo = false;
 
       $mandatory_fields = array('name'     => __('Name'),
-                                'subtypes' => __('Type list', 'tag'));
+                                'subtypes' => _n('Associated item type', 'Associated item types',2));
 
       if (!isset($input['subtypes'])) {
          $msg[]   = $mandatory_fields['subtypes'];
