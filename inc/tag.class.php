@@ -109,14 +109,17 @@ class PluginTagTag extends CommonDropdown {
                      `name` varchar(255) NOT NULL DEFAULT '',
                      `comment` text collate utf8_unicode_ci,
                      `color` varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-                     `type_menu` text COLLATE utf8_unicode_ci DEFAULT NULL,
                      PRIMARY KEY (`id`),
                      KEY `name` (`name`)
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
          $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       }
       
-      // Version 0.90-1.3
+      $migration->addField($table, 'type_menu', "varchar(50) NOT NULL DEFAULT ''");
+      $migration->addKey($table, 'type_menu');
+      $migration->migrationOneTable($table);
+      
+      // Version 0.90-1.1
       $result = $DB->query("SHOW FIELDS FROM `$table` where Field ='type_menu'");
       if ($result && $DB->numrows($result)) {
          while ($data = $DB->fetch_assoc($result)) {
@@ -386,16 +389,19 @@ class PluginTagTag extends CommonDropdown {
       $tag   = new self();
       $items = $tag->find($where, 'name');
       foreach ($items as $item) {
+         $param = in_array($item['id'], $selected_id) ? ' selected ' : '';
+         $param .= 'data-color-option="'.$item['color'].'"';
          if (!empty($item['type_menu'])) {
             // Allowed types
             foreach (json_decode($item['type_menu'], true) as $subtype) {
                if (strtolower($subtype) == $itemtype) {
-                  $param = in_array($item['id'], $selected_id) ? ' selected ' : '';
-                  $param .= 'data-color-option="'.$item['color'].'"';
                   echo '<option value="'.$item['id'].'" '.$param.'>'.$item['name'].'</option>';
                   break;
                }
             }
+            
+         } else {
+            echo '<option value="'.$item['id'].'" '.$param.'>'.$item['name'].'</option>';
          }
       }
       echo "</select>";
@@ -471,14 +477,8 @@ class PluginTagTag extends CommonDropdown {
       $msg     = array();
       $checkKo = false;
 
-      $mandatory_fields = array('name'     => __('Name'),
-                                'subtypes' => _n('Associated item type', 'Associated item types',2));
+      $mandatory_fields = array('name'     => __('Name'));
 
-      if (!isset($input['subtypes'])) {
-         $msg[]   = $mandatory_fields['subtypes'];
-         $checkKo = true;
-      }
-         
       foreach ($input as $key => $value) {
          if (isset($mandatory_fields[$key])) {
             if (empty($value)) {
