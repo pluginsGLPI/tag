@@ -13,7 +13,7 @@ class PluginTagTagItem extends CommonDBRelation {
     
    
    public static function getTypeName($nb=1) {
-      return _n('Tag', 'Tags', $nb, 'tag');
+      return PluginTagTag::getTypeName($nb);
    }
    
    public static function install(Migration $migration) {

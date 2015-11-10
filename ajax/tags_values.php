@@ -10,7 +10,7 @@ if (in_array(strtolower($_REQUEST['itemtype']),
 $class = ($_REQUEST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
 
 echo "<tr class='$class'>";
-echo "<th>"._n('Tag', 'Tags', 2, 'tag')."</th>";
+echo "<th>".PluginTagTag::getTypeName(2)."</th>";
 echo "<td colspan='3'>";
 PluginTagTag::tagDropdownMultiple();
 echo "</td>";

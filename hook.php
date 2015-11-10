@@ -69,7 +69,7 @@ function plugin_tag_getAddSearchOptions($itemtype) {
 
    $sopt[$rng1]['table']         = getTableForItemType('PluginTagTag');
    $sopt[$rng1]['field']         = 'name';
-   $sopt[$rng1]['name']          = _n('Tag', 'Tag', 2, 'tag');
+   $sopt[$rng1]['name']          = PluginTagTag::getTypeName(2);
    $sopt[$rng1]['datatype']      = 'string';
    $sopt[$rng1]['searchtype']    = "contains";
    $sopt[$rng1]['massiveaction'] = false;
