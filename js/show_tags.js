@@ -15,8 +15,7 @@ function parseUrl(val) {
 
 // FAIL (with multiples entities) ?
 function getIdFromHeader() {
-   var headerRow = document.querySelectorAll("tr.headerRow")[0]; //or $("tr.headerRow:first");
-   var splited = headerRow.querySelectorAll("th")[0].textContent.split(" ");
+   var splited = $("tr.headerRow:first th:first").text().split(" ");
    return splited[splited.length - 1];
 }
 
@@ -50,7 +49,7 @@ function showTags() {
    }
    
    var id = parseUrl('id');
-   if (id == '') {
+   if (id == '' || id == 'Not found') {
       id = parseInt(getIdFromHeader()); //For part of Mreporting plugin
       
       // Security :
