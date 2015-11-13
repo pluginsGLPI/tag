@@ -41,19 +41,14 @@ function idealTextColor(hexTripletColor) {
 
 function formatOption(option) {
    var color = option.element[0].getAttribute("data-color-option");
+   var template = "<span style='padding: 2px; border-radius: 3px; ";
    if (color !== "") {
       var invertedcolor = idealTextColor(color);
-   }
-   
-   var template = "";
-   template+= "<span style='padding: 2px; border-radius: 3px; "; 
-   if (color !== "") {
+
       template+= " background-color: " + color + "; ";
       template+= " color: " + invertedcolor + "; ";
    }
-   template+= "'>";
-   template+= option.text;
-   template+= "</span>";
+   template+= "'>" + option.text + "</span>";
 
    return template;
 }
@@ -75,7 +70,7 @@ function showTags() {
    }
    
    // Don't show in notification :
-   if (itemtype == 'notification' || itemtype == 'crontask') {
+   if (itemtype == 'notification' || itemtype == 'crontask') { //Note : test crontask no is need on 0.90
       return;
    }
    
