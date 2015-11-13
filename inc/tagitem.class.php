@@ -160,7 +160,7 @@ class PluginTagTagItem extends CommonDBRelation {
          
          default:
             $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'SlaLevel', 'Link', 
-                  'CartridgeItem', 'ConsumableItem', 'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent', 
+                  'CartridgeItem', 'ConsumableItem', 'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate',
                   'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Project', 'Reminder', 'RSSFeed', 'User',
                   'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', 'KnowbaseItem');
             break;
