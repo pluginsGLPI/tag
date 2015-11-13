@@ -104,7 +104,6 @@ class PluginTagTagItem extends CommonDBRelation {
    }
 
    static function getMenuNameByItemtype($itemtype) { //Note : can be name getItemtypesByMenu
-
       $menu = Html::getMenuInfos();
 
       if (isset($menu['helpdesk']['types']['Planning'])) {
@@ -116,6 +115,8 @@ class PluginTagTagItem extends CommonDBRelation {
 
       $itemtypes['assets'] = $menu['assets']['types'];
       $itemtypes['helpdesk'] = $menu['helpdesk']['types'];
+      $itemtypes['helpdesk'][] = 'TicketTemplate';
+
       $itemtypes['management'] = $menu['management']['types'];
       $itemtypes['tools'] = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
       $itemtypes['admin'] = array('User', 'Group', 'Entity', 'Profile'); //Manque les différentes Rules...
@@ -138,7 +139,7 @@ class PluginTagTagItem extends CommonDBRelation {
             break;
 
          case 'helpdesk':
-            $itemtypes = array('Ticket', 'Problem', 'Change', 'TicketRecurrent'); //incomplet
+            $itemtypes = array('Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate'); //incomplet
             break;
 
          case 'management':

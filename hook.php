@@ -57,7 +57,6 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    }
    
    if ($itemtype === 'PluginTagTag' 
-         || $itemtype === 'TicketTemplate'
          || $itemtype === 'CronTask' //Because no have already tag in CronTask interface
          || $itemtype === 'PluginFormcreatorFormanswer' //No have tag associated
          || $itemtype === 'QueuedMail'
