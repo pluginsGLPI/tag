@@ -248,6 +248,12 @@ class PluginTagTag extends CommonDropdown {
       $tab[6]['name']            = _n('Tag type', 'Tag types', 1, 'tag');
       $tab[6]['massiveaction']   = true;
 
+      // For History tab (quick fix)
+      $tab[7]['table']           = $this->getTable();
+      $tab[7]['field']           = 'color';
+      $tab[7]['name']            = __('HTML color', 'tag');
+      $tab[7]['searchtype']      = 'contains';
+
       return $tab;
    }
 
