@@ -1,5 +1,14 @@
 <?php
 
+// Plugin hook after *Uninstall*
+function plugin_uninstall_after_tag($item) {
+   $tagitem = new PluginTagTagItem();
+   $tagitem->deleteByCriteria(array('itemtype' => $item->getType(),
+                                    'items_id' => $item->getID()
+                                    )
+   );
+}
+
 function plugin_pre_item_update_tag($parm) {
    global $DB;
    

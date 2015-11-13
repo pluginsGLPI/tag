@@ -48,6 +48,14 @@ function plugin_init_tag() {
          }
       }
 
+      // Plugin uninstall : after uninstall action
+
+      $UNINSTALL_TYPES = array('Computer', 'Monitor', 'NetworkEquipment',
+                           'Peripheral', 'Phone', 'Printer');
+      foreach ($UNINSTALL_TYPES as $uninstall_itemtype) {
+         $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$uninstall_itemtype] = 'plugin_uninstall_after_tag';
+      }
+
       if (isset($matches[1][0])) {
          $itemtype = $matches[1][0];
 
