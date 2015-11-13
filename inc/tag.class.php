@@ -93,10 +93,13 @@ class PluginTagTag extends CommonDropdown {
    }
 
    public static function uninstall() {
-      $query = "DELETE FROM glpi_logs WHERE itemtype_link='".__CLASS__."'";
+      $query = "DELETE FROM glpi_logs WHERE itemtype_link='".__CLASS__."' OR itemtype = '".__CLASS__."'";
       $GLOBALS['DB']->query($query);
       
       $query = "DELETE FROM glpi_bookmarks WHERE itemtype='".__CLASS__."'";
+      $GLOBALS['DB']->query($query);
+
+      $query = "DELETE FROM glpi_bookmarks_users WHERE itemtype='".__CLASS__."'";
       $GLOBALS['DB']->query($query);
       
       $query = "DELETE FROM glpi_displaypreferences WHERE itemtype='".__CLASS__."' OR num=10500";
