@@ -79,29 +79,6 @@ class PluginTagTagItem extends CommonDBRelation {
    function getSpecificMassiveActions($checkitem=NULL) {
       return array();
    }
-   
-   function getSearchOptions() {
-      $tab                       = array();
-      
-      $tab['common']             = __('Characteristics');
-
-      return $tab;
-
-      /*
-      $tab[1]['table']           = $this->getTable();
-      $tab[1]['field']           = 'name';
-      $tab[1]['name']            = __('Name');
-      $tab[1]['massiveaction']   = true;
-      $tab[1]['datatype']        = 'itemlink';
-   
-      $tab[2]['table']           = $this->getTable();
-      $tab[2]['field']           = 'comment';
-      $tab[2]['name']            = __('Description');
-      $tab[2]['massiveaction']   = true;
-      $tab[2]['datatype']        = 'string';
-      return $tab;
-      */
-   }
 
    static function getMenuNameByItemtype($itemtype) { //Note : can be name getItemtypesByMenu
       $menu = Html::getMenuInfos();
