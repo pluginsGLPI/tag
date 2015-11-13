@@ -23,6 +23,14 @@ function plugin_init_tag() {
 
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
+
+      // Plugin uninstall : after uninstall action
+
+      $UNINSTALL_TYPES = array('Computer', 'Monitor', 'NetworkEquipment',
+                           'Peripheral', 'Phone', 'Printer');
+      foreach ($UNINSTALL_TYPES as $uninstall_itemtype) {
+         $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$uninstall_itemtype] = 'plugin_uninstall_after_tag';
+      }
    }
    
    // only on itemtype form
@@ -46,14 +54,6 @@ function plugin_init_tag() {
          if (Session::haveRight("itilcategory", READ)) {
             $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js';
          }
-      }
-
-      // Plugin uninstall : after uninstall action
-
-      $UNINSTALL_TYPES = array('Computer', 'Monitor', 'NetworkEquipment',
-                           'Peripheral', 'Phone', 'Printer');
-      foreach ($UNINSTALL_TYPES as $uninstall_itemtype) {
-         $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$uninstall_itemtype] = 'plugin_uninstall_after_tag';
       }
 
       if (isset($matches[1][0])) {
