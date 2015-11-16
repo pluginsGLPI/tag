@@ -30,7 +30,7 @@ class PluginTagTag extends CommonDropdown {
 
       echo "<tr class='line0'><td><label for='type_de_tag'>" . _n('Tag type', 'Tag types', 1, 'tag') . "</label></td>";
       echo "<td>";
-      $values = array(0 => Dropdown::EMPTY_VALUE);
+      $values = array('' => Dropdown::EMPTY_VALUE);
 
       $menus = Html::getMenuInfos();
       foreach ($menus as $key => $value) {
