@@ -71,8 +71,8 @@ function plugin_init_tag() {
 
             // Tag have no tag associated
             if ($itemtype != 'PluginTagTag') {
-               $PLUGIN_HOOKS['pre_item_update']['tag'][$obj->getType()] = 'plugin_pre_item_update_tag';
-               $PLUGIN_HOOKS['pre_item_purge']['tag'][$obj->getType()]  = 'plugin_pre_item_purge_tag';
+               $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+               $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = 'plugin_pre_item_purge_tag';
             }
          }
       }

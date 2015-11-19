@@ -115,10 +115,12 @@ class PluginTagTag extends CommonDropdown {
          $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
       }
       
-      $migration->addField($table, 'type_menu', "varchar(50) NOT NULL DEFAULT ''");
-      $migration->addKey($table, 'type_menu');
-      $migration->migrationOneTable($table);
-      
+      if (!FieldExists($table, 'type_menu')) {
+         $migration->addField($table, 'type_menu', "varchar(50) NOT NULL DEFAULT ''");
+         $migration->addKey($table, 'type_menu');
+         $migration->migrationOneTable($table);
+      }
+
       // Version 0.90-1.1
       $result = $DB->query("SHOW FIELDS FROM `$table` where Field ='type_menu'");
       if ($result && $DB->numrows($result)) {
