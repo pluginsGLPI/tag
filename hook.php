@@ -113,6 +113,8 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 
             list($name, $id) = explode(Search::SHORTSEP, $tag);
             
+            if ($name === Search::NULLVALUE) return;
+            
             $plugintagtag->getFromDB($id);
             $color = $plugintagtag->fields["color"];
             if (! empty($color)) {
