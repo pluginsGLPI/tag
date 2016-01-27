@@ -31,6 +31,8 @@ function plugin_init_tag() {
       foreach ($UNINSTALL_TYPES as $uninstall_itemtype) {
          $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$uninstall_itemtype] = 'plugin_uninstall_after_tag';
       }
+
+      $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/scripts.js';
    }
    
    // only on itemtype form
@@ -78,8 +80,8 @@ function plugin_init_tag() {
 
             // Tag have no tag associated
             if ($itemtype != 'PluginTagTag') {
-               $PLUGIN_HOOKS['pre_item_update']['tag'][$obj->getType()] = 'plugin_pre_item_update_tag';
-               $PLUGIN_HOOKS['pre_item_purge']['tag'][$obj->getType()]  = 'plugin_pre_item_purge_tag';
+               $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
+               $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = 'plugin_pre_item_purge_tag';
             }
          }
       }
@@ -88,8 +90,8 @@ function plugin_init_tag() {
 
 function plugin_version_tag() {
    return array('name'       => __('Tag Management', 'tag'),
-            'version'        => '0.90-1.0',
-            'author'         => 'Emmanuel Haguet - <a href="http://www.teclib.com">Teclib\'</a>',
+            'version'        => '0.90-1.1',
+            'author'         => 'Emmanuel Haguet (Teclib\') - Ludovic Dupont (Infotel conseil)',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
             'minGlpiVersion' => "0.90");
@@ -99,8 +101,8 @@ function plugin_version_tag() {
  * Check plugin's prerequisites before installation
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85','lt')) {
-      echo __('This plugin requires GLPI >= 0.85');
+   if (version_compare(GLPI_VERSION,'0.90','lt')) {
+      echo __('This plugin requires GLPI >= 0.90');
    } else {
       return true;
    }
