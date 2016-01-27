@@ -30,24 +30,9 @@ class PluginTagTag extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td><label for='type_de_tag'>" . _n('Tag type', 'Tag types', 1, 'tag') . "</label></td>";
-      echo "<td>";
-      $values = array('' => Dropdown::EMPTY_VALUE);
-
-      $menus = Html::getMenuInfos();
-      foreach ($menus as $key => $value) {
-         if ($key != 'plugins' && $key != 'preference') {
-            $values[$key] = $menus[$key]['title'];
-         }
-      }      
-      Dropdown::showFromArray("type_menu", $values, array('value' => $this->fields['type_menu'],
-                                                                        'width' => '50%'));
-      echo "</td>";
-      echo "</tr>";
-
       echo "<tr class='line1 tab_bg_2'><td><label for='comment'>" . __('Description') . "</label></td>";
       echo "<td>";
-      echo "<textarea name='comment' id ='comment' cols='45' rows='2'>" . $this->fields['comment'] . "</textarea>";
+      echo "<textarea name='comment' id ='comment' cols='45' rows='3'>" . $this->fields['comment'] . "</textarea>";
       echo "</td>";
       echo "</tr>";
 
