@@ -152,6 +152,22 @@ function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
    return $where;
 }
 
+function plugin_tag_addWhere($link, $nott, $itemtype, $ID, $val, $searchtype) {
+   // "Types d'élément associé"
+   if ($itemtype == 'PluginTagTag' && $ID == 6) {
+      switch ($searchtype) {
+         case 'equals':
+            return "`glpi_plugin_tag_tags`.`type_menu` LIKE '%\"$val\"%'";
+
+         case 'notequals':
+            return "`glpi_plugin_tag_tags`.`type_menu` NOT LIKE '%\"$val\"%'";
+      }
+   }
+
+   return "";
+}
+
+
 /**
  * Define Dropdown tables to be manage in GLPI :
  */

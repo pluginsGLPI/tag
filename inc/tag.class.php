@@ -346,12 +346,13 @@ class PluginTagTag extends CommonDropdown {
          case 'type_menu':
             $tab = array('' => Dropdown::EMPTY_VALUE);
 
-            $menus = Html::getMenuInfos();
-            foreach ($menus as $key => $value) {
-               if ($key != 'plugins' && $key != 'preference') {
-                  $tab[$key] = $menus[$key]['title'];
-               }
+            $itemtypes = PluginTagTagitem::getItemtypes('all');
+            foreach ($itemtypes as $itemtype) {
+               $item           = getItemForItemtype($itemtype);
+               $tab[$itemtype] = $item->getTypeName();
+
             }
+
             return Dropdown::showFromArray($name, $tab, $options);
             break;
       }
