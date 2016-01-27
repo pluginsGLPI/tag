@@ -192,8 +192,11 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
          
          echo "<tr class='tab_bg_1'><td class='right'>";
-         //Note : this function is deprecated (and replace by an other)
-         $itemtypes_to_show = self::getItemtypes($tag->fields['type_menu']);
+         if (is_array(json_decode($tag->fields['type_menu']))) {
+            $itemtypes_to_show = json_decode($tag->fields['type_menu']);
+         } else {
+            $itemtypes_to_show = array(); //self::getItemtypes("");
+         }
 
          Dropdown::showAllItems("items_id", 0, 0,
             ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
