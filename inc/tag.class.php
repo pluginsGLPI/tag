@@ -315,8 +315,7 @@ class PluginTagTag extends CommonDropdown {
       $tab[6]['table']           = $this->getTable();
       $tab[6]['field']           = 'type_menu';
       $tab[6]['searchtype']      = array('equals', 'notequals');
-      $tab[6]['name']            = _n('Tag type', 'Tag types', 1, 'tag');
-      $tab[6]['massiveaction']   = true;
+      $tab[6]['name']            = _n('Associated item type', 'Associated item types',2);
 
       // For History tab (quick fix)
       $tab[7]['table']           = $this->getTable();
