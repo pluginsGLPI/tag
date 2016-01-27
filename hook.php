@@ -120,13 +120,21 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
          $out .= '</ul></div>';
          return $out;
          break;
-   }
+      case 6: //Type de tag
+         if ($type == 'PluginTagTag') { //for future
+            $key = $data[$num][0]['name'];
+            if (! is_array(json_decode($key))) { //for when $key value is "0"
+               return __("None");
+            }
 
-   if ($type == 'PluginTagTag' && $field == 6) {
-      $key = $data[$num][0]['name'];
-
-      $menu = Html::getMenuInfos();
-      return $menu[$key]['title'];
+            $itemtype_names = array();
+            foreach (json_decode($key) as $itemtype) {
+               $item = getItemForItemtype($itemtype);
+               $itemtype_names[] = $item->getTypeName();
+            }
+            $out = implode(", ", $itemtype_names);
+            return $out;
+         }
    }
    
    return "";
