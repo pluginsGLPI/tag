@@ -9,6 +9,12 @@ function plugin_uninstall_after_tag($item) {
    );
 }
 
+function plugin_datainjection_populate_tag() {
+   global $INJECTABLE_TYPES;
+
+   $INJECTABLE_TYPES['PluginTagTagInjection'] = 'tag';
+}
+
 function plugin_pre_item_update_tag($parm) {
    global $DB;
    

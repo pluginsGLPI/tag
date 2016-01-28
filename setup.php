@@ -14,6 +14,9 @@ function plugin_init_tag() {
    global $PLUGIN_HOOKS;
    
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
+   
+   // plugin datainjection
+   $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
    Plugin::registerClass('PluginTagTagItem',
             array('addtabon' => array('PluginTagTag')));
