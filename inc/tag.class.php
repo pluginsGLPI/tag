@@ -166,7 +166,6 @@ class PluginTagTag extends CommonDropdown {
     **/
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       $tab = array();
-      $tab[1] = __('Main');
       $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
       return $tab;
    }
@@ -178,9 +177,6 @@ class PluginTagTag extends CommonDropdown {
       switch ($item->getType()) {
          case __CLASS__ :
             switch ($tabnum) {
-               case 1 :
-                  $item->showForm($item->getID());
-                  break;
                case 2 :
                   $tagitem = new PluginTagTagItem();
                   $tagitem->showForTag($item);
@@ -193,6 +189,7 @@ class PluginTagTag extends CommonDropdown {
    
    function defineTabs($options=array()) {
       $ong = array();
+      $this->addDefaultFormTab($ong);
       $this->addStandardTab(__CLASS__, $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
       return $ong;
