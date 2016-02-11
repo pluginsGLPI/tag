@@ -17,14 +17,14 @@ function plugin_datainjection_populate_tag() {
 
 function plugin_pre_item_update_tag($parm) {
    global $DB;
-   
+
    if (isset($_REQUEST['plugin_tag_tag_id']) && isset($_REQUEST['plugin_tag_tag_itemtype'])) {
 
       $already_present = array();
 
       $itemtype = PluginTagTag::getItemtype($_REQUEST['plugin_tag_tag_itemtype'], $_REQUEST['plugin_tag_tag_id']);
 
-      $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']." 
+      $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']."
                      AND `itemtype` = '".$itemtype."'";
 
       $item = new PluginTagTagItem();
@@ -35,9 +35,9 @@ function plugin_pre_item_update_tag($parm) {
          } else {
             $item->delete(array("id" => $indb['id']));
          }
-         
+
       }
-   
+
       if (isset($_REQUEST["_plugin_tag_tag_values"])) {
          foreach ($_REQUEST["_plugin_tag_tag_values"] as $tag_id) {
             if (!in_array($tag_id, $already_present)) {
@@ -54,7 +54,7 @@ function plugin_pre_item_update_tag($parm) {
 }
 
 function plugin_pre_item_purge_tag($object) {
-   
+
    if (isset($object->input["plugin_tag_tag_itemtype"])) { // Example : TicketTask no have tag
       $tagitem = new PluginTagTagItem();
       $result = $tagitem->deleteByCriteria(array(
@@ -66,19 +66,19 @@ function plugin_pre_item_purge_tag($object) {
 
 function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt = array();
-   
+
    if (! Session::haveRight("itilcategory", READ)) {
       return array();
    }
-   
-   if ($itemtype === 'PluginTagTag' 
+
+   if ($itemtype === 'PluginTagTag'
          || $itemtype === 'CronTask' //Because no have already tag in CronTask interface
          || $itemtype === 'PluginFormcreatorFormanswer' //No have tag associated
          || $itemtype === 'QueuedMail'
          || strpos($itemtype, 'PluginPrintercounters') !== false) {
       return array();
    }
-   
+
    $rng1 = PluginTagTag::TAG_SEARCH_NUM;
    //$sopt[strtolower($itemtype)] = ''; //self::getTypeName(2);
 
@@ -92,9 +92,9 @@ function plugin_tag_getAddSearchOptions($itemtype) {
    $sopt[$rng1]['usehaving']     = true;
    $sopt[$rng1]['joinparams']    = array('beforejoin' => array('table'      => 'glpi_plugin_tag_tagitems',
                                                                'joinparams' => array('jointype' => "itemtype_item")));
-   
+
    //array('jointype' => "itemtype_item");
-   
+
    return $sopt;
 }
 
@@ -105,12 +105,12 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
                  <ul class="select2-choices">';
          $separator = '';
          $plugintagtag = new PluginTagTag();
-         
+
          foreach ($data[$num] as $tag) {
             if (isset($tag['id']) && isset($tag['name'])) {
                $id    = $tag['id'];
                $name  = $tag['name'];
-               
+
                $plugintagtag->getFromDB($id);
                $color = $plugintagtag->fields["color"];
 
@@ -142,7 +142,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
             return $out;
          }
    }
-   
+
    return "";
 }
 
@@ -195,6 +195,10 @@ function plugin_tag_install() {
       // Load *.class.php files and get the class name
       if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
          $classname = 'PluginTag' . ucfirst($matches[1]);
+
+         // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
+         if ($classname == 'PluginTagTaginjection') continue;
+
          include_once($filepath);
          // If the install method exists, load it
          if (method_exists($classname, 'install')) {
@@ -216,6 +220,10 @@ function plugin_tag_uninstall() {
       // Load *.class.php files and get the class name
       if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
          $classname = 'PluginTag' . ucfirst($matches[1]);
+
+         // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
+         if ($classname == 'PluginTagTaginjection') continue;
+
          include_once($filepath);
          // If the install method exists, load it
          if (method_exists($classname, 'uninstall')) {
