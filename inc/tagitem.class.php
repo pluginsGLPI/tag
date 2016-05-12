@@ -17,6 +17,8 @@ class PluginTagTagItem extends CommonDBRelation {
    }
 
    public static function install(Migration $migration) {
+      global $DB;
+
       $table = getTableForItemType(__CLASS__);
 
       if (!TableExists($table)) {
@@ -26,12 +28,25 @@ class PluginTagTagItem extends CommonDBRelation {
             	`items_id` INT(11) NOT NULL DEFAULT '1',
             	`itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
             	PRIMARY KEY (`id`),
-            	INDEX `name` (`itemtype`)
+            	UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`),
             )
             COLLATE='utf8_unicode_ci'
             ENGINE=MyISAM";
-         $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
+         $DB->query($query) or die($DB->error());
       }
+
+      if (isIndex($table, "name")) {
+         $query = "ALTER TABLE `$table`
+                   DROP INDEX `name`";
+         $DB->query($query) or die($DB->error());
+      }
+
+      if (!isIndex($table, "unicity")) {
+         $query = "ALTER TABLE `$table`
+                   ADD UNIQUE INDEX `unicity` (`items_id`, `itemtype`, `plugin_tag_tags_id`)";
+         $DB->query($query) or die($DB->error());
+      }
+
       return true;
    }
 
