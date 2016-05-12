@@ -2,7 +2,7 @@ function parseUrl(val) {
     var result = "Not found",
         tmp = [];
     location.search
-    //.replace ( "?", "" ) 
+    //.replace ( "?", "" )
     // this is better, there might be a question mark inside
     .substr(1)
         .split("&")
@@ -36,7 +36,7 @@ function idealTextColor(hexTripletColor) {
       B: parseInt(hexTripletColor.substring(4, 6), 16)
    };
    var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
-   return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";   
+   return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
 }
 
 function formatOption(option) {
@@ -56,41 +56,41 @@ function formatOption(option) {
 function showTags() {
    var str = document.location.href.substr(document.location.href.search('/front/') + 7);
    var itemtype = str.substr(0, str.search('.form.php'));
-   
+
    if (location.pathname.indexOf('plugins') > 0) {
       // get plugin name :
       str = document.location.href.substr(document.location.href.search('/plugins/') + 9);
       var plugin_name = str.substr(0, str.search('/front/'));
-      
+
       itemtype = 'Plugin' + upperFirst(plugin_name) + upperFirst(itemtype);
-      
+
       urlAjax = "../../tag/ajax/tag.php";
    } else {
       urlAjax = "../plugins/tag/ajax/tag.php";
    }
-   
+
    // Don't show in notification :
    if (itemtype == 'notification' || itemtype == 'crontask') { //Note : test crontask no is need on 0.90
       return;
    }
-   
+
    var id = parseUrl('id');
    if (id == '' || id == 'Not found') {
       id = parseInt(getIdFromHeader()); //For part of Mreporting plugin
-      
+
       // Security :
       if (! isInteger(id)) {
          return;
       }
    }
-   
+
    var hidden_fields = "<input type='hidden' name='plugin_tag_tag_id' value='"+id+"'>" +
       "<input type='hidden' name='plugin_tag_tag_itemtype' value='"+itemtype+"'>";
    $.ajax({
       type: "POST",
       url: urlAjax,
-      data: {"itemtype" : itemtype, 
-             "id"       : id, 
+      data: {"itemtype" : itemtype,
+             "id"       : id,
              "action"   : "tag_values"},
       success: function(msg){
          if ($("#mainformtable").find("[name='plugin_tag_tag_itemtype']").length == 0) {

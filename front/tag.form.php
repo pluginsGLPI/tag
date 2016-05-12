@@ -13,13 +13,13 @@ if (! $plugin->isInstalled("tag") || ! $plugin->isActivated("tag")) {
 if (isset($_POST['add']) || isset($_REQUEST['update'])) {
    if (isset($_POST['add'])) {
       $item = new PluginTagTagItem();
-      
+
       // Check unicity :
       if (isset($_REQUEST['plugin_tag_tags_id'])) {
          $found = $item->find('plugin_tag_tags_id = '. $_REQUEST['plugin_tag_tags_id'] .'
                                AND items_id = ' . $_REQUEST['items_id'].'
                                AND itemtype = "' . $_REQUEST['itemtype'].'"');
-         
+
          if (count($found) == 0) {
             $item->add($_REQUEST);
          }

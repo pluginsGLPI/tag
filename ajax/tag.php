@@ -4,7 +4,7 @@ include ('../../../inc/includes.php');
 switch ($_POST['action']) {
    case 'tag_values':
       // check if itemtype can display tag control
-      if (in_array(strtolower($_POST['itemtype']), 
+      if (in_array(strtolower($_POST['itemtype']),
                    array_map('strtolower', getBlacklistItemtype()))) {
          return '';
       }
@@ -18,7 +18,7 @@ switch ($_POST['action']) {
       echo "</td>";
       echo "</tr>";
       break;
-   
+
    case 'add_subtypes':
       // Sub type add
       $itemtypes = array();
@@ -27,11 +27,11 @@ switch ($_POST['action']) {
          $itemtypes[$itemtype] = $item->getTypeName();
       }
       Dropdown::showFromArray("add_subtypes", $itemtypes, array('multiple' => true, 'rand' => $_POST['rand'], 'width' => '50%'));
-      
+
       // Add subtypes button
       echo " <a class=\"vsubmit\" onclick=\"pluginTagAddSubType('dropdown_subtypes".$_POST['rand']."', 'dropdown_add_subtypes".$_POST['rand']."', '".$CFG_GLPI['root_doc']."/plugins/tag/ajax/tag.php');\">".__('Add type', 'tag')."</a>";
       break;
-   
+
    case 'list_subtypes':
       // Sub type list
       $itemtypes = array();

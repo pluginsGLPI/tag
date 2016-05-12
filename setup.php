@@ -12,9 +12,9 @@ function getBlacklistItemtype() {
 
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
-   
+
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
-   
+
    // plugin datainjection
    $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
@@ -37,24 +37,24 @@ function plugin_init_tag() {
 
       $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/scripts.js';
    }
-   
+
    // only on itemtype form
    if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
 
-      if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false && 
-         strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false && 
+      if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false &&
+         strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false &&
          strpos($_SERVER['REQUEST_URI'], "id=-1") === false && //for Computer
          strpos($_SERVER['REQUEST_URI'], "withtemplate=") === false && //exclude template
          strpos($_SERVER['REQUEST_URI'], "?new=1") === false && //for exemple : for checklistconfig in plugin resources
          strpos($_SERVER['REQUEST_URI'], "popup=1&rand=") === false && //item no exist
          strpos($_SERVER['REQUEST_URI'], "/front/queuedmail") === false && //quemail items are temporary
-         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false && 
-         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tagtype") === false && 
+         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false &&
+         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tagtype") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/datainjection/front/model.form.php") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/webservices/front/client.form.php?new=1") === false &&
          strpos($_SERVER['REQUEST_URI'], "plugins/printercounters/") === false &&
-         isset ($_SESSION["glpiroot"]) && 
-         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false && 
+         isset ($_SESSION["glpiroot"]) &&
+         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false &&
          strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/config.form.php") === false) { //for ?forcetab=PluginBehaviorsConfig%241
          if (Session::haveRight("itilcategory", READ)) {
             $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js';
@@ -76,7 +76,7 @@ function plugin_init_tag() {
          }
 
          if (class_exists($itemtype)) {
-            
+
             //normalize classname case
             $obj = new $itemtype();
             $itemtype = get_class($obj);
