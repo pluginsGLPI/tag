@@ -124,6 +124,7 @@ class PluginTagTag extends CommonDropdown {
       // Version 0.90-1.1
       $result = $DB->query("SHOW FIELDS FROM `$table` where Field ='type_menu'");
       if ($result && $DB->numrows($result)) {
+         require_once "tagitem.class.php";
          while ($data = $DB->fetch_assoc($result)) {
             if (stristr($data["Type"], 'varchar') !== FALSE) {
                $DB->query("ALTER TABLE `$table` DROP INDEX `type_menu`;");
