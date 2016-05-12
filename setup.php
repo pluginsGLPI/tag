@@ -93,7 +93,7 @@ function plugin_init_tag() {
 
 function plugin_version_tag() {
    return array('name'       => __('Tag Management', 'tag'),
-            'version'        => '0.90-1.1',
+            'version'        => '0.90-1.2',
             'author'         => 'Emmanuel Haguet (Teclib\') - Ludovic Dupont (Infotel conseil)',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
