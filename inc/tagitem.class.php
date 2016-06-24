@@ -28,7 +28,7 @@ class PluginTagTagItem extends CommonDBRelation {
             	`items_id` INT(11) NOT NULL DEFAULT '1',
             	`itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
             	PRIMARY KEY (`id`),
-            	UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`),
+            	UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
             )
             COLLATE='utf8_unicode_ci'
             ENGINE=MyISAM";
