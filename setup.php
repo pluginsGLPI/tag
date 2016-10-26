@@ -1,4 +1,33 @@
 <?php
+/*
+ -------------------------------------------------------------------------
+ tag plugin for GLPI
+ Copyright (C) 2003-2011 by the tag Development Team.
+
+ https://github.com/pluginsGLPI/tag
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of tag.
+
+ tag is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ tag is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with tag. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+define ('PLUGIN_TAG_VERSION', '0.90-1.3');
+
 /**
  * Check plugin's config before activation
  */
@@ -93,7 +122,7 @@ function plugin_init_tag() {
 
 function plugin_version_tag() {
    return array('name'       => __('Tag Management', 'tag'),
-            'version'        => '0.90-1.3',
+            'version'        => PLUGIN_TAG_VERSION,
             'author'         => 'Emmanuel Haguet (Teclib\') - Ludovic Dupont (Infotel conseil)',
             'homepage'       => 'http://www.teclib.com',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
