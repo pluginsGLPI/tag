@@ -47,7 +47,7 @@ class PluginTagTag extends CommonDropdown {
       echo "<td colspan='2'>";
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='line1 tab_bg_2'>";
-      echo "<th>"._n('Associated item type', 'Associated item types',2)."</th>";
+      echo "<th>"._n('Associated item type', 'Associated item types', 2)."</th>";
       echo "</tr>";
 
       echo "<tr class='line1 tab_bg_2'>";
@@ -298,7 +298,7 @@ class PluginTagTag extends CommonDropdown {
       $tab[6]['table']           = $this->getTable();
       $tab[6]['field']           = 'type_menu';
       $tab[6]['searchtype']      = array('equals', 'notequals');
-      $tab[6]['name']            = _n('Associated item type', 'Associated item types',2);
+      $tab[6]['name']            = _n('Associated item type', 'Associated item types', 2);
 
       // For History tab (quick fix)
       $tab[7]['table']           = $this->getTable();
@@ -372,7 +372,7 @@ class PluginTagTag extends CommonDropdown {
 
       // Object must be an instance of CommonDBTM (or inherint of this)
       if (!$obj instanceof CommonDBTM) {
-        return;
+         return;
       }
 
       $obj->getFromDB($_REQUEST['id']);
@@ -431,7 +431,7 @@ class PluginTagTag extends CommonDropdown {
       }
    }
 
-  /**
+   /**
    * Actions done before add
    *
    * @param type $input
@@ -447,7 +447,7 @@ class PluginTagTag extends CommonDropdown {
       return $input;
    }
 
-  /**
+   /**
    * Actions done before update
    *
    * @param type $input
@@ -463,7 +463,7 @@ class PluginTagTag extends CommonDropdown {
       return $input;
    }
 
-  /**
+   /**
    * Encode sub types
    *
    * @param type $input
@@ -482,7 +482,7 @@ class PluginTagTag extends CommonDropdown {
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields($input){
+   function checkMandatoryFields($input) {
       $msg     = array();
       $checkKo = false;
 

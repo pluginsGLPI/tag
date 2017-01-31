@@ -223,7 +223,9 @@ function plugin_tag_install() {
          $classname = 'PluginTag' . ucfirst($matches[1]);
 
          // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
-         if ($classname == 'PluginTagTaginjection') continue;
+         if ($classname == 'PluginTagTaginjection') {
+            continue;
+         }
 
          include_once($filepath);
          // If the install method exists, load it
@@ -248,7 +250,9 @@ function plugin_tag_uninstall() {
          $classname = 'PluginTag' . ucfirst($matches[1]);
 
          // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
-         if ($classname == 'PluginTagTaginjection') continue;
+         if ($classname == 'PluginTagTaginjection') {
+            continue;
+         }
 
          include_once($filepath);
          // If the install method exists, load it

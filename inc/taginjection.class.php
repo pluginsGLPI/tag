@@ -20,7 +20,7 @@ class PluginTagTagInjection extends PluginTagTag
 
    function connectedTo() {
       //Note : Interesting to have GLPI core object (who can have a tag) here
-   	return array();
+       return array();
    }
 
    /**
@@ -50,10 +50,10 @@ class PluginTagTagInjection extends PluginTagTag
 
       // Update field for add a default value
       if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
-      	$item = new parent();
-      	$item->update(array('id' => $results[get_parent_class()],
-      							  'type_menu' => '0')); //default value
-   	}
+          $item = new parent();
+          $item->update(array('id' => $results[get_parent_class()],
+                                    'type_menu' => '0')); //default value
+      }
 
       return $results;
    }

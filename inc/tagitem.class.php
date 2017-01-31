@@ -95,7 +95,8 @@ class PluginTagTagItem extends CommonDBRelation {
       return array();
    }
 
-   static function getMenuNameByItemtype($itemtype) { //Note : can be name getItemtypesByMenu
+   static function getMenuNameByItemtype($itemtype) {
+      //Note : can be name getItemtypesByMenu
       $menu = Html::getMenuInfos();
 
       if (isset($menu['helpdesk']['types']['Planning'])) {
@@ -271,7 +272,7 @@ class PluginTagTagItem extends CommonDBRelation {
 
             switch ($itemtype) {
                case 'KnowbaseItem':
-               $query .= "-1 AS entity
+                  $query .= "-1 AS entity
                   FROM `glpi_plugin_tag_tagitems`, `$itemtable`
                   ".KnowbaseItem::addVisibilityJoins()."
                   WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
@@ -335,88 +336,88 @@ class PluginTagTagItem extends CommonDBRelation {
 
                   while ($data = $DB->fetch_assoc($result_linked)) {
 
-                  if ($itemtype == 'Softwarelicense') {
-                     $soft = new Software();
-                     $soft->getFromDB($data['softwares_id']);
-                     $data["name"] .= ' - ' . $soft->getName(); //This add name of software
-                  } elseif ($itemtype == "PluginResourcesResource") {
-                     $data["name"] = formatUserName($data["id"], "", $data["name"],
+                     if ($itemtype == 'Softwarelicense') {
+                        $soft = new Software();
+                        $soft->getFromDB($data['softwares_id']);
+                        $data["name"] .= ' - ' . $soft->getName(); //This add name of software
+                     } else if ($itemtype == "PluginResourcesResource") {
+                        $data["name"] = formatUserName($data["id"], "", $data["name"],
                                            $data["firstname"]);
-                  }
+                     }
 
-                  $linkname = $data[$column];
+                     $linkname = $data[$column];
 
-                  if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
-                     $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
-                  }
+                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
+                        $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+                     }
 
-                  $name = "<a href=\"".Toolbox::getItemTypeFormURL($itemtype)."?id=".$data["id"]."\">".$linkname."</a>";
+                     $name = "<a href=\"".Toolbox::getItemTypeFormURL($itemtype)."?id=".$data["id"]."\">".$linkname."</a>";
 
-                  if ($itemtype == 'PluginProjetProjet'
+                     if ($itemtype == 'PluginProjetProjet'
                         || $itemtype == 'PluginResourcesResource') {
-                     $pieces = preg_split('/(?=[A-Z])/', $itemtype);
-                     $plugin_name = $pieces[2];
+                        $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                        $plugin_name = $pieces[2];
 
-                     $datas = array("entities_id" => $data["entity"],
+                        $datas = array("entities_id" => $data["entity"],
                                     "ITEM_0" => $data["name"],
                                     "ITEM_0_2" => $data["id"],
                                     "id" => $data["id"],
                                     "META_0" => $data["name"]); //for PluginResourcesResource
 
-                     if (isset($data["is_recursive"])) {
-                        $datas["is_recursive"] = $data["is_recursive"];
+                        if (isset($data["is_recursive"])) {
+                           $datas["is_recursive"] = $data["is_recursive"];
+                        }
+
+                           Plugin::load(strtolower($plugin_name), true);
+                           $function_giveitem = 'plugin_'.strtolower($plugin_name).'_giveItem';
+                        if (function_exists($function_giveitem)) { // For security
+                           $name = call_user_func($function_giveitem, $itemtype, 1, $datas, 0);
+                        }
+
                      }
 
-                     Plugin::load(strtolower($plugin_name), true);
-                     $function_giveitem = 'plugin_'.strtolower($plugin_name).'_giveItem';
-                     if (function_exists($function_giveitem)) { // For security
-                        $name = call_user_func($function_giveitem, $itemtype, 1, $datas, 0);
+                     echo "<tr class='tab_bg_1'>";
+
+                     if ($canedit) {
+                        echo "<td width='10'>";
+                        if ($item->canUpdate()) {
+                           Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
+                        }
+                        echo "</td>";
+                     }
+                     echo "<td class='center'>";
+
+                     // Show plugin name (is to delete remove any ambiguity) :
+                     $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                     if ($pieces[1] == 'Plugin') {
+                        $plugin_name = $pieces[2];
+                        if (function_exists("plugin_version_".$plugin_name)) { // For security
+                           $tab = call_user_func("plugin_version_".$plugin_name);
+                           echo $tab["name"]." : ";
+                        }
                      }
 
-                  }
+                     echo $item->getTypeName(1)."</td>";
+                     echo "<td ".(isset($data['is_deleted']) && $data['is_deleted'] ? "class='tab_bg_2_2'":"").">".$name."</td>";
+                     echo "<td class='center'>";
 
-                  echo "<tr class='tab_bg_1'>";
+                     $entity = $data['entity'];
 
-                  if ($canedit) {
-                     echo "<td width='10'>";
-                     if ($item->canUpdate()) {
-                        Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
+                     //for Plugins :
+                     if ($data["entity"] == -1) {
+                        $item->getFromDB($data['id']);
+                        if (isset($item->fields["entities_id"])) {
+                           $entity = $item->fields["entities_id"];
+                        }
                      }
+                     echo Dropdown::getDropdownName("glpi_entities", $entity);
+
                      echo "</td>";
-                  }
-                  echo "<td class='center'>";
-
-                  // Show plugin name (is to delete remove any ambiguity) :
-                  $pieces = preg_split('/(?=[A-Z])/', $itemtype);
-                  if ($pieces[1] == 'Plugin') {
-                     $plugin_name = $pieces[2];
-                     if (function_exists("plugin_version_".$plugin_name)) { // For security
-                        $tab = call_user_func("plugin_version_".$plugin_name);
-                        echo $tab["name"]." : ";
-                     }
-                  }
-
-                  echo $item->getTypeName(1)."</td>";
-                  echo "<td ".(isset($data['is_deleted']) && $data['is_deleted'] ? "class='tab_bg_2_2'":"").">".$name."</td>";
-                  echo "<td class='center'>";
-
-                  $entity = $data['entity'];
-
-                  //for Plugins :
-                  if ($data["entity"] == -1) {
-                     $item->getFromDB($data['id']);
-                     if (isset($item->fields["entities_id"])) {
-                        $entity = $item->fields["entities_id"];
-                     }
-                  }
-                  echo Dropdown::getDropdownName("glpi_entities", $entity);
-
-                  echo "</td>";
-                  echo "<td class='center'>".
+                     echo "<td class='center'>".
                          (isset($data["serial"]) ? "".$data["serial"]."" :"-")."</td>";
-                  echo "<td class='center'>".
+                     echo "<td class='center'>".
                          (isset($data["otherserial"]) ? "".$data["otherserial"]."" :"-")."</td>";
-                  echo "</tr>";
+                     echo "</tr>";
                   }
                }
             }

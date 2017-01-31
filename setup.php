@@ -152,7 +152,7 @@ function plugin_version_tag() {
  * @return boolean
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.90','lt')) {
+   if (version_compare(GLPI_VERSION, '0.90', 'lt')) {
       if (method_exists('Plugin', 'messageIncompatible')) {
          echo Plugin::messageIncompatible('core', '0.90');
       } else {
