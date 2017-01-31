@@ -1,35 +1,39 @@
 <?php
 /*
  -------------------------------------------------------------------------
- tag plugin for GLPI
- Copyright (C) 2003-2011 by the tag Development Team.
+ Tag plugin for GLPI
+ Copyright (C) 2003-2017 by the Tag Development Team.
 
  https://github.com/pluginsGLPI/tag
  -------------------------------------------------------------------------
 
  LICENSE
 
- This file is part of tag.
+ This file is part of Tag.
 
- tag is free software; you can redistribute it and/or modify
+ Tag is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 
- tag is distributed in the hope that it will be useful,
+ Tag is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with tag. If not, see <http://www.gnu.org/licenses/>.
+ along with Tag. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
 
 define ('PLUGIN_TAG_VERSION', '0.90-1.3');
 
 /**
- * Check plugin's config before activation
+ * Check configuration process
+ *
+ * @param boolean $verbose Whether to display message on failure. Defaults to false
+ *
+ * @return boolean
  */
 function plugin_tag_check_config($verbose=false) {
    return true;
@@ -39,6 +43,12 @@ function getBlacklistItemtype() {
    return array('Tag');
 }
 
+/**
+ * Init hooks of the plugin.
+ * REQUIRED
+ *
+ * @return void
+ */
 function plugin_init_tag() {
    global $PLUGIN_HOOKS;
 
@@ -120,21 +130,34 @@ function plugin_init_tag() {
    }
 }
 
+/**
+ * Get the name and the version of the plugin
+ * REQUIRED
+ *
+ * @return array
+ */
 function plugin_version_tag() {
    return array('name'       => __('Tag Management', 'tag'),
             'version'        => PLUGIN_TAG_VERSION,
-            'author'         => 'Emmanuel Haguet (Teclib\') - Ludovic Dupont (Infotel conseil)',
-            'homepage'       => 'http://www.teclib.com',
+            'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
+            'homepage'       => 'https://github.com/pluginsGLPI/tag',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
             'minGlpiVersion' => "0.90");
 }
 
 /**
- * Check plugin's prerequisites before installation
+ * Check pre-requisites before install
+ * OPTIONNAL, but recommanded
+ *
+ * @return boolean
  */
 function plugin_tag_check_prerequisites() {
    if (version_compare(GLPI_VERSION,'0.90','lt')) {
-      echo __('This plugin requires GLPI >= 0.90');
+      if (method_exists('Plugin', 'messageIncompatible')) {
+         echo Plugin::messageIncompatible('core', '0.90');
+      } else {
+         echo __('This plugin requires GLPI >= 0.90');
+      }
    } else {
       return true;
    }

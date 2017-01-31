@@ -1,21 +1,18 @@
-Plugin Tag (pour GLPI) :
-* Ajout de "tags" à n'importe quel objet de GLPI (étendant CommonDBTM).
-* Les tags sont administrables dans les intitulés.
-* Les tags sont visibles et modifiables en entête de l'objet (en dessous du titre).
-* Les tags peuvent être recherchés et visualisés dans les listes d'objets.
-* Dans l'administration on peut visualiser un rapport des objets associés.
+# Tag GLPI plugin
 
-Il utilise en effet la fonction Javascript querySelectorAll().
+* Add tags on every GLPI item type (which extends `CommonDBTM`)
+* Manage tag from labels
+* Tags are displayed and editable in the object form header (just below title)
+* You can search for tags and display them in objects lists
+* You can display a report from associated objects in administration
 
-Translations
-------------
+## Translations
 
 If you want Tag to be available in your native language and have a little time , you can help us :
 
 Join us on [Transifex](https://www.transifex.com/teclib/glpi-plugin-tag/)
 
-Contributing
-------------
+## Contributing
 
 * Open a ticket for each bug/feature so it can be discussed
 * Follow [development guidelines](http://glpi-developer-documentation.readthedocs.io/en/latest/plugins.html)
