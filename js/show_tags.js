@@ -7,9 +7,11 @@ function parseUrl(val) {
     .substr(1)
         .split("&")
         .forEach(function (item) {
-        tmp = item.split("=");
-        if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
-    });
+         tmp = item.split("=");
+         if (tmp[0] === val) {
+            result = decodeURIComponent(tmp[1]);
+         }
+        });
     return result;
 }
 
@@ -90,14 +92,14 @@ function showTags() {
       type: "POST",
       url: urlAjax,
       data: {"itemtype" : itemtype,
-             "id"       : id,
-             "action"   : "tag_values"},
+         "id"       : id,
+         "action"   : "tag_values"},
       success: function(msg){
          if ($("#mainformtable").find("[name='plugin_tag_tag_itemtype']").length == 0) {
             $("#mainformtable tr:first").after(msg + hidden_fields);
             $("#mainformtable .chosen-select-no-results").select2({
-                'formatResult': formatOption,
-                'formatSelection': formatOption
+               'formatResult': formatOption,
+               'formatSelection': formatOption
             });
          }
       }
@@ -120,4 +122,3 @@ $(document).ready(function() {
       }
    });
 });
-
