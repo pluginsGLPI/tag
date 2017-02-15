@@ -54,43 +54,14 @@ class PluginTagTagItem extends CommonDBRelation {
    }
 
    static function getTag_items($id_glpi_obj, $itemtype) {
-      $IDs = array(); //init
+      $id_list = [];
 
       $tagitems = new self();
       foreach ($tagitems->find("itemtype = '$itemtype' AND items_id = $id_glpi_obj") as $tagitem) {
-         $IDs[] = $tagitem["plugin_tag_tags_id"];
+         $id_list[] = $tagitem["plugin_tag_tags_id"];
       }
 
-      return $IDs;
-   }
-
-   /**
-    * @see CommonDBTM::doSpecificMassiveActions()
-    **/
-   function doSpecificMassiveActions($input=array()) {
-      $res = array('ok'      => 0,
-                  'ko'      => 0,
-                  'noright' => 0);
-      switch ($input['action']) {
-         default :
-            return parent::doSpecificMassiveActions($input);
-      }
-      return $res;
-   }
-
-   function getAllMassiveActions($is_deleted=0, $checkitem=NULL) {
-      if ($this->maybeDeleted()
-            && !$this->useDeletedToLockIfDynamic()) {
-               $actions['delete'] = _x('button', 'Put in dustbin');
-      } else {
-         $actions['purge'] = _x('button', 'Delete permanently');
-      }
-
-      return $actions;
-   }
-
-   function getSpecificMassiveActions($checkitem=NULL) {
-      return array();
+      return $id_list;
    }
 
    static function getMenuNameByItemtype($itemtype) {
@@ -109,11 +80,11 @@ class PluginTagTagItem extends CommonDBRelation {
       $itemtypes['helpdesk'][] = 'TicketTemplate';
 
       $itemtypes['management'] = $menu['management']['types'];
-      $itemtypes['tools'] = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
-      $itemtypes['admin'] = array('User', 'Group', 'Entity', 'Profile'); //Manque les différentes Rules...
+      $itemtypes['tools'] = ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'];
+      $itemtypes['admin'] = ['User', 'Group', 'Entity', 'Profile']; //Manque les différentes Rules...
 
       //Manque tout les intitulés, les composants, Notification -> Modèle de notifications, Notification -> Traduction de modèle (mais pas front/notification)
-      $itemtypes['config'] = array('SLA', 'SlaLevel', 'FieldUnicity', 'Link'); //Manque les différents intutulés, les Device*,
+      $itemtypes['config'] = ['SLA', 'SlaLevel', 'FieldUnicity', 'Link']; //Manque les différents intutulés, les Device*,
 
       foreach ($itemtypes as $key => $value) {
          if (in_array($itemtype, $value)) {
@@ -126,34 +97,38 @@ class PluginTagTagItem extends CommonDBRelation {
    static function getItemtypes($menu_key) {
       switch ($menu_key) {
          case 'assets':
-            $itemtypes = array('Computer', 'Monitor', 'Software', 'NetworkEquipment', 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone');
+            $itemtypes = ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
+                          'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone'];
             break;
 
          case 'helpdesk':
-            $itemtypes = array('Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate'); //incomplet
+            $itemtypes = ['Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate']; //incomplet
             break;
 
          case 'management':
-            $itemtypes = array('Budget', 'Supplier', 'Contact', 'Contract', 'Document');
+            $itemtypes = ['Budget', 'Supplier', 'Contact', 'Contract', 'Document'];
 
             break;
          case 'tools':
-            $itemtypes = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
+            $itemtypes = ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'];
             break;
 
          case 'admin':
-            $itemtypes = array('User', 'Group', 'Entity', 'Profile');
+            $itemtypes = ['User', 'Group', 'Entity', 'Profile'];
             break;
 
          case 'config':
-            $itemtypes = array('SLA', 'SlaLevel', 'Link'); //Inutile de mettre ici FieldUnicity
+            $itemtypes = ['SLA', 'SlaLevel', 'Link']; //Inutile de mettre ici FieldUnicity
             break;
 
          default:
-            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'SlaLevel', 'Link',
-                  'CartridgeItem', 'ConsumableItem', 'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate',
-                  'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Project', 'Reminder', 'RSSFeed', 'User',
-                  'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', 'KnowbaseItem');
+            $itemtypes = ['Computer', 'Monitor', 'Software', 'Peripheral', 'Printer',
+                          'SLA', 'SlaLevel', 'Link','CartridgeItem', 'ConsumableItem',
+                          'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent',
+                          'TicketTemplate', 'Budget', 'Supplier', 'Contact', 'Contract',
+                          'Document', 'Project', 'Reminder', 'RSSFeed', 'User','Group',
+                          'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment',
+                          'KnowbaseItem'];
             break;
       }
 
@@ -182,16 +157,15 @@ class PluginTagTagItem extends CommonDBRelation {
       }
 
       $canedit = $tag->can($instID, UPDATE);
-
-      $table = getTableForItemType(__CLASS__);
+      $table  = getTableForItemType(__CLASS__);
 
       $result = $DB->query("SELECT DISTINCT `itemtype`
-         FROM `$table`
-         WHERE `plugin_tag_tags_id` = '$instID'");
+                            FROM `$table`
+                            WHERE `plugin_tag_tags_id` = '$instID'");
 
       $result2 = $DB->query("SELECT `itemtype`, items_id
-            FROM `$table`
-            WHERE `plugin_tag_tags_id` = '$instID'");
+                             FROM `$table`
+                             WHERE `plugin_tag_tags_id` = '$instID'");
 
       $number = $DB->numrows($result);
       $rand   = mt_rand();
@@ -206,12 +180,10 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
 
          echo "<tr class='tab_bg_1'><td class='right'>";
+         $itemtypes_to_show = [];
          if (is_array(json_decode($tag->fields['type_menu']))) {
             $itemtypes_to_show = json_decode($tag->fields['type_menu']);
-         } else {
-            $itemtypes_to_show = array(); //self::getItemtypes("");
          }
-
          Dropdown::showAllItems("items_id", 0, 0,
             ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
             $itemtypes_to_show, false, true
@@ -356,11 +328,11 @@ class PluginTagTagItem extends CommonDBRelation {
                         $pieces = preg_split('/(?=[A-Z])/', $itemtype);
                         $plugin_name = $pieces[2];
 
-                        $datas = array("entities_id" => $data["entity"],
-                                    "ITEM_0" => $data["name"],
-                                    "ITEM_0_2" => $data["id"],
-                                    "id" => $data["id"],
-                                    "META_0" => $data["name"]); //for PluginResourcesResource
+                        $datas = ["entities_id" => $data["entity"],
+                                  "ITEM_0"      => $data["name"],
+                                  "ITEM_0_2"    => $data["id"],
+                                  "id"          => $data["id"],
+                                  "META_0"      => $data["name"]]; //for PluginResourcesResource
 
                         if (isset($data["is_recursive"])) {
                            $datas["is_recursive"] = $data["is_recursive"];

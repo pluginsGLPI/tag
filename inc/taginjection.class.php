@@ -4,10 +4,8 @@ class PluginTagTagInjection extends PluginTagTag
       implements PluginDatainjectionInjectionInterface {
 
    static function getTable() {
-
       $parenttype = get_parent_class();
       return $parenttype::getTable();
-
    }
 
    static function getTypeName($nb=0) {
@@ -20,7 +18,7 @@ class PluginTagTagInjection extends PluginTagTag
 
    function connectedTo() {
       //Note : Interesting to have GLPI core object (who can have a tag) here
-      return array();
+      return [];
    }
 
    /**
@@ -31,8 +29,8 @@ class PluginTagTagInjection extends PluginTagTag
       $tab = Search::getOptions(get_parent_class($this));
 
       //Remove some options because some fields cannot be imported
-      $options['ignore_fields'] = array(3, 4, 6); //id, entity, type_menu;
-      $options['displaytype']   = array("dropdown" => array(12));
+      $options['ignore_fields'] = [3, 4, 6]; //id, entity, type_menu;
+      $options['displaytype']   = ["dropdown" => [12]];
 
       return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
    }
@@ -49,8 +47,8 @@ class PluginTagTagInjection extends PluginTagTag
       // Update field for add a default value
       if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
           $item = new parent();
-          $item->update(array('id' => $results[get_parent_class()],
-                                    'type_menu' => '0')); //default value
+          $item->update(['id'        => $results[get_parent_class()],
+                         'type_menu' => '0']); //default value
       }
 
       return $results;

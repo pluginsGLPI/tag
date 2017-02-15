@@ -16,35 +16,6 @@ function pluginTagAddSubType(toupdate, toobserve, url) {
     });
 }
 
-function parseUrl(val) {
-    var result = "Not found",
-        tmp = [];
-    location.search
-    //.replace ( "?", "" )
-    // this is better, there might be a question mark inside
-    .substr(1)
-        .split("&")
-        .forEach(function (item) {
-        tmp = item.split("=");
-        if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
-    });
-    return result;
-}
-
-// FAIL (with multiples entities) ?
-function getIdFromHeader() {
-   var splited = $("tr.headerRow:first th:first").text().split(" ");
-   return splited[splited.length - 1];
-}
-
-function upperFirst(str) {
-   return str.charAt(0).toUpperCase() + str.substring(1);
-}
-
-function isInteger(x) {
-   return (typeof x === 'number') && (x % 1 === 0);
-}
-
 function idealTextColor(hexTripletColor) {
    var nThreshold = 105;
    hexTripletColor.replace(/^#/,'')

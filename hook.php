@@ -103,7 +103,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
                return __("None");
             }
 
-            $itemtype_names = array();
+            $itemtype_names = [];
             foreach (json_decode($key) as $itemtype) {
                $item = getItemForItemtype($itemtype);
                $itemtype_names[] = $item->getTypeName();
