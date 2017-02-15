@@ -480,9 +480,9 @@ class PluginTagTagItem extends CommonDBRelation {
                                                        array $ids) {
       switch ($ma->getAction()) {
          case "chooseTag":
-            foreach($ma->items as $itemtype => $items) {
+            foreach ($ma->items as $itemtype => $items) {
                $object = new $itemtype;
-               foreach($items as $items_id) {
+               foreach ($items as $items_id) {
                   $object->fields['id'] = $items_id;
                   $object->input        = $ma->getInput();
                   if (self::updateItem($object, ['delete_old' => false])) {

@@ -234,7 +234,7 @@ class PluginTagTag extends CommonDropdown {
       ]);
    }
 
-    function getLinkedItems() {
+   function getLinkedItems() {
       global $DB;
 
       $query = "SELECT `itemtype`, `items_id`
