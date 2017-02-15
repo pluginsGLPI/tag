@@ -29,10 +29,10 @@
 // Plugin hook after *Uninstall*
 function plugin_uninstall_after_tag($item) {
    $tagitem = new PluginTagTagItem();
-   $tagitem->deleteByCriteria(array('itemtype' => $item->getType(),
-                                    'items_id' => $item->getID()
-                                    )
-   );
+   $tagitem->deleteByCriteria([
+      'itemtype' => $item->getType(),
+      'items_id' => $item->getID()
+   ]);
 }
 
 function plugin_datainjection_populate_tag() {
@@ -83,50 +83,43 @@ function plugin_pre_item_purge_tag($object) {
 
    if (isset($object->input["plugin_tag_tag_itemtype"])) { // Example : TicketTask no have tag
       $tagitem = new PluginTagTagItem();
-      $result = $tagitem->deleteByCriteria(array(
+      $result  = $tagitem->deleteByCriteria([
          "items_id" => $object->fields["id"],
          "itemtype" => ucfirst($object->input["plugin_tag_tag_itemtype"]),
-      ));
+      ]);
    }
 }
 
 function plugin_tag_getAddSearchOptions($itemtype) {
-   $sopt = array();
-
-   if (! Session::haveRight("itilcategory", READ)) {
-      return array();
+   if (!PluginTagTag::canItemtype($itemtype)) {
+      return [];
    }
 
-   if ($itemtype === 'PluginTagTag'
-         || $itemtype === 'CronTask' //Because no have already tag in CronTask interface
-         || $itemtype === 'PluginFormcreatorFormanswer' //No have tag associated
-         || $itemtype === 'QueuedMail'
-         || strpos($itemtype, 'PluginPrintercounters') !== false) {
-      return array();
-   }
-
-   $rng1 = PluginTagTag::TAG_SEARCH_NUM;
-   //$sopt[strtolower($itemtype)] = ''; //self::getTypeName(2);
-
-   $sopt[$rng1]['table']         = getTableForItemType('PluginTagTag');
-   $sopt[$rng1]['field']         = 'name';
-   $sopt[$rng1]['name']          = PluginTagTag::getTypeName(2);
-   $sopt[$rng1]['datatype']      = 'string';
-   $sopt[$rng1]['searchtype']    = "contains";
-   $sopt[$rng1]['massiveaction'] = false;
-   $sopt[$rng1]['forcegroupby']  = true;
-   $sopt[$rng1]['usehaving']     = true;
-   $sopt[$rng1]['joinparams']    = array('beforejoin' => array('table'      => 'glpi_plugin_tag_tagitems',
-                                                               'joinparams' => array('jointype' => "itemtype_item")));
-
-   //array('jointype' => "itemtype_item");
-
-   return $sopt;
+   return [
+      PluginTagTag::S_OPTION => [
+         'table'         => PluginTagTag::getTable(),
+         'field'         => 'name',
+         'name'          => PluginTagTag::getTypeName(2),
+         'datatype'      => 'string',
+         'searchtype'    => 'contains',
+         'massiveaction' => false,
+         'forcegroupby'  => true,
+         'usehaving'     => true,
+         'joinparams'    =>  [
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_tag_tagitems',
+               'joinparams' => [
+                  'jointype' => 'itemtype_item'
+               ]
+            ]
+         ]
+      ]
+   ];
 }
 
 function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    switch ($field) {
-      case PluginTagTag::TAG_SEARCH_NUM: //Note : can declare a const for "10500"
+      case PluginTagTag::S_OPTION:
          $out = '<div id="s2id_tag_select" class="select2-container select2-container-multi chosen-select-no-results" style="width: 100%;">
                  <ul class="select2-choices">';
          $separator = '';
@@ -175,7 +168,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
 
    $values = explode(",", $val);
-   $where = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
+   $where  = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
    array_shift($values);
    foreach ($values as $value) {
       $value = trim($value);
@@ -201,10 +194,27 @@ function plugin_tag_addWhere($link, $nott, $itemtype, $ID, $val, $searchtype) {
 
 
 /**
- * Define Dropdown tables to be manage in GLPI :
+ * Define Dropdown managed in GLPI
+ *
+ * @return  array the list of dropdowns (label => class)
  */
 function plugin_tag_getDropdown() {
-   return array('PluginTagTag' => PluginTagTag::getTypeName(2));
+   return ['PluginTagTag' => PluginTagTag::getTypeName(2)];
+}
+
+/**
+ * Define massive actions for other itemtype
+ *
+ * @param  string $itemtype
+ * @return array the massive action list
+ */
+function plugin_tag_MassiveActions($itemtype = '') {
+   if (PluginTagTag::canItemtype($itemtype)) {
+      return ['PluginTagTag'.MassiveAction::CLASS_ACTION_SEPARATOR.'chooseTag'
+               => __("Choose tags...", 'tag')];
+   }
+
+   return [];
 }
 
 /**

@@ -39,10 +39,6 @@ function plugin_tag_check_config($verbose=false) {
    return true;
 }
 
-function getBlacklistItemtype() {
-   return array('Tag');
-}
-
 /**
  * Init hooks of the plugin.
  * REQUIRED
@@ -50,15 +46,9 @@ function getBlacklistItemtype() {
  * @return void
  */
 function plugin_init_tag() {
-   global $PLUGIN_HOOKS;
+   global $PLUGIN_HOOKS, $UNINSTALL_TYPES, $CFG_GLPI;
 
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
-
-   // plugin datainjection
-   $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
-
-   Plugin::registerClass('PluginTagTagItem',
-            array('addtabon' => array('PluginTagTag')));
 
    $plugin = new Plugin();
    if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
@@ -66,40 +56,31 @@ function plugin_init_tag() {
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
-      // Plugin uninstall : after uninstall action
+      // require spectrum (for glpi >= 9.2)
+      $CFG_GLPI['javascript']['config']['commondropdown']['PluginTagTag'] = ['colorpicker'];
 
-      $UNINSTALL_TYPES = array('Computer', 'Monitor', 'NetworkEquipment',
-                           'Peripheral', 'Phone', 'Printer');
-      foreach ($UNINSTALL_TYPES as $uninstall_itemtype) {
-         $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$uninstall_itemtype] = 'plugin_uninstall_after_tag';
+      // Plugin use specific massive actions
+      $PLUGIN_HOOKS['use_massive_action']['tag'] = true;
+
+      // Plugin uninstall : after uninstall action
+      if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
+         foreach ($UNINSTALL_TYPES as $u_itemtype) {
+            $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$u_itemtype] = 'plugin_uninstall_after_tag';
+         }
       }
 
-      $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/scripts.js';
+      // insert tag dropdown into all possible itemtypes
+      $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'preItemForm'];
+
+      // plugin datainjection
+      $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
+
+      // add needed javascript files
+      $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
    }
 
    // only on itemtype form
    if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
-
-      if (strpos($_SERVER['REQUEST_URI'], "/front/dropdown.php") === false &&
-         strpos($_SERVER['REQUEST_URI'], ".form.php?") !== false &&
-         strpos($_SERVER['REQUEST_URI'], "id=-1") === false && //for Computer
-         strpos($_SERVER['REQUEST_URI'], "withtemplate=") === false && //exclude template
-         strpos($_SERVER['REQUEST_URI'], "?new=1") === false && //for exemple : for checklistconfig in plugin resources
-         strpos($_SERVER['REQUEST_URI'], "popup=1&rand=") === false && //item no exist
-         strpos($_SERVER['REQUEST_URI'], "/front/queuedmail") === false && //quemail items are temporary
-         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tag.form.php") === false &&
-         strpos($_SERVER['REQUEST_URI'], "plugins/tag/front/tagtype") === false &&
-         strpos($_SERVER['REQUEST_URI'], "plugins/datainjection/front/model.form.php") === false &&
-         strpos($_SERVER['REQUEST_URI'], "plugins/webservices/front/client.form.php?new=1") === false &&
-         strpos($_SERVER['REQUEST_URI'], "plugins/printercounters/") === false &&
-         isset ($_SESSION["glpiroot"]) &&
-         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/reservation.form.php") === false &&
-         strpos($_SERVER['REQUEST_URI'], $_SESSION["glpiroot"]."/front/config.form.php") === false) { //for ?forcetab=PluginBehaviorsConfig%241
-         if (Session::haveRight("itilcategory", READ)) {
-            $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/show_tags.js';
-         }
-      }
-
       if (isset($matches[1][0])) {
          $itemtype = $matches[1][0];
 
@@ -109,16 +90,11 @@ function plugin_init_tag() {
             }
          }
 
-         // stop on blaclisted itemtype
-         if (in_array($itemtype, array_map('strtolower', getBlacklistItemtype()))) {
-            return '';
-         }
-
-         if (class_exists($itemtype)) {
-
+         if (class_exists($itemtype)
+             && PluginTagTag::canItemtype($itemtype)) {
             //normalize classname case
-            $obj = new $itemtype();
-            $itemtype = get_class($obj);
+            $object   = new $itemtype();
+            $itemtype = get_class($object);
 
             // Tag have no tag associated
             if ($itemtype != 'PluginTagTag') {

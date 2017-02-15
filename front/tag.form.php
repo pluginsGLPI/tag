@@ -30,5 +30,4 @@ if (isset($_POST['add']) || isset($_REQUEST['update'])) {
 }
 
 $dropdown = new PluginTagTag();
-
 include (GLPI_ROOT . "/front/dropdown.common.form.php");

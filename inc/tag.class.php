@@ -4,17 +4,38 @@ class PluginTagTag extends CommonDropdown {
    // From CommonDBTM
    public $dohistory = true;
 
-   const MNBSP = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-
-   const TAG_SEARCH_NUM = 10500;
+   const S_OPTION = 10500;
 
    public static function getTypeName($nb=1) {
       return _n('Tag', 'Tags', $nb, 'tag');
+   }
+
+   /**
+    * Return the list of blackisted itemtype
+    * We don't want tag system on theses
+    *
+    * @return array of string itemtypes
+    */
+   public static function getBlacklistItemtype() {
+      return [
+         'PluginTagTag',
+         'Notification',
+         'Crontask',
+         'PluginFormcreatorFormanswer',
+         'QueuedMail',
+      ];
+   }
+
+   /**
+    * Check if the passed itemtype is in the blacklist
+    *
+    * @param  string $itemtype
+    *
+    * @return bool
+    */
+   public static function canItemtype($itemtype = '') {
+      return !in_array(strtolower($itemtype),
+                       array_map('strtolower', self::getBlacklistItemtype()));
    }
 
    public function showForm($ID, $options = array()) {
@@ -38,7 +59,6 @@ class PluginTagTag extends CommonDropdown {
 
       echo "<tr class='line1 tab_bg_2'><td><label>" . __('HTML color', 'tag') . "</label></td>";
       echo "<td>";
-      //Note : create some bugs
       Html::showColorField('color', array('value' => $this->fields['color']));
       echo "</td>";
       echo "</tr>";
@@ -101,18 +121,19 @@ class PluginTagTag extends CommonDropdown {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
+
       if (!TableExists($table)) {
-         $query = "CREATE TABLE IF NOT EXISTS `$table` (
-                     `id` int(11) NOT NULL auto_increment,
-                     `entities_id` int(11) NOT NULL DEFAULT '0',
-                     `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
-                     `name` varchar(255) NOT NULL DEFAULT '',
-                     `comment` text collate utf8_unicode_ci,
-                     `color` varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-                     PRIMARY KEY (`id`),
-                     KEY `name` (`name`)
-                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-         $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
+         $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
+            `id`           int(11) NOT NULL auto_increment,
+            `entities_id`  int(11) NOT NULL DEFAULT '0',
+            `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
+            `name`         varchar(255) NOT NULL DEFAULT '',
+            `comment`      text collate utf8_unicode_ci,
+            `color`        varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+            PRIMARY KEY (`id`),
+            KEY `name` (`name`)
+         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
+            or die($DB->error());
       }
 
       if (!FieldExists($table, 'type_menu')) {
@@ -146,34 +167,38 @@ class PluginTagTag extends CommonDropdown {
    }
 
    public static function uninstall() {
-      $query = "DELETE FROM glpi_logs WHERE itemtype_link='".__CLASS__."' OR itemtype = '".__CLASS__."'";
-      $GLOBALS['DB']->query($query);
+      global $DB;
 
-      $query = "DELETE FROM glpi_bookmarks WHERE itemtype='".__CLASS__."'";
-      $GLOBALS['DB']->query($query);
+      $DB->query("DELETE FROM glpi_logs
+                  WHERE itemtype_link = '".__CLASS__."'
+                     OR itemtype = '".__CLASS__."'")
+         or die($DB->error());
 
-      $query = "DELETE FROM glpi_bookmarks_users WHERE itemtype='".__CLASS__."'";
-      $GLOBALS['DB']->query($query);
+      $DB->query("DELETE FROM glpi_bookmarks
+                  WHERE itemtype = '".__CLASS__."'")
+         or die($DB->error());
 
-      $query = "DELETE FROM glpi_displaypreferences WHERE itemtype='".__CLASS__."' OR num=".PluginTagTag::TAG_SEARCH_NUM;
-      $GLOBALS['DB']->query($query);
+      $DB->query("DELETE FROM glpi_bookmarks_users
+                  WHERE itemtype = '".__CLASS__."'")
+         or die($DB->error());
 
-      $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
-      return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
+      $DB->query("DELETE FROM glpi_displaypreferences
+                  WHERE itemtype = '".__CLASS__."'
+                     OR num = ".self::S_OPTION)
+         or die($DB->error());
+
+      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`")
+         or die($DB->error());
+
+      return true;
    }
 
-   /**
-    * Définition du nom de l'onglet
-    **/
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       $tab = array();
       $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
       return $tab;
    }
 
-   /**
-    * Définition du contenu de l'onglet
-    **/
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
       switch ($item->getType()) {
          case __CLASS__ :
@@ -192,13 +217,16 @@ class PluginTagTag extends CommonDropdown {
       $ong = array();
       $this->addDefaultFormTab($ong);
       $this->addStandardTab(__CLASS__, $ong, $options);
+      $this->addStandardTab('PluginTagTagItem', $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
 
    public function cleanDBonPurge() {
-      $GLOBALS['DB']->query("DELETE FROM `glpi_plugin_tag_tagitems`
-                WHERE `plugin_tag_tags_id`=".$this->fields['id']);
+      $tagitem = new PluginTagTagItem();
+      $tagitem->deleteByCriteria([
+         'plugin_tag_tags_id' => $this->getID()
+      ]);
    }
 
     /**
@@ -208,11 +236,13 @@ class PluginTagTag extends CommonDropdown {
     * @since version 0.84.4
     **/
    function getLinkedItems() {
+      global $DB;
+
       $query = "SELECT `itemtype`, `items_id`
               FROM `glpi_computers_items`
               WHERE `computers_id` = '" . $this->fields['id']."'";
       $tab = array();
-      foreach ($GLOBALS['DB']->request($query) as $data) {
+      foreach ($DB->request($query) as $data) {
          $tab[$data['itemtype']][$data['items_id']] = $data['items_id'];
       }
       return $tab;
@@ -252,13 +282,23 @@ class PluginTagTag extends CommonDropdown {
     **/
    function doSpecificMassiveActions($input=array()) {
       $res = array('ok'      => 0,
-                  'ko'      => 0,
-                  'noright' => 0);
+                   'ko'      => 0,
+                   'noright' => 0);
       switch ($input['action']) {
          default :
             return parent::doSpecificMassiveActions($input);
       }
       return $res;
+   }
+
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+
+      switch ($ma->getAction()) {
+         case 'chooseTag':
+            self::showTagDropdown(['itemtype' => 'computer']);
+            return true;
+      }
+      return parent::showMassiveActionsSubForm($ma);
    }
 
    function getSearchOptions() {
@@ -345,7 +385,7 @@ class PluginTagTag extends CommonDropdown {
    /**
     * For fixed the issue #1 on Github
     */
-   static function getItemtype($itemtype, $id) {
+   static function getItemtype($itemtype, $id = 0) {
       // Specific for a webpage in GLPI
       if ($itemtype == 'rule.generic') {
          $rule = new Rule();
@@ -365,9 +405,37 @@ class PluginTagTag extends CommonDropdown {
             "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";
    }
 
-   static function tagDropdownMultiple($options = array()) {
+   static function preItemForm($params) {
+      if (isset($params['item'])
+          && $params['item'] instanceof CommonDBTM) {
+         $itemtype = get_class($params['item']);
 
-      $itemtype = self::getItemtype($_REQUEST['itemtype'], $_REQUEST['id']);
+         if (self::canItemtype($itemtype)) {
+            $html_tag = ($itemtype == 'Ticket') ? "th" : 'td';
+
+            echo "<tr class='tab_bg_1'>";
+            echo "<$html_tag>"._n('Tag', 'Tags', 2, 'tag')."</$html_tag>";
+            echo "<td colspan='3'>";
+            self::showTagDropdown([
+               'itemtype' => $itemtype,
+               'id'       => $params['item']->getId(),
+            ]);
+            echo "</td>";
+            echo "</tr>";
+         }
+      }
+   }
+
+   static function showTagDropdown($params = []) {
+      // compute default params
+      $default_params = [
+         'id'       => 0,
+         'itemtype' => '',
+      ];
+      $params = array_merge($default_params, $params);
+
+      // check itemtype
+      $itemtype = self::getItemtype($params['itemtype'], $params['id']);
       $obj = new $itemtype();
 
       // Object must be an instance of CommonDBTM (or inherint of this)
@@ -375,68 +443,67 @@ class PluginTagTag extends CommonDropdown {
          return;
       }
 
-      $obj->getFromDB($_REQUEST['id']);
+      // retrieve single object
+      if (isset($params['id'])) {
+         $obj->getFromDB($params['id']);
+      }
+
+      // create the select html tag
+      $rand     = mt_rand();
       $sel_attr = $obj->canUpdateItem() ? '' : ' disabled ';
+      echo "<select data-placeholder='".__('Choose tags...', 'tag')."'
+                    name='_plugin_tag_tag_values[]'
+                    id='tag_select_$rand' multiple
+                    class='tag_select chosen-select-no-results'
+                    $sel_attr
+                    style='width:80%;' >";
 
-      echo "<select data-placeholder='".__('Choose tags...', 'tag').self::MNBSP."' name='_plugin_tag_tag_values[]'
-          id='tag_select' multiple class='chosen-select-no-results' ".$sel_attr." style='width:80%;' >";
-
+      // found already used tag
       $selected_id = array();
       $tag_item = new PluginTagTagItem();
-      foreach ($tag_item->find('items_id='.$_REQUEST['id'].'
+      foreach ($tag_item->find('items_id='.$params['id'].'
                                 AND itemtype="'.$itemtype.'"') as $found_item) {
          $selected_id[] = $found_item['plugin_tag_tags_id'];
       }
 
-      // Restrict tag by entity if current object has entity
-      $where = "1 ";
-      if (isset($obj->fields['entities_id'])) {
-         $field = $obj->getType() == 'Entity' ? 'id' : 'entities_id';
-         $where .= getEntitiesRestrictRequest("AND", '', '', $obj->fields[$field], true);
+      // Restrict tag finding by entity
+      $where = "";
+      if ($obj->isEntityAssign()) {
+         $where = getEntitiesRestrictRequest("AND", '', '', '', true);
       }
 
+      // create the select options
       $tag   = new self();
-      $items = $tag->find($where, 'name');
-      foreach ($items as $item) {
-         $param = in_array($item['id'], $selected_id) ? ' selected ' : '';
-         $param .= 'data-color-option="'.$item['color'].'"';
-         if (!empty($item['type_menu'])) {
-            // Allowed types
-            foreach (json_decode($item['type_menu'], true) as $subtype) {
-               if (strtolower($subtype) == $itemtype) {
-                  echo '<option value="'.$item['id'].'" '.$param.'>'.$item['name'].'</option>';
-                  break;
-               }
-            }
-
-         } else {
-            echo '<option value="'.$item['id'].'" '.$param.'>'.$item['name'].'</option>';
+      $ftags = $tag->find($where, 'name');
+      foreach ($ftags as $current_tag) {
+         if (empty($current_tag['type_menu'])
+             || in_array($itemtype, json_decode($current_tag['type_menu'], true))) {
+            echo "<option value='{$current_tag['id']}'
+                          ".(in_array($current_tag['id'], $selected_id) ? ' selected ' : '')."
+                          data-color-option='{$current_tag['color']}'>".
+            $current_tag['name'].'</option>';
          }
       }
       echo "</select>";
 
+      // call select2 lib for this select html tag
+      echo Html::scriptBlock("$(function() {
+         $('#tag_select_$rand').select2({
+             'formatResult': formatOption,
+             'formatSelection': formatOption
+         });
+      });");
+
+      // Show '+' button :
       if (self::canCreate()) {
-         $rand = mt_rand();
-
-         /*
-         echo "<script type='text/javascript'>\n
-            window.updateTagSelectResults_".$rand." = function () {
-
-            }
-         </script>";
-         */
-
-         // Show '+' button :
          self::showMoreButton($rand);
       }
+
+      // show hidden fields
+      echo Html::hidden('plugin_tag_tag_id',       ['value' => $params['id']]);
+      echo Html::hidden('plugin_tag_tag_itemtype', ['value' => $params['itemtype']]);
    }
 
-   /**
-   * Actions done before add
-   *
-   * @param type $input
-   * @return type
-   */
    function prepareInputForAdd($input) {
       if (!$this->checkMandatoryFields($input)) {
          return false;
@@ -447,12 +514,6 @@ class PluginTagTag extends CommonDropdown {
       return $input;
    }
 
-   /**
-   * Actions done before update
-   *
-   * @param type $input
-   * @return type
-   */
    function prepareInputForUpdate($input) {
       if (!$this->checkMandatoryFields($input)) {
          return false;
@@ -477,16 +538,15 @@ class PluginTagTag extends CommonDropdown {
    }
 
    /**
-   * checkMandatoryFields
+   * Check all mandatory field are filled
    *
-   * @param type $input
+   * @param array $input
    * @return boolean
    */
-   function checkMandatoryFields($input) {
-      $msg     = array();
+   function checkMandatoryFields($input = []) {
+      $msg     = [];
       $checkKo = false;
-
-      $mandatory_fields = array('name'     => __('Name'));
+      $mandatory_fields = ['name' => __('Name')];
 
       foreach ($input as $key => $value) {
          if (isset($mandatory_fields[$key])) {

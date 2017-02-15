@@ -4,9 +4,8 @@ include ('../../../inc/includes.php');
 switch ($_POST['action']) {
    case 'tag_values':
       // check if itemtype can display tag control
-      if (in_array(strtolower($_POST['itemtype']),
-                   array_map('strtolower', getBlacklistItemtype()))) {
-         return '';
+      if (!PluginTagTag::canItemtype($_POST['itemtype'])) {
+         exit;
       }
 
       $class = ($_POST['itemtype'] == 'ticket') ? "tab_bg_1" : '';
@@ -14,7 +13,7 @@ switch ($_POST['action']) {
       echo "<tr class='$class tab_bg_1'>";
       echo "<th>"._n('Tag', 'Tags', 2, 'tag')."</th>";
       echo "<td colspan='3'>";
-      PluginTagTag::tagDropdownMultiple();
+      PluginTagTag::showTagDropdown($_REQUEST);
       echo "</td>";
       echo "</tr>";
       break;

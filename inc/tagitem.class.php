@@ -35,24 +35,22 @@ class PluginTagTagItem extends CommonDBRelation {
          $DB->query($query) or die($DB->error());
       }
 
-      if (isIndex($table, "name")) {
-         $query = "ALTER TABLE `$table`
-                   DROP INDEX `name`";
-         $DB->query($query) or die($DB->error());
-      }
-
-      if (!isIndex($table, "unicity")) {
-         $query = "ALTER TABLE `$table`
-                   ADD UNIQUE INDEX `unicity` (`items_id`, `itemtype`, `plugin_tag_tags_id`)";
-         $DB->query($query) or die($DB->error());
-      }
+      // fix indexes
+      $migration->dropKey($table, 'name');
+      $migration->addKey($table,
+                         ['items_id', 'itemtype', 'plugin_tag_tags_id'],
+                         'unicity',
+                         'UNIQUE INDEX');
+      $migration->migrationOneTable($table);
 
       return true;
    }
 
    public static function uninstall() {
-      $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
-      return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
+      global $DB;
+
+      return $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`")
+         or die($DB->error());
    }
 
    static function getTag_items($id_glpi_obj, $itemtype) {

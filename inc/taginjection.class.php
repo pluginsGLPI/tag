@@ -1,7 +1,7 @@
 <?php
 
 class PluginTagTagInjection extends PluginTagTag
-                                                implements PluginDatainjectionInjectionInterface {
+      implements PluginDatainjectionInjectionInterface {
 
    static function getTable() {
 
@@ -15,12 +15,12 @@ class PluginTagTagInjection extends PluginTagTag
    }
 
    function isPrimaryType() {
-      return true; //false;
+      return true;
    }
 
    function connectedTo() {
       //Note : Interesting to have GLPI core object (who can have a tag) here
-       return array();
+      return array();
    }
 
    /**
@@ -28,12 +28,10 @@ class PluginTagTagInjection extends PluginTagTag
    **/
    function getOptions($primary_type='') {
 
-      $tab           = Search::getOptions(get_parent_class($this));
+      $tab = Search::getOptions(get_parent_class($this));
 
       //Remove some options because some fields cannot be imported
-      $notimportable = array(3, 4, 6); //id, entity, type_menu
-
-      $options['ignore_fields'] = $notimportable;
+      $options['ignore_fields'] = array(3, 4, 6); //id, entity, type_menu;
       $options['displaytype']   = array("dropdown" => array(12));
 
       return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
@@ -57,18 +55,4 @@ class PluginTagTagInjection extends PluginTagTag
 
       return $results;
    }
-
-   /**
-    * @param $primary_type
-    * @param $values
-   **/
-   /*
-   function addSpecificNeededFields($primary_type, $values) {
-
-      $fields['items_id'] = $values[$primary_type]['id'];
-      $fields['itemtype'] = $primary_type;
-      return $fields;
-   }
-   */
-
 }
