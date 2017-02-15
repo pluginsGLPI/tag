@@ -296,11 +296,11 @@ class PluginTagTag extends CommonDropdown {
       $tab[6]['searchtype']      = ['equals', 'notequals'];
       $tab[6]['name']            = _n('Associated item type', 'Associated item types', 2);
 
-      // For History tab (quick fix)
       $tab[7]['table']           = $this->getTable();
       $tab[7]['field']           = 'color';
       $tab[7]['name']            = __('HTML color', 'tag');
       $tab[7]['searchtype']      = 'contains';
+      $tab[7]['datatype']        = 'specific';
 
       return $tab;
    }
@@ -311,8 +311,6 @@ class PluginTagTag extends CommonDropdown {
       if (!is_array($values)) {
          $values = [$field => $values];
       }
-      $options['display'] = false;
-      $options['value']   = $values[$field];
       switch ($field) {
          case 'type_menu':
             $tab = ['' => Dropdown::EMPTY_VALUE];
@@ -321,13 +319,26 @@ class PluginTagTag extends CommonDropdown {
             foreach ($itemtypes as $itemtype) {
                $item           = getItemForItemtype($itemtype);
                $tab[$itemtype] = $item->getTypeName();
-
             }
+
+            $options['display'] = false;
+            $options['value']   = $values[$field];
 
             return Dropdown::showFromArray($name, $tab, $options);
             break;
       }
+
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
+   }
+
+   static function getSpecificValueToDisplay($field, $values, array $options = array()) {
+
+      switch ($field) {
+         case 'color' :
+            return "<div style='background-color: $values[$field];'>&nbsp;</div>";
+      }
+
+      return parent::getSpecificValueToDisplay($field, $values, $options);
    }
 
    /**
