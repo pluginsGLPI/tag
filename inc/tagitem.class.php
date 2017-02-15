@@ -408,7 +408,8 @@ class PluginTagTagItem extends CommonDBRelation {
       $itemtype = array_shift($itemtypes);
 
       switch ($ma->getAction()) {
-         case 'chooseTag':
+         case 'addTag':
+         case 'removeTag':
             PluginTagTag::showTagDropdown(['itemtype' => $itemtype]);
             echo Html::submit(_sx('button', 'Save'));
             return true;
@@ -419,14 +420,33 @@ class PluginTagTagItem extends CommonDBRelation {
    static function processMassiveActionsForOneItemtype(MassiveAction $ma,
                                                        CommonDBTM $item,
                                                        array $ids) {
+      $input = $ma->getInput();
       switch ($ma->getAction()) {
          case "chooseTag":
             foreach ($ma->items as $itemtype => $items) {
                $object = new $itemtype;
                foreach ($items as $items_id) {
                   $object->fields['id'] = $items_id;
-                  $object->input        = $ma->getInput();
+                  $object->input        = $input;
                   if (self::updateItem($object, ['delete_old' => false])) {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                  } else {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                     $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                  }
+               }
+            }
+            break;
+         case "removeTag":
+            $tagitem = new self;
+            foreach ($ma->items as $itemtype => $items) {
+               $object = new $itemtype;
+               foreach ($items as $items_id) {
+                  if ($tagitem->deleteByCriteria([
+                     'items_id'           => $items_id,
+                     'itemtype'           => $itemtype,
+                     'plugin_tag_tags_id' => array_values($input['_plugin_tag_tag_values']),
+                  ])) {
                      $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
                   } else {
                      $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);

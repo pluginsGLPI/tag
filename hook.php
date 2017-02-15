@@ -169,8 +169,12 @@ function plugin_tag_getDropdown() {
  */
 function plugin_tag_MassiveActions($itemtype = '') {
    if (PluginTagTag::canItemtype($itemtype)) {
-      return ['PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'chooseTag'
-               => __("Add tags", 'tag')];
+      return [
+         'PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'addTag'
+               => __("Add tags", 'tag'),
+         'PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'removeTag'
+               => __("Remove tags", 'tag'),
+      ];
    }
 
    return [];
