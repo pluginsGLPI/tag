@@ -71,33 +71,49 @@ function plugin_tag_getAddSearchOptions($itemtype) {
 function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    switch ($field) {
       case PluginTagTag::S_OPTION:
-         $out = '<div id="s2id_tag_select" class="select2-container select2-container-multi chosen-select-no-results" style="width: 100%;">
-                 <ul class="select2-choices">';
+         $out = '<div class="tag_select select2-container" style="width: 100%;">
+                 <div class="select2-choices no-negative-margin">';
          $separator = '';
          $plugintagtag = new PluginTagTag();
 
          foreach ($data[$num] as $tag) {
             if (isset($tag['id']) && isset($tag['name'])) {
-               $id    = $tag['id'];
-               $name  = $tag['name'];
-
-               $plugintagtag->getFromDB($id);
+               $plugintagtag->getFromDB($tag['id']);
                $color = $plugintagtag->fields["color"];
-
                $style = "";
                if (!empty($color)) {
-                  $style .= "border-width:2px; border-color:$color;";
+                  $style .= "background-color: $color; color: ".idealTextColor($color);
+               } else {
+                  $style .= "border: 1px solid #BBB;";
                }
 
-               $out .= '<li class="select2-search-choice" style="padding-left:5px;'.$style.'">'.$separator.$name.'</li>';
-               $separator = '<span style="display:none">, </span>'; //For export (CSV, PDF) of GLPI core
+               $out .= '<span class="select2-search-choice tag_choice"
+                              style="padding-left:5px;'.$style.'">'.
+                       $separator.$tag['name'].'</span>';
+               //For export (CSV, PDF) of GLPI core
+               $separator = '<span style="display:none">, </span>';
             }
          }
-         $out .= '</ul></div>';
+         $out .= '</div></div>';
          return $out;
    }
 
    return "";
+}
+
+
+function idealTextColor($hexTripletColor) {
+   $nThreshold = 105;
+   $hexTripletColor = str_replace('#', '', $hexTripletColor);
+   $components = [
+      'R' => intval(substr($hexTripletColor, 0, 2)),
+      'G' => intval(substr($hexTripletColor, 2, 4)),
+      'B' => intval(substr($hexTripletColor, 4, 6)),
+   ];
+   $bgDelta = ($components['R'] * 0.299)
+            + ($components['G'] * 0.587)
+            + ($components['B'] * 0.114);
+   return ((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff";
 }
 
 function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {

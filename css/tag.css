@@ -24,7 +24,13 @@
    border-radius: 3px;
 }
 
-.select2-choices .tag_choice {
+.select2-choices.no-negative-margin .tag_choice {
+   display: inline-block;
+   padding-right: 5px;
+   margin: 1px;
+}
+
+.select2-choices:not(.no-negative-margin) .tag_choice {
    margin-left: -18px;
    padding-left: 18px;
 }
