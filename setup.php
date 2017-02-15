@@ -75,8 +75,9 @@ function plugin_init_tag() {
       // plugin datainjection
       $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
-      // add needed javascript files
+      // add needed javascript & css files
       $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
+      $PLUGIN_HOOKS['add_css']['tag'][] = 'css/tag.css';
    }
 
    // only on itemtype form

@@ -1,0 +1,30 @@
+.tag_select.select2-container .select2-search-choice {
+   border: none;
+   background: none;
+   box-shadow: none;
+   margin: 4px 1px;
+   padding: 4px 0 3px 18px;
+}
+
+#mainformtable .tag_select.select2-container .select2-choices:not(:hover) {
+   border:  1px solid transparent;
+   background-image: none;
+}
+
+.tag_select.select2-container .select2-search-choice-close {
+   color: #000;
+}
+
+.tag_choice {
+   padding: 3px 4px 6px 2px;
+   border-radius: 3px;
+}
+
+.select2-choices .tag_choice {
+   margin-left: -18px;
+   padding-left: 18px;
+}
+
+.select2-results .tag_choice {
+   padding: 2px 4px;
+}

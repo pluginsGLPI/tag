@@ -59,12 +59,14 @@ function idealTextColor(hexTripletColor) {
 
 function formatOption(option) {
    var color = option.element[0].getAttribute("data-color-option");
-   var template = "<span style='padding: 2px; border-radius: 3px; ";
+   var template = "<span class='tag_choice' style='";
    if (color !== "") {
       var invertedcolor = idealTextColor(color);
 
       template+= " background-color: " + color + "; ";
       template+= " color: " + invertedcolor + "; ";
+   } else {
+      template+= " border: 1px solid #BBB; ";
    }
    template+= "'>" + option.text + "</span>";
 
