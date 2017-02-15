@@ -295,7 +295,7 @@ class PluginTagTag extends CommonDropdown {
 
       switch ($ma->getAction()) {
          case 'chooseTag':
-            self::showTagDropdown(['itemtype' => 'computer']);
+            self::showTagDropdown(['itemtype' => 'Computer']);
             return true;
       }
       return parent::showMassiveActionsSubForm($ma);

@@ -1,3 +1,7 @@
+.tag_select {
+   font-size: 11px;
+}
+
 .tag_select.select2-container .select2-search-choice {
    border: none;
    background: none;
