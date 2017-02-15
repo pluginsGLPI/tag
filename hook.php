@@ -41,55 +41,6 @@ function plugin_datainjection_populate_tag() {
    $INJECTABLE_TYPES['PluginTagTagInjection'] = 'tag';
 }
 
-function plugin_pre_item_update_tag($parm) {
-   global $DB;
-
-   if (isset($_REQUEST['plugin_tag_tag_id']) && isset($_REQUEST['plugin_tag_tag_itemtype'])) {
-
-      $already_present = array();
-
-      $itemtype = PluginTagTag::getItemtype($_REQUEST['plugin_tag_tag_itemtype'], $_REQUEST['plugin_tag_tag_id']);
-
-      $query_part = "`items_id`=".$_REQUEST['plugin_tag_tag_id']."
-                     AND `itemtype` = '".$itemtype."'";
-
-      $item = new PluginTagTagItem();
-      foreach ($item->find($query_part) as $indb) {
-         if (isset($_REQUEST["_plugin_tag_tag_values"]) &&
-               in_array($indb["plugin_tag_tags_id"], $_REQUEST["_plugin_tag_tag_values"])) {
-            $already_present[] = $indb["plugin_tag_tags_id"];
-         } else {
-            $item->delete(array("id" => $indb['id']));
-         }
-
-      }
-
-      if (isset($_REQUEST["_plugin_tag_tag_values"])) {
-         foreach ($_REQUEST["_plugin_tag_tag_values"] as $tag_id) {
-            if (!in_array($tag_id, $already_present)) {
-               $item->add(array(
-                     'plugin_tag_tags_id' => $tag_id,
-                     'items_id' => $_REQUEST['plugin_tag_tag_id'],
-                     'itemtype' => ucfirst($itemtype), //get_class($parm)
-               ));
-            }
-         }
-      }
-   }
-   return $parm;
-}
-
-function plugin_pre_item_purge_tag($object) {
-
-   if (isset($object->input["plugin_tag_tag_itemtype"])) { // Example : TicketTask no have tag
-      $tagitem = new PluginTagTagItem();
-      $result  = $tagitem->deleteByCriteria([
-         "items_id" => $object->fields["id"],
-         "itemtype" => ucfirst($object->input["plugin_tag_tag_itemtype"]),
-      ]);
-   }
-}
-
 function plugin_tag_getAddSearchOptions($itemtype) {
    if (!PluginTagTag::canItemtype($itemtype)) {
       return [];
@@ -210,8 +161,8 @@ function plugin_tag_getDropdown() {
  */
 function plugin_tag_MassiveActions($itemtype = '') {
    if (PluginTagTag::canItemtype($itemtype)) {
-      return ['PluginTagTag'.MassiveAction::CLASS_ACTION_SEPARATOR.'chooseTag'
-               => __("Choose tags...", 'tag')];
+      return ['PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'chooseTag'
+               => __("Add tags", 'tag')];
    }
 
    return [];

@@ -431,4 +431,98 @@ class PluginTagTagItem extends CommonDBRelation {
 
    }
 
+   /**
+    * Update all tags associated to an item
+    *
+    * @param  CommonDBTM $item [description]
+    *
+    * @return boolean
+    */
+   static function updateItem(CommonDBTM $item, $options = array()) {
+      if ($item->getID()
+          && !isset($item->input["_plugin_tag_tag_values"])) {
+         return true;
+      }
+
+      //merge default options with parameter one
+      $default_options = [
+         'delete_old' => true
+      ];
+      $options = array_merge($default_options, $options);
+
+      if ($options['delete_old']) {
+         // purge old tags
+         self::purgeItem($item);
+         $tag_values = $item->input["_plugin_tag_tag_values"];
+
+      } else {
+         // remove possible duplicates (to avoid sql errors on unique index)
+         $tag_item   = new self();
+         $found      = $tag_item->find("`items_id` = ".$item->getID()."
+                                        AND `itemtype` = ".$item->getType());
+         $tag_values = array_diff($item->input["_plugin_tag_tag_values"], array_keys($found));
+      }
+
+      // add tags
+      foreach ($tag_values as $tag_id) {
+         $tag_item->add([
+            'plugin_tag_tags_id' => $tag_id,
+            'items_id' => $item->getID(),
+            'itemtype' => $item->getType()
+         ]);
+      }
+
+      return true;
+   }
+
+   /**
+    * Delete all tags associated to an item
+    *
+    * @param  CommonDBTM $item
+    * @return boolean
+    */
+   static function purgeItem(CommonDBTM $item) {
+      $tagitem = new self();
+      return $tagitem->deleteByCriteria([
+         "items_id" => $item->getID(),
+         "itemtype" => $item->getType(),
+      ]);
+   }
+
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+
+      $itemtypes = array_keys($ma->items);
+      $itemtype = array_shift($itemtypes);
+
+      switch ($ma->getAction()) {
+         case 'chooseTag':
+            PluginTagTag::showTagDropdown(['itemtype' => $itemtype]);
+            echo Html::submit(_sx('button', 'Save'));
+            return true;
+      }
+      return parent::showMassiveActionsSubForm($ma);
+   }
+
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma,
+                                                       CommonDBTM $item,
+                                                       array $ids) {
+      switch ($ma->getAction()) {
+         case "chooseTag":
+            foreach($ma->items as $itemtype => $items) {
+               $object = new $itemtype;
+               foreach($items as $items_id) {
+                  $object->fields['id'] = $items_id;
+                  $object->input        = $ma->getInput();
+                  if (self::updateItem($object, ['delete_old' => false])) {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                  } else {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                     $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                  }
+               }
+            }
+            break;
+      }
+   }
+
 }

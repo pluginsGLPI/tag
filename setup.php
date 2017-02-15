@@ -77,31 +77,14 @@ function plugin_init_tag() {
 
       // add needed javascript & css files
       $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
-      $PLUGIN_HOOKS['add_css']['tag'][] = 'css/tag.css';
-   }
+      $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';
 
-   // only on itemtype form
-   if (preg_match_all("/.*\/(.*)\.form\.php/", $_SERVER['REQUEST_URI'], $matches) !== false) {
-      if (isset($matches[1][0])) {
-         $itemtype = $matches[1][0];
-
-         if (preg_match_all("/plugins\/(.*)\//U", $_SERVER['REQUEST_URI'], $matches_plugin) !== false) {
-            if (isset($matches_plugin[1][0])) {
-               $itemtype = "Plugin" . ucfirst($matches_plugin[1][0]) . ucfirst($itemtype);
-            }
-         }
-
-         if (class_exists($itemtype)
-             && PluginTagTag::canItemtype($itemtype)) {
-            //normalize classname case
-            $object   = new $itemtype();
-            $itemtype = get_class($object);
-
-            // Tag have no tag associated
-            if ($itemtype != 'PluginTagTag') {
-               $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = 'plugin_pre_item_update_tag';
-               $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = 'plugin_pre_item_purge_tag';
-            }
+      // hook on object changes
+      if ($itemtype = PluginTagTag::getCurrentItemtype()) {
+         if (PluginTagTag::canItemtype($itemtype)) {
+            $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
          }
       }
    }
@@ -119,7 +102,7 @@ function plugin_version_tag() {
             'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
             'homepage'       => 'https://github.com/pluginsGLPI/tag',
             'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
-            'minGlpiVersion' => "0.90");
+            'minGlpiVersion' => "9.1.2");
 }
 
 /**
@@ -129,11 +112,11 @@ function plugin_version_tag() {
  * @return boolean
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '0.90', 'lt')) {
+   if (version_compare(GLPI_VERSION, '9.1.2', 'lt')) {
       if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '0.90');
+         echo Plugin::messageIncompatible('core', '9.1.2');
       } else {
-         echo __('This plugin requires GLPI >= 0.90');
+         echo __('This plugin requires GLPI >= 9.1.2');
       }
    } else {
       return true;

@@ -34,8 +34,8 @@ class PluginTagTag extends CommonDropdown {
     * @return bool
     */
    public static function canItemtype($itemtype = '') {
-      return !in_array(strtolower($itemtype),
-                       array_map('strtolower', self::getBlacklistItemtype()));
+      return (!class_exists($itemtype)
+              || !in_array($itemtype, self::getBlacklistItemtype()));
    }
 
    public function showForm($ID, $options = array()) {
@@ -291,16 +291,6 @@ class PluginTagTag extends CommonDropdown {
       return $res;
    }
 
-   static function showMassiveActionsSubForm(MassiveAction $ma) {
-
-      switch ($ma->getAction()) {
-         case 'chooseTag':
-            self::showTagDropdown(['itemtype' => 'Computer']);
-            return true;
-      }
-      return parent::showMassiveActionsSubForm($ma);
-   }
-
    function getSearchOptions() {
       $tab                       = array();
 
@@ -498,10 +488,6 @@ class PluginTagTag extends CommonDropdown {
       if (self::canCreate()) {
          self::showMoreButton($rand);
       }
-
-      // show hidden fields
-      echo Html::hidden('plugin_tag_tag_id',       ['value' => $params['id']]);
-      echo Html::hidden('plugin_tag_tag_itemtype', ['value' => $params['itemtype']]);
    }
 
    function prepareInputForAdd($input) {
@@ -562,5 +548,38 @@ class PluginTagTag extends CommonDropdown {
          return false;
       }
       return true;
+   }
+
+   /**
+    * Retrieve the current itemtype from the current page url
+    *
+    * @return mixed(string/boolean) false if not itemtype found, the string itemtype if found
+    */
+   public static function getCurrentItemtype() {
+      $itemtype = '';
+      if (preg_match('/\/plugins\/([a-zA-Z]+)\/front\/([a-zA-Z]+).form.php/',
+                     $_SERVER['PHP_SELF'], $matches)) {
+         $itemtype = 'plugin'.$matches[1].$matches[2];
+
+      } else if (preg_match('/([a-zA-Z]+).form.php/', $_SERVER['PHP_SELF'], $matches)) {
+         $itemtype = $matches[1];
+
+      } else if (preg_match('/\/plugins\/([a-zA-Z]+)\/front\/([a-zA-Z]+).php/',
+                            $_SERVER['PHP_SELF'], $matches)) {
+         $itemtype = 'plugin'.$matches[1].$matches[2];
+
+      } else if (preg_match('/([a-zA-Z]+).php/', $_SERVER['PHP_SELF'], $matches)) {
+         $itemtype = $matches[1];
+      }
+
+      if (!empty($itemtype)
+          && class_exists($itemtype)
+          && is_subclass_of($itemtype, "CommonDBTM")) {
+         // instanciate itemtype (to retrieve camelcase)
+         $item = new $itemtype;
+         return $item->getType();
+      }
+
+      return false;
    }
 }
