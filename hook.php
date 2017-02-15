@@ -95,42 +95,34 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
          }
          $out .= '</ul></div>';
          return $out;
-         break;
-      case 6: //Type de tag
-         if ($type == 'PluginTagTag') { //for future
-            $key = $data[$num][0]['name'];
-            if (! is_array(json_decode($key))) { //for when $key value is "0"
-               return __("None");
-            }
-
-            $itemtype_names = [];
-            foreach (json_decode($key) as $itemtype) {
-               $item = getItemForItemtype($itemtype);
-               $itemtype_names[] = $item->getTypeName();
-            }
-            $out = implode(", ", $itemtype_names);
-            return $out;
-         }
    }
 
    return "";
 }
 
-function plugin_tag_addHaving($link, $nott, $type, $id, $val, $num) {
+function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {
+   $searchopt = &Search::getOptions($itemtype);
+   $table     = $searchopt[$ID]["table"];
+   $field     = $searchopt[$ID]["field"];
 
-   $values = explode(",", $val);
-   $where  = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
-   array_shift($values);
-   foreach ($values as $value) {
-      $value = trim($value);
-      $where .= " OR `ITEM_$num` LIKE '%$value%'";
+   if ($table.".".$field == "glpi_plugin_tag_tags.type_menu") {
+      $values = explode(",", $val);
+      $where  = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
+      array_shift($values);
+      foreach ($values as $value) {
+         $value = trim($value);
+         $where .= " OR `ITEM_$num` LIKE '%$value%'";
+      }
+      return $where;
    }
-   return $where;
 }
 
 function plugin_tag_addWhere($link, $nott, $itemtype, $ID, $val, $searchtype) {
-   // "Types d'élément associé"
-   if ($itemtype == 'PluginTagTag' && $ID == 6) {
+   $searchopt = &Search::getOptions($itemtype);
+   $table     = $searchopt[$ID]["table"];
+   $field     = $searchopt[$ID]["field"];
+
+   if ($table.".".$field == "glpi_plugin_tag_tags.type_menu") {
       switch ($searchtype) {
          case 'equals':
             return "`glpi_plugin_tag_tags`.`type_menu` LIKE '%\"$val\"%'";

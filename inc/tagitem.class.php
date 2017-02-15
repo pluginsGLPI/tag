@@ -53,83 +53,22 @@ class PluginTagTagItem extends CommonDBRelation {
          or die($DB->error());
    }
 
-   static function getTag_items($id_glpi_obj, $itemtype) {
-      $id_list = [];
-
-      $tagitems = new self();
-      foreach ($tagitems->find("itemtype = '$itemtype' AND items_id = $id_glpi_obj") as $tagitem) {
-         $id_list[] = $tagitem["plugin_tag_tags_id"];
-      }
-
-      return $id_list;
-   }
-
-   static function getMenuNameByItemtype($itemtype) {
-      //Note : can be name getItemtypesByMenu
-      $menu = Html::getMenuInfos();
-
-      if (isset($menu['helpdesk']['types']['Planning'])) {
-         unset($menu['helpdesk']['types']['Planning']);
-      }
-      if (isset($menu['helpdesk']['types']['Stat'])) {
-         unset($menu['helpdesk']['types']['Stat']);
-      }
-
-      $itemtypes['assets'] = $menu['assets']['types'];
-      $itemtypes['helpdesk'] = $menu['helpdesk']['types'];
-      $itemtypes['helpdesk'][] = 'TicketTemplate';
-
-      $itemtypes['management'] = $menu['management']['types'];
-      $itemtypes['tools'] = ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'];
-      $itemtypes['admin'] = ['User', 'Group', 'Entity', 'Profile']; //Manque les différentes Rules...
-
-      //Manque tout les intitulés, les composants, Notification -> Modèle de notifications, Notification -> Traduction de modèle (mais pas front/notification)
-      $itemtypes['config'] = ['SLA', 'SlaLevel', 'FieldUnicity', 'Link']; //Manque les différents intutulés, les Device*,
-
-      foreach ($itemtypes as $key => $value) {
-         if (in_array($itemtype, $value)) {
-            return $key;
-         }
-      }
-      return '';
-   }
-
    static function getItemtypes($menu_key) {
-      switch ($menu_key) {
-         case 'assets':
-            $itemtypes = ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
-                          'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone'];
-            break;
+      $itemtypes_list = [
+         'assets'     => ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
+                          'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone'],
+         'helpdesk'   => ['Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate'],
+         'management' => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document'],
+         'tools'      => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'],
+         'admin'      => ['User', 'Group', 'Entity', 'Profile'],
+         'config'     => ['SLA', 'SlaLevel', 'Link'],
+      ];
 
-         case 'helpdesk':
-            $itemtypes = ['Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate']; //incomplet
-            break;
-
-         case 'management':
-            $itemtypes = ['Budget', 'Supplier', 'Contact', 'Contract', 'Document'];
-
-            break;
-         case 'tools':
-            $itemtypes = ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'];
-            break;
-
-         case 'admin':
-            $itemtypes = ['User', 'Group', 'Entity', 'Profile'];
-            break;
-
-         case 'config':
-            $itemtypes = ['SLA', 'SlaLevel', 'Link']; //Inutile de mettre ici FieldUnicity
-            break;
-
-         default:
-            $itemtypes = ['Computer', 'Monitor', 'Software', 'Peripheral', 'Printer',
-                          'SLA', 'SlaLevel', 'Link','CartridgeItem', 'ConsumableItem',
-                          'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent',
-                          'TicketTemplate', 'Budget', 'Supplier', 'Contact', 'Contract',
-                          'Document', 'Project', 'Reminder', 'RSSFeed', 'User','Group',
-                          'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment',
-                          'KnowbaseItem'];
-            break;
+      if (isset($itemtypes_list[$menu_key])) {
+         $itemtypes = $itemtypes_list[$menu_key];
+      } else {
+         // flatten $itemtypes_list
+         $itemtypes = call_user_func_array('array_merge', $itemtypes_list);
       }
 
       foreach ($itemtypes as $key => $itemtype) {
@@ -139,12 +78,14 @@ class PluginTagTagItem extends CommonDBRelation {
          }
       }
 
+      sort($itemtypes);
+
       return $itemtypes;
    }
 
    /**
+    * Display the list of available itemtype
     *
-    * Note : can separe code of view list
     * @param PluginTagTag $tag
     * @return boolean
     */
