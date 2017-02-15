@@ -103,17 +103,17 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
 
 
 function idealTextColor($hexTripletColor) {
-   $nThreshold = 105;
+   $nThreshold      = 105;
    $hexTripletColor = str_replace('#', '', $hexTripletColor);
-   $components = [
-      'R' => intval(substr($hexTripletColor, 0, 2)),
-      'G' => intval(substr($hexTripletColor, 2, 4)),
-      'B' => intval(substr($hexTripletColor, 4, 6)),
+   $components      = [
+      'R' => hexdec(substr($hexTripletColor, 0, 2)),
+      'G' => hexdec(substr($hexTripletColor, 2, 2)),
+      'B' => hexdec(substr($hexTripletColor, 4, 2)),
    ];
    $bgDelta = ($components['R'] * 0.299)
             + ($components['G'] * 0.587)
             + ($components['B'] * 0.114);
-   return ((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff";
+   return (((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff");
 }
 
 function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {

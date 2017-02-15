@@ -16,9 +16,20 @@ function pluginTagAddSubType(toupdate, toobserve, url) {
     });
 }
 
+function rgb2hex(rgb){
+   rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+   return (rgb && rgb.length === 4) ? "#" +
+      ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+      ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+      ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+}
+
 function idealTextColor(hexTripletColor) {
    var nThreshold = 105;
-   hexTripletColor.replace(/^#/,'')
+   if (hexTripletColor.indexOf('rgb') != -1) {
+      hexTripletColor = rgb2hex(hexTripletColor);
+   }
+   hexTripletColor = hexTripletColor.replace('#','');
    var components = {
       R: parseInt(hexTripletColor.substring(0, 2), 16),
       G: parseInt(hexTripletColor.substring(2, 4), 16),
