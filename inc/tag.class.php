@@ -140,6 +140,7 @@ class PluginTagTag extends CommonDropdown {
             `name`         varchar(255) NOT NULL DEFAULT '',
             `comment`      text collate utf8_unicode_ci,
             `color`        varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+            `type_menu`    text collate utf8_unicode_ci,
             PRIMARY KEY (`id`),
             KEY `name` (`name`)
          ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
@@ -147,7 +148,7 @@ class PluginTagTag extends CommonDropdown {
       }
 
       if (!FieldExists($table, 'type_menu')) {
-         $migration->addField($table, 'type_menu', "varchar(50) NOT NULL DEFAULT ''");
+         $migration->addField($table, 'type_menu', "text");
          $migration->migrationOneTable($table);
       }
 
