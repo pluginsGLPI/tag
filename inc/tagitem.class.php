@@ -363,6 +363,8 @@ class PluginTagTagItem extends CommonDBRelation {
       ];
       $options = array_merge($default_options, $options);
 
+      $tag_item   = new self();
+
       if ($options['delete_old']) {
          // purge old tags
          self::purgeItem($item);
@@ -370,7 +372,6 @@ class PluginTagTagItem extends CommonDBRelation {
 
       } else {
          // remove possible duplicates (to avoid sql errors on unique index)
-         $tag_item   = new self();
          $found      = $tag_item->find("`items_id` = ".$item->getID()."
                                         AND `itemtype` = ".$item->getType());
          $tag_values = array_diff($item->input["_plugin_tag_tag_values"], array_keys($found));
