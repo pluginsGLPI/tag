@@ -1,5 +1,6 @@
 .tag_select {
    font-size: 11px;
+   width: 80%;
 }
 
 .tag_select.select2-container .select2-search-choice {

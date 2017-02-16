@@ -40,12 +40,11 @@ function idealTextColor(hexTripletColor) {
 }
 
 function formatOption(option) {
-   var color = option.element[0].getAttribute("data-color-option");
    var template = "<span class='tag_choice' style='";
-   if (color !== "") {
-      var invertedcolor = idealTextColor(color);
-
-      template+= " background-color: " + color + "; ";
+   if (typeof option.color != 'undefined'
+       && option.color !== "") {
+      var invertedcolor = idealTextColor(option.color);
+      template+= " background-color: " + option.color + "; ";
       template+= " color: " + invertedcolor + "; ";
    } else {
       template+= " border: 1px solid #BBB; ";

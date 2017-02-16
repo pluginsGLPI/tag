@@ -363,21 +363,34 @@ class PluginTagTagItem extends CommonDBRelation {
       ];
       $options = array_merge($default_options, $options);
 
-      $tag_item   = new self();
+      // instanciate needed objects
+      $tag      = new PluginTagTag();
+      $tag_item = new self();
 
+      // untokenize values and create new ones
+      $tag_values = explode(',', $item->input["_plugin_tag_tag_values"]);
+      foreach ($tag_values as &$tag_value) {
+         if (strpos($tag_value, "newtag_") !== false) {
+            $tag_value = str_replace("newtag_", "", $tag_value);
+            $tag_value = $tag->add([
+               'name' => $tag_value,
+            ]);
+         }
+      }
+
+      // process actions
       if ($options['delete_old']) {
          // purge old tags
          self::purgeItem($item);
-         $tag_values = $item->input["_plugin_tag_tag_values"];
 
       } else {
          // remove possible duplicates (to avoid sql errors on unique index)
          $found      = $tag_item->find("`items_id` = ".$item->getID()."
                                         AND `itemtype` = ".$item->getType());
-         $tag_values = array_diff($item->input["_plugin_tag_tag_values"], array_keys($found));
+         $tag_values = array_diff($tag_values, array_keys($found));
       }
 
-      // add tags
+      // link tags with the current item
       foreach ($tag_values as $tag_id) {
          $tag_item->add([
             'plugin_tag_tags_id' => $tag_id,
@@ -423,7 +436,7 @@ class PluginTagTagItem extends CommonDBRelation {
                                                        array $ids) {
       $input = $ma->getInput();
       switch ($ma->getAction()) {
-         case "chooseTag":
+         case "addTag":
             foreach ($ma->items as $itemtype => $items) {
                $object = new $itemtype;
                foreach ($items as $items_id) {
@@ -446,7 +459,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   if ($tagitem->deleteByCriteria([
                      'items_id'           => $items_id,
                      'itemtype'           => $itemtype,
-                     'plugin_tag_tags_id' => array_values($input['_plugin_tag_tag_values']),
+                     'plugin_tag_tags_id' => explode(',', $input['_plugin_tag_tag_values']),
                   ])) {
                      $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
                   } else {

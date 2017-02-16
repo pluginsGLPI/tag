@@ -363,16 +363,6 @@ class PluginTagTag extends CommonDropdown {
       return $itemtype;
    }
 
-   static function showMoreButton($rand) {
-      global $CFG_GLPI;
-
-      echo "&nbsp;<img title=\"".__s('Add')."\" alt=\"".__s('Add')."\" src='".$CFG_GLPI["root_doc"].
-           "/pics/add_dropdown.png' style='cursor:pointer;margin-left:2px;'
-           onClick=\"var w = window.open('".
-            $CFG_GLPI['root_doc']."/plugins/tag/front/tag.form.php?popup=1&amp;rand=".$rand."', ".
-            "'glpipopup', 'height=400, width=1000, top=100, left=100, scrollbars=yes' );w.focus();\">";
-   }
-
    /**
     * Display the current tag dropdown in form header of items
     *
@@ -425,60 +415,66 @@ class PluginTagTag extends CommonDropdown {
          return;
       }
 
-      // retrieve single object
+      // instanciate needed objects
+      $tag      = new self();
+      $tag_item = new PluginTagTagItem();
+
+      // retrieve current item
       if (isset($params['id'])) {
          $obj->getFromDB($params['id']);
       }
 
-      // create the select html tag
-      $rand     = mt_rand();
-      $sel_attr = $obj->canUpdateItem() ? '' : ' disabled ';
-      echo "<select data-placeholder='".__('Choose tags...', 'tag')."'
-                    name='_plugin_tag_tag_values[]'
-                    id='tag_select_$rand' multiple
-                    class='tag_select chosen-select-no-results'
-                    $sel_attr
-                    style='width:80%;' >";
-
-      // found already used tag
-      $selected_id = [];
-      $tag_item = new PluginTagTagItem();
+      // find values for this items
+      $values = [];
       foreach ($tag_item->find('items_id='.$params['id'].'
                                 AND itemtype="'.$itemtype.'"') as $found_item) {
-         $selected_id[] = $found_item['plugin_tag_tags_id'];
+         $values[] = $found_item['plugin_tag_tags_id'];
       }
 
-      // Restrict tag finding by entity
+      // Restrict tags finding by entity
       $where = "";
       if ($obj->isEntityAssign()) {
          $where = getEntitiesRestrictRequest("AND", '', '', '', true);
       }
 
-      // create the select options
-      $tag   = new self();
-      $ftags = $tag->find($where, 'name');
-      foreach ($ftags as $current_tag) {
-         if (empty($current_tag['type_menu'])
-             || in_array($itemtype, json_decode($current_tag['type_menu'], true))) {
-            echo "<option value='{$current_tag['id']}'
-                          ".(in_array($current_tag['id'], $selected_id) ? ' selected ' : '')."
-                          data-color-option='{$current_tag['color']}'>".
-            $current_tag['name'].'</option>';
-         }
-      }
-      echo "</select>";
+      // found existing tags
+      $select2_tags = array_values(array_map(function($value) {
+         return [
+            'id'    => $value['id'],
+            'text'  => $value['name'],
+            'color' => $value['color'],
+         ];
+      }, $tag->find($where, 'name')));
 
-      // call select2 lib for this select html tag
+      // create an input receiving the tag tokens
+      $rand = mt_rand();
+      echo Html::input('_plugin_tag_tag_values', [
+         'id'       => "tag_select_$rand",
+         'value'    => implode(',', $values),
+         'class'    => 'tag_select',
+         'multiple' => 'multiple',
+      ]);
+
+      // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
-             'formatResult': formatOption,
-             'formatSelection': formatOption
+            'formatResult': formatOption,
+            'formatSelection': formatOption,
+            'formatSearching': '".__("Loading...")."',
+            'tags': ".json_encode($select2_tags).",
+            'tokenSeparators': [',', ';'],
+            'readonly': ".($obj->canUpdateItem() ? 'false': 'true').",
+            'createSearchChoice': function (term) {
+               // prefix value by 'newtag_' to differenciate created tag from existing ones
+               return { id: 'newtag_'+term, text: term };
+            }
          });
       });");
 
-      // Show '+' button :
+      // Show tooltip
       if (self::canCreate()) {
-         self::showMoreButton($rand);
+         echo Html::showToolTip(__("View all tags", 'tag'),
+                                ['link' => self::getFormURL()]);
       }
    }
 
