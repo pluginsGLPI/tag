@@ -53,36 +53,6 @@ class PluginTagTagItem extends CommonDBRelation {
          or die($DB->error());
    }
 
-   static function getItemtypes($menu_key) {
-      $itemtypes_list = [
-         'assets'     => ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
-                          'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone'],
-         'helpdesk'   => ['Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate'],
-         'management' => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document'],
-         'tools'      => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'],
-         'admin'      => ['User', 'Group', 'Entity', 'Profile'],
-         'config'     => ['SLA', 'SlaLevel', 'Link'],
-      ];
-
-      if (isset($itemtypes_list[$menu_key])) {
-         $itemtypes = $itemtypes_list[$menu_key];
-      } else {
-         // flatten $itemtypes_list
-         $itemtypes = call_user_func_array('array_merge', $itemtypes_list);
-      }
-
-      foreach ($itemtypes as $key => $itemtype) {
-         $obj = new $itemtype();
-         if (! $obj->canUpdate()) {
-            unset($itemtypes[$key]);
-         }
-      }
-
-      sort($itemtypes);
-
-      return $itemtypes;
-   }
-
    /**
     * Display the list of available itemtype
     *

@@ -53,6 +53,19 @@ function plugin_init_tag() {
    $plugin = new Plugin();
    if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
 
+      // define list of itemtype which can be associated with tags
+      $CFG_GLPI['plugin_tag_itemtypes'] = [
+         __('Assets')         => ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
+                                  'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem',
+                                  'Phone'],
+         __('Assistance')     => ['Ticket', 'Problem', 'Change', 'TicketRecurrent',
+                                  'TicketTemplate'],
+         __('Management')     => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document'],
+         __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'],
+         __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
+         __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
+      ];
+
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 

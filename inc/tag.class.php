@@ -69,56 +69,32 @@ class PluginTagTag extends CommonDropdown {
       echo "</tr>";
 
       echo "<tr class='line0 tab_bg_2'>";
-      echo "<td colspan='2'>";
-      echo "<table class='tab_cadre_fixe'>";
-      echo "<tr class='line1 tab_bg_2'>";
-      echo "<th>"._n('Associated item type', 'Associated item types', 2)."</th>";
-      echo "</tr>";
-
-      echo "<tr class='line1 tab_bg_2'>";
-      echo "<td class='center'>";
-      echo _n('Tag type', 'Tag types', 1, 'tag')." ";
-      $values = [0 => Dropdown::EMPTY_VALUE];
-      $menus  = Html::getMenuInfos();
-      foreach ($menus as $key => $value) {
-         if ($key != 'plugins' && $key != 'preference') {
-            $values[$key] = $menus[$key]['title'];
-         }
-      }
-      $rand = Dropdown::showFromArray("type_menu", $values, ['value'     => $this->fields['type_menu'],
-                                                             'width'     => '50%',
-                                                             'on_change' => 'pluginTagSubType();']);
-
-      echo "<div id='plugin_tag_itemtype'></div><br>";
-      $JS = 'function pluginTagSubType(){';
-      $JS .= Ajax::updateItemJsCode('plugin_tag_itemtype',
-                                    $CFG_GLPI['root_doc']."/plugins/tag/ajax/tag.php",
-                                    ['action'    => 'add_subtypes',
-                                     'type_menu' => '__VALUE__',
-                                     'rand'      => $rand],
-                                    "dropdown_type_menu$rand", false);
-      $JS .= '}';
-      $JS .= 'pluginTagSubType();';
-      echo Html::scriptBlock($JS);
-
-      // Sub type choice
-      $itemtypes = [];
-      $selected  = [];
-      if (!empty($this->fields['type_menu'])) {
-         foreach (json_decode($this->fields['type_menu'], true) as $itemtype) {
-            $item                 = getItemForItemtype($itemtype);
-            $itemtypes[$itemtype] = $item->getTypeName();
-            $selected[]           = $itemtype;
-         }
-      }
-      Dropdown::showFromArray("subtypes", $itemtypes,
-                              ['values'   => $selected,
-                               'multiple' => true,
-                               'rand'     => $rand,
-                               'width'    => '100%']);
+      echo "<td><label>"
+           ._n('Associated item type', 'Associated item types', 2)."</label></td>";
       echo "</td>";
-      echo "</tr>";
-      echo "</table>";
+      echo "<td>";
+      // show an hidden input to permist deletion of all values
+      echo Html::hidden("type_menu");
+
+      // retrieve tags elements and existing values
+      $type_menu_elements = [];
+      foreach ($CFG_GLPI['plugin_tag_itemtypes'] as $group_label => $group_values) {
+         foreach ($group_values as $itemtype) {
+            $type_menu_elements[$group_label][$itemtype] = $itemtype::getTypeName();
+         }
+      }
+      $type_menu_values = json_decode($this->fields['type_menu']);
+      if ($type_menu_values === false
+          || $type_menu_values === NULL) {
+         $type_menu_values = [];
+      }
+
+      // show the multiple dropdown
+      Dropdown::showFromArray("type_menu",
+                              $type_menu_elements,
+                              ['values'   => $type_menu_values,
+                               'multiple' => 'multiples']);
+
       echo "</td>";
       echo "</tr>";
 
@@ -431,10 +407,12 @@ class PluginTagTag extends CommonDropdown {
          $values[] = $found_item['plugin_tag_tags_id'];
       }
 
-      // Restrict tags finding by entity
-      $where = "";
+      // Restrict tags finding by itemtype and entity
+      $where = "(`type_menu` IS NULL
+                 OR `type_menu` = ''
+                 OR `type_menu` LIKE '%$itemtype%')";
       if ($obj->isEntityAssign()) {
-         $where = getEntitiesRestrictRequest("AND", '', '', '', true);
+         $where.= getEntitiesRestrictRequest(" AND", '', '', '', true);
       }
 
       // found existing tags
@@ -500,8 +478,8 @@ class PluginTagTag extends CommonDropdown {
    * @param type $input
    */
    function encodeSubtypes($input) {
-      if (!empty($input['subtypes'])) {
-         $input['type_menu'] = json_encode($input['subtypes']);
+      if (!empty($input['type_menu'])) {
+         $input['type_menu'] = json_encode(array_values($input['type_menu']));
       }
 
       return $input;
