@@ -338,7 +338,10 @@ class PluginTagTagItem extends CommonDBRelation {
       $tag_item = new self();
 
       // untokenize values and create new ones
-      $tag_values = explode(',', $item->input["_plugin_tag_tag_values"]);
+      $tag_values = [];
+      if (!empty($item->input["_plugin_tag_tag_values"])) {
+         $tag_values = explode(',', $item->input["_plugin_tag_tag_values"]);
+      }
       foreach ($tag_values as &$tag_value) {
          if (strpos($tag_value, "newtag_") !== false) {
             $tag_value = str_replace("newtag_", "", $tag_value);
