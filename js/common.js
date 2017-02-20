@@ -29,7 +29,7 @@ function formatOption(option) {
       template+= " background-color: " + option.color + "; ";
       template+= " color: " + invertedcolor + "; ";
    } else {
-      template+= " border: 1px solid #BBB; ";
+      template+= " background-color: #DDDDDD; ";
    }
    template+= "'>" + option.text + "</span>";
 

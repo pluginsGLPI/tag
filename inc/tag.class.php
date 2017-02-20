@@ -442,6 +442,7 @@ class PluginTagTag extends CommonDropdown {
             'formatResult': formatOption,
             'formatSelection': formatOption,
             'formatSearching': '".__("Loading...")."',
+            'dropdownCssClass': 'tag_select_results',
             'tags': ".json_encode($select2_tags).",
             'tokenSeparators': [',', ';'],
             'readonly': ".($obj->canUpdateItem() ? 'false': 'true').",
