@@ -118,8 +118,8 @@ function idealTextColor($hexTripletColor) {
 
 function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {
    $searchopt = &Search::getOptions($itemtype);
-   $table     = $searchopt[$ID]["table"];
-   $field     = $searchopt[$ID]["field"];
+   $table     = $searchopt[$id]["table"];
+   $field     = $searchopt[$id]["field"];
 
    if ($table.".".$field == "glpi_plugin_tag_tags.type_menu") {
       $values = explode(",", $val);
@@ -133,10 +133,10 @@ function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {
    }
 }
 
-function plugin_tag_addWhere($link, $nott, $itemtype, $ID, $val, $searchtype) {
+function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype) {
    $searchopt = &Search::getOptions($itemtype);
-   $table     = $searchopt[$ID]["table"];
-   $field     = $searchopt[$ID]["field"];
+   $table     = $searchopt[$id]["table"];
+   $field     = $searchopt[$id]["field"];
 
    if ($table.".".$field == "glpi_plugin_tag_tags.type_menu") {
       switch ($searchtype) {
