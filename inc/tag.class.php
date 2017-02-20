@@ -452,8 +452,9 @@ class PluginTagTag extends CommonDropdown {
 
       // Show tooltip
       if (self::canCreate()) {
+         echo "&nbsp;";
          echo Html::showToolTip(__("View all tags", 'tag'),
-                                ['link' => self::getFormURL()]);
+                                ['link' => self::getSearchURL()]);
       }
    }
 
