@@ -349,7 +349,13 @@ class PluginTagTag extends CommonDropdown {
    static function preItemForm($params = array()) {
       if (isset($params['item'])
           && $params['item'] instanceof CommonDBTM) {
-         $itemtype = get_class($params['item']);
+         $item     = $params['item'];
+         $itemtype = get_class($item);
+
+         if (!isset($_SESSION['glpi_tabs'][strtolower($item::getType())])
+             || strpos($_SESSION['glpi_tabs'][strtolower($item::getType())], '$main') === false) {
+            return;
+         };
 
          if (self::canItemtype($itemtype)) {
             $html_tag = ($itemtype == 'Ticket') ? "th" : 'td';
@@ -359,7 +365,7 @@ class PluginTagTag extends CommonDropdown {
             echo "<td colspan='3'>";
             self::showTagDropdown([
                'itemtype' => $itemtype,
-               'id'       => $params['item']->getId(),
+               'id'       => $item->getId(),
             ]);
             echo "</td>";
             echo "</tr>";
