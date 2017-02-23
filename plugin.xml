@@ -23,9 +23,12 @@
    <readme>https://github.com/pluginsGLPI/tag/blob/master/README.md</readme>
    <authors>
       <author>TECLIB'</author>
-      <author>Emmanuel HAGUET</author>
    </authors>
    <versions>
+      <version>
+         <num>2.0.0</num>
+         <compatibility>9.1.2</compatibility>
+      </version>
       <version>
          <num>0.90-1.3</num>
          <compatibility>0.90</compatibility>

@@ -84,8 +84,7 @@ class PluginTagTag extends CommonDropdown {
          }
       }
       $type_menu_values = json_decode($this->fields['type_menu']);
-      if ($type_menu_values === false
-          || $type_menu_values === NULL) {
+      if (!is_array($type_menu_values)) {
          $type_menu_values = [];
       }
 
@@ -310,8 +309,8 @@ class PluginTagTag extends CommonDropdown {
       switch ($field) {
          case 'type_menu':
             $itemtypes = json_decode($values[$field]);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-               return __("None");
+            if (!is_array($itemtypes)) {
+               return "&nbsp;";
             }
             $itemtype_names = [];
             foreach ($itemtypes as $itemtype) {

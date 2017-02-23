@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '0.90-1.3');
+define ('PLUGIN_TAG_VERSION', '2.0.0');
 
 /**
  * Check configuration process
