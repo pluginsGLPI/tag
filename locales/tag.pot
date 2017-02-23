@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-05 14:58+0100\n"
+"POT-Creation-Date: 2017-02-23 10:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,30 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:71 ajax/tag.php:15 inc/tag.class.php:17 inc/tagitem.class.php:16
-msgid "Tag"
-msgid_plural "Tag"
-msgstr[0] ""
-msgstr[1] ""
-
-#: setup.php:83
+#: setup.php:113
 msgid "Tag Management"
 msgstr ""
 
-#: ajax/tag.php:32
-msgid "Add type"
-msgstr ""
-
-#: inc/tag.class.php:39
-msgid "HTML color"
-msgstr ""
-
-#: inc/tag.class.php:55 inc/tag.class.php:295
-msgid "Tag type"
-msgid_plural "Tag types"
+#: inc/tag.class.php:10 inc/tag.class.php:364
+msgid "Tag"
+msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tag.class.php:369
-msgid "Choose tags..."
+#: inc/tag.class.php:65 inc/tag.class.php:280
+msgid "HTML color"
+msgstr ""
+
+#: inc/tag.class.php:465
+msgid "View all tags"
+msgstr ""
+
+#: hook.php:174
+msgid "Add tags"
+msgstr ""
+
+#: hook.php:176
+msgid "Remove tags"
 msgstr ""
