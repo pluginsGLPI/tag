@@ -1,13 +1,11 @@
 <?php
 
 class PluginTagTagInjection extends PluginTagTag
-                                                implements PluginDatainjectionInjectionInterface {
+      implements PluginDatainjectionInjectionInterface {
 
    static function getTable() {
-
       $parenttype = get_parent_class();
       return $parenttype::getTable();
-
    }
 
    static function getTypeName($nb=0) {
@@ -15,12 +13,12 @@ class PluginTagTagInjection extends PluginTagTag
    }
 
    function isPrimaryType() {
-      return true; //false;
+      return true;
    }
 
    function connectedTo() {
       //Note : Interesting to have GLPI core object (who can have a tag) here
-       return array();
+      return [];
    }
 
    /**
@@ -28,13 +26,11 @@ class PluginTagTagInjection extends PluginTagTag
    **/
    function getOptions($primary_type='') {
 
-      $tab           = Search::getOptions(get_parent_class($this));
+      $tab = Search::getOptions(get_parent_class($this));
 
       //Remove some options because some fields cannot be imported
-      $notimportable = array(3, 4, 6); //id, entity, type_menu
-
-      $options['ignore_fields'] = $notimportable;
-      $options['displaytype']   = array("dropdown" => array(12));
+      $options['ignore_fields'] = [3, 4, 6]; //id, entity, type_menu;
+      $options['displaytype']   = ["dropdown" => [12]];
 
       return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
    }
@@ -51,24 +47,10 @@ class PluginTagTagInjection extends PluginTagTag
       // Update field for add a default value
       if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
           $item = new parent();
-          $item->update(array('id' => $results[get_parent_class()],
-                                    'type_menu' => '0')); //default value
+          $item->update(['id'        => $results[get_parent_class()],
+                         'type_menu' => '0']); //default value
       }
 
       return $results;
    }
-
-   /**
-    * @param $primary_type
-    * @param $values
-   **/
-   /*
-   function addSpecificNeededFields($primary_type, $values) {
-
-      $fields['items_id'] = $values[$primary_type]['id'];
-      $fields['itemtype'] = $primary_type;
-      return $fields;
-   }
-   */
-
 }

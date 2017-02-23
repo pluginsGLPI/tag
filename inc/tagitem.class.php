@@ -35,143 +35,27 @@ class PluginTagTagItem extends CommonDBRelation {
          $DB->query($query) or die($DB->error());
       }
 
-      if (isIndex($table, "name")) {
-         $query = "ALTER TABLE `$table`
-                   DROP INDEX `name`";
-         $DB->query($query) or die($DB->error());
-      }
-
-      if (!isIndex($table, "unicity")) {
-         $query = "ALTER TABLE `$table`
-                   ADD UNIQUE INDEX `unicity` (`items_id`, `itemtype`, `plugin_tag_tags_id`)";
-         $DB->query($query) or die($DB->error());
-      }
+      // fix indexes
+      $migration->dropKey($table, 'name');
+      $migration->addKey($table,
+                         ['items_id', 'itemtype', 'plugin_tag_tags_id'],
+                         'unicity',
+                         'UNIQUE INDEX');
+      $migration->migrationOneTable($table);
 
       return true;
    }
 
    public static function uninstall() {
-      $query = "DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`";
-      return $GLOBALS['DB']->query($query) or die($GLOBALS['DB']->error());
-   }
+      global $DB;
 
-   static function getTag_items($id_glpi_obj, $itemtype) {
-      $IDs = array(); //init
-
-      $tagitems = new self();
-      foreach ($tagitems->find("itemtype = '$itemtype' AND items_id = $id_glpi_obj") as $tagitem) {
-         $IDs[] = $tagitem["plugin_tag_tags_id"];
-      }
-
-      return $IDs;
+      return $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`")
+         or die($DB->error());
    }
 
    /**
-    * @see CommonDBTM::doSpecificMassiveActions()
-    **/
-   function doSpecificMassiveActions($input=array()) {
-      $res = array('ok'      => 0,
-                  'ko'      => 0,
-                  'noright' => 0);
-      switch ($input['action']) {
-         default :
-            return parent::doSpecificMassiveActions($input);
-      }
-      return $res;
-   }
-
-   function getAllMassiveActions($is_deleted=0, $checkitem=NULL) {
-      if ($this->maybeDeleted()
-            && !$this->useDeletedToLockIfDynamic()) {
-               $actions['delete'] = _x('button', 'Put in dustbin');
-      } else {
-         $actions['purge'] = _x('button', 'Delete permanently');
-      }
-
-      return $actions;
-   }
-
-   function getSpecificMassiveActions($checkitem=NULL) {
-      return array();
-   }
-
-   static function getMenuNameByItemtype($itemtype) {
-      //Note : can be name getItemtypesByMenu
-      $menu = Html::getMenuInfos();
-
-      if (isset($menu['helpdesk']['types']['Planning'])) {
-         unset($menu['helpdesk']['types']['Planning']);
-      }
-      if (isset($menu['helpdesk']['types']['Stat'])) {
-         unset($menu['helpdesk']['types']['Stat']);
-      }
-
-      $itemtypes['assets'] = $menu['assets']['types'];
-      $itemtypes['helpdesk'] = $menu['helpdesk']['types'];
-      $itemtypes['helpdesk'][] = 'TicketTemplate';
-
-      $itemtypes['management'] = $menu['management']['types'];
-      $itemtypes['tools'] = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
-      $itemtypes['admin'] = array('User', 'Group', 'Entity', 'Profile'); //Manque les différentes Rules...
-
-      //Manque tout les intitulés, les composants, Notification -> Modèle de notifications, Notification -> Traduction de modèle (mais pas front/notification)
-      $itemtypes['config'] = array('SLA', 'SlaLevel', 'FieldUnicity', 'Link'); //Manque les différents intutulés, les Device*,
-
-      foreach ($itemtypes as $key => $value) {
-         if (in_array($itemtype, $value)) {
-            return $key;
-         }
-      }
-      return '';
-   }
-
-   static function getItemtypes($menu_key) {
-      switch ($menu_key) {
-         case 'assets':
-            $itemtypes = array('Computer', 'Monitor', 'Software', 'NetworkEquipment', 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem', 'Phone');
-            break;
-
-         case 'helpdesk':
-            $itemtypes = array('Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate'); //incomplet
-            break;
-
-         case 'management':
-            $itemtypes = array('Budget', 'Supplier', 'Contact', 'Contract', 'Document');
-
-            break;
-         case 'tools':
-            $itemtypes = array('Project', 'Reminder', 'RSSFeed', 'KnowbaseItem');
-            break;
-
-         case 'admin':
-            $itemtypes = array('User', 'Group', 'Entity', 'Profile');
-            break;
-
-         case 'config':
-            $itemtypes = array('SLA', 'SlaLevel', 'Link'); //Inutile de mettre ici FieldUnicity
-            break;
-
-         default:
-            $itemtypes = array('Computer', 'Monitor', 'Software', 'Peripheral', 'Printer', 'SLA', 'SlaLevel', 'Link',
-                  'CartridgeItem', 'ConsumableItem', 'Phone', 'Ticket', 'Problem', 'Change', 'TicketRecurrent', 'TicketTemplate',
-                  'Budget', 'Supplier', 'Contact', 'Contract', 'Document', 'Project', 'Reminder', 'RSSFeed', 'User',
-                  'Group', 'Entity', 'Profile', 'Location', 'ITILCategory', 'NetworkEquipment', 'KnowbaseItem');
-            break;
-      }
-
-      foreach ($itemtypes as $key => $itemtype) {
-         $obj = new $itemtype();
-         if (! $obj->canUpdate()) {
-            unset($itemtypes[$key]);
-         }
-      }
-
-      return $itemtypes;
-   }
-
-   /**
+    * Display the list of available itemtype
     *
-    * Note : can separe code of view list
     * @param PluginTagTag $tag
     * @return boolean
     */
@@ -184,16 +68,15 @@ class PluginTagTagItem extends CommonDBRelation {
       }
 
       $canedit = $tag->can($instID, UPDATE);
-
-      $table = getTableForItemType(__CLASS__);
+      $table  = getTableForItemType(__CLASS__);
 
       $result = $DB->query("SELECT DISTINCT `itemtype`
-         FROM `$table`
-         WHERE `plugin_tag_tags_id` = '$instID'");
+                            FROM `$table`
+                            WHERE `plugin_tag_tags_id` = '$instID'");
 
       $result2 = $DB->query("SELECT `itemtype`, items_id
-            FROM `$table`
-            WHERE `plugin_tag_tags_id` = '$instID'");
+                             FROM `$table`
+                             WHERE `plugin_tag_tags_id` = '$instID'");
 
       $number = $DB->numrows($result);
       $rand   = mt_rand();
@@ -208,12 +91,10 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
 
          echo "<tr class='tab_bg_1'><td class='right'>";
+         $itemtypes_to_show = [];
          if (is_array(json_decode($tag->fields['type_menu']))) {
             $itemtypes_to_show = json_decode($tag->fields['type_menu']);
-         } else {
-            $itemtypes_to_show = array(); //self::getItemtypes("");
          }
-
          Dropdown::showAllItems("items_id", 0, 0,
             ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
             $itemtypes_to_show, false, true
@@ -358,11 +239,11 @@ class PluginTagTagItem extends CommonDBRelation {
                         $pieces = preg_split('/(?=[A-Z])/', $itemtype);
                         $plugin_name = $pieces[2];
 
-                        $datas = array("entities_id" => $data["entity"],
-                                    "ITEM_0" => $data["name"],
-                                    "ITEM_0_2" => $data["id"],
-                                    "id" => $data["id"],
-                                    "META_0" => $data["name"]); //for PluginResourcesResource
+                        $datas = ["entities_id" => $data["entity"],
+                                  "ITEM_0"      => $data["name"],
+                                  "ITEM_0_2"    => $data["id"],
+                                  "id"          => $data["id"],
+                                  "META_0"      => $data["name"]]; //for PluginResourcesResource
 
                         if (isset($data["is_recursive"])) {
                            $datas["is_recursive"] = $data["is_recursive"];
@@ -431,6 +312,137 @@ class PluginTagTagItem extends CommonDBRelation {
       }
       echo "</div>";
 
+   }
+
+   /**
+    * Update all tags associated to an item
+    *
+    * @param  CommonDBTM $item [description]
+    *
+    * @return boolean
+    */
+   static function updateItem(CommonDBTM $item, $options = array()) {
+      if ($item->getID()
+          && !isset($item->input["_plugin_tag_tag_values"])) {
+         return true;
+      }
+
+      //merge default options with parameter one
+      $default_options = [
+         'delete_old' => true
+      ];
+      $options = array_merge($default_options, $options);
+
+      // instanciate needed objects
+      $tag      = new PluginTagTag();
+      $tag_item = new self();
+
+      // untokenize values and create new ones
+      $tag_values = [];
+      if (!empty($item->input["_plugin_tag_tag_values"])) {
+         $tag_values = explode(',', $item->input["_plugin_tag_tag_values"]);
+      }
+      foreach ($tag_values as &$tag_value) {
+         if (strpos($tag_value, "newtag_") !== false) {
+            $tag_value = str_replace("newtag_", "", $tag_value);
+            $tag_value = $tag->add([
+               'name' => $tag_value,
+            ]);
+         }
+      }
+
+      // process actions
+      if ($options['delete_old']) {
+         // purge old tags
+         self::purgeItem($item);
+
+      } else {
+         // remove possible duplicates (to avoid sql errors on unique index)
+         $found      = $tag_item->find("`items_id` = ".$item->getID()."
+                                        AND `itemtype` = ".$item->getType());
+         $tag_values = array_diff($tag_values, array_keys($found));
+      }
+
+      // link tags with the current item
+      foreach ($tag_values as $tag_id) {
+         $tag_item->add([
+            'plugin_tag_tags_id' => $tag_id,
+            'items_id' => $item->getID(),
+            'itemtype' => $item->getType()
+         ]);
+      }
+
+      return true;
+   }
+
+   /**
+    * Delete all tags associated to an item
+    *
+    * @param  CommonDBTM $item
+    * @return boolean
+    */
+   static function purgeItem(CommonDBTM $item) {
+      $tagitem = new self();
+      return $tagitem->deleteByCriteria([
+         "items_id" => $item->getID(),
+         "itemtype" => $item->getType(),
+      ]);
+   }
+
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+
+      $itemtypes = array_keys($ma->items);
+      $itemtype = array_shift($itemtypes);
+
+      switch ($ma->getAction()) {
+         case 'addTag':
+         case 'removeTag':
+            PluginTagTag::showTagDropdown(['itemtype' => $itemtype]);
+            echo Html::submit(_sx('button', 'Save'));
+            return true;
+      }
+      return parent::showMassiveActionsSubForm($ma);
+   }
+
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma,
+                                                       CommonDBTM $item,
+                                                       array $ids) {
+      $input = $ma->getInput();
+      switch ($ma->getAction()) {
+         case "addTag":
+            foreach ($ma->items as $itemtype => $items) {
+               $object = new $itemtype;
+               foreach ($items as $items_id) {
+                  $object->fields['id'] = $items_id;
+                  $object->input        = $input;
+                  if (self::updateItem($object, ['delete_old' => false])) {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                  } else {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                     $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                  }
+               }
+            }
+            break;
+         case "removeTag":
+            $tagitem = new self;
+            foreach ($ma->items as $itemtype => $items) {
+               $object = new $itemtype;
+               foreach ($items as $items_id) {
+                  if ($tagitem->deleteByCriteria([
+                     'items_id'           => $items_id,
+                     'itemtype'           => $itemtype,
+                     'plugin_tag_tags_id' => explode(',', $input['_plugin_tag_tag_values']),
+                  ])) {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                  } else {
+                     $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                     $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                  }
+               }
+            }
+            break;
+      }
    }
 
 }
