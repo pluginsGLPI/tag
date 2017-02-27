@@ -357,6 +357,12 @@ class PluginTagTag extends CommonDropdown {
          };
 
          if (self::canItemtype($itemtype)) {
+            // manage values after a redirect (ex ticket creation, after a cat change)
+            $value = '';
+            if (isset($item->input['_plugin_tag_tag_values'])) {
+               $value = $item->input['_plugin_tag_tag_values'];
+            }
+
             $html_tag = ($itemtype == 'Ticket') ? "th" : 'td';
 
             echo "<tr class='tab_bg_1'>";
@@ -365,6 +371,7 @@ class PluginTagTag extends CommonDropdown {
             self::showTagDropdown([
                'itemtype' => $itemtype,
                'id'       => $item->getId(),
+               'value'    => $value,
             ]);
             echo "</td>";
             echo "</tr>";
@@ -384,6 +391,7 @@ class PluginTagTag extends CommonDropdown {
       $default_params = [
          'id'       => 0,
          'itemtype' => '',
+         'value'    => '',
       ];
       $params = array_merge($default_params, $params);
 
@@ -412,6 +420,8 @@ class PluginTagTag extends CommonDropdown {
                                    AND itemtype="'.$itemtype.'"') as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
          }
+      } else {
+         $values = explode(',', $params['value']);
       }
 
       // Restrict tags finding by itemtype and entity
