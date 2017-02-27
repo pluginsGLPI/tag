@@ -441,6 +441,13 @@ class PluginTagTag extends CommonDropdown {
          'multiple' => 'multiple',
       ]);
 
+      $token_creation = "
+         // prefix value by 'newtag_' to differenciate created tag from existing ones
+         return { id: 'newtag_'+term, text: term };";
+      if (!self::canCreate()) {
+         $token_creation = "return false;";
+      }
+
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
@@ -452,8 +459,7 @@ class PluginTagTag extends CommonDropdown {
             'tokenSeparators': [',', ';'],
             'readonly': ".($obj->canUpdateItem() ? 'false': 'true').",
             'createSearchChoice': function (term) {
-               // prefix value by 'newtag_' to differenciate created tag from existing ones
-               return { id: 'newtag_'+term, text: term };
+               $token_creation
             }
          });
       });");
