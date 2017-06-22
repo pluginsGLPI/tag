@@ -442,7 +442,7 @@ class PluginTagTag extends CommonDropdown {
       // Restrict tags finding by itemtype and entity
       $where = "(`type_menu` IS NULL
                  OR `type_menu` = ''
-                 OR `type_menu` = 0
+                 OR `type_menu` = '0'
                  OR `type_menu` LIKE '%$itemtype%')";
       if ($obj->isEntityAssign()) {
          $where.= getEntitiesRestrictRequest(" AND", '', '', '', true);
