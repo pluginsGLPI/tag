@@ -351,10 +351,25 @@ class PluginTagTag extends CommonDropdown {
          $item     = $params['item'];
          $itemtype = get_class($item);
 
-         if (!isset($_SESSION['glpi_tabs'][strtolower($item::getType())])
-             || strpos($_SESSION['glpi_tabs'][strtolower($item::getType())], '$main') === false) {
-            return;
-         };
+         // KnowbaseItem is special form, i think we want to skip tab detection
+         if (!$item instanceof KnowbaseItem) {
+            // we want tag input only for primary form (not ticket solution for example)
+            $callers   = debug_backtrace();
+            /*Toolbox::logDebug($params['options']);
+            Toolbox::backtrace();*/
+            foreach ($callers as $call) {
+               if ($call['function'] == 'displayTabContentForItem'
+                  // ticket solution is a pain to detect, direct exclusion
+                   || $call['function'] == 'showSolutionForm') {
+                  return false;
+               }
+            }
+            // no sub objects form (like followups and task)
+            if (isset($params['options']['parent'])
+                && $params['options']['parent'] instanceof CommonDBTM) {
+               return false;
+            }
+         }
 
          if (self::canItemtype($itemtype)) {
             // manage values after a redirect (ex ticket creation, after a cat change)
