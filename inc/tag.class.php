@@ -351,12 +351,33 @@ class PluginTagTag extends CommonDropdown {
          $item     = $params['item'];
          $itemtype = get_class($item);
 
-         if (!isset($_SESSION['glpi_tabs'][strtolower($item::getType())])
-             || strpos($_SESSION['glpi_tabs'][strtolower($item::getType())], '$main') === false) {
-            return;
-         };
+         // KnowbaseItem is special form, i think we want to skip tab detection
+         if (!$item instanceof KnowbaseItem) {
+            // we want tag input only for primary form (not ticket solution for example)
+            $callers   = debug_backtrace();
+            /*Toolbox::logDebug($params['options']);
+            Toolbox::backtrace();*/
+            foreach ($callers as $call) {
+               if ($call['function'] == 'displayTabContentForItem'
+                  // ticket solution is a pain to detect, direct exclusion
+                   || $call['function'] == 'showSolutionForm') {
+                  return false;
+               }
+            }
+            // no sub objects form (like followups and task)
+            if (isset($params['options']['parent'])
+                && $params['options']['parent'] instanceof CommonDBTM) {
+               return false;
+            }
+         }
 
          if (self::canItemtype($itemtype)) {
+            // manage values after a redirect (ex ticket creation, after a cat change)
+            $value = '';
+            if (isset($item->input['_plugin_tag_tag_values'])) {
+               $value = $item->input['_plugin_tag_tag_values'];
+            }
+
             $html_tag = ($itemtype == 'Ticket') ? "th" : 'td';
 
             echo "<tr class='tab_bg_1'>";
@@ -365,6 +386,7 @@ class PluginTagTag extends CommonDropdown {
             self::showTagDropdown([
                'itemtype' => $itemtype,
                'id'       => $item->getId(),
+               'value'    => $value,
             ]);
             echo "</td>";
             echo "</tr>";
@@ -384,6 +406,7 @@ class PluginTagTag extends CommonDropdown {
       $default_params = [
          'id'       => 0,
          'itemtype' => '',
+         'value'    => '',
       ];
       $params = array_merge($default_params, $params);
 
@@ -412,12 +435,14 @@ class PluginTagTag extends CommonDropdown {
                                    AND itemtype="'.$itemtype.'"') as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
          }
+      } else {
+         $values = explode(',', $params['value']);
       }
 
       // Restrict tags finding by itemtype and entity
       $where = "(`type_menu` IS NULL
                  OR `type_menu` = ''
-                 OR `type_menu` = 0
+                 OR `type_menu` = '0'
                  OR `type_menu` LIKE '%$itemtype%')";
       if ($obj->isEntityAssign()) {
          $where.= getEntitiesRestrictRequest(" AND", '', '', '', true);
@@ -441,6 +466,13 @@ class PluginTagTag extends CommonDropdown {
          'multiple' => 'multiple',
       ]);
 
+      $token_creation = "
+         // prefix value by 'newtag_' to differenciate created tag from existing ones
+         return { id: 'newtag_'+term, text: term };";
+      if (!self::canCreate()) {
+         $token_creation = "return false;";
+      }
+
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
@@ -452,8 +484,7 @@ class PluginTagTag extends CommonDropdown {
             'tokenSeparators': [',', ';'],
             'readonly': ".($obj->canUpdateItem() ? 'false': 'true').",
             'createSearchChoice': function (term) {
-               // prefix value by 'newtag_' to differenciate created tag from existing ones
-               return { id: 'newtag_'+term, text: term };
+               $token_creation
             }
          });
       });");
