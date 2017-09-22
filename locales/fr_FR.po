@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 10:43+0100\n"
-"PO-Revision-Date: 2017-02-23 09:47+0000\n"
+"POT-Creation-Date: 2017-09-22 10:04+0200\n"
+"PO-Revision-Date: 2017-08-03 17:54+0000\n"
 "Last-Translator: alexandre delaunay <delaunay.alexandre@gmail.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/teclib/glpi-plugin-tag/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -21,24 +21,6 @@ msgstr ""
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: setup.php:113
-msgid "Tag Management"
-msgstr "Gestion des tags"
-
-#: inc/tag.class.php:10 inc/tag.class.php:364
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiquette"
-msgstr[1] "Etiquettes"
-
-#: inc/tag.class.php:65 inc/tag.class.php:280
-msgid "HTML color"
-msgstr "Couleur HTML"
-
-#: inc/tag.class.php:465
-msgid "View all tags"
-msgstr "Voir toutes les étiquettes"
-
 #: hook.php:174
 msgid "Add tags"
 msgstr "Ajouter des étiquettes"
@@ -46,3 +28,21 @@ msgstr "Ajouter des étiquettes"
 #: hook.php:176
 msgid "Remove tags"
 msgstr "Supprimer des étiquettes"
+
+#: inc/tag.class.php:10 inc/tag.class.php:384
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiquette"
+msgstr[1] "Etiquettes"
+
+#: inc/tag.class.php:65 inc/tag.class.php:279
+msgid "HTML color"
+msgstr "Couleur HTML"
+
+#: inc/tag.class.php:495
+msgid "View all tags"
+msgstr "Voir toutes les étiquettes"
+
+#: setup.php:113
+msgid "Tag Management"
+msgstr "Gestion des tags"
