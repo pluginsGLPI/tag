@@ -26,8 +26,11 @@
    </authors>
    <versions>
       <version>
-         <num>2.0.1</num>
+         <num>2.1.0</version>
          <compatibility>9.2</compatibility>
+      </version>
+      <version>
+         <num>2.0.1</num>
          <compatibility>9.1.2</compatibility>
       </version>
       <version>

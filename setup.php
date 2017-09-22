@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.0.1');
+define ('PLUGIN_TAG_VERSION', '2.1.0');
 
 /**
  * Check configuration process
@@ -110,12 +110,19 @@ function plugin_init_tag() {
  * @return array
  */
 function plugin_version_tag() {
-   return array('name'       => __('Tag Management', 'tag'),
-            'version'        => PLUGIN_TAG_VERSION,
-            'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
-            'homepage'       => 'https://github.com/pluginsGLPI/tag',
-            'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
-            'minGlpiVersion' => "9.1.2");
+   return [
+      'name'       => __('Tag Management', 'tag'),
+      'version'        => PLUGIN_TAG_VERSION,
+      'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
+      'homepage'       => 'https://github.com/pluginsGLPI/tag',
+      'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
+      'requirements'   => [
+         'glpi' => [
+            'min' => '9.2',
+            'dev' => true
+         ]
+      ]
+   ];
 }
 
 /**
@@ -125,14 +132,11 @@ function plugin_version_tag() {
  * @return boolean
  */
 function plugin_tag_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.1.2', 'lt')) {
-      if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '9.1.2');
-      } else {
-         echo __('This plugin requires GLPI >= 9.1.2');
-      }
-   } else {
-      return true;
+   $version = rtrim(GLPI_VERSION, '-dev');
+   if (version_compare($version, '9.2', 'lt')) {
+      echo "This plugin requires GLPI 9.2";
+      return false;
    }
-   return false;
+
+   return true;
 }
