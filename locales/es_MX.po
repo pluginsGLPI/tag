@@ -3,38 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexander Salas Bastidas <a.salas@ieee.org>, 2017
+# Alexander Salas Bastidas <alexander.salas@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 10:43+0100\n"
-"PO-Revision-Date: 2017-02-23 10:00+0000\n"
-"Last-Translator: Alexander Salas Bastidas <a.salas@ieee.org>\n"
+"POT-Creation-Date: 2017-09-22 10:04+0200\n"
+"PO-Revision-Date: 2017-08-03 17:54+0000\n"
+"Last-Translator: Alexander Salas Bastidas <alexander.salas@gmail.com>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/teclib/glpi-plugin-tag/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_MX\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: setup.php:113
-msgid "Tag Management"
-msgstr "Administración de etiquetas"
-
-#: inc/tag.class.php:10 inc/tag.class.php:364
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiqueta"
-msgstr[1] "Etiquetas"
-
-#: inc/tag.class.php:65 inc/tag.class.php:280
-msgid "HTML color"
-msgstr "Color HTML"
-
-#: inc/tag.class.php:465
-msgid "View all tags"
-msgstr "Ver todas las etiquetas"
 
 #: hook.php:174
 msgid "Add tags"
@@ -43,3 +25,21 @@ msgstr "Agregar etiquetas"
 #: hook.php:176
 msgid "Remove tags"
 msgstr "Eliminar etiquetas"
+
+#: inc/tag.class.php:10 inc/tag.class.php:384
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiquetas"
+
+#: inc/tag.class.php:65 inc/tag.class.php:279
+msgid "HTML color"
+msgstr "Color HTML"
+
+#: inc/tag.class.php:495
+msgid "View all tags"
+msgstr "Ver todas las etiquetas"
+
+#: setup.php:113
+msgid "Tag Management"
+msgstr "Administración de etiquetas"

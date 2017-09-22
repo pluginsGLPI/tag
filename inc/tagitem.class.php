@@ -12,7 +12,7 @@ class PluginTagTagItem extends CommonDBRelation {
    static public $take_entity_2 = false;
 
 
-   public static function getTypeName($nb=1) {
+   public static function getTypeName($nb = 1) {
       return PluginTagTag::getTypeName($nb);
    }
 
@@ -21,14 +21,14 @@ class PluginTagTagItem extends CommonDBRelation {
 
       $table = getTableForItemType(__CLASS__);
 
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-            	`id` INT(11) NOT NULL AUTO_INCREMENT,
-            	`plugin_tag_tags_id` INT(11) NOT NULL DEFAULT '0',
-            	`items_id` INT(11) NOT NULL DEFAULT '1',
-            	`itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-            	PRIMARY KEY (`id`),
-            	UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
+               `id` INT(11) NOT NULL AUTO_INCREMENT,
+               `plugin_tag_tags_id` INT(11) NOT NULL DEFAULT '0',
+               `items_id` INT(11) NOT NULL DEFAULT '1',
+               `itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+               PRIMARY KEY (`id`),
+               UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
             )
             COLLATE='utf8_unicode_ci'
             ENGINE=MyISAM";
@@ -60,7 +60,7 @@ class PluginTagTagItem extends CommonDBRelation {
     * @return boolean
     */
    static function showForTag(PluginTagTag $tag) {
-      global $DB;
+      global $DB, $CFG_GLPI;
 
       $instID = $tag->fields['id'];
       if (!$tag->can($instID, READ)) {
@@ -83,26 +83,31 @@ class PluginTagTagItem extends CommonDBRelation {
 
       if ($canedit) {
          echo "<div class='firstbloc'>";
-         //can use standart GLPI function
-         $target = Toolbox::getItemTypeFormURL('PluginTagTag');
-         echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post' action='".$target."'>";
+         echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post'
+               action='".Toolbox::getItemTypeFormURL('PluginTagTag')."'>";
 
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
 
-         echo "<tr class='tab_bg_1'><td class='right'>";
-         $itemtypes_to_show = [];
-         if (is_array(json_decode($tag->fields['type_menu']))) {
-            $itemtypes_to_show = json_decode($tag->fields['type_menu']);
+         $itemtypes_to_show = json_decode($tag->fields['type_menu']);
+         if (!is_array($itemtypes_to_show)) {
+            $itemtypes_to_show = [];
+            foreach ($CFG_GLPI['plugin_tag_itemtypes'] as $menu_entry) {
+               foreach ($menu_entry as $default_itemtype) {
+                  array_push($itemtypes_to_show, $default_itemtype);
+               }
+            }
          }
-         Dropdown::showAllItems("items_id", 0, 0,
-            ($tag->fields['is_recursive'] ? -1 : $tag->fields['entities_id']),
-            $itemtypes_to_show, false, true
-         );
-         echo "<style>.select2-container { text-align: left; } </style>"; //minor
+         echo "<tr class='tab_bg_1'><td class='right'>";
+         Dropdown::showSelectItemFromItemtypes(['itemtypes' => $itemtypes_to_show,
+                                                'entity_restrict'
+                                                       => ($tag->fields['is_recursive']
+                                                           ?getSonsOf('glpi_entities',
+                                                                      $tag->fields['entities_id'])
+                                                           :$tag->fields['entities_id']),
+                                                'checkright' => true]);
          echo "</td><td class='center'>";
          echo "<input type='hidden' name='plugin_tag_tags_id' value='$instID'>";
-         //Note : can use standart GLPI method
          echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
          echo "</td></tr>";
          echo "</table>";
