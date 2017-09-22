@@ -12,7 +12,7 @@ class PluginTagTagItem extends CommonDBRelation {
    static public $take_entity_2 = false;
 
 
-   public static function getTypeName($nb=1) {
+   public static function getTypeName($nb = 1) {
       return PluginTagTag::getTypeName($nb);
    }
 
@@ -21,14 +21,14 @@ class PluginTagTagItem extends CommonDBRelation {
 
       $table = getTableForItemType(__CLASS__);
 
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-            	`id` INT(11) NOT NULL AUTO_INCREMENT,
-            	`plugin_tag_tags_id` INT(11) NOT NULL DEFAULT '0',
-            	`items_id` INT(11) NOT NULL DEFAULT '1',
-            	`itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-            	PRIMARY KEY (`id`),
-            	UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
+               `id` INT(11) NOT NULL AUTO_INCREMENT,
+               `plugin_tag_tags_id` INT(11) NOT NULL DEFAULT '0',
+               `items_id` INT(11) NOT NULL DEFAULT '1',
+               `itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+               PRIMARY KEY (`id`),
+               UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
             )
             COLLATE='utf8_unicode_ci'
             ENGINE=MyISAM";

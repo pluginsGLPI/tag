@@ -107,7 +107,7 @@ class PluginTagTag extends CommonDropdown {
 
       $table = getTableForItemType(__CLASS__);
 
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
             `id`           int(11) NOT NULL auto_increment,
             `entities_id`  int(11) NOT NULL DEFAULT '0',
@@ -122,7 +122,7 @@ class PluginTagTag extends CommonDropdown {
             or die($DB->error());
       }
 
-      if (!FieldExists($table, 'type_menu')) {
+      if (!$DB->fieldExists($table, 'type_menu')) {
          $migration->addField($table, 'type_menu', "text");
          $migration->migrationOneTable($table);
       }
