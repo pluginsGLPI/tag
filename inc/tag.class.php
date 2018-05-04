@@ -156,12 +156,10 @@ class PluginTagTag extends CommonDropdown {
                      OR itemtype = '".__CLASS__."'")
          or die($DB->error());
 
-      $DB->query("DELETE FROM glpi_bookmarks
-                  WHERE itemtype = '".__CLASS__."'")
+      $DB->delete('glpi_savedsearches', ['itemtype' => __CLASS__])
          or die($DB->error());
 
-      $DB->query("DELETE FROM glpi_bookmarks_users
-                  WHERE itemtype = '".__CLASS__."'")
+      $DB->delete('glpi_savedsearches_users', ['itemtype' => __CLASS__])
          or die($DB->error());
 
       $DB->query("DELETE FROM glpi_displaypreferences
