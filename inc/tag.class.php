@@ -474,28 +474,34 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // found existing tags
-      $select2_tags = array_values(array_map(function($value) {
-         return [
-            'id'    => $value['id'],
-            'text'  => $value['name'],
-            'color' => $value['color'],
+      $existing_tags = $tag->find($where, 'name');
+      $select2_tags = [];
+      foreach ($existing_tags as $existing_tag) {
+         $select2_tags[] = [
+            'id'       => $existing_tag['id'],
+            'text'     => $existing_tag['name'],
+            'color'    => $existing_tag['color'],
+            'selected' => in_array($existing_tag['id'], $values),
          ];
-      }, $tag->find($where, 'name')));
+      }
 
       // create an input receiving the tag tokens
       $rand = mt_rand();
-      echo Html::input('_plugin_tag_tag_values', [
-         'id'       => "tag_select_$rand",
-         'value'    => implode(',', $values),
-         'class'    => 'tag_select',
-         'multiple' => 'multiple',
-      ]);
+      echo Html::select(
+         '_plugin_tag_tag_values[]',
+         [],
+         [
+            'id'       => "tag_select_$rand",
+            'class'    => 'tag_select',
+            'multiple' => 'multiple',
+         ]
+      );
 
       $token_creation = "
          // prefix value by 'newtag_' to differenciate created tag from existing ones
-         return { id: 'newtag_'+term, text: term };";
+         return { id: 'newtag_'+ params.term, text: params.term };";
       if (!self::canCreate()) {
-         $token_creation = "return false;";
+         $token_creation = "return null;";
       }
 
       $readOnly = $obj->isNewItem() ? !$obj->canCreateItem() : !$obj->canUpdateItem();
@@ -503,14 +509,19 @@ class PluginTagTag extends CommonDropdown {
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
-            'formatResult': formatOption,
-            'formatSelection': formatOption,
-            'formatSearching': '".__("Loading...")."',
-            'dropdownCssClass': 'tag_select_results',
-            'tags': ".json_encode($select2_tags).",
-            'tokenSeparators': [',', ';'],
-            'readonly': ".($readOnly ? 'true': 'false').",
-            'createSearchChoice': function (term) {
+            templateResult: formatOption,
+            templateSelection: formatOption,
+            formatSearching: '".__("Loading...")."',
+            dropdownCssClass: 'tag_select_results',
+            data: ".json_encode($select2_tags).",
+            tags: true,
+            tokenSeparators: [',', ';'],
+            readonly: ".($readOnly ? 'true': 'false').",
+            createTag: function (params) {
+               var term = $.trim(params.term);
+               if (term === '') {
+                  return null;
+               }
                $token_creation
             }
          });
