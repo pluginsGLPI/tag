@@ -234,55 +234,79 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
 
-   function getSearchOptions() {
-      $tab                       = [];
+   function rawSearchOptions() {
 
-      $tab['common']             = __('Characteristics');
+      $tab = [];
 
-      $tab[1]['table']           = $this->getTable();
-      $tab[1]['field']           = 'name';
-      $tab[1]['name']            = __('Name');
-      $tab[1]['massiveaction']   = true;
-      $tab[1]['datatype']        = 'itemlink';
+      $tab[] = [
+         'id'            => 'common',
+         'name'          => __('Characteristics'),
+      ];
 
-      $tab[2]['table']           = $this->getTable();
-      $tab[2]['field']           = 'comment';
-      $tab[2]['name']            = __('Description');
-      $tab[2]['massiveaction']   = true;
-      $tab[2]['datatype']        = 'string';
+      $tab[] = [
+         'id'            => 1,
+         'table'         => $this->getTable(),
+         'field'         => 'name',
+         'name'          => __('Name'),
+         'datatype'      => 'itemlink',
+         'massiveaction' => true,
+      ];
 
-      $tab[3]['table']           = $this->getTable();
-      $tab[3]['field']           = 'id';
-      $tab[3]['name']            = __('ID');
-      $tab[3]['massiveaction']   = false;
-      $tab[3]['datatype']        = 'number';
+      $tab[] = [
+         'id'            => 2,
+         'table'         => $this->getTable(),
+         'field'         => 'comment',
+         'name'          => __('Description'),
+         'datatype'      => 'string',
+         'massiveaction' => true,
+      ];
 
-      $tab[4]['table']           = 'glpi_entities';
-      $tab[4]['field']           = 'completename';
-      $tab[4]['linkfield']       = 'entities_id';
-      $tab[4]['name']            = __('Entity');
-      $tab[4]['datatype']        = 'dropdown';
+      $tab[] = [
+         'id'            => 3,
+         'table'         => $this->getTable(),
+         'field'         => 'id',
+         'name'          => __('ID'),
+         'datatype'      => 'number',
+         'massiveaction' => false,
+      ];
 
-      $tab[5]['table']           = $this->getTable();
-      $tab[5]['field']           = 'is_recursive';
-      $tab[5]['name']            = __('Child entities');
-      $tab[5]['datatype']        = 'bool';
+      $tab[] = [
+         'id'            => 4,
+         'table'         => 'glpi_entities',
+         'field'         => 'completename',
+         'linkfield'     => 'entities_id',
+         'name'          => __('Entity'),
+         'datatype'      => 'dropdown',
+      ];
 
-      $tab[6]['table']           = $this->getTable();
-      $tab[6]['field']           = 'type_menu';
-      $tab[6]['searchtype']      = ['equals', 'notequals'];
-      $tab[6]['name']            = _n('Associated item type', 'Associated item types', 2);
-      $tab[6]['datatype']        = 'specific';
+      $tab[] = [
+         'id'            => 5,
+         'table'         => $this->getTable(),
+         'field'         => 'is_recursive',
+         'name'          => __('Child entities'),
+         'datatype'      => 'bool',
+      ];
 
-      $tab[7]['table']           = $this->getTable();
-      $tab[7]['field']           = 'color';
-      $tab[7]['name']            = __('HTML color', 'tag');
-      $tab[7]['searchtype']      = 'contains';
-      $tab[7]['datatype']        = 'specific';
+      $tab[] = [
+         'id'            => 6,
+         'table'         => $this->getTable(),
+         'field'         => 'type_menu',
+         'name'          => _n('Associated item type', 'Associated item types', 2),
+         'searchtype'    => ['equals', 'notequals'],
+         'datatype'      => 'specific',
+      ];
+
+      $tab[] = [
+         'id'            => 7,
+         'table'         => $this->getTable(),
+         'field'         => 'color',
+         'name'          => __('HTML color', 'tag'),
+         'searchtype'    => 'contains',
+         'datatype'      => 'specific',
+      ];
 
       return $tab;
    }
-
 
    static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
       if (!is_array($values)) {
