@@ -327,6 +327,7 @@ class PluginTagTagItem extends CommonDBRelation {
     * @return boolean
     */
    static function updateItem(CommonDBTM $item, $options = array()) {
+
       if ($item->getID()
           && !isset($item->input["_plugin_tag_tag_values"])) {
          return true;
@@ -342,11 +343,10 @@ class PluginTagTagItem extends CommonDBRelation {
       $tag      = new PluginTagTag();
       $tag_item = new self();
 
-      // untokenize values and create new ones
-      $tag_values = [];
-      if (!empty($item->input["_plugin_tag_tag_values"])) {
-         $tag_values = explode(',', $item->input["_plugin_tag_tag_values"]);
-      }
+      // create new values
+      $tag_values = !empty($item->input["_plugin_tag_tag_values"])
+         ? $item->input["_plugin_tag_tag_values"]
+         : [];
       foreach ($tag_values as &$tag_value) {
          if (strpos($tag_value, "newtag_") !== false) {
             $tag_value = str_replace("newtag_", "", $tag_value);
@@ -437,7 +437,7 @@ class PluginTagTagItem extends CommonDBRelation {
                   if ($tagitem->deleteByCriteria([
                      'items_id'           => $items_id,
                      'itemtype'           => $itemtype,
-                     'plugin_tag_tags_id' => explode(',', $input['_plugin_tag_tag_values']),
+                     'plugin_tag_tags_id' => $input['_plugin_tag_tag_values'],
                   ])) {
                      $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
                   } else {

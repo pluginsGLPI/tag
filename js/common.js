@@ -33,5 +33,5 @@ function formatOption(option) {
    }
    template+= "'>" + option.text + "</span>";
 
-   return template;
+   return $(template);
 }
