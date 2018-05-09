@@ -23,6 +23,7 @@ class PluginTagTag extends CommonDropdown {
          'Crontask',
          'PluginFormcreatorFormanswer',
          'QueuedMail',
+         'PluginPrintercountersRecord'
       ];
    }
 
