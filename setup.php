@@ -66,6 +66,10 @@ function plugin_init_tag() {
          __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
       ];
 
+      if ($plugin->isInstalled('appliances') && $plugin->isActivated('appliances')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
+      }
+
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
