@@ -23,6 +23,7 @@ class PluginTagTag extends CommonDropdown {
          'Crontask',
          'PluginFormcreatorFormanswer',
          'QueuedMail',
+         'PluginPrintercountersRecord'
       ];
    }
 
@@ -473,6 +474,8 @@ class PluginTagTag extends CommonDropdown {
          $token_creation = "return false;";
       }
 
+      $readOnly = $obj->isNewItem() ? !$obj->canCreateItem() : !$obj->canUpdateItem();
+
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
@@ -482,7 +485,7 @@ class PluginTagTag extends CommonDropdown {
             'dropdownCssClass': 'tag_select_results',
             'tags': ".json_encode($select2_tags).",
             'tokenSeparators': [',', ';'],
-            'readonly': ".($obj->canUpdateItem() ? 'false': 'true').",
+            'readonly': ".($readOnly ? 'true': 'false').",
             'createSearchChoice': function (term) {
                $token_creation
             }

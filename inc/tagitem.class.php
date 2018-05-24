@@ -364,7 +364,7 @@ class PluginTagTagItem extends CommonDBRelation {
       } else {
          // remove possible duplicates (to avoid sql errors on unique index)
          $found      = $tag_item->find("`items_id` = ".$item->getID()."
-                                        AND `itemtype` = ".$item->getType());
+                                        AND `itemtype` = '".$item->getType()."'");
          $tag_values = array_diff($tag_values, array_keys($found));
       }
 
