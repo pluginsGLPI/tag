@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Markku Vepsä, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Tag\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-22 10:04+0200\n"
+"PO-Revision-Date: 2018-05-29 17:42+0000\n"
+"Last-Translator: Markku Vepsä\n"
+"Language-Team: Finnish (Finland) (http://www.transifex.com/teclib/glpi-plugin-tag/language/fi_FI/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi_FI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hook.php:174
+msgid "Add tags"
+msgstr "Lisää tunnisteita"
+
+#: hook.php:176
+msgid "Remove tags"
+msgstr "Poista tunnisteita"
+
+#: inc/tag.class.php:10 inc/tag.class.php:384
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Tunniste"
+msgstr[1] "Tunnisteet"
+
+#: inc/tag.class.php:65 inc/tag.class.php:279
+msgid "HTML color"
+msgstr "HTML-väri"
+
+#: inc/tag.class.php:495
+msgid "View all tags"
+msgstr "Näytä kaikki tunnisteet"
+
+#: setup.php:113
+msgid "Tag Management"
+msgstr "Tunnisteiden hallinta"
