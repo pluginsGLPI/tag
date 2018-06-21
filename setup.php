@@ -26,7 +26,12 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.1.1');
+define ('PLUGIN_TAG_VERSION', '2.1.2');
+
+// Minimal GLPI version, inclusive
+define("PLUGIN_TAG_MIN_GLPI", "9.2");
+// Maximum GLPI version, exclusive
+define("PLUGIN_TAG_MAX_GLPI", "9.3");
 
 /**
  * Check configuration process
@@ -65,6 +70,10 @@ function plugin_init_tag() {
          __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
          __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
       ];
+
+      if ($plugin->isInstalled('appliances') && $plugin->isActivated('appliances')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
+      }
 
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
@@ -118,8 +127,9 @@ function plugin_version_tag() {
       'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
       'requirements'   => [
          'glpi' => [
-            'min' => '9.2',
-            'dev' => true
+            'min' => PLUGIN_TAG_MIN_GLPI,
+            'max' => PLUGIN_TAG_MAX_GLPI,
+            'dev' => true, //Required to allow 9.2-dev
          ]
       ]
    ];
@@ -132,10 +142,23 @@ function plugin_version_tag() {
  * @return boolean
  */
 function plugin_tag_check_prerequisites() {
-   $version = rtrim(GLPI_VERSION, '-dev');
-   if (version_compare($version, '9.2', 'lt')) {
-      echo "This plugin requires GLPI 9.2";
-      return false;
+
+   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
+   if (!method_exists('Plugin', 'checkGlpiVersion')) {
+      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
+      $matchMinGlpiReq = version_compare($version, PLUGIN_TAG_MIN_GLPI, '>=');
+      $matchMaxGlpiReq = version_compare($version, PLUGIN_TAG_MAX_GLPI, '<');
+
+      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
+         echo vsprintf(
+            'This plugin requires GLPI >= %1$s and < %2$s.',
+            [
+               PLUGIN_TAG_MIN_GLPI,
+               PLUGIN_TAG_MAX_GLPI,
+            ]
+         );
+         return false;
+      }
    }
 
    return true;

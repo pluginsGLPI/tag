@@ -22,7 +22,7 @@ class PluginTagTag extends CommonDropdown {
          'Notification',
          'Crontask',
          'PluginFormcreatorFormanswer',
-         'QueuedMail',
+         'QueuedNotification',
          'PluginPrintercountersRecord'
       ];
    }
@@ -157,11 +157,11 @@ class PluginTagTag extends CommonDropdown {
                      OR itemtype = '".__CLASS__."'")
          or die($DB->error());
 
-      $DB->query("DELETE FROM glpi_bookmarks
+      $DB->query("DELETE FROM glpi_savedsearches
                   WHERE itemtype = '".__CLASS__."'")
          or die($DB->error());
 
-      $DB->query("DELETE FROM glpi_bookmarks_users
+      $DB->query("DELETE FROM glpi_savedsearches_users
                   WHERE itemtype = '".__CLASS__."'")
          or die($DB->error());
 
