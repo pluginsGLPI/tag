@@ -6,7 +6,7 @@ class PluginTagTag extends CommonDropdown {
 
    const S_OPTION = 10500;
 
-   public static function getTypeName($nb=1) {
+   public static function getTypeName($nb = 1) {
       return _n('Tag', 'Tags', $nb, 'tag');
    }
 
@@ -39,7 +39,7 @@ class PluginTagTag extends CommonDropdown {
               || !in_array($itemtype, self::getBlacklistItemtype()));
    }
 
-   public function showForm($ID, $options = array()) {
+   public function showForm($ID, $options = []) {
       global $CFG_GLPI;
 
       $this->initForm($ID, $options);
@@ -177,13 +177,13 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       $tab    = [];
       $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
       return $tab;
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       switch ($item->getType()) {
          case __CLASS__ :
             switch ($tabnum) {
@@ -197,7 +197,7 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
 
-   function defineTabs($options=array()) {
+   function defineTabs($options = []) {
       $ong = [];
       $this->addDefaultFormTab($ong);
       $this->addStandardTab(__CLASS__, $ong, $options);
@@ -310,7 +310,7 @@ class PluginTagTag extends CommonDropdown {
       return $tab;
    }
 
-   static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
+   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
       if (!is_array($values)) {
          $values = [$field => $values];
       }
@@ -331,7 +331,7 @@ class PluginTagTag extends CommonDropdown {
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
 
-   static function getSpecificValueToDisplay($field, $values, array $options = array()) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
       switch ($field) {
          case 'type_menu':
             $itemtypes = json_decode($values[$field]);
@@ -371,7 +371,7 @@ class PluginTagTag extends CommonDropdown {
     *                          - item the CommonDBTM object
     * @return nothing
     */
-   static function preItemForm($params = array()) {
+   static function preItemForm($params = []) {
       if (isset($params['item'])
           && $params['item'] instanceof CommonDBTM) {
          $item     = $params['item'];

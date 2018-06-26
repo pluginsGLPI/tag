@@ -326,7 +326,7 @@ class PluginTagTagItem extends CommonDBRelation {
     *
     * @return boolean
     */
-   static function updateItem(CommonDBTM $item, $options = array()) {
+   static function updateItem(CommonDBTM $item, $options = []) {
 
       if ($item->getID()
           && !isset($item->input["_plugin_tag_tag_values"])) {
