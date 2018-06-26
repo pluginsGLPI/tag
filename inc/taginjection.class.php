@@ -8,7 +8,7 @@ class PluginTagTagInjection extends PluginTagTag
       return $parenttype::getTable();
    }
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return parent::getTypeName(1);
    }
 
@@ -24,7 +24,7 @@ class PluginTagTagInjection extends PluginTagTag
    /**
     * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::getOptions()
    **/
-   function getOptions($primary_type='') {
+   function getOptions($primary_type = '') {
 
       $tab = Search::getOptions(get_parent_class($this));
 
@@ -38,7 +38,7 @@ class PluginTagTagInjection extends PluginTagTag
    /**
     * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::addOrUpdateObject()
    **/
-   function addOrUpdateObject($values=array(), $options=array()) {
+   function addOrUpdateObject($values = [], $options = []) {
 
       $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
       $lib->processAddOrUpdate();

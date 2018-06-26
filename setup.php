@@ -40,7 +40,7 @@ define("PLUGIN_TAG_MAX_GLPI", "9.4");
  *
  * @return boolean
  */
-function plugin_tag_check_config($verbose=false) {
+function plugin_tag_check_config($verbose = false) {
    return true;
 }
 
