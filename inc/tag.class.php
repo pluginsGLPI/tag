@@ -6,7 +6,7 @@ class PluginTagTag extends CommonDropdown {
 
    const S_OPTION = 10500;
 
-   public static function getTypeName($nb=1) {
+   public static function getTypeName($nb = 1) {
       return _n('Tag', 'Tags', $nb, 'tag');
    }
 
@@ -39,7 +39,7 @@ class PluginTagTag extends CommonDropdown {
               || !in_array($itemtype, self::getBlacklistItemtype()));
    }
 
-   public function showForm($ID, $options = array()) {
+   public function showForm($ID, $options = []) {
       global $CFG_GLPI;
 
       $this->initForm($ID, $options);
@@ -129,7 +129,8 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // Version 0.90-1.1
-      $fields = $DB->list_fields($table);
+      // Disable cache on field list as cache wes not pruned after adding field
+      $fields = $DB->list_fields($table, false);
       if (stristr($fields['type_menu']["Type"], 'varchar') !== false) {
          $migration->changeField($table, 'type_menu', 'type_menu', 'text');
          $migration->dropKey($table, 'type_menu');
@@ -176,13 +177,13 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       $tab    = [];
       $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
       return $tab;
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       switch ($item->getType()) {
          case __CLASS__ :
             switch ($tabnum) {
@@ -196,7 +197,7 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
 
-   function defineTabs($options=array()) {
+   function defineTabs($options = []) {
       $ong = [];
       $this->addDefaultFormTab($ong);
       $this->addStandardTab(__CLASS__, $ong, $options);
@@ -235,57 +236,81 @@ class PluginTagTag extends CommonDropdown {
       return true;
    }
 
-   function getSearchOptions() {
-      $tab                       = [];
+   function rawSearchOptions() {
 
-      $tab['common']             = __('Characteristics');
+      $tab = [];
 
-      $tab[1]['table']           = $this->getTable();
-      $tab[1]['field']           = 'name';
-      $tab[1]['name']            = __('Name');
-      $tab[1]['massiveaction']   = true;
-      $tab[1]['datatype']        = 'itemlink';
+      $tab[] = [
+         'id'            => 'common',
+         'name'          => __('Characteristics'),
+      ];
 
-      $tab[2]['table']           = $this->getTable();
-      $tab[2]['field']           = 'comment';
-      $tab[2]['name']            = __('Description');
-      $tab[2]['massiveaction']   = true;
-      $tab[2]['datatype']        = 'string';
+      $tab[] = [
+         'id'            => 1,
+         'table'         => $this->getTable(),
+         'field'         => 'name',
+         'name'          => __('Name'),
+         'datatype'      => 'itemlink',
+         'massiveaction' => true,
+      ];
 
-      $tab[3]['table']           = $this->getTable();
-      $tab[3]['field']           = 'id';
-      $tab[3]['name']            = __('ID');
-      $tab[3]['massiveaction']   = false;
-      $tab[3]['datatype']        = 'number';
+      $tab[] = [
+         'id'            => 2,
+         'table'         => $this->getTable(),
+         'field'         => 'comment',
+         'name'          => __('Description'),
+         'datatype'      => 'string',
+         'massiveaction' => true,
+      ];
 
-      $tab[4]['table']           = 'glpi_entities';
-      $tab[4]['field']           = 'completename';
-      $tab[4]['linkfield']       = 'entities_id';
-      $tab[4]['name']            = __('Entity');
-      $tab[4]['datatype']        = 'dropdown';
+      $tab[] = [
+         'id'            => 3,
+         'table'         => $this->getTable(),
+         'field'         => 'id',
+         'name'          => __('ID'),
+         'datatype'      => 'number',
+         'massiveaction' => false,
+      ];
 
-      $tab[5]['table']           = $this->getTable();
-      $tab[5]['field']           = 'is_recursive';
-      $tab[5]['name']            = __('Child entities');
-      $tab[5]['datatype']        = 'bool';
+      $tab[] = [
+         'id'            => 4,
+         'table'         => 'glpi_entities',
+         'field'         => 'completename',
+         'linkfield'     => 'entities_id',
+         'name'          => __('Entity'),
+         'datatype'      => 'dropdown',
+      ];
 
-      $tab[6]['table']           = $this->getTable();
-      $tab[6]['field']           = 'type_menu';
-      $tab[6]['searchtype']      = ['equals', 'notequals'];
-      $tab[6]['name']            = _n('Associated item type', 'Associated item types', 2);
-      $tab[6]['datatype']        = 'specific';
+      $tab[] = [
+         'id'            => 5,
+         'table'         => $this->getTable(),
+         'field'         => 'is_recursive',
+         'name'          => __('Child entities'),
+         'datatype'      => 'bool',
+      ];
 
-      $tab[7]['table']           = $this->getTable();
-      $tab[7]['field']           = 'color';
-      $tab[7]['name']            = __('HTML color', 'tag');
-      $tab[7]['searchtype']      = 'contains';
-      $tab[7]['datatype']        = 'specific';
+      $tab[] = [
+         'id'            => 6,
+         'table'         => $this->getTable(),
+         'field'         => 'type_menu',
+         'name'          => _n('Associated item type', 'Associated item types', 2),
+         'searchtype'    => ['equals', 'notequals'],
+         'datatype'      => 'specific',
+      ];
+
+      $tab[] = [
+         'id'            => 7,
+         'table'         => $this->getTable(),
+         'field'         => 'color',
+         'name'          => __('HTML color', 'tag'),
+         'searchtype'    => 'contains',
+         'datatype'      => 'specific',
+      ];
 
       return $tab;
    }
 
-
-   static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
+   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
       if (!is_array($values)) {
          $values = [$field => $values];
       }
@@ -306,7 +331,7 @@ class PluginTagTag extends CommonDropdown {
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
 
-   static function getSpecificValueToDisplay($field, $values, array $options = array()) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
       switch ($field) {
          case 'type_menu':
             $itemtypes = json_decode($values[$field]);
@@ -346,7 +371,7 @@ class PluginTagTag extends CommonDropdown {
     *                          - item the CommonDBTM object
     * @return nothing
     */
-   static function preItemForm($params = array()) {
+   static function preItemForm($params = []) {
       if (isset($params['item'])
           && $params['item'] instanceof CommonDBTM) {
          $item     = $params['item'];
@@ -450,28 +475,34 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // found existing tags
-      $select2_tags = array_values(array_map(function($value) {
-         return [
-            'id'    => $value['id'],
-            'text'  => $value['name'],
-            'color' => $value['color'],
+      $existing_tags = $tag->find($where, 'name');
+      $select2_tags = [];
+      foreach ($existing_tags as $existing_tag) {
+         $select2_tags[] = [
+            'id'       => $existing_tag['id'],
+            'text'     => $existing_tag['name'],
+            'color'    => $existing_tag['color'],
+            'selected' => in_array($existing_tag['id'], $values),
          ];
-      }, $tag->find($where, 'name')));
+      }
 
       // create an input receiving the tag tokens
       $rand = mt_rand();
-      echo Html::input('_plugin_tag_tag_values', [
-         'id'       => "tag_select_$rand",
-         'value'    => implode(',', $values),
-         'class'    => 'tag_select',
-         'multiple' => 'multiple',
-      ]);
+      echo Html::select(
+         '_plugin_tag_tag_values[]',
+         [],
+         [
+            'id'       => "tag_select_$rand",
+            'class'    => 'tag_select',
+            'multiple' => 'multiple',
+         ]
+      );
 
       $token_creation = "
          // prefix value by 'newtag_' to differenciate created tag from existing ones
-         return { id: 'newtag_'+term, text: term };";
+         return { id: 'newtag_'+ params.term, text: params.term };";
       if (!self::canCreate()) {
-         $token_creation = "return false;";
+         $token_creation = "return null;";
       }
 
       $readOnly = $obj->isNewItem() ? !$obj->canCreateItem() : !$obj->canUpdateItem();
@@ -479,14 +510,19 @@ class PluginTagTag extends CommonDropdown {
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
-            'formatResult': formatOption,
-            'formatSelection': formatOption,
-            'formatSearching': '".__("Loading...")."',
-            'dropdownCssClass': 'tag_select_results',
-            'tags': ".json_encode($select2_tags).",
-            'tokenSeparators': [',', ';'],
-            'readonly': ".($readOnly ? 'true': 'false').",
-            'createSearchChoice': function (term) {
+            templateResult: formatOption,
+            templateSelection: formatOption,
+            formatSearching: '".__("Loading...")."',
+            dropdownCssClass: 'tag_select_results',
+            data: ".json_encode($select2_tags).",
+            tags: true,
+            tokenSeparators: [',', ';'],
+            readonly: ".($readOnly ? 'true': 'false').",
+            createTag: function (params) {
+               var term = $.trim(params.term);
+               if (term === '') {
+                  return null;
+               }
                $token_creation
             }
          });

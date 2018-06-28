@@ -26,12 +26,12 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.1.2');
+define ('PLUGIN_TAG_VERSION', '2.2.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "9.2");
+define("PLUGIN_TAG_MIN_GLPI", "9.3");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "9.3");
+define("PLUGIN_TAG_MAX_GLPI", "9.4");
 
 /**
  * Check configuration process
@@ -40,7 +40,7 @@ define("PLUGIN_TAG_MAX_GLPI", "9.3");
  *
  * @return boolean
  */
-function plugin_tag_check_config($verbose=false) {
+function plugin_tag_check_config($verbose = false) {
    return true;
 }
 

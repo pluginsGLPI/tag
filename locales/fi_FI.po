@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 10:04+0200\n"
+"POT-Creation-Date: 2018-06-26 09:20+0000\n"
 "PO-Revision-Date: 2018-05-29 17:42+0000\n"
 "Last-Translator: Markku Vepsä\n"
 "Language-Team: Finnish (Finland) (http://www.transifex.com/teclib/glpi-plugin-tag/language/fi_FI/)\n"
@@ -26,20 +26,20 @@ msgstr "Lisää tunnisteita"
 msgid "Remove tags"
 msgstr "Poista tunnisteita"
 
-#: inc/tag.class.php:10 inc/tag.class.php:384
+#: inc/tag.class.php:10 inc/tag.class.php:410
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tunniste"
 msgstr[1] "Tunnisteet"
 
-#: inc/tag.class.php:65 inc/tag.class.php:279
+#: inc/tag.class.php:66 inc/tag.class.php:305
 msgid "HTML color"
 msgstr "HTML-väri"
 
-#: inc/tag.class.php:495
+#: inc/tag.class.php:534
 msgid "View all tags"
 msgstr "Näytä kaikki tunnisteet"
 
-#: setup.php:113
+#: setup.php:123
 msgid "Tag Management"
 msgstr "Tunnisteiden hallinta"
