@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 10:04+0200\n"
+"POT-Creation-Date: 2018-06-26 09:20+0000\n"
 "PO-Revision-Date: 2018-06-07 13:06+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/teclib/glpi-plugin-tag/language/cs_CZ/)\n"
@@ -27,7 +27,7 @@ msgstr "Přidat štítky"
 msgid "Remove tags"
 msgstr "Odebrat štítky"
 
-#: inc/tag.class.php:10 inc/tag.class.php:384
+#: inc/tag.class.php:10 inc/tag.class.php:410
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Štítek"
@@ -35,14 +35,14 @@ msgstr[1] "Štítky"
 msgstr[2] "Štítků"
 msgstr[3] "Štítky"
 
-#: inc/tag.class.php:65 inc/tag.class.php:279
+#: inc/tag.class.php:66 inc/tag.class.php:305
 msgid "HTML color"
 msgstr "Barva v HTML zápisu"
 
-#: inc/tag.class.php:495
+#: inc/tag.class.php:534
 msgid "View all tags"
 msgstr "Zobrazit všechny štítky"
 
-#: setup.php:113
+#: setup.php:123
 msgid "Tag Management"
 msgstr "Správa štítků"
