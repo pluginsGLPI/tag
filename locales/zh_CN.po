@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# 杜哥 <liangjia@qq.com>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Tag\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-26 09:20+0000\n"
+"PO-Revision-Date: 2018-07-02 08:45+0000\n"
+"Last-Translator: 杜哥 <liangjia@qq.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/teclib/glpi-plugin-tag/language/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hook.php:174
+msgid "Add tags"
+msgstr "添加标签"
+
+#: hook.php:176
+msgid "Remove tags"
+msgstr "移除标签"
+
+#: inc/tag.class.php:10 inc/tag.class.php:410
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "标签"
+
+#: inc/tag.class.php:66 inc/tag.class.php:305
+msgid "HTML color"
+msgstr "HTML颜色"
+
+#: inc/tag.class.php:534
+msgid "View all tags"
+msgstr "查看全部标签"
+
+#: setup.php:123
+msgid "Tag Management"
+msgstr "标签管理"
