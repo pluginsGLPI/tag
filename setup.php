@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.2.0');
+define ('PLUGIN_TAG_VERSION', '2.2.1');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "9.3");
