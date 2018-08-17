@@ -6,6 +6,7 @@
    <description>
       <short>
          <fr>Ajout de tags sur n'importe quel objet de GLPI</fr>
+         <cs>Přidání štítku k libovolnému objektu v GLPI</cs>
       </short>
       <long>
          <fr>
@@ -15,6 +16,13 @@
 * Les tags peuvent être recherchés et visualisés dans les listes d'objets.
 * Dans l'administration on peut visualiser un rapport des objets associés.
          </fr>
+         <cs>
+* Přídání „Štítků“ k libovolnému objektu v GLPI (rozšíření CommonDBTM).
+* Štítky je možné spravovat v titulcích.
+* Štítky jsou viditelné a upravitelné v hlavičce objektu (pod názvem).
+* Štítky lze vyhledávat a prohlížet v seznamu objektů.
+* Ve správě je možné zobrazit výkaz o souvisejících objektech.
+         </cs>
       </long>
    </description>
    <homepage>https://github.com/pluginsGLPI/tag</homepage>
@@ -82,6 +90,7 @@
       </version>
    </versions>
    <langs>
+      <lang>cs_CZ</lang>
       <lang>en_GB</lang>
       <lang>fr_FR</lang>
    </langs>
@@ -103,6 +112,12 @@
          <tag>Color</tag>
          <tag>User</tag>
       </en>
+      <cs>
+         <tag>Štítek</tag>
+         <tag>Požadavek</tag>
+         <tag>Barva</tag>
+         <tag>Uživatel</tag>
+      </cs>
    </tags>
    <screenshots>
       <screenshot>https://raw.githubusercontent.com/pluginsGLPI/tag/master/screenshot.png</screenshot>
