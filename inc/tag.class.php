@@ -137,7 +137,7 @@ class PluginTagTag extends CommonDropdown {
          $migration->dropKey($table, 'type_menu');
          $migration->migrationOneTable($table);
 
-         $datas = getAllDatasFromTable($table, "`type_menu` IS NOT NULL");
+         $datas = getAllDatasFromTable($table, ['NOT' => ['type_menu' => null]]);
          if (!empty($datas)) {
             foreach ($datas as $data) {
                $itemtypes = PluginTagTagItem::getItemtypes($data['type_menu']);
