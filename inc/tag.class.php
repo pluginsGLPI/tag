@@ -120,7 +120,7 @@ class PluginTagTag extends CommonDropdown {
             `type_menu`    text collate utf8_unicode_ci,
             PRIMARY KEY (`id`),
             KEY `name` (`name`)
-         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
+         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
             or die($DB->error());
       }
 
