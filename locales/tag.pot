@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-26 09:20+0000\n"
+"POT-Creation-Date: 2018-08-24 14:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,17 +26,17 @@ msgstr ""
 msgid "Remove tags"
 msgstr ""
 
-#: inc/tag.class.php:10 inc/tag.class.php:410
+#: inc/tag.class.php:10 inc/tag.class.php:411
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tag.class.php:66 inc/tag.class.php:305
+#: inc/tag.class.php:67 inc/tag.class.php:306
 msgid "HTML color"
 msgstr ""
 
-#: inc/tag.class.php:534
+#: inc/tag.class.php:535
 msgid "View all tags"
 msgstr ""
 
