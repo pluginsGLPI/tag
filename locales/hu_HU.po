@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-26 09:20+0000\n"
+"POT-Creation-Date: 2018-08-24 14:42+0000\n"
 "PO-Revision-Date: 2018-05-16 11:19+0000\n"
 "Last-Translator: Laszlo Czirbesz <czirbesz.laszlo@soulware.hu>\n"
 "Language-Team: Hungarian (Hungary) (http://www.transifex.com/teclib/glpi-plugin-tag/language/hu_HU/)\n"
@@ -26,17 +26,17 @@ msgstr "Címkék hozzáadása"
 msgid "Remove tags"
 msgstr "Címkék eltávolítása"
 
-#: inc/tag.class.php:10 inc/tag.class.php:410
+#: inc/tag.class.php:10 inc/tag.class.php:411
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Címke"
 msgstr[1] "Címkék"
 
-#: inc/tag.class.php:66 inc/tag.class.php:305
+#: inc/tag.class.php:67 inc/tag.class.php:306
 msgid "HTML color"
 msgstr "HTML szín"
 
-#: inc/tag.class.php:534
+#: inc/tag.class.php:535
 msgid "View all tags"
 msgstr "Minden címke megtekintése"
 

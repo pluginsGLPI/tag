@@ -120,7 +120,7 @@ class PluginTagTag extends CommonDropdown {
             `type_menu`    text collate utf8_unicode_ci,
             PRIMARY KEY (`id`),
             KEY `name` (`name`)
-         ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
+         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
             or die($DB->error());
       }
 
@@ -137,7 +137,7 @@ class PluginTagTag extends CommonDropdown {
          $migration->dropKey($table, 'type_menu');
          $migration->migrationOneTable($table);
 
-         $datas = getAllDatasFromTable($table, "`type_menu` IS NOT NULL");
+         $datas = getAllDatasFromTable($table, ['NOT' => ['type_menu' => null]]);
          if (!empty($datas)) {
             foreach ($datas as $data) {
                $itemtypes = PluginTagTagItem::getItemtypes($data['type_menu']);

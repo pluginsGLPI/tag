@@ -31,7 +31,7 @@ class PluginTagTagItem extends CommonDBRelation {
                UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
             )
             COLLATE='utf8_unicode_ci'
-            ENGINE=MyISAM";
+            ENGINE=InnoDB";
          $DB->query($query) or die($DB->error());
       }
 
