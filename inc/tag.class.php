@@ -511,8 +511,9 @@ class PluginTagTag extends CommonDropdown {
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
-            templateResult: formatOption,
-            templateSelection: formatOption,
+            width: 'calc(100% - 20px)',
+            templateResult: formatOptionResult,
+            templateSelection: formatOptionSelection,
             formatSearching: '".__("Loading...")."',
             dropdownCssClass: 'tag_select_results',
             data: ".json_encode($select2_tags).",
