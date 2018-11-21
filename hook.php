@@ -41,13 +41,14 @@ function plugin_datainjection_populate_tag() {
    $INJECTABLE_TYPES['PluginTagTagInjection'] = 'tag';
 }
 
-function plugin_tag_getAddSearchOptions($itemtype) {
+function plugin_tag_getAddSearchOptionsNew($itemtype) {
    if (!PluginTagTag::canItemtype($itemtype)) {
       return [];
    }
 
-   return [
-      PluginTagTag::S_OPTION => [
+   $options = [
+      [
+         'id'            => PluginTagTag::S_OPTION,
          'table'         => PluginTagTag::getTable(),
          'field'         => 'name',
          'name'          => PluginTagTag::getTypeName(2),
@@ -66,11 +67,42 @@ function plugin_tag_getAddSearchOptions($itemtype) {
          ]
       ]
    ];
+
+   $item = new $itemtype;
+   if ($item->isEntityAssign()) {
+      $options [] = [
+         'id'            => (PluginTagTag::S_OPTION + 1),
+         'table'         => PluginTagTag::getTable(),
+         'field'         => 'name',
+         'name'          => PluginTagTag::getTypeName(2)." - ".__("Entity"),
+         'datatype'      => 'string',
+         'searchtype'    => 'contains',
+         'massiveaction' => false,
+         'forcegroupby'  => true,
+         'usehaving'     => true,
+         'joinparams'    =>  [
+            'condition'  => "AND 1=1", // to force distinct complex id than the previous option
+            'beforejoin' => [
+               'table'      => 'glpi_plugin_tag_tagitems',
+               'joinparams' => [
+                  'jointype'          => 'itemtype_item',
+                  'specific_itemtype' => 'Entity',
+                  'beforejoin' => [
+                     'table' => 'glpi_entities',
+                  ]
+               ]
+            ]
+         ]
+      ];
+   }
+
+   return $options;
 }
 
 function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    switch ($field) {
       case PluginTagTag::S_OPTION:
+      case PluginTagTag::S_OPTION+1:
          $out = '<div class="tag_select select2-container" style="width: 100%;">
                  <div class="select2-choices no-negative-margin">';
          $separator = '';
