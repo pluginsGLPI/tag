@@ -18,10 +18,24 @@ function idealTextColor(hexTripletColor) {
       B: parseInt(hexTripletColor.substring(4, 6), 16)
    };
    var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
-   return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
+   return ((255 - bgDelta) < nThreshold) ? "#000000" : "#E6E6E6";
 }
 
-function formatOption(option) {
+function formatOptionSelection(option, container) {
+   if (typeof option.color != 'undefined'
+       && option.color.length > 0) {
+      var invertedcolor = idealTextColor(option.color);
+      $(container)
+         .css("background-color", option.color)
+         .css("border-color", invertedcolor)
+         .css("color", invertedcolor)
+         .children('.select2-selection__choice__remove')
+            .css("color", invertedcolor);
+   }
+   return option.text;
+}
+
+function formatOptionResult(option, container) {
    var template = "<span class='tag_choice' style='";
    if (typeof option.color != 'undefined'
        && option.color !== "") {
