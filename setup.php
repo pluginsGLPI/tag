@@ -100,6 +100,9 @@ function plugin_init_tag() {
       // add needed javascript & css files
       $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
       $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';
+      if (Session::isMultiEntitiesMode()) {
+         $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/entity.js';
+      }
 
       // hook on object changes
       if ($itemtype = PluginTagTag::getCurrentItemtype()) {
@@ -162,4 +165,18 @@ function plugin_tag_check_prerequisites() {
    }
 
    return true;
+}
+
+function idealTextColor($hexTripletColor) {
+   $nThreshold      = 105;
+   $hexTripletColor = str_replace('#', '', $hexTripletColor);
+   $components      = [
+      'R' => hexdec(substr($hexTripletColor, 0, 2)),
+      'G' => hexdec(substr($hexTripletColor, 2, 2)),
+      'B' => hexdec(substr($hexTripletColor, 4, 2)),
+   ];
+   $bgDelta = ($components['R'] * 0.299)
+            + ($components['G'] * 0.587)
+            + ($components['B'] * 0.114);
+   return (((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff");
 }

@@ -1,12 +1,12 @@
-function rgb2hex(rgb){
+var rgb2hex = function(rgb){
    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
    return (rgb && rgb.length === 4) ? "#" +
       ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
-}
+};
 
-function idealTextColor(hexTripletColor) {
+var idealTextColor = function(hexTripletColor) {
    var nThreshold = 105;
    if (hexTripletColor.indexOf('rgb') != -1) {
       hexTripletColor = rgb2hex(hexTripletColor);
@@ -21,7 +21,7 @@ function idealTextColor(hexTripletColor) {
    return ((255 - bgDelta) < nThreshold) ? "#000000" : "#E6E6E6";
 }
 
-function formatOptionSelection(option, container) {
+var formatOptionSelection = function(option, container) {
    if (typeof option.color != 'undefined'
        && option.color.length > 0) {
       var invertedcolor = idealTextColor(option.color);
@@ -33,9 +33,9 @@ function formatOptionSelection(option, container) {
             .css("color", invertedcolor);
    }
    return option.text;
-}
+};
 
-function formatOptionResult(option, container) {
+var formatOptionResult = function(option, container) {
    var template = "<span class='tag_choice' style='";
    if (typeof option.color != 'undefined'
        && option.color !== "") {
@@ -48,4 +48,4 @@ function formatOptionResult(option, container) {
    template+= "'>" + option.text + "</span>";
 
    return $(template);
-}
+};

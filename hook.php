@@ -106,22 +106,9 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
          $out = '<div class="tag_select select2-container" style="width: 100%;">
                  <div class="select2-choices no-negative-margin">';
          $separator = '';
-         $plugintagtag = new PluginTagTag();
-
          foreach ($data[$num] as $tag) {
             if (isset($tag['id']) && isset($tag['name'])) {
-               $plugintagtag->getFromDB($tag['id']);
-               $color = $plugintagtag->fields["color"];
-               $style = "";
-               if (!empty($color)) {
-                  $style .= "background-color: $color; color: ".idealTextColor($color);
-               } else {
-                  $style .= "border: 1px solid #BBB;";
-               }
-
-               $out .= '<span class="select2-search-choice tag_choice"
-                              style="padding-left:5px;'.$style.'">'.
-                       $separator.$tag['name'].'</span>';
+               $out .= PluginTagTag::getSingleTag($tag['id'], $separator);
                //For export (CSV, PDF) of GLPI core
                $separator = '<span style="display:none">, </span>';
             }
@@ -133,20 +120,6 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
    return "";
 }
 
-
-function idealTextColor($hexTripletColor) {
-   $nThreshold      = 105;
-   $hexTripletColor = str_replace('#', '', $hexTripletColor);
-   $components      = [
-      'R' => hexdec(substr($hexTripletColor, 0, 2)),
-      'G' => hexdec(substr($hexTripletColor, 2, 2)),
-      'B' => hexdec(substr($hexTripletColor, 4, 2)),
-   ];
-   $bgDelta = ($components['R'] * 0.299)
-            + ($components['G'] * 0.587)
-            + ($components['B'] * 0.114);
-   return (((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff");
-}
 
 function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {
    $searchopt = &Search::getOptions($itemtype);
