@@ -457,7 +457,7 @@ class PluginTagTag extends CommonDropdown {
 
       // find values for this items
       $values = [];
-      if ($params['id']) {
+      if (isset($params['id'])) {
          foreach ($tag_item->find('items_id='.$params['id'].'
                                    AND itemtype="'.$itemtype.'"') as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
