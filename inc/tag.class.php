@@ -538,6 +538,39 @@ class PluginTagTag extends CommonDropdown {
       }
    }
 
+   static function getTagForEntityName($completename = "") {
+      $completename = Html::entity_decode_deep($completename);
+      $entities_id = Entity::getEntityIDByCompletename($completename);
+
+      $out = "";
+      if ($entities_id >= 0) {
+         $tag_item = new PluginTagTagItem();
+         foreach ($tag_item->find("items_id = $entities_id
+                                   AND itemtype = 'Entity'") as $found_item) {
+            $out .= PluginTagTag::getSingleTag($found_item['plugin_tag_tags_id']);
+         }
+      }
+
+      return $out;
+   }
+
+   static function getSingleTag($tag_id, $separator = '') {
+      $plugintagtag = new self();
+      $plugintagtag->getFromDB($tag_id);
+      $color = $plugintagtag->fields["color"];
+      $style = "";
+      if (!empty($color)) {
+         $inv_color = idealTextColor($color);
+         $style .= "background-color: $color; border: 1px solid $inv_color; color: $inv_color";
+      } else {
+         $style .= "border: 1px solid #BBB;";
+      }
+
+      return "<span class='select2-search-choice tag_choice'
+                    style='padding-left:5px;$style'>".
+              $separator.$plugintagtag->fields['name'].'</span>';
+   }
+
    function prepareInputForAdd($input) {
       if (!$this->checkMandatoryFields($input)) {
          return false;
