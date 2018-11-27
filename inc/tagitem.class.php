@@ -151,161 +151,160 @@ class PluginTagTagItem extends CommonDBRelation {
                $itemtable = getTableForItemType($itemtype);
             }
 
-            $obj = new $itemtype();
-            $obj->getFromDB($item_id);
+            $criteria = [
+               'SELECT'     => [
+                  $itemtable . '.*',
+                  'glpi_plugin_tag_tagitems.id AS IDD',
+               ],
+               'FROM'       => 'glpi_plugin_tag_tagitems',
+               'INNER JOIN' => [
+                  $itemtable => [
+                     'ON' => [
+                        $itemtable                 => 'id',
+                        'glpi_plugin_tag_tagitems' => 'items_id',
+                        [
+                           'AND' => [
+                              'glpi_plugin_tag_tagitems.itemtype' => $itemtype
+                           ]
+                        ]
+                     ]
+                  ],
+               ],
+               'WHERE'      => [
+                  'glpi_plugin_tag_tagitems.plugin_tag_tags_id' => $instID,
+               ] + getEntitiesRestrictCriteria($itemtable, '', '', $item->maybeRecursive()),
+               'ORDERBY'    => [
+                  $itemtable . '.' . $column,
+               ],
+            ];
 
-            $query = "SELECT `$itemtable`.*, `glpi_plugin_tag_tagitems`.`id` AS IDD, ";
+            if ($item->maybeTemplate()) {
+               $criteria['WHERE'][$itemtable . '.is_template'] = 0;
+            }
 
             switch ($itemtype) {
                case 'KnowbaseItem':
-                  $query .= "-1 AS entity
-                  FROM `glpi_plugin_tag_tagitems`, `$itemtable`
-                  ".KnowbaseItem::addVisibilityJoins()."
-                  WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
-                  AND ";
+                  $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
+                  $visibility_crit = KnowbaseItem::getVisibilityCriteria();
+                  if (array_key_exists('LEFT JOIN', $visibility_crit)
+                      && !empty($visibility_crit['LEFT JOIN'])) {
+                     $criteria['LEFT JOIN'] = $visibility_crit['LEFT JOIN'];
+                  }
                   break;
                case 'Profile':
                case 'RSSFeed':
                case 'Reminder':
                case 'Entity':
                   //Possible to add (in code) condition to visibility :
-                  $query .= "-1 AS entity
-                  FROM `glpi_plugin_tag_tagitems`, `$itemtable`
-                  WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
-                  AND ";
+                  $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
                   break;
                default:
+                  $obj = new $itemtype();
+                  $obj->getFromDB($item_id);
+
                   if (isset($obj->fields['entities_id'])) {
-                     $query .= "`glpi_entities`.`id` AS entity
-                        FROM `glpi_plugin_tag_tagitems`, `$itemtable`
-                        LEFT JOIN `glpi_entities`
-                        ON (`glpi_entities`.`id` = `$itemtable`.`entities_id`)
-                        WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
-                        AND ";
+                     $criteria['SELECT'][] = 'glpi_entities.id AS entity';
+                     $criteria['LEFT JOIN'] = [
+                        'glpi_entities' => [
+                           'ON' => [
+                              'glpi_entities' => 'id',
+                              $itemtable      => 'entities_id',
+                           ]
+                        ],
+                     ];
+                     array_unshift($criteria['ORDERBY'], 'glpi_entities.completename');
                   } else {
-                     $query .= "-1 AS entity
-                        FROM `glpi_plugin_tag_tagitems`, `$itemtable`
-                        WHERE `$itemtable`.`id` = `glpi_plugin_tag_tagitems`.`items_id`
-                        AND ";
+                     $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
                   }
                   break;
             }
 
-            $query .= "`glpi_plugin_tag_tagitems`.`itemtype` = '$itemtype'
-               AND `glpi_plugin_tag_tagitems`.`plugin_tag_tags_id` = '$instID' ";
+            $linked_iterator = $DB->request($criteria);
 
-            $query .= getEntitiesRestrictRequest(" AND ", $itemtable, '', '', $item->maybeRecursive());
+            while ($data = $linked_iterator->next()) {
 
-            if ($item->maybeTemplate()) {
-               $query .= " AND `$itemtable`.`is_template` = '0'";
-            }
+               if ($itemtype == 'Softwarelicense') {
+                  $soft = new Software();
+                  $soft->getFromDB($data['softwares_id']);
+                  $data["name"] .= ' - ' . $soft->getName(); //This add name of software
+               } else if ($itemtype == "PluginResourcesResource") {
+                  $data["name"] = formatUserName($data["id"], "", $data["name"],
+                                     $data["firstname"]);
+               }
 
-            switch ($itemtype) {
-               case 'KnowbaseItem':
-               case 'Profile':
-               case 'RSSFeed':
-               case 'Reminder':
-               case 'Entity':
-                  $query .= " ORDER BY `$itemtable`.`$column`";
-                  break;
-               default:
-                  if (isset($obj->fields['entities_id'])) {
-                     $query .= " ORDER BY `glpi_entities`.`completename`, `$itemtable`.`$column`";
-                  } else {
-                     $query .= " ORDER BY `$itemtable`.`$column`";
+               $linkname = $data[$column];
+
+               if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
+                  $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+               }
+
+               $name = "<a href=\"".Toolbox::getItemTypeFormURL($itemtype)."?id=".$data["id"]."\">".$linkname."</a>";
+
+               if ($itemtype == 'PluginProjetProjet'
+                  || $itemtype == 'PluginResourcesResource') {
+                  $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                  $plugin_name = $pieces[2];
+
+                  $datas = ["entities_id" => $data["entity"],
+                            "ITEM_0"      => $data["name"],
+                            "ITEM_0_2"    => $data["id"],
+                            "id"          => $data["id"],
+                            "META_0"      => $data["name"]]; //for PluginResourcesResource
+
+                  if (isset($data["is_recursive"])) {
+                     $datas["is_recursive"] = $data["is_recursive"];
                   }
-                  break;
-            }
 
-            if ($result_linked = $DB->query($query)) {
-               if ($DB->numrows($result_linked)) {
+                     Plugin::load(strtolower($plugin_name), true);
+                     $function_giveitem = 'plugin_'.strtolower($plugin_name).'_giveItem';
+                  if (function_exists($function_giveitem)) { // For security
+                     $name = call_user_func($function_giveitem, $itemtype, 1, $datas, 0);
+                  }
 
-                  while ($data = $DB->fetch_assoc($result_linked)) {
+               }
 
-                     if ($itemtype == 'Softwarelicense') {
-                        $soft = new Software();
-                        $soft->getFromDB($data['softwares_id']);
-                        $data["name"] .= ' - ' . $soft->getName(); //This add name of software
-                     } else if ($itemtype == "PluginResourcesResource") {
-                        $data["name"] = formatUserName($data["id"], "", $data["name"],
-                                           $data["firstname"]);
-                     }
+               echo "<tr class='tab_bg_1'>";
 
-                     $linkname = $data[$column];
+               if ($canedit) {
+                  echo "<td width='10'>";
+                  if ($item->canUpdate()) {
+                     Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
+                  }
+                  echo "</td>";
+               }
+               echo "<td class='center'>";
 
-                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
-                        $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
-                     }
-
-                     $name = "<a href=\"".Toolbox::getItemTypeFormURL($itemtype)."?id=".$data["id"]."\">".$linkname."</a>";
-
-                     if ($itemtype == 'PluginProjetProjet'
-                        || $itemtype == 'PluginResourcesResource') {
-                        $pieces = preg_split('/(?=[A-Z])/', $itemtype);
-                        $plugin_name = $pieces[2];
-
-                        $datas = ["entities_id" => $data["entity"],
-                                  "ITEM_0"      => $data["name"],
-                                  "ITEM_0_2"    => $data["id"],
-                                  "id"          => $data["id"],
-                                  "META_0"      => $data["name"]]; //for PluginResourcesResource
-
-                        if (isset($data["is_recursive"])) {
-                           $datas["is_recursive"] = $data["is_recursive"];
-                        }
-
-                           Plugin::load(strtolower($plugin_name), true);
-                           $function_giveitem = 'plugin_'.strtolower($plugin_name).'_giveItem';
-                        if (function_exists($function_giveitem)) { // For security
-                           $name = call_user_func($function_giveitem, $itemtype, 1, $datas, 0);
-                        }
-
-                     }
-
-                     echo "<tr class='tab_bg_1'>";
-
-                     if ($canedit) {
-                        echo "<td width='10'>";
-                        if ($item->canUpdate()) {
-                           Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
-                        }
-                        echo "</td>";
-                     }
-                     echo "<td class='center'>";
-
-                     // Show plugin name (is to delete remove any ambiguity) :
-                     $pieces = preg_split('/(?=[A-Z])/', $itemtype);
-                     if ($pieces[1] == 'Plugin') {
-                        $plugin_name = $pieces[2];
-                        if (function_exists("plugin_version_".$plugin_name)) { // For security
-                           $tab = call_user_func("plugin_version_".$plugin_name);
-                           echo $tab["name"]." : ";
-                        }
-                     }
-
-                     echo $item->getTypeName(1)."</td>";
-                     echo "<td ".(isset($data['is_deleted']) && $data['is_deleted'] ? "class='tab_bg_2_2'":"").">".$name."</td>";
-                     echo "<td class='center'>";
-
-                     $entity = $data['entity'];
-
-                     //for Plugins :
-                     if ($data["entity"] == -1) {
-                        $item->getFromDB($data['id']);
-                        if (isset($item->fields["entities_id"])) {
-                           $entity = $item->fields["entities_id"];
-                        }
-                     }
-                     echo Dropdown::getDropdownName("glpi_entities", $entity);
-
-                     echo "</td>";
-                     echo "<td class='center'>".
-                         (isset($data["serial"]) ? "".$data["serial"]."" :"-")."</td>";
-                     echo "<td class='center'>".
-                         (isset($data["otherserial"]) ? "".$data["otherserial"]."" :"-")."</td>";
-                     echo "</tr>";
+               // Show plugin name (is to delete remove any ambiguity) :
+               $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+               if ($pieces[1] == 'Plugin') {
+                  $plugin_name = $pieces[2];
+                  if (function_exists("plugin_version_".$plugin_name)) { // For security
+                     $tab = call_user_func("plugin_version_".$plugin_name);
+                     echo $tab["name"]." : ";
                   }
                }
+
+               echo $item->getTypeName(1)."</td>";
+               echo "<td ".(isset($data['is_deleted']) && $data['is_deleted'] ? "class='tab_bg_2_2'":"").">".$name."</td>";
+               echo "<td class='center'>";
+
+               $entity = $data['entity'];
+
+               //for Plugins :
+               if ($data["entity"] == -1) {
+                  $item->getFromDB($data['id']);
+                  if (isset($item->fields["entities_id"])) {
+                     $entity = $item->fields["entities_id"];
+                  }
+               }
+               echo Dropdown::getDropdownName("glpi_entities", $entity);
+
+               echo "</td>";
+               echo "<td class='center'>".
+                   (isset($data["serial"]) ? "".$data["serial"]."" :"-")."</td>";
+               echo "<td class='center'>".
+                   (isset($data["otherserial"]) ? "".$data["otherserial"]."" :"-")."</td>";
+               echo "</tr>";
             }
          }
       }
@@ -363,8 +362,8 @@ class PluginTagTagItem extends CommonDBRelation {
 
       } else {
          // remove possible duplicates (to avoid sql errors on unique index)
-         $found      = $tag_item->find("`items_id` = ".$item->getID()."
-                                        AND `itemtype` = '".$item->getType()."'");
+         $found      = $tag_item->find(['items_id' => $item->getID(),
+                                        'itemtype' => $item->getType()]);
          $tag_values = array_diff($tag_values, array_keys($found));
       }
 
