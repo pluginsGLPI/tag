@@ -34,6 +34,9 @@
    </authors>
    <versions>
       <version>
+         <num>2.4.0</num>
+         <compatibility>9.4</compatibility>
+      </version>
          <num>2.3.0</num>
          <compatibility>9.3</compatibility>
       </version>

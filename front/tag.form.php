@@ -14,9 +14,9 @@ if (isset($_POST['add'])) {
 
    // Check unicity :
    if (isset($_REQUEST['plugin_tag_tags_id'])) {
-      $found = $item->find('plugin_tag_tags_id = '. $_REQUEST['plugin_tag_tags_id'] .'
-                            AND items_id = ' . $_REQUEST['items_id'].'
-                            AND itemtype = "' . $_REQUEST['itemtype'].'"');
+      $found = $item->find(['plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
+                            'items_id' => $_REQUEST['items_id'],
+                            'itemtype' => $_REQUEST['itemtype']]);
 
       if (count($found) == 0) {
          $item->add($_REQUEST);
