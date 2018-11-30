@@ -34,6 +34,10 @@
    font-size: 11px;
 }
 
+.tab_cadre_pager span.tag_choice {
+   margin: 2px;
+}
+
 .select2-results .tag_choice {
    padding: 2px 4px;
 }

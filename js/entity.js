@@ -20,14 +20,15 @@ $(function() {
 var setEntityTag = function() {
 
    // find entity title for ticket
-   var regex = /.+-\s.+\s[0-9]+\s\((.+)\)/;
-   var entity_title = $('#mainformtable tr:first-child th').filter(function() {
+   var regex = /.+(-\s.+\s[0-9]+)*\s\((.+)\)/;
+   var entity_title = $('#page .tab_cadre_pager tr.tab_bg_2:first-child td.b.big, \
+                         #mainformtable tr:first-child th').filter(function() {
       return regex.test($(this).text());
    })
 
    if (entity_title.length > 0) {
-      var matches     = entity_title.text().match(regex);
-      var entity_name = matches[1];
+      var matches     = entity_title.first().text().match(regex);
+      var entity_name = matches[2];
       replaceEntity(entity_title, entity_name)
    } else {
       // find entity title for all objects except tickets
