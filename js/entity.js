@@ -27,7 +27,8 @@ var setEntityTag = function() {
    })
 
    if (entity_title.length > 0) {
-      var matches     = entity_title.first().text().match(regex);
+      entity_title    = entity_title.first();
+      var matches     = entity_title.text().match(regex);
       var entity_name = matches[2];
       replaceEntity(entity_title, entity_name)
    } else {
