@@ -24,7 +24,7 @@ var setEntityTag = function() {
    var entity_title = $('#page .tab_cadre_pager tr.tab_bg_2:first-child td.b.big, \
                          #mainformtable tr:first-child th').filter(function() {
       return regex.test($(this).text());
-   })
+   });
 
    if (entity_title.length > 0) {
       entity_title    = entity_title.first();
@@ -60,7 +60,7 @@ var replaceEntity = function(entity_title, entity_name) {
          success: function(response) {
             entity_title.html(function() {
                if ($(this).html().indexOf(')') > 0) {
-                  return $(this).html().replace(")", response+")");
+                  return $(this).html().replace(/\)$/, response+")");
                } else {
                   return $(this).html()+response;
                }
