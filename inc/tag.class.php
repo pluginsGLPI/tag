@@ -539,8 +539,10 @@ class PluginTagTag extends CommonDropdown {
    }
 
    static function getTagForEntityName($completename = "") {
-      $completename = Html::entity_decode_deep($completename);
-      $entities_id = Entity::getEntityIDByCompletename($completename);
+      $plus_rootentity = sprintf(__('%1$s + %2$s'), '', __('Child entities'));
+      $completename    = Html::entity_decode_deep($completename);
+      $completename    = trim(str_replace($plus_rootentity, '', $completename));
+      $entities_id     = Entity::getEntityIDByCompletename($completename);
 
       $out = "";
       if ($entities_id >= 0) {
