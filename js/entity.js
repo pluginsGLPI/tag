@@ -22,7 +22,7 @@ var setEntityTag = function() {
    // find entity title for ticket
    var regex = /.+(-\s.+\s[0-9]+)*\s\((.+)\)/;
    var entity_title = $('#page .tab_cadre_pager tr.tab_bg_2:first-child td.b.big, \
-                         #mainformtable tr:first-child th').filter(function() {
+                         #mainformtable tr.headerRow:first-child th:first-child').filter(function() {
       return regex.test($(this).text());
    });
 
