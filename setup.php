@@ -26,12 +26,12 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.3.0');
+define ('PLUGIN_TAG_VERSION', '2.4.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "9.3");
+define("PLUGIN_TAG_MIN_GLPI", "9.4");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "9.4");
+define("PLUGIN_TAG_MAX_GLPI", "9.5");
 
 /**
  * Check configuration process

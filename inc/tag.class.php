@@ -230,7 +230,7 @@ class PluginTagTag extends CommonDropdown {
    // for massive actions
    function haveChildren() {
       $tagitems = new PluginTagTagItem();
-      $data = $tagitems->find("`plugin_tag_tags_id` = ".$this->getID());
+      $data = $tagitems->find(['plugin_tag_tags_id' => $this->getID()]);
       if (count($data) == 0) {
          return false;
       }
@@ -458,8 +458,8 @@ class PluginTagTag extends CommonDropdown {
       // find values for this items
       $values = [];
       if (isset($params['id'])) {
-         foreach ($tag_item->find('items_id='.$params['id'].'
-                                   AND itemtype="'.$itemtype.'"') as $found_item) {
+         foreach ($tag_item->find(['items_id' => $params['id'],
+                                   'itemtype' => $itemtype]) as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
          }
       } else {
@@ -467,12 +467,16 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // Restrict tags finding by itemtype and entity
-      $where = "(`type_menu` IS NULL
-                 OR `type_menu` = ''
-                 OR `type_menu` = '0'
-                 OR `type_menu` LIKE '%$itemtype%')";
+      $where = [
+         'OR' => [
+            ['type_menu' => null],
+            ['type_menu' => ''],
+            ['type_menu' => 0],
+            ['type_menu' => ['LIKE', '%$itemtype%']],
+         ]
+      ];
       if ($obj->isEntityAssign()) {
-         $where.= getEntitiesRestrictRequest(" AND", '', '', '', true);
+         $where += getEntitiesRestrictCriteria('', '', '', true);
       }
 
       // found existing tags
@@ -547,8 +551,8 @@ class PluginTagTag extends CommonDropdown {
       $out = "";
       if ($entities_id >= 0) {
          $tag_item = new PluginTagTagItem();
-         foreach ($tag_item->find("items_id = $entities_id
-                                   AND itemtype = 'Entity'") as $found_item) {
+         foreach ($tag_item->find(['items_id' => $entities_id,
+                                   'itemtype' => 'Entity']) as $found_item) {
             $out .= PluginTagTag::getSingleTag($found_item['plugin_tag_tags_id']);
          }
       }
