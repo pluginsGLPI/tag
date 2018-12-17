@@ -1,12 +1,12 @@
-function rgb2hex(rgb){
+var rgb2hex = function(rgb){
    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
    return (rgb && rgb.length === 4) ? "#" +
       ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
-}
+};
 
-function idealTextColor(hexTripletColor) {
+var idealTextColor = function(hexTripletColor) {
    var nThreshold = 105;
    if (hexTripletColor.indexOf('rgb') != -1) {
       hexTripletColor = rgb2hex(hexTripletColor);
@@ -18,10 +18,24 @@ function idealTextColor(hexTripletColor) {
       B: parseInt(hexTripletColor.substring(4, 6), 16)
    };
    var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
-   return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
+   return ((255 - bgDelta) < nThreshold) ? "#000000" : "#E6E6E6";
 }
 
-function formatOption(option) {
+var formatOptionSelection = function(option, container) {
+   if (typeof option.color != 'undefined'
+       && option.color.length > 0) {
+      var invertedcolor = idealTextColor(option.color);
+      $(container)
+         .css("background-color", option.color)
+         .css("border-color", invertedcolor)
+         .css("color", invertedcolor)
+         .children('.select2-selection__choice__remove')
+            .css("color", invertedcolor);
+   }
+   return option.text;
+};
+
+var formatOptionResult = function(option, container) {
    var template = "<span class='tag_choice' style='";
    if (typeof option.color != 'undefined'
        && option.color !== "") {
@@ -34,4 +48,4 @@ function formatOption(option) {
    template+= "'>" + option.text + "</span>";
 
    return $(template);
-}
+};

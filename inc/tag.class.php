@@ -457,7 +457,7 @@ class PluginTagTag extends CommonDropdown {
 
       // find values for this items
       $values = [];
-      if ($params['id']) {
+      if (isset($params['id'])) {
          foreach ($tag_item->find('items_id='.$params['id'].'
                                    AND itemtype="'.$itemtype.'"') as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
@@ -511,8 +511,9 @@ class PluginTagTag extends CommonDropdown {
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
          $('#tag_select_$rand').select2({
-            templateResult: formatOption,
-            templateSelection: formatOption,
+            width: 'calc(100% - 20px)',
+            templateResult: formatOptionResult,
+            templateSelection: formatOptionSelection,
             formatSearching: '".__("Loading...")."',
             dropdownCssClass: 'tag_select_results',
             data: ".json_encode($select2_tags).",
@@ -535,6 +536,41 @@ class PluginTagTag extends CommonDropdown {
          echo Html::showToolTip(__("View all tags", 'tag'),
                                 ['link' => self::getSearchURL()]);
       }
+   }
+
+   static function getTagForEntityName($completename = "") {
+      $plus_rootentity = sprintf(__('%1$s + %2$s'), '', __('Child entities'));
+      $completename    = Html::entity_decode_deep($completename);
+      $completename    = trim(str_replace($plus_rootentity, '', $completename));
+      $entities_id     = Entity::getEntityIDByCompletename($completename);
+
+      $out = "";
+      if ($entities_id >= 0) {
+         $tag_item = new PluginTagTagItem();
+         foreach ($tag_item->find("items_id = $entities_id
+                                   AND itemtype = 'Entity'") as $found_item) {
+            $out .= PluginTagTag::getSingleTag($found_item['plugin_tag_tags_id']);
+         }
+      }
+
+      return $out;
+   }
+
+   static function getSingleTag($tag_id, $separator = '') {
+      $plugintagtag = new self();
+      $plugintagtag->getFromDB($tag_id);
+      $color = $plugintagtag->fields["color"];
+      $style = "";
+      if (!empty($color)) {
+         $inv_color = idealTextColor($color);
+         $style .= "background-color: $color; border: 1px solid $inv_color; color: $inv_color";
+      } else {
+         $style .= "border: 1px solid #BBB;";
+      }
+
+      return "<span class='select2-search-choice tag_choice'
+                    style='padding-left:5px;$style'>".
+              $separator.$plugintagtag->fields['name'].'</span>';
    }
 
    function prepareInputForAdd($input) {
