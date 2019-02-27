@@ -68,32 +68,34 @@ function plugin_tag_getAddSearchOptionsNew($itemtype) {
       ]
    ];
 
-   $item = new $itemtype;
-   if ($item->isEntityAssign()) {
-      $options [] = [
-         'id'            => (PluginTagTag::S_OPTION + 1),
-         'table'         => PluginTagTag::getTable(),
-         'field'         => 'name',
-         'name'          => PluginTagTag::getTypeName(2)." - ".__("Entity"),
-         'datatype'      => 'string',
-         'searchtype'    => 'contains',
-         'massiveaction' => false,
-         'forcegroupby'  => true,
-         'usehaving'     => true,
-         'joinparams'    =>  [
-            'condition'  => "AND 1=1", // to force distinct complex id than the previous option
-            'beforejoin' => [
-               'table'      => 'glpi_plugin_tag_tagitems',
-               'joinparams' => [
-                  'jointype'          => 'itemtype_item',
-                  'specific_itemtype' => 'Entity',
-                  'beforejoin' => [
-                     'table' => 'glpi_entities',
+   if ($itemtype != 'AllAssets') {
+      $item = new $itemtype;
+      if ($item->isEntityAssign()) {
+         $options [] = [
+            'id'            => (PluginTagTag::S_OPTION + 1),
+            'table'         => PluginTagTag::getTable(),
+            'field'         => 'name',
+            'name'          => PluginTagTag::getTypeName(2)." - ".__("Entity"),
+            'datatype'      => 'string',
+            'searchtype'    => 'contains',
+            'massiveaction' => false,
+            'forcegroupby'  => true,
+            'usehaving'     => true,
+            'joinparams'    =>  [
+               'condition'  => "AND 1=1", // to force distinct complex id than the previous option
+               'beforejoin' => [
+                  'table'      => 'glpi_plugin_tag_tagitems',
+                  'joinparams' => [
+                     'jointype'          => 'itemtype_item',
+                     'specific_itemtype' => 'Entity',
+                     'beforejoin' => [
+                        'table' => 'glpi_entities',
+                     ]
                   ]
                ]
             ]
-         ]
-      ];
+         ];
+      }
    }
 
    return $options;
