@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Tag\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-11 15:50+0000\n"
+"PO-Revision-Date: 2019-02-27 16:56+0000\n"
+"Last-Translator: Rui Melo <viper5000pt@gmail.com>\n"
+"Language-Team: Portuguese (Portugal) (http://www.transifex.com/teclib/glpi-plugin-tag/language/pt_PT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hook.php:181
+msgid "Add tags"
+msgstr "Adicionar etiquetas"
+
+#: hook.php:183
+msgid "Remove tags"
+msgstr "Remover etiquetas"
+
+#: inc/tag.class.php:10 inc/tag.class.php:412
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Marcador"
+msgstr[1] "Tags"
+
+#: inc/tag.class.php:68 inc/tag.class.php:307
+msgid "HTML color"
+msgstr "Cor HTML"
+
+#: inc/tag.class.php:541
+msgid "View all tags"
+msgstr "Exibir todas etiquetas"
+
+#: setup.php:126
+msgid "Tag Management"
+msgstr "Gerenciamento de Etiquetas"
