@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-24 14:42+0000\n"
+"POT-Creation-Date: 2019-03-11 15:50+0000\n"
 "PO-Revision-Date: 2018-07-02 08:45+0000\n"
 "Last-Translator: liAnGjiA <liangjia@qq.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/teclib/glpi-plugin-tag/language/zh_CN/)\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hook.php:174
+#: hook.php:181
 msgid "Add tags"
 msgstr "添加标签"
 
-#: hook.php:176
+#: hook.php:183
 msgid "Remove tags"
 msgstr "移除标签"
 
-#: inc/tag.class.php:10 inc/tag.class.php:411
+#: inc/tag.class.php:10 inc/tag.class.php:412
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "标签"
 
-#: inc/tag.class.php:67 inc/tag.class.php:306
+#: inc/tag.class.php:68 inc/tag.class.php:307
 msgid "HTML color"
 msgstr "HTML颜色"
 
-#: inc/tag.class.php:535
+#: inc/tag.class.php:541
 msgid "View all tags"
 msgstr "查看全部标签"
 
-#: setup.php:123
+#: setup.php:126
 msgid "Tag Management"
 msgstr "标签管理"

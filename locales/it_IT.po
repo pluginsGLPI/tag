@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-24 14:42+0000\n"
+"POT-Creation-Date: 2019-03-11 15:50+0000\n"
 "PO-Revision-Date: 2017-09-22 15:17+0000\n"
 "Last-Translator: alexandre delaunay <delaunay.alexandre@gmail.com>\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-plugin-tag/language/it_IT/)\n"
@@ -18,28 +18,28 @@ msgstr ""
 "Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:174
+#: hook.php:181
 msgid "Add tags"
 msgstr ""
 
-#: hook.php:176
+#: hook.php:183
 msgid "Remove tags"
 msgstr ""
 
-#: inc/tag.class.php:10 inc/tag.class.php:411
+#: inc/tag.class.php:10 inc/tag.class.php:412
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tag.class.php:67 inc/tag.class.php:306
+#: inc/tag.class.php:68 inc/tag.class.php:307
 msgid "HTML color"
 msgstr "Colore HTML"
 
-#: inc/tag.class.php:535
+#: inc/tag.class.php:541
 msgid "View all tags"
 msgstr ""
 
-#: setup.php:123
+#: setup.php:126
 msgid "Tag Management"
 msgstr "Gestione Tag"
