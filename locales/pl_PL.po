@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-24 14:42+0000\n"
+"POT-Creation-Date: 2019-03-11 15:50+0000\n"
 "PO-Revision-Date: 2017-10-29 22:52+0000\n"
 "Last-Translator: awiamo\n"
 "Language-Team: Polish (Poland) (http://www.transifex.com/teclib/glpi-plugin-tag/language/pl_PL/)\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Language: pl_PL\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: hook.php:174
+#: hook.php:181
 msgid "Add tags"
 msgstr "Dodaj słowa kluczowe"
 
-#: hook.php:176
+#: hook.php:183
 msgid "Remove tags"
 msgstr "Usuń słowa kluczowe"
 
-#: inc/tag.class.php:10 inc/tag.class.php:411
+#: inc/tag.class.php:10 inc/tag.class.php:412
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
@@ -34,14 +34,14 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/tag.class.php:67 inc/tag.class.php:306
+#: inc/tag.class.php:68 inc/tag.class.php:307
 msgid "HTML color"
 msgstr "kolor HTML"
 
-#: inc/tag.class.php:535
+#: inc/tag.class.php:541
 msgid "View all tags"
 msgstr "Pokaż wszystkie słowa kluczowe"
 
-#: setup.php:123
+#: setup.php:126
 msgid "Tag Management"
 msgstr "Zarządzanie słowami kluczowymi"
