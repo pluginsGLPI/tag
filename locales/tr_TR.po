@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-24 14:42+0000\n"
+"POT-Creation-Date: 2019-03-11 15:50+0000\n"
 "PO-Revision-Date: 2017-09-23 21:40+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-plugin-tag/language/tr_TR/)\n"
@@ -18,28 +18,28 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: hook.php:174
+#: hook.php:181
 msgid "Add tags"
 msgstr "Etiket ekle"
 
-#: hook.php:176
+#: hook.php:183
 msgid "Remove tags"
 msgstr "Etiket sil"
 
-#: inc/tag.class.php:10 inc/tag.class.php:411
+#: inc/tag.class.php:10 inc/tag.class.php:412
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiket"
 msgstr[1] "Etiket"
 
-#: inc/tag.class.php:67 inc/tag.class.php:306
+#: inc/tag.class.php:68 inc/tag.class.php:307
 msgid "HTML color"
 msgstr "HTML rengi"
 
-#: inc/tag.class.php:535
+#: inc/tag.class.php:541
 msgid "View all tags"
 msgstr "Tüm etiketleri görüntüle"
 
-#: setup.php:123
+#: setup.php:126
 msgid "Tag Management"
 msgstr "Etiket Yönetimi"

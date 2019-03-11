@@ -25,6 +25,7 @@ class PluginTagTag extends CommonDropdown {
          'QueuedNotification',
          'PluginPrintercountersRecord',
          'ITILSolution',
+         'ITILFollowup',
       ];
    }
 
