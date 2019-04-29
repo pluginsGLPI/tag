@@ -416,6 +416,8 @@ class PluginTagTag extends CommonDropdown {
                'id'       => $item->getId(),
                'value'    => $value,
             ]);
+            echo "<input type='hidden' name='_plugin_tag_tag_process'>";
+
             echo "</td>";
             echo "</tr>";
          }
