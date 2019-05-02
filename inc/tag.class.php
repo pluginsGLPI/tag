@@ -473,7 +473,7 @@ class PluginTagTag extends CommonDropdown {
             ['type_menu' => null],
             ['type_menu' => ''],
             ['type_menu' => 0],
-            ['type_menu' => ['LIKE', '%$itemtype%']],
+            ['type_menu' => ['LIKE', '%'.$itemtype.'%']],
          ]
       ];
       if ($obj->isEntityAssign()) {
@@ -494,6 +494,7 @@ class PluginTagTag extends CommonDropdown {
 
       // create an input receiving the tag tokens
       $rand = mt_rand();
+      echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
       echo Html::select(
          '_plugin_tag_tag_values[]',
          [],
