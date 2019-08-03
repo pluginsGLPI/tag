@@ -42,7 +42,7 @@ function plugin_datainjection_populate_tag() {
 }
 
 function plugin_tag_getAddSearchOptionsNew($itemtype) {
-   if (!PluginTagTag::canItemtype($itemtype)) {
+   if (!PluginTagTag::canView() || !PluginTagTag::canItemtype($itemtype)) {
       return [];
    }
 

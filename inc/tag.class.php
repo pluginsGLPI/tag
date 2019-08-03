@@ -5,6 +5,7 @@ class PluginTagTag extends CommonDropdown {
    public $dohistory = true;
 
    const S_OPTION = 10500;
+   static $rightname = 'plugin_tag_tag';
 
    public static function getTypeName($nb = 1) {
       return _n('Tag', 'Tags', $nb, 'tag');
@@ -43,6 +44,10 @@ class PluginTagTag extends CommonDropdown {
 
    public function showForm($ID, $options = []) {
       global $CFG_GLPI;
+
+      if (!$this->canViewItem()) {
+         return false;
+      }
 
       $this->initForm($ID, $options);
       $this->showFormHeader($options);
@@ -147,6 +152,15 @@ class PluginTagTag extends CommonDropdown {
                            WHERE `id` = '".$data['id']."'");
             }
          }
+      }
+
+      // Add full rights to profiles that have READ or UPDATE config right
+      $migration->addRight(self::$rightname);
+      $migration->displayWarning("Tags now have rights. Please review all profiles to set the required level of rights.");
+
+      if (Session::haveRight(Config::$rightname, READ | UPDATE)) {
+         // Update active profile to give access without having to logout/login
+         $_SESSION['glpiactiveprofile'][self::$rightname] = ALLSTANDARDRIGHT;
       }
 
       return true;
@@ -374,6 +388,10 @@ class PluginTagTag extends CommonDropdown {
     * @return nothing
     */
    static function preItemForm($params = []) {
+      if (!self::canView()) {
+         return false;
+      }
+
       if (isset($params['item'])
           && $params['item'] instanceof CommonDBTM) {
          $item     = $params['item'];
@@ -512,7 +530,9 @@ class PluginTagTag extends CommonDropdown {
          $token_creation = "return null;";
       }
 
-      $readOnly = $obj->isNewItem() ? !$obj->canCreateItem() : !$obj->canUpdateItem();
+      $readOnly = (!$tag::canUpdate() ||
+            ((($obj->isNewItem() && !$obj->canCreateItem())) ||
+            (!$obj->isNewItem() && !$obj->canUpdateItem())));
 
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
@@ -525,7 +545,7 @@ class PluginTagTag extends CommonDropdown {
             data: ".json_encode($select2_tags).",
             tags: true,
             tokenSeparators: [',', ';'],
-            readonly: ".($readOnly ? 'true': 'false').",
+            disabled: ".($readOnly ? 'true': 'false').",
             createTag: function (params) {
                var term = $.trim(params.term);
                if (term === '') {

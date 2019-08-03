@@ -112,6 +112,8 @@ function plugin_init_tag() {
             $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
          }
       }
+
+      Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
    }
 }
 
