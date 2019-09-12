@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.4.2');
+define ('PLUGIN_TAG_VERSION', '2.5.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "9.4");
@@ -112,6 +112,8 @@ function plugin_init_tag() {
             $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
          }
       }
+
+      Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
    }
 }
 
