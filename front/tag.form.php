@@ -1,7 +1,7 @@
 <?php
 include ('../../../inc/includes.php');
 
-Session::checkRight("config", UPDATE);
+Session::checkRight(PluginTagTag::$rightname, UPDATE);
 
 $plugin = new Plugin();
 if (! $plugin->isInstalled("tag")
