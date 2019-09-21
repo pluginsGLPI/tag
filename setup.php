@@ -26,12 +26,12 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.4.2');
+define ('PLUGIN_TAG_VERSION', '2.6.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "9.4");
+define("PLUGIN_TAG_MIN_GLPI", "9.5");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "9.5");
+define("PLUGIN_TAG_MAX_GLPI", "9.6");
 
 /**
  * Check configuration process
@@ -93,6 +93,7 @@ function plugin_init_tag() {
 
       // insert tag dropdown into all possible itemtypes
       $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'preItemForm'];
+      $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
 
       // plugin datainjection
       $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";

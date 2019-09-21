@@ -423,6 +423,62 @@ class PluginTagTag extends CommonDropdown {
    }
 
    /**
+    * Display the current tags before the Kanban item content.
+    *
+    * @param  array $params should contains theses keys:
+    *                          - itemtype The item type
+    *                          - items_id The item's id
+    *                          - content postKanbanContent content
+    * @return array Array of params passed in in addition to the new content.
+    */
+   static function preKanbanContent($params = []) {
+      global $DB;
+
+      if (!Session::haveRight(PluginTagTag::$rightname, READ)) {
+         return null;
+      }
+
+      if (isset($params['itemtype']) && isset($params['items_id'])) {
+         if (!isset($params['content'])) {
+            $params['content'] = "";
+         }
+         $iterator = $DB->request([
+            'SELECT'    => [
+               'name',
+               'comment',
+               'color'
+            ],
+            'FROM'      => PluginTagTagItem::getTable(),
+            'LEFT JOIN' => [
+               PluginTagTag::getTable() => [
+                  'FKEY'   => [
+                     PluginTagTag::getTable()      => 'id',
+                     PluginTagTagItem::getTable()  => 'plugin_tag_tags_id'
+                  ]
+               ]
+            ],
+            'WHERE'     => [
+               'itemtype'  => $params['itemtype'],
+               'items_id'  => $params['items_id']
+            ]
+         ]);
+
+         $content = "<div style='display: flex; flex-wrap: wrap;'>";
+         while ($data = $iterator->next()) {
+            $title = htmlentities($data['comment']);
+            $name = htmlentities($data['name']);
+            $textcolor = idealTextColor($data['color']);
+            $style = "background-color: {$data['color']}; color: {$textcolor};";
+            $content .= "<span class='tag_choice' style='{$style}' title='{$title}'>{$name}</span>&nbsp;&nbsp;";
+         }
+         $content .= "</div>";
+         $params['content'] .= $content;
+         return $params;
+      }
+      return null;
+   }
+
+   /**
     * Display the tag dropdowns
     * @param  array  $params could contains theses keys:
     *                           - itemtype (mandatory)
