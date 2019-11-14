@@ -137,7 +137,7 @@ class PluginTagTag extends CommonDropdown {
 
       // Version 0.90-1.1
       // Disable cache on field list as cache wes not pruned after adding field
-      $fields = $DB->list_fields($table, false);
+      $fields = $DB->listFields($table, false);
       if (stristr($fields['type_menu']["Type"], 'varchar') !== false) {
          $migration->changeField($table, 'type_menu', 'type_menu', 'text');
          $migration->dropKey($table, 'type_menu');
