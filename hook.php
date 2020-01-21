@@ -52,11 +52,10 @@ function plugin_tag_getAddSearchOptionsNew($itemtype) {
          'table'         => PluginTagTag::getTable(),
          'field'         => 'name',
          'name'          => PluginTagTag::getTypeName(2),
-         'datatype'      => 'string',
-         'searchtype'    => 'contains',
+         'datatype'      => 'dropdown',
+         'searchtype'    => ['equals','notequals','contains'],
          'massiveaction' => false,
          'forcegroupby'  => true,
-         'usehaving'     => true,
          'joinparams'    =>  [
             'beforejoin' => [
                'table'      => 'glpi_plugin_tag_tagitems',
