@@ -20,6 +20,9 @@ class PluginTagTag extends CommonDropdown {
    public static function getBlacklistItemtype() {
       return [
          'PluginTagTag',
+         'PluginTagTagItem',
+         'Itil_Project',
+         'Item_Project',
          'Notification',
          'Crontask',
          'PluginFormcreatorFormanswer',
