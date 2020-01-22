@@ -18,7 +18,7 @@
 
 ## Documentation
 
-We maintain a detailed documentation here -> ![Documentation](https://glpi-plugins.readthedocs.io/en/latest/tag/index.html)
+We maintain a detailed documentation here -> [Documentation](https://glpi-plugins.readthedocs.io/en/latest/tag/index.html)
 
 
 ## Contact
