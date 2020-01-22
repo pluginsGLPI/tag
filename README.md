@@ -7,6 +7,7 @@
 [![GitHub release](https://img.shields.io/github/release/pluginsGLPI/tag.svg)](https://github.com/pluginsGLPI/tag/releases)
 [![GitHub build](https://travis-ci.org/pluginsGLPI/tag.svg?)](https://travis-ci.org/pluginsGLPI/tag/)
 
+![Screenshot](./screenshot.png)
 
 * Add tags on every GLPI item type (which extends `CommonDBTM`)
 * Manage tag from labels
