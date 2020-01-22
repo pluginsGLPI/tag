@@ -86,6 +86,10 @@ function plugin_init_tag() {
 
       // Plugin uninstall : after uninstall action
       if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
+         //to prevent null global variable load plugin if needed
+         if ($UNINSTALL_TYPES == null) {
+            Plugin::load('uninstall');
+         }
          foreach ($UNINSTALL_TYPES as $u_itemtype) {
             $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$u_itemtype] = 'plugin_uninstall_after_tag';
          }
