@@ -118,7 +118,12 @@ class PluginTagTagItem extends CommonDBRelation {
       echo "<div class='spaced'>";
       if ($canedit && $number) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         Html::showMassiveActions();
+
+         $massiveactionparams['specific_actions']
+               = [ 'MassiveAction:purge'
+                =>  _x('button', 'Delete permanently the relation with selected elements')];
+
+         Html::showMassiveActions($massiveactionparams);
       }
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr>";
