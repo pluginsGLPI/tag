@@ -7,7 +7,7 @@
 [![GitHub release](https://img.shields.io/github/release/pluginsGLPI/tag.svg)](https://github.com/pluginsGLPI/tag/releases)
 [![GitHub build](https://travis-ci.org/pluginsGLPI/tag.svg?)](https://travis-ci.org/pluginsGLPI/tag/)
 
-![Screenshot](./screenshot.png)
+![Screenshot](./tag.gif)
 
 * Add tags on every GLPI item type (which extends `CommonDBTM`)
 * Manage tag from labels
@@ -17,10 +17,10 @@
 
 * Download : https://github.com/PluginsGLPI/tag/releases
 
+
 ## Documentation
 
 We maintain a detailed documentation here -> [Documentation](https://glpi-plugins.readthedocs.io/en/latest/tag/index.html)
-
 
 ## Contact
 
@@ -29,7 +29,9 @@ You can also chat with us via IRC in [#glpi on freenode](http://webchat.freenode
 
 ## Professional Services
 
-The GLPI Android Inventory Agent and GLPI Network services are available through our [Partner's Network](http://www.teclib-edition.com/en/partners/). We provide special training, bug fixes with editor subscription, contributions for new features, and more.
+![GLPI Network](./glpi_network.png "GLPI network")
+
+The GLPI Network services are available through our [Partner's Network](http://www.teclib-edition.com/en/partners/). We provide special training, bug fixes with editor subscription, contributions for new features, and more.
 
 Obtain a personalized service experience, associated with benefits and opportunities.
 
@@ -43,6 +45,6 @@ Obtain a personalized service experience, associated with benefits and opportuni
 
 ## Copying
 
-* **Name**: [Tag](https://glpi-project.org/fr/) is a registered trademark of [Teclib](http://www.teclib-edition.com/en/).
 * **Code**: you can redistribute it and/or modify
     it under the terms of the GNU General Public License ([GPL-2.0](https://www.gnu.org/licenses/gpl-2.0.en.html)).
+

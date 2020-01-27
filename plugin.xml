@@ -35,7 +35,8 @@
    <versions>
       <version>
          <num>2.5.0</num>
-         <compatibility>9.4</compatibility>
+         <compatibility>~9.4.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.5.0/glpi-tag-2.5.0.tar.bz2</download_url>
       </version>
       <version>
          <num>2.4.2</num>
@@ -144,6 +145,6 @@
       </cs>
    </tags>
    <screenshots>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/tag/master/screenshot.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/tag/master/tag.gif</screenshot>
    </screenshots>
 </root>
