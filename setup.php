@@ -75,6 +75,11 @@ function plugin_init_tag() {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
       }
 
+      // Plugin fusioninventory
+      if ($plugin->isInstalled('fusioninventory') && $plugin->isActivated('fusioninventory')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
+      }
+
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
