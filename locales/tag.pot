@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 11:07+0000\n"
+"POT-Creation-Date: 2020-02-07 10:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:181
+#: hook.php:180
 msgid "Add tags"
 msgstr ""
 
-#: hook.php:183
+#: hook.php:182
 msgid "Remove tags"
 msgstr ""
 
@@ -40,10 +40,10 @@ msgstr[1] ""
 msgid "HTML color"
 msgstr ""
 
-#: inc/tag.class.php:562
+#: inc/tag.class.php:618
 msgid "View all tags"
 msgstr ""
 
-#: setup.php:128
+#: setup.php:138
 msgid "Tag Management"
 msgstr ""
