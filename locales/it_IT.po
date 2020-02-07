@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Davide Foschi (Argaar TantaRes) <argaar@gmail.com>, 2016
+# Giudy <spam@habilitas.it>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-12 12:09+0000\n"
-"PO-Revision-Date: 2019-09-12 12:10+0000\n"
-"Last-Translator: Cédric Anne\n"
+"POT-Creation-Date: 2020-02-07 10:06+0000\n"
+"PO-Revision-Date: 2019-10-08 09:18+0000\n"
+"Last-Translator: Giudy <spam@habilitas.it>\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-plugin-tag/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,32 +19,32 @@ msgstr ""
 "Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:181
+#: hook.php:180
 msgid "Add tags"
-msgstr ""
+msgstr "Aggiungi Etichetta"
 
-#: hook.php:183
+#: hook.php:182
 msgid "Remove tags"
-msgstr ""
+msgstr "Rimuovi etichetta"
 
 #: inc/profile.class.php:5 inc/profile.class.php:39
 msgid "Tag management"
-msgstr ""
+msgstr "Gestione etichette"
 
 #: inc/tag.class.php:11 inc/tag.class.php:430
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Etichetta"
+msgstr[1] "Etichette"
 
 #: inc/tag.class.php:73 inc/tag.class.php:321
 msgid "HTML color"
 msgstr "Colore HTML"
 
-#: inc/tag.class.php:562
+#: inc/tag.class.php:618
 msgid "View all tags"
-msgstr ""
+msgstr "Visualizza tutte le etichette"
 
-#: setup.php:128
+#: setup.php:138
 msgid "Tag Management"
 msgstr "Gestione Tag"

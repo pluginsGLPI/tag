@@ -3,49 +3,46 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# awiamo, 2017
+# SeongHyeon Cho <jaymz9634@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-07 10:06+0000\n"
-"PO-Revision-Date: 2019-09-12 12:10+0000\n"
-"Last-Translator: Cédric Anne\n"
-"Language-Team: Polish (Poland) (http://www.transifex.com/teclib/glpi-plugin-tag/language/pl_PL/)\n"
+"PO-Revision-Date: 2020-01-30 04:36+0000\n"
+"Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>\n"
+"Language-Team: Korean (Korea) (http://www.transifex.com/teclib/glpi-plugin-tag/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl_PL\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Language: ko_KR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: hook.php:180
 msgid "Add tags"
-msgstr "Dodaj słowa kluczowe"
+msgstr "태그 추가"
 
 #: hook.php:182
 msgid "Remove tags"
-msgstr "Usuń słowa kluczowe"
+msgstr "태그 제거"
 
 #: inc/profile.class.php:5 inc/profile.class.php:39
 msgid "Tag management"
-msgstr ""
+msgstr "태그 관리"
 
 #: inc/tag.class.php:11 inc/tag.class.php:430
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "태그"
 
 #: inc/tag.class.php:73 inc/tag.class.php:321
 msgid "HTML color"
-msgstr "kolor HTML"
+msgstr "HTML 색상"
 
 #: inc/tag.class.php:618
 msgid "View all tags"
-msgstr "Pokaż wszystkie słowa kluczowe"
+msgstr "모든 태그 보기"
 
 #: setup.php:138
 msgid "Tag Management"
-msgstr "Zarządzanie słowami kluczowymi"
+msgstr "태그 관리"

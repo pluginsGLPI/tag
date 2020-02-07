@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.5.0');
+define ('PLUGIN_TAG_VERSION', '2.6.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "9.4");
@@ -75,6 +75,11 @@ function plugin_init_tag() {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
       }
 
+      // Plugin fusioninventory
+      if ($plugin->isInstalled('fusioninventory') && $plugin->isActivated('fusioninventory')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
+      }
+
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
@@ -86,6 +91,10 @@ function plugin_init_tag() {
 
       // Plugin uninstall : after uninstall action
       if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
+         //to prevent null global variable load plugin if needed
+         if ($UNINSTALL_TYPES == null) {
+            Plugin::load('uninstall');
+         }
          foreach ($UNINSTALL_TYPES as $u_itemtype) {
             $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$u_itemtype] = 'plugin_uninstall_after_tag';
          }
@@ -93,6 +102,7 @@ function plugin_init_tag() {
 
       // insert tag dropdown into all possible itemtypes
       $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'preItemForm'];
+      $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
 
       // plugin datainjection
       $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
