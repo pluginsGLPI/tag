@@ -29,20 +29,9 @@
 define ('PLUGIN_TAG_VERSION', '2.6.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "9.4");
+define("PLUGIN_TAG_MIN_GLPI", "9.5");
 // Maximum GLPI version, exclusive
 define("PLUGIN_TAG_MAX_GLPI", "9.6");
-
-/**
- * Check configuration process
- *
- * @param boolean $verbose Whether to display message on failure. Defaults to false
- *
- * @return boolean
- */
-function plugin_tag_check_config($verbose = false) {
-   return true;
-}
 
 /**
  * Init hooks of the plugin.
@@ -139,7 +128,7 @@ function plugin_version_tag() {
       'version'        => PLUGIN_TAG_VERSION,
       'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
       'homepage'       => 'https://github.com/pluginsGLPI/tag',
-      'license'        => '<a href="../plugins/tag/LICENSE" target="_blank">GPLv2+</a>',
+      'license'        => '<a href="'.Plugin::getWebDir('tag').'/LICENSE" target="_blank">GPLv2+</a>',
       'requirements'   => [
          'glpi' => [
             'min' => PLUGIN_TAG_MIN_GLPI,
@@ -150,34 +139,6 @@ function plugin_version_tag() {
    ];
 }
 
-/**
- * Check pre-requisites before install
- * OPTIONNAL, but recommanded
- *
- * @return boolean
- */
-function plugin_tag_check_prerequisites() {
-
-   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
-   if (!method_exists('Plugin', 'checkGlpiVersion')) {
-      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
-      $matchMinGlpiReq = version_compare($version, PLUGIN_TAG_MIN_GLPI, '>=');
-      $matchMaxGlpiReq = version_compare($version, PLUGIN_TAG_MAX_GLPI, '<');
-
-      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
-         echo vsprintf(
-            'This plugin requires GLPI >= %1$s and < %2$s.',
-            [
-               PLUGIN_TAG_MIN_GLPI,
-               PLUGIN_TAG_MAX_GLPI,
-            ]
-         );
-         return false;
-      }
-   }
-
-   return true;
-}
 
 function idealTextColor($hexTripletColor) {
    $nThreshold      = 105;
