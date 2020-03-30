@@ -743,4 +743,8 @@ class PluginTagTag extends CommonDropdown {
 
       return false;
    }
+
+   static function getIcon() {
+      return "fas fa-tags";
+   }
 }
