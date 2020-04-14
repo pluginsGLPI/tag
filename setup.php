@@ -75,11 +75,11 @@ function plugin_init_tag() {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
       }
 
-     // Plugin Webapplication
-     if ($plugin->isInstalled('webapplications') && $plugin->isActivated('webapplications')) {
+      // Plugin Webapplication
+      if ($plugin->isInstalled('webapplications') && $plugin->isActivated('webapplications')) {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginWebapplicationsWebapplication';
       }
-    
+
       // Plugin fusioninventory
       if ($plugin->isInstalled('fusioninventory') && $plugin->isActivated('fusioninventory')) {
          $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
