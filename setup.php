@@ -62,11 +62,12 @@ function plugin_init_tag() {
       $CFG_GLPI['plugin_tag_itemtypes'] = [
          __('Assets')         => ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
                                   'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem',
-                                  'Phone'],
+                                  'Phone', 'Enclosure', 'PDU', 'PassiveDCEquipment'],
          __('Assistance')     => ['Ticket', 'Problem', 'Change', 'TicketRecurrent',
                                   'TicketTemplate'],
-         __('Management')     => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document'],
-         __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem'],
+         __('Management')     => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document',
+                                  'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain'],
+         __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
          __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
          __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
       ];
