@@ -89,9 +89,6 @@ function plugin_init_tag() {
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
-      // require spectrum (for glpi >= 9.2)
-      $CFG_GLPI['javascript']['config']['commondropdown']['PluginTagTag'] = ['colorpicker'];
-
       // Plugin use specific massive actions
       $PLUGIN_HOOKS['use_massive_action']['tag'] = true;
 
