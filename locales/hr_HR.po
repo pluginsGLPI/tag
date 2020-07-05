@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 10:06+0000\n"
+"POT-Creation-Date: 2020-07-05 11:31+0000\n"
 "PO-Revision-Date: 2020-02-12 09:10+0000\n"
 "Last-Translator: milotype <mail@milotype.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/teclib/glpi-plugin-tag/language/hr_HR/)\n"
@@ -45,6 +45,6 @@ msgstr "HTML boja"
 msgid "View all tags"
 msgstr "Prikaži sve oznake"
 
-#: setup.php:138
+#: setup.php:124
 msgid "Tag Management"
 msgstr "Upravljanje oznakama"

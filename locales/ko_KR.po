@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 10:06+0000\n"
+"POT-Creation-Date: 2020-07-05 11:31+0000\n"
 "PO-Revision-Date: 2020-01-30 04:36+0000\n"
 "Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/teclib/glpi-plugin-tag/language/ko_KR/)\n"
@@ -43,6 +43,6 @@ msgstr "HTML 색상"
 msgid "View all tags"
 msgstr "모든 태그 보기"
 
-#: setup.php:138
+#: setup.php:124
 msgid "Tag Management"
 msgstr "태그 관리"

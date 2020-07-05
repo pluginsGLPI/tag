@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 10:06+0000\n"
+"POT-Creation-Date: 2020-07-05 11:31+0000\n"
 "PO-Revision-Date: 2019-09-12 12:10+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: Slovak (Slovakia) (http://www.transifex.com/teclib/glpi-plugin-tag/language/sk_SK/)\n"
@@ -46,6 +46,6 @@ msgstr "Farba HTML"
 msgid "View all tags"
 msgstr "Zobraziť všetky značky"
 
-#: setup.php:138
+#: setup.php:124
 msgid "Tag Management"
 msgstr "Správa značiek"
