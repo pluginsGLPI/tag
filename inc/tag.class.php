@@ -137,13 +137,13 @@ class PluginTagTag extends CommonDropdown {
 
       // Version 0.90-1.1
       // Disable cache on field list as cache wes not pruned after adding field
-      $fields = $DB->list_fields($table, false);
+      $fields = $DB->listFields($table, false);
       if (stristr($fields['type_menu']["Type"], 'varchar') !== false) {
          $migration->changeField($table, 'type_menu', 'type_menu', 'text');
          $migration->dropKey($table, 'type_menu');
          $migration->migrationOneTable($table);
 
-         $datas = getAllDatasFromTable($table, ['NOT' => ['type_menu' => null]]);
+         $datas = getAllDataFromTable($table, ['NOT' => ['type_menu' => null]]);
          if (!empty($datas)) {
             foreach ($datas as $data) {
                $itemtypes = PluginTagTagItem::getItemtypes($data['type_menu']);
@@ -742,5 +742,9 @@ class PluginTagTag extends CommonDropdown {
       }
 
       return false;
+   }
+
+   static function getIcon() {
+      return "fas fa-tags";
    }
 }

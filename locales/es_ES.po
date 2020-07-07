@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexander J. Salas B. <inactive+alexandersalas@transifex.com>, 2016
+# 5b63a00e0726b96d7ef35c99d5553cd0_b787b5f <8bb2d0f7e8927228f17fba8639d787be_31711>, 2016
 # Alexander Salas Bastidas <alexander.salas@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-07 10:06+0000\n"
+"POT-Creation-Date: 2020-07-05 11:31+0000\n"
 "PO-Revision-Date: 2019-09-12 12:10+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/teclib/glpi-plugin-tag/language/es_ES/)\n"
@@ -45,6 +45,6 @@ msgstr "Color HTML"
 msgid "View all tags"
 msgstr "Ver todas las etiquetas"
 
-#: setup.php:138
+#: setup.php:124
 msgid "Tag Management"
 msgstr "Administración de etiquetas"
