@@ -381,19 +381,21 @@ class PluginTagTag extends CommonDropdown {
    }
 
    /**
-    * Display the current tag dropdown in form header of items
+    * Display the current tag dropdown in form of items.
+    *
+    * Depending on the config settings, this will either show at the top or bottom of the forms.
     *
     * @param  array $params should contains theses keys:
     *                          - item the CommonDBTM object
-    * @return nothing
+    * @return bool|void False if the form was not shown. Otherwise nothing is returned and the form is displayed.
     */
-   static function preItemForm($params = []) {
+   static function showForItem($params = []) {
       if (!self::canView()) {
          return false;
       }
 
       if (isset($params['item'])
-          && $params['item'] instanceof CommonDBTM) {
+         && $params['item'] instanceof CommonDBTM) {
          $item     = $params['item'];
          $itemtype = get_class($item);
 
@@ -406,13 +408,13 @@ class PluginTagTag extends CommonDropdown {
             foreach ($callers as $call) {
                if ($call['function'] == 'displayTabContentForItem'
                   // ticket solution is a pain to detect, direct exclusion
-                   || $call['function'] == 'showSolutionForm') {
+                  || $call['function'] == 'showSolutionForm') {
                   return false;
                }
             }
             // no sub objects form (like followups and task)
             if (isset($params['options']['parent'])
-                && $params['options']['parent'] instanceof CommonDBTM) {
+               && $params['options']['parent'] instanceof CommonDBTM) {
                return false;
             }
          }

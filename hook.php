@@ -235,7 +235,7 @@ function plugin_tag_uninstall() {
          }
 
          include_once($filepath);
-         // If the install method exists, load it
+         // If the uninstall method exists, load it
          if (method_exists($classname, 'uninstall')) {
             $classname::uninstall();
          }
