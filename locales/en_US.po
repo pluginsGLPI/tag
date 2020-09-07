@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 11:31+0000\n"
-"PO-Revision-Date: 2019-09-12 12:10+0000\n"
+"POT-Creation-Date: 2020-09-07 06:23+0000\n"
+"PO-Revision-Date: 2020-09-07 06:24+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: English (United States) (http://www.transifex.com/teclib/glpi-plugin-tag/language/en_US/)\n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:180
+#: hook.php:181
 msgid "Add tags"
 msgstr "Add tags"
 
-#: hook.php:182
+#: hook.php:183
 msgid "Remove tags"
 msgstr "Remove tags"
 
@@ -31,20 +31,24 @@ msgstr "Remove tags"
 msgid "Tag management"
 msgstr ""
 
-#: inc/tag.class.php:11 inc/tag.class.php:430
+#: inc/tag.class.php:11 inc/tag.class.php:435
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: inc/tag.class.php:73 inc/tag.class.php:321
+#: inc/tag.class.php:76 inc/tag.class.php:324
 msgid "HTML color"
 msgstr "HTML color"
 
-#: inc/tag.class.php:618
+#: inc/tag.class.php:623
 msgid "View all tags"
 msgstr "View all tags"
 
-#: setup.php:124
+#: inc/config.class.php:9 inc/config.class.php:26 setup.php:136
 msgid "Tag Management"
 msgstr "Tag Management"
+
+#: inc/config.class.php:27
+msgid "Tags location"
+msgstr ""

@@ -26,7 +26,7 @@
  --------------------------------------------------------------------------
  */
 
-define ('PLUGIN_TAG_VERSION', '2.7.0');
+define ('PLUGIN_TAG_VERSION', '2.8.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "9.5");
@@ -93,7 +93,12 @@ function plugin_init_tag() {
       }
 
       // insert tag dropdown into all possible itemtypes
-      $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'preItemForm'];
+      $location = Config::getConfigurationValues('plugin:Tag')['tags_location'] ?? 0;
+      if ($location === '1') {
+         $PLUGIN_HOOKS['post_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
+      } else {
+         $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
+      }
       $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
 
       // plugin datainjection
@@ -116,6 +121,7 @@ function plugin_init_tag() {
       }
 
       Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
+      Plugin::registerClass('PluginTagConfig', ['addtabon' => 'Config']);
    }
 }
 

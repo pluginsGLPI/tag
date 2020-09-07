@@ -56,6 +56,7 @@ function plugin_tag_getAddSearchOptionsNew($itemtype) {
          'searchtype'    => ['equals','notequals','contains'],
          'massiveaction' => false,
          'forcegroupby'  => true,
+         'usehaving'     => true,
          'joinparams'    =>  [
             'beforejoin' => [
                'table'      => 'glpi_plugin_tag_tagitems',
@@ -234,7 +235,7 @@ function plugin_tag_uninstall() {
          }
 
          include_once($filepath);
-         // If the install method exists, load it
+         // If the uninstall method exists, load it
          if (method_exists($classname, 'uninstall')) {
             $classname::uninstall();
          }
