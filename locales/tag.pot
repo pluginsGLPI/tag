@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-05 11:31+0000\n"
+"POT-Creation-Date: 2020-09-07 06:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:180
+#: hook.php:181
 msgid "Add tags"
 msgstr ""
 
-#: hook.php:182
+#: hook.php:183
 msgid "Remove tags"
 msgstr ""
 
@@ -30,20 +30,24 @@ msgstr ""
 msgid "Tag management"
 msgstr ""
 
-#: inc/tag.class.php:11 inc/tag.class.php:430
+#: inc/tag.class.php:11 inc/tag.class.php:435
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tag.class.php:73 inc/tag.class.php:321
+#: inc/tag.class.php:76 inc/tag.class.php:324
 msgid "HTML color"
 msgstr ""
 
-#: inc/tag.class.php:618
+#: inc/tag.class.php:623
 msgid "View all tags"
 msgstr ""
 
-#: setup.php:124
+#: inc/config.class.php:9 inc/config.class.php:26 setup.php:136
 msgid "Tag Management"
+msgstr ""
+
+#: inc/config.class.php:27
+msgid "Tags location"
 msgstr ""
