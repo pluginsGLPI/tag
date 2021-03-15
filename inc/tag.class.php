@@ -723,14 +723,14 @@ class PluginTagTag extends CommonDropdown {
     */
    public static function getCurrentItemtype() {
       $itemtype = '';
-      if (preg_match('/\/(marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).form.php/',
+      if (preg_match('/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).form.php/',
                      $_SERVER['PHP_SELF'], $matches)) {
          $itemtype = 'Plugin'.ucfirst($matches[1]).ucfirst($matches[2]);
 
       } else if (preg_match('/([a-zA-Z]+).form.php/', $_SERVER['PHP_SELF'], $matches)) {
          $itemtype = $matches[1];
 
-      } else if (preg_match('/\/(marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).php/',
+      } else if (preg_match('/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).php/',
                             $_SERVER['PHP_SELF'], $matches)) {
          $itemtype = 'Plugin'.ucfirst($matches[1]).ucfirst($matches[2]);
 
