@@ -7,7 +7,6 @@
 .tag_select + .select2-container .select2-selection--multiple {
    border: 1px solid #D3D3D3;
    margin: 0;
-   height: 22px;
    min-height: 30px;
 }
 

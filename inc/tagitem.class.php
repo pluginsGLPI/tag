@@ -22,16 +22,17 @@ class PluginTagTagItem extends CommonDBRelation {
       $table = getTableForItemType(__CLASS__);
 
       if (!$DB->tableExists($table)) {
+         $default_charset = DBConnection::getDefaultCharset();
+         $default_collation = DBConnection::getDefaultCollation();
+
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-               `id` INT(11) NOT NULL AUTO_INCREMENT,
-               `plugin_tag_tags_id` INT(11) NOT NULL DEFAULT '0',
-               `items_id` INT(11) NOT NULL DEFAULT '1',
-               `itemtype` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+               `id` INT NOT NULL AUTO_INCREMENT,
+               `plugin_tag_tags_id` INT NOT NULL DEFAULT '0',
+               `items_id` INT NOT NULL DEFAULT '1',
+               `itemtype` VARCHAR(255) NOT NULL DEFAULT '',
                PRIMARY KEY (`id`),
                UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
-            )
-            COLLATE='utf8_unicode_ci'
-            ENGINE=InnoDB";
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->query($query) or die($DB->error());
       }
 
@@ -89,8 +90,9 @@ class PluginTagTagItem extends CommonDBRelation {
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_2'><th colspan='2'>".__('Add an item')."</th></tr>";
 
-         $itemtypes_to_show = json_decode($tag->fields['type_menu']);
-         if (!is_array($itemtypes_to_show)) {
+         if (!empty($tag->fields['type_menu'])) {
+            $itemtypes_to_show = json_decode($tag->fields['type_menu']);
+         } else {
             $itemtypes_to_show = [];
             foreach ($CFG_GLPI['plugin_tag_itemtypes'] as $menu_entry) {
                foreach ($menu_entry as $default_itemtype) {
@@ -98,7 +100,7 @@ class PluginTagTagItem extends CommonDBRelation {
                }
             }
          }
-         echo "<tr class='tab_bg_1'><td class='right'>";
+         echo "<tr class='tab_bg_1'><td>";
          Dropdown::showSelectItemFromItemtypes(['itemtypes' => $itemtypes_to_show,
                                                 'entity_restrict'
                                                        => ($tag->fields['is_recursive']
@@ -106,10 +108,11 @@ class PluginTagTagItem extends CommonDBRelation {
                                                                       $tag->fields['entities_id'])
                                                            :$tag->fields['entities_id']),
                                                 'checkright' => true]);
-         echo "</td><td class='center'>";
+         echo "</td><td width='20%'>";
          echo "<input type='hidden' name='plugin_tag_tags_id' value='$instID'>";
-         echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
+         echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='btn btn-primary'>";
          echo "</td></tr>";
+
          echo "</table>";
          Html::closeForm();
          echo "</div>";
@@ -226,7 +229,7 @@ class PluginTagTagItem extends CommonDBRelation {
 
             $linked_iterator = $DB->request($criteria);
 
-            while ($data = $linked_iterator->next()) {
+            foreach ($linked_iterator as $data) {
 
                if ($itemtype == 'Softwarelicense') {
                   $soft = new Software();

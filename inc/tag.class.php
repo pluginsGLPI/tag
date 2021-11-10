@@ -94,10 +94,7 @@ class PluginTagTag extends CommonDropdown {
             $type_menu_elements[$group_label][$itemtype] = $itemtype::getTypeName();
          }
       }
-      $type_menu_values = json_decode($this->fields['type_menu']);
-      if (!is_array($type_menu_values)) {
-         $type_menu_values = [];
-      }
+      $type_menu_values = !empty($this->fields['type_menu']) ? json_decode($this->fields['type_menu']) : [];
 
       // show the multiple dropdown
       Dropdown::showFromArray("type_menu",
@@ -119,17 +116,20 @@ class PluginTagTag extends CommonDropdown {
       $table = getTableForItemType(__CLASS__);
 
       if (!$DB->tableExists($table)) {
+         $default_charset = DBConnection::getDefaultCharset();
+         $default_collation = DBConnection::getDefaultCollation();
+
          $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
-            `id`           int(11) NOT NULL auto_increment,
-            `entities_id`  int(11) NOT NULL DEFAULT '0',
-            `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
+            `id`           int NOT NULL auto_increment,
+            `entities_id`  int NOT NULL DEFAULT '0',
+            `is_recursive` tinyint NOT NULL DEFAULT '1',
             `name`         varchar(255) NOT NULL DEFAULT '',
-            `comment`      text collate utf8_unicode_ci,
-            `color`        varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-            `type_menu`    text collate utf8_unicode_ci,
+            `comment`      text,
+            `color`        varchar(50) NOT NULL DEFAULT '',
+            `type_menu`    text,
             PRIMARY KEY (`id`),
             KEY `name` (`name`)
-         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
+         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;")
             or die($DB->error());
       }
 
@@ -429,18 +429,28 @@ class PluginTagTag extends CommonDropdown {
                $value = $item->input['_plugin_tag_tag_values'];
             }
 
-            $html_tag = ($itemtype == 'Ticket') ? "th" : 'td';
+            $field_class = "form-field row col-12 col-sm-6 px-3 mt-2 mb-n2";
+            $label_class = "col-form-label col-xxl-5 text-xxl-end";
+            $input_class = "col-xxl-7 field-container";
 
-            echo "<tr class='tab_bg_1'>";
-            echo "<$html_tag>"._n('Tag', 'Tags', 2, 'tag')."</$html_tag>";
-            echo "<td colspan='3'>";
+            if ($item instanceof CommonITILObject) {
+               $field_class = "form-field row col-12 mb-2";
+               $label_class = "col-form-label col-xxl-4 text-xxl-end";
+               $input_class = "col-xxl-8 field-container";
+            }
+
+            echo "<div class='$field_class'>";
+            echo "<div class='$label_class'>".
+               _n('Tag', 'Tags', 2, 'tag').
+            "</div>";
+            echo "<div class='$input_class'>";
             self::showTagDropdown([
                'itemtype' => $itemtype,
                'id'       => $item->getId(),
                'value'    => $value,
             ]);
-            echo "</td>";
-            echo "</tr>";
+            echo "</div>";
+            echo "</div>";
          }
       }
    }
@@ -487,7 +497,7 @@ class PluginTagTag extends CommonDropdown {
          ]);
 
          $content = "<div style='display: flex; flex-wrap: wrap;'>";
-         while ($data = $iterator->next()) {
+         foreach ($iterator as $data) {
             $title = htmlentities($data['comment']);
             $name = htmlentities($data['name']);
             $textcolor = idealTextColor($data['color']);
@@ -572,6 +582,8 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // create an input receiving the tag tokens
+      echo "<div class='btn-group btn-group-sm w-100'>";
+
       $rand = mt_rand();
       echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
       echo Html::select(
@@ -619,10 +631,13 @@ class PluginTagTag extends CommonDropdown {
 
       // Show tooltip
       if (self::canCreate()) {
-         echo "&nbsp;";
+         echo "<div class='btn btn-outline-secondary'>";
          echo Html::showToolTip(__("View all tags", 'tag'),
                                 ['link' => self::getSearchURL()]);
+         echo "</div>";
       }
+
+      echo "</div>";
    }
 
    static function getTagForEntityName($completename = "") {

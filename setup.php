@@ -29,9 +29,9 @@
 define ('PLUGIN_TAG_VERSION', '2.8.1');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "9.5");
+define("PLUGIN_TAG_MIN_GLPI", "10.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "9.6");
+define("PLUGIN_TAG_MAX_GLPI", "10.0.99");
 
 /**
  * Init hooks of the plugin.
