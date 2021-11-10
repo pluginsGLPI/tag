@@ -104,7 +104,7 @@ class PluginTagTag extends CommonDropdown {
       echo "<tr class='line1 tab_bg_2'>";
       echo "<td><label>".__('HTML color', 'tag')."</label></td>";
       echo "<td>";
-      Html::showColorField('color', ['value' => $this->fields['color']]);
+      Html::showColorField('color', ['value' => $this->fields['color'] ?: '#DDDDDD']);
       echo "</td>";
       echo "</tr>";
 
@@ -123,10 +123,7 @@ class PluginTagTag extends CommonDropdown {
             $type_menu_elements[$group_label][$itemtype] = $itemtype::getTypeName();
          }
       }
-      $type_menu_values = json_decode($this->fields['type_menu']);
-      if (!is_array($type_menu_values)) {
-         $type_menu_values = [];
-      }
+      $type_menu_values = !empty($this->fields['type_menu']) ? json_decode($this->fields['type_menu']) : [];
 
       // show the multiple dropdown
       Dropdown::showFromArray("type_menu",
@@ -145,20 +142,24 @@ class PluginTagTag extends CommonDropdown {
    public static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType(__CLASS__);
 
       if (!$DB->tableExists($table)) {
          $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
-            `id`           int(11) NOT NULL auto_increment,
-            `entities_id`  int(11) NOT NULL DEFAULT '0',
-            `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
+            `id`           int {$default_key_sign} NOT NULL auto_increment,
+            `entities_id`  int {$default_key_sign} NOT NULL DEFAULT '0',
+            `is_recursive` tinyint NOT NULL DEFAULT '1',
             `name`         varchar(255) NOT NULL DEFAULT '',
-            `comment`      text collate utf8_unicode_ci,
-            `color`        varchar(50) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-            `type_menu`    text collate utf8_unicode_ci,
+            `comment`      text,
+            `color`        varchar(50) NOT NULL DEFAULT '',
+            `type_menu`    text,
             PRIMARY KEY (`id`),
             KEY `name` (`name`)
-         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci")
+         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;")
             or die($DB->error());
       }
 
@@ -394,7 +395,8 @@ class PluginTagTag extends CommonDropdown {
             $out = implode(", ", $itemtype_names);
             return $out;
          case 'color' :
-            return "<div style='background-color: $values[$field];'>&nbsp;</div>";
+            $color = $values[$field] ?: '#DDDDDD';
+            return "<div style='background-color: $color;'>&nbsp;</div>";
       }
 
       return parent::getSpecificValueToDisplay($field, $values, $options);
@@ -431,26 +433,6 @@ class PluginTagTag extends CommonDropdown {
          $item     = $params['item'];
          $itemtype = get_class($item);
 
-         // KnowbaseItem is special form, i think we want to skip tab detection
-         if (!$item instanceof KnowbaseItem) {
-            // we want tag input only for primary form (not ticket solution for example)
-            $callers   = debug_backtrace();
-            /*Toolbox::logDebug($params['options']);
-            Toolbox::backtrace();*/
-            foreach ($callers as $call) {
-               if ($call['function'] == 'displayTabContentForItem'
-                  // ticket solution is a pain to detect, direct exclusion
-                  || $call['function'] == 'showSolutionForm') {
-                  return false;
-               }
-            }
-            // no sub objects form (like followups and task)
-            if (isset($params['options']['parent'])
-               && $params['options']['parent'] instanceof CommonDBTM) {
-               return false;
-            }
-         }
-
          if (self::canItemtype($itemtype)) {
             // manage values after a redirect (ex ticket creation, after a cat change)
             $value = '';
@@ -458,18 +440,28 @@ class PluginTagTag extends CommonDropdown {
                $value = $item->input['_plugin_tag_tag_values'];
             }
 
-            $html_tag = ($itemtype == 'Ticket') ? "th" : 'td';
+            $field_class = "form-field row col-12 col-sm-6 px-3 mt-2 mb-n2";
+            $label_class = "col-form-label col-xxl-5 text-xxl-end";
+            $input_class = "col-xxl-7 field-container";
 
-            echo "<tr class='tab_bg_1'>";
-            echo "<$html_tag>"._n('Tag', 'Tags', 2, 'tag')."</$html_tag>";
-            echo "<td colspan='3'>";
+            if ($item instanceof CommonITILObject) {
+               $field_class = "form-field row col-12 mb-2";
+               $label_class = "col-form-label col-xxl-4 text-xxl-end";
+               $input_class = "col-xxl-8 field-container";
+            }
+
+            echo "<div class='$field_class'>";
+            echo "<div class='$label_class'>".
+               _n('Tag', 'Tags', 2, 'tag').
+            "</div>";
+            echo "<div class='$input_class'>";
             self::showTagDropdown([
                'itemtype' => $itemtype,
                'id'       => $item->getId(),
                'value'    => $value,
             ]);
-            echo "</td>";
-            echo "</tr>";
+            echo "</div>";
+            echo "</div>";
          }
       }
    }
@@ -516,11 +508,12 @@ class PluginTagTag extends CommonDropdown {
          ]);
 
          $content = "<div style='display: flex; flex-wrap: wrap;'>";
-         while ($data = $iterator->next()) {
-            $title = htmlentities($data['comment']);
-            $name = htmlentities($data['name']);
-            $textcolor = idealTextColor($data['color']);
-            $style = "background-color: {$data['color']}; color: {$textcolor};";
+         foreach ($iterator as $data) {
+            $title = $data['comment'];
+            $name = $data['name'];
+            $color = $data['color'] ?: '#DDDDDD';
+            $textcolor = idealTextColor($color);
+            $style = "background-color: {$color}; color: {$textcolor};";
             $content .= "<span class='tag_choice' style='{$style}' title='{$title}'>{$name}</span>&nbsp;&nbsp;";
          }
          $content .= "</div>";
@@ -528,6 +521,41 @@ class PluginTagTag extends CommonDropdown {
          return $params;
       }
       return null;
+   }
+
+   public static function kanbanItemMetadata($params) {
+      global $DB;
+
+      if (!Session::haveRight(PluginTagTag::$rightname, READ)) {
+         return $params;
+      }
+
+      if (isset($params['itemtype']) && isset($params['items_id'])) {
+         $iterator = $DB->request([
+            'SELECT'    => [
+               'name',
+            ],
+            'FROM'      => PluginTagTagItem::getTable(),
+            'LEFT JOIN' => [
+               PluginTagTag::getTable() => [
+                  'FKEY'   => [
+                     PluginTagTag::getTable()      => 'id',
+                     PluginTagTagItem::getTable()  => 'plugin_tag_tags_id'
+                  ]
+               ]
+            ],
+            'WHERE'     => [
+               'itemtype'  => $params['itemtype'],
+               'items_id'  => $params['items_id']
+            ]
+         ]);
+
+         $params['metadata']['tags'] = $params['metadata']['tags'] ?? [];
+         foreach ($iterator as $data) {
+            $params['metadata']['tags'][] = $data['name'];
+         }
+      }
+      return $params;
    }
 
    /**
@@ -601,6 +629,8 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // create an input receiving the tag tokens
+      echo "<div class='btn-group btn-group-sm w-100'>";
+
       $rand = mt_rand();
       echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
       echo Html::select(
@@ -648,10 +678,13 @@ class PluginTagTag extends CommonDropdown {
 
       // Show tooltip
       if (self::canCreate()) {
-         echo "&nbsp;";
+         echo "<div class='btn btn-outline-secondary'>";
          echo Html::showToolTip(__("View all tags", 'tag'),
                                 ['link' => self::getSearchURL()]);
+         echo "</div>";
       }
+
+      echo "</div>";
    }
 
    static function getTagForEntityName($completename = "") {
@@ -675,14 +708,9 @@ class PluginTagTag extends CommonDropdown {
    static function getSingleTag($tag_id, $separator = '') {
       $plugintagtag = new self();
       $plugintagtag->getFromDB($tag_id);
-      $color = $plugintagtag->fields["color"];
-      $style = "";
-      if (!empty($color)) {
-         $inv_color = idealTextColor($color);
-         $style .= "background-color: $color; border: 1px solid $inv_color; color: $inv_color";
-      } else {
-         $style .= "border: 1px solid #BBB;";
-      }
+      $color = $plugintagtag->fields["color"] ?: '#DDDDDD';
+      $inv_color = idealTextColor($color);
+      $style = "background-color: $color; border: 1px solid $inv_color; color: $inv_color";
 
       return "<span class='select2-search-choice tag_choice'
                     style='padding-left:5px;$style'>".
@@ -767,11 +795,8 @@ class PluginTagTag extends CommonDropdown {
          $itemtype = $matches[1];
       }
 
-      if (!empty($itemtype)
-          && class_exists($itemtype)
-          && is_subclass_of($itemtype, "CommonDBTM")) {
-         // instanciate itemtype (to retrieve camelcase)
-         $item = new $itemtype;
+      $item = getItemForItemtype($itemtype);
+      if ($item instanceof CommonDBTM) {
          return $item->getType();
       }
 

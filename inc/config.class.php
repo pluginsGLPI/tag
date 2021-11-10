@@ -40,7 +40,7 @@ class PluginTagConfig extends CommonDBTM {
       return '';
    }
 
-   public function showForm() {
+   public function showConfigForm() {
       global $CFG_GLPI;
       if (!Session::haveRight('config', UPDATE)) {
          return false;
@@ -78,7 +78,7 @@ class PluginTagConfig extends CommonDBTM {
 
       if ($item->getType() == 'Config') {
          $config = new self();
-         $config->showForm();
+         $config->showConfigForm();
       }
    }
 
