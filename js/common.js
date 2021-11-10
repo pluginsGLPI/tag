@@ -50,30 +50,35 @@ var idealTextColor = function(hexTripletColor) {
 }
 
 var formatOptionSelection = function(option, container) {
-   if (typeof option.color != 'undefined'
-       && option.color.length > 0) {
-      var invertedcolor = idealTextColor(option.color);
-      $(container)
-         .css("background-color", option.color)
-         .css("border-color", invertedcolor)
-         .css("color", invertedcolor)
-         .children('.select2-selection__choice__remove')
-            .css("color", invertedcolor);
-   }
-   return option.text;
+   var color = (typeof option.color !== 'undefined' && option.color !== '')
+      ? option.color
+      : '#DDDDDD';
+   var invertedcolor = idealTextColor(color);
+
+   $(container)
+      .css("background-color", color)
+      .css("border-color", invertedcolor)
+      .css("color", invertedcolor)
+      .children('.select2-selection__choice__remove')
+         .css("color", invertedcolor);
+
+   var _elt = $('<span></span>');
+   _elt.html(escapeMarkupText(option.text));
+   return _elt;
 };
 
-var formatOptionResult = function(option, container) {
-   var template = "<span class='tag_choice' style='";
-   if (typeof option.color != 'undefined'
-       && option.color !== "") {
-      var invertedcolor = idealTextColor(option.color);
-      template+= " background-color: " + option.color + "; ";
-      template+= " color: " + invertedcolor + "; ";
-   } else {
-      template+= " background-color: #DDDDDD; ";
-   }
-   template+= "'>" + option.text + "</span>";
+var formatOptionResult = function(option) {
+
+   var color = (typeof option.color !== 'undefined' && option.color !== '')
+      ? option.color
+      : '#DDDDDD';
+   var invertedcolor = idealTextColor(color);
+
+   var template = `
+      <span class="tag_choice" style="background-color: ${color}; color: ${invertedcolor}">
+         ${option.text}
+      </span>
+   `;
 
    return $(template);
 };

@@ -40,25 +40,15 @@ class PluginTagProfile extends Profile {
       return true;
    }
 
-   /**
-    * Print the Tag plugin right form for the current profile
-    *
-    * @param int  $profiles_id  Current profile ID
-    * @param bool $openform     Open the form (true by default)
-    * @param bool $closeform    Close the form (true by default)
-   **/
-   function showForm($profiles_id = 0, $openform = true, $closeform = true) {
-      global $CFG_GLPI;
-
+   function showForm($ID, array $options = []) {
       if (!self::canView()) {
          return false;
       }
 
       echo "<div class='spaced'>";
       $profile = new Profile();
-      $profile->getFromDB($profiles_id);
-      if (($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]))
-          && $openform) {
+      $profile->getFromDB($ID);
+      if ($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE])) {
          echo "<form method='post' action='".$profile->getFormURL()."'>";
       }
 
@@ -68,10 +58,9 @@ class PluginTagProfile extends Profile {
       $matrix_options['title'] = __('Tag management', 'tag');
       $profile->displayRightsChoiceMatrix($rights, $matrix_options);
 
-      if ($canedit
-          && $closeform) {
+      if ($canedit) {
          echo "<div class='center'>";
-         echo Html::hidden('id', ['value' => $profiles_id]);
+         echo Html::hidden('id', ['value' => $ID]);
          echo Html::submit(_sx('button', 'Save'), ['name' => 'update']);
          echo "</div>\n";
          Html::closeForm();
