@@ -539,6 +539,43 @@ class PluginTagTag extends CommonDropdown {
       return null;
    }
 
+   public static function kanbanItemMetadata($params) {
+      global $DB;
+
+      if (!Session::haveRight(PluginTagTag::$rightname, READ)) {
+         return $params;
+      }
+
+      if (isset($params['itemtype']) && isset($params['items_id'])) {
+         $iterator = $DB->request([
+            'SELECT'    => [
+               'name',
+               'comment',
+               'color'
+            ],
+            'FROM'      => PluginTagTagItem::getTable(),
+            'LEFT JOIN' => [
+               PluginTagTag::getTable() => [
+                  'FKEY'   => [
+                     PluginTagTag::getTable()      => 'id',
+                     PluginTagTagItem::getTable()  => 'plugin_tag_tags_id'
+                  ]
+               ]
+            ],
+            'WHERE'     => [
+               'itemtype'  => $params['itemtype'],
+               'items_id'  => $params['items_id']
+            ]
+         ]);
+
+         $params['metadata']['tags'] = $params['metadata']['tags'] ?? [];
+         foreach ($iterator as $data) {
+            $params['metadata']['tags'][] = htmlentities($data['name']);
+         }
+      }
+      return $params;
+   }
+
    /**
     * Display the tag dropdowns
     * @param  array  $params could contains theses keys:

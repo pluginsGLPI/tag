@@ -27,6 +27,8 @@
  *  --------------------------------------------------------------------------
  */
 
+use Glpi\Plugin\Hooks;
+
 define ('PLUGIN_TAG_VERSION', '2.9.0-rc1');
 
 // Minimal GLPI version, inclusive
@@ -101,12 +103,30 @@ function plugin_init_tag() {
          $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
       }
       $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
+      $common_kanban_filters = [
+         'tag' => [
+            'description' => _x('filters', 'If the item has a tag'),
+            'supported_prefixes' => ['!']
+         ],
+         'tagged' => [
+            'description' => _x('filters', 'If the item is tagged'),
+            'supported_prefixes' => ['!']
+         ]
+      ];
+      $PLUGIN_HOOKS[Hooks::KANBAN_FILTERS]['tag'] = [
+         'Project' => $common_kanban_filters,
+         'Ticket' => $common_kanban_filters,
+         'Problem' => $common_kanban_filters,
+         'Change' => $common_kanban_filters,
+      ];
+      $PLUGIN_HOOKS[Hooks::KANBAN_ITEM_METADATA]['tag'] = ['PluginTagTag', 'kanbanItemMetadata'];
 
       // plugin datainjection
       $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
       // add needed javascript & css files
       $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
+      $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/kanban.js';
       $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';
       if (Session::isMultiEntitiesMode()) {
          $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/entity.js';
