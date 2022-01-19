@@ -550,8 +550,6 @@ class PluginTagTag extends CommonDropdown {
          $iterator = $DB->request([
             'SELECT'    => [
                'name',
-               'comment',
-               'color'
             ],
             'FROM'      => PluginTagTagItem::getTable(),
             'LEFT JOIN' => [
@@ -570,7 +568,7 @@ class PluginTagTag extends CommonDropdown {
 
          $params['metadata']['tags'] = $params['metadata']['tags'] ?? [];
          foreach ($iterator as $data) {
-            $params['metadata']['tags'][] = htmlentities($data['name']);
+            $params['metadata']['tags'][] = $data['name'];
          }
       }
       return $params;

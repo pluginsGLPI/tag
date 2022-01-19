@@ -105,11 +105,11 @@ function plugin_init_tag() {
       $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
       $common_kanban_filters = [
          'tag' => [
-            'description' => _x('filters', 'If the item has a tag'),
+            'description' => _x('filters', 'If the item has a tag', 'tag'),
             'supported_prefixes' => ['!']
          ],
          'tagged' => [
-            'description' => _x('filters', 'If the item is tagged'),
+            'description' => _x('filters', 'If the item is tagged', 'tag'),
             'supported_prefixes' => ['!']
          ]
       ];

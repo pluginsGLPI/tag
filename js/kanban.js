@@ -48,7 +48,6 @@ $(document).on('kanban:filter', (e, data) => {
       if (filters.tagged !== undefined) {
          const tagged_term = filters.tagged.term.toLowerCase() === 'false' ? false : true;
          if ((tagged !== tagged_term) !== filters.tagged.exclusion) {
-            console.log('tagged filter not matched');
             shown = false;
          }
       }
