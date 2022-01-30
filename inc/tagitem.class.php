@@ -337,12 +337,6 @@ class PluginTagTagItem extends CommonDBRelation {
          return true;
       }
 
-      //merge default options with parameter one
-      $default_options = [
-         'delete_old' => true
-      ];
-      $options = array_merge($default_options, $options);
-
       // instanciate needed objects
       $tag      = new PluginTagTag();
       $tag_item = new self();
@@ -361,16 +355,11 @@ class PluginTagTagItem extends CommonDBRelation {
       }
 
       // process actions
-      if ($options['delete_old']) {
-         // purge old tags
-         self::purgeItem($item);
-
-      } else {
-         // remove possible duplicates (to avoid sql errors on unique index)
-         $found      = $tag_item->find(['items_id' => $item->getID(),
-                                        'itemtype' => $item->getType()]);
-         $tag_values = array_diff($tag_values, array_keys($found));
-      }
+      $tag_del = [];
+      $found = $tag_item->find(['items_id' => $item->getID(),
+                                'itemtype' => $item->getType()]);
+      $tag_del = array_diff(array_map(function($t){return $t['plugin_tag_tags_id'];}, $found), $tag_values);
+      $tag_values = array_diff($tag_values, array_map(function($t){return $t['plugin_tag_tags_id'];}, $found));
 
       // link tags with the current item
       foreach ($tag_values as $tag_id) {
@@ -378,6 +367,13 @@ class PluginTagTagItem extends CommonDBRelation {
             'plugin_tag_tags_id' => $tag_id,
             'items_id' => $item->getID(),
             'itemtype' => $item->getType()
+         ]);
+      }
+      foreach ($tag_del as $tag_id) {
+         $tag_item->deleteByCriteria([
+            'plugin_tag_tags_id' => $tag_id,
+            "items_id" => $item->getID(),
+            "itemtype" => $item->getType(),
          ]);
       }
 
