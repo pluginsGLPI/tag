@@ -352,24 +352,19 @@ class PluginTagTagItem extends CommonDBRelation {
    }
 
    /**
-    * Update all tags associated to an item
+    * Add tags to an item
     *
-    * @param  CommonDBTM $item [description]
+    * @param CommonDBTM $item
+    * @param bool $delete_existing_tags
     *
     * @return boolean
     */
-   static function updateItem(CommonDBTM $item, $options = []) {
+   static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true) {
 
       if ($item->getID()
           && !isset($item->input["_plugin_tag_tag_process_form"])) {
          return true;
       }
-
-      //merge default options with parameter one
-      $default_options = [
-         'delete_old' => true
-      ];
-      $options = array_merge($default_options, $options);
 
       // instanciate needed objects
       $tag      = new PluginTagTag();
@@ -389,23 +384,26 @@ class PluginTagTagItem extends CommonDBRelation {
       }
 
       // process actions
-      if ($options['delete_old']) {
-         // purge old tags
-         self::purgeItem($item);
-
-      } else {
-         // remove possible duplicates (to avoid sql errors on unique index)
-         $found      = $tag_item->find(['items_id' => $item->getID(),
-                                        'itemtype' => $item->getType()]);
-         $tag_values = array_diff($tag_values, array_keys($found));
-      }
+      $existing_tags_ids = array_column(
+         $tag_item->find(['items_id' => $item->getID(), 'itemtype' => $item->getType()]),
+         'plugin_tag_tags_id'
+      );
+      $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
+      $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
 
       // link tags with the current item
-      foreach ($tag_values as $tag_id) {
+      foreach ($added_tags_ids as $tag_id) {
          $tag_item->add([
             'plugin_tag_tags_id' => $tag_id,
             'items_id' => $item->getID(),
             'itemtype' => $item->getType()
+         ]);
+      }
+      foreach ($removed_tags_ids as $tag_id) {
+         $tag_item->deleteByCriteria([
+            'plugin_tag_tags_id' => $tag_id,
+            "items_id" => $item->getID(),
+            "itemtype" => $item->getType(),
          ]);
       }
 
@@ -452,7 +450,7 @@ class PluginTagTagItem extends CommonDBRelation {
                foreach ($items as $items_id) {
                   $object->fields['id'] = $items_id;
                   $object->input        = $input;
-                  if (self::updateItem($object, ['delete_old' => false])) {
+                  if (self::updateItem($object, false)) {
                      $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
                   } else {
                      $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
