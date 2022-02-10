@@ -243,3 +243,16 @@ function plugin_tag_uninstall() {
    }
    return true;
 }
+
+function plugin_tag_post_init() {
+   global $PLUGIN_HOOKS;
+
+   // hook on object changes
+   if ($itemtype = PluginTagTag::getCurrentItemtype()) {
+      if (PluginTagTag::canItemtype($itemtype)) {
+         $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
+         $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = ['PluginTagTagItem', 'updateItem'];
+         $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
+      }
+   }
+}

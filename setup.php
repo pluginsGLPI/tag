@@ -78,6 +78,9 @@ function plugin_init_tag() {
       // add link on plugin name in Configuration > Plugin
       $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
+      // Wait all plugins are loaded to find the itemtype matching the current URL
+      $PLUGIN_HOOKS['post_init']['tag'] = 'plugin_tag_post_init';
+
       // Plugin use specific massive actions
       $PLUGIN_HOOKS['use_massive_action']['tag'] = true;
 
@@ -109,15 +112,6 @@ function plugin_init_tag() {
       $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';
       if (Session::isMultiEntitiesMode()) {
          $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/entity.js';
-      }
-
-      // hook on object changes
-      if ($itemtype = PluginTagTag::getCurrentItemtype()) {
-         if (PluginTagTag::canItemtype($itemtype)) {
-            $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
-         }
       }
 
       Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
