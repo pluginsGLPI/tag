@@ -369,13 +369,14 @@ class PluginTagTagItem extends CommonDBRelation {
             'itemtype' => $item->getType()
          ]);
       }
-      foreach ($tag_del as $tag_id) {
-         $tag_item->deleteByCriteria([
-            'plugin_tag_tags_id' => $tag_id,
-            "items_id" => $item->getID(),
-            "itemtype" => $item->getType(),
-         ]);
-      }
+      if (!isset($options['delete_old']) || $options['delete_old'])
+         foreach ($tag_del as $tag_id) {
+            $tag_item->deleteByCriteria([
+               'plugin_tag_tags_id' => $tag_id,
+               "items_id" => $item->getID(),
+               "itemtype" => $item->getType(),
+            ]);
+         }
 
       return true;
    }
