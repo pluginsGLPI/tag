@@ -59,7 +59,6 @@ class PluginTagTag extends CommonDropdown {
          'PluginPrintercountersRecord',
          'ITILSolution',
          'ITILFollowup',
-         'PluginFormcreatorIssue',
       ];
    }
 

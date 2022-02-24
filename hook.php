@@ -177,7 +177,7 @@ function plugin_tag_getDropdown() {
  * @return array the massive action list
  */
 function plugin_tag_MassiveActions($itemtype = '') {
-   if (PluginTagTag::canItemtype($itemtype)) {
+   if (PluginTagTag::canItemtype($itemtype) && is_a($itemtype, CommonDBTM::class, true) && $itemtype::canUpdate()) {      
       return [
          'PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'addTag'
                => __("Add tags", 'tag'),
