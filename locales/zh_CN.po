@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 11:37+0000\n"
-"PO-Revision-Date: 2020-09-07 06:24+0000\n"
-"Last-Translator: Cédric Anne\n"
+"POT-Creation-Date: 2022-04-20 14:26+0000\n"
+"PO-Revision-Date: 2015-09-18 12:56+0000\n"
+"Last-Translator: liAnGjiA <liangjia@qq.com>, 2018\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/teclib/glpi-plugin-tag/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,35 +18,45 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hook.php:181
+#: hook.php:183
 msgid "Add tags"
 msgstr "添加标签"
 
-#: hook.php:183
+#: inc/tag.class.php:105 inc/tag.class.php:354
+msgid "HTML color"
+msgstr "HTML颜色"
+
+#: setup.php:112
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr ""
+
+#: setup.php:116
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr ""
+
+#: hook.php:185
 msgid "Remove tags"
 msgstr "移除标签"
 
-#: inc/profile.class.php:5 inc/profile.class.php:39
-msgid "Tag management"
-msgstr ""
-
-#: inc/tag.class.php:11 inc/tag.class.php:435
+#: inc/tag.class.php:40 inc/tag.class.php:455
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "标签"
 
-#: inc/tag.class.php:76 inc/tag.class.php:324
-msgid "HTML color"
-msgstr "HTML颜色"
-
-#: inc/tag.class.php:623
-msgid "View all tags"
-msgstr "查看全部标签"
-
-#: inc/config.class.php:9 inc/config.class.php:26 setup.php:136
+#: inc/config.class.php:38 inc/config.class.php:55 setup.php:152
 msgid "Tag Management"
 msgstr "标签管理"
 
-#: inc/config.class.php:27
+#: inc/profile.class.php:34 inc/profile.class.php:58
+msgid "Tag management"
+msgstr ""
+
+#: inc/config.class.php:56
 msgid "Tags location"
 msgstr ""
+
+#: inc/tag.class.php:682
+msgid "View all tags"
+msgstr "查看全部标签"
