@@ -594,13 +594,13 @@ class PluginTagTag extends CommonDropdown {
 
       // find values for this items
       $values = [];
-      if (isset($params['id'])) {
+      if (isset($params['id']) && empty($params['value'])) {
          foreach ($tag_item->find(['items_id' => $params['id'],
                                    'itemtype' => $itemtype]) as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
          }
       } else {
-         $values = explode(',', $params['value']);
+         $values = $params['value'];
       }
 
       // Restrict tags finding by itemtype and entity
