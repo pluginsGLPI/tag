@@ -442,7 +442,6 @@ class PluginTagTag extends CommonDropdown {
                $value = $item->input['_saved']['_plugin_tag_tag_values'];
             }
 
-
             $field_class = "form-field row col-12 col-sm-6 px-3 mt-2 mb-n2";
             $label_class = "col-form-label col-xxl-5 text-xxl-end";
             $input_class = "col-xxl-7 field-container";
