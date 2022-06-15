@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Milo Ivir <mail@milotype.de>, 2020
-# Milo Ivir <mail@milotype.de>, 2020
+# Milo Ivir <mail@milotype.de>, 2020,2022
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 14:26+0000\n"
+"POT-Creation-Date: 2022-06-15 10:35+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>, 2020\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/teclib/glpi-plugin-tag/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,12 +30,12 @@ msgstr "HTML boja"
 #: setup.php:112
 msgctxt "filters"
 msgid "If the item has a tag"
-msgstr ""
+msgstr "Ako predmet ima oznaku"
 
 #: setup.php:116
 msgctxt "filters"
 msgid "If the item is tagged"
-msgstr ""
+msgstr "Ako je predmet označen"
 
 #: hook.php:185
 msgid "Remove tags"
@@ -58,7 +58,7 @@ msgstr "Upravljanje oznakama"
 
 #: inc/config.class.php:56
 msgid "Tags location"
-msgstr "Mjesto oznaka"
+msgstr "Lokacija oznaka"
 
 #: inc/tag.class.php:682
 msgid "View all tags"

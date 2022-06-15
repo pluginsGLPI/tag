@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2021
+# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2022
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 14:26+0000\n"
+"POT-Creation-Date: 2022-06-15 10:35+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2021\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2022\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-plugin-tag/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,12 +29,12 @@ msgstr "HTML rengi"
 #: setup.php:112
 msgctxt "filters"
 msgid "If the item has a tag"
-msgstr ""
+msgstr "Ögenin etiketi varsa"
 
 #: setup.php:116
 msgctxt "filters"
 msgid "If the item is tagged"
-msgstr ""
+msgstr "Öge etiketlenmişse"
 
 #: hook.php:185
 msgid "Remove tags"
