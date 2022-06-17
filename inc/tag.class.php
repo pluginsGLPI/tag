@@ -594,13 +594,15 @@ class PluginTagTag extends CommonDropdown {
 
       // find values for this items
       $values = [];
-      if (isset($params['id'])) {
+      if (!$obj->isNewItem()) {
          foreach ($tag_item->find(['items_id' => $params['id'],
                                    'itemtype' => $itemtype]) as $found_item) {
             $values[] = $found_item['plugin_tag_tags_id'];
          }
-      } else {
-         $values = explode(',', $params['value']);
+      } elseif (is_string($params['value'])) {
+         $values = !empty($params['value']) ? explode(',', $params['value']) : [];
+      } elseif (is_array($params['value'])) {
+         $values = $params['value'];
       }
 
       // Restrict tags finding by itemtype and entity
@@ -626,6 +628,15 @@ class PluginTagTag extends CommonDropdown {
             'color'    => $existing_tag['color'],
             'selected' => in_array($existing_tag['id'], $values),
          ];
+      }
+      // new tags restored from saved input
+      $new_tags = array_diff($values, array_column($existing_tags, 'id'));
+      foreach ($new_tags as $new_tag)  {
+          $select2_tags[] = [
+            'id'       => $new_tag,
+            'text'     => preg_replace('/^newtag_(.+)/', '$1', $new_tag),
+            'selected' => true,
+          ];
       }
 
       // create an input receiving the tag tokens
