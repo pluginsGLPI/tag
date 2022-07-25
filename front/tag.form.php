@@ -32,9 +32,7 @@ include ('../../../inc/includes.php');
 
 Session::checkRight(PluginTagTag::$rightname, UPDATE);
 
-$plugin = new Plugin();
-if (! $plugin->isInstalled("tag")
-    || ! $plugin->isActivated("tag")) {
+if (!Plugin::isPluginActive("tag")) {
    Html::displayNotFoundError();
 }
 

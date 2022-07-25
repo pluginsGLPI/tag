@@ -48,8 +48,7 @@ function plugin_init_tag() {
 
    $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
 
-   $plugin = new Plugin();
-   if ($plugin->isInstalled("tag") && $plugin->isActivated("tag")) {
+   if (Plugin::isPluginActive("tag")) {
 
       // define list of itemtype which can be associated with tags
       $CFG_GLPI['plugin_tag_itemtypes'] = [
@@ -65,17 +64,17 @@ function plugin_init_tag() {
          __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
       ];
 
-      if ($plugin->isInstalled('appliances') && $plugin->isActivated('appliances')) {
+      if (Plugin::isPluginActive('appliances')) {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
       }
 
       // Plugin Webapplication
-      if ($plugin->isInstalled('webapplications') && $plugin->isActivated('webapplications')) {
+      if (Plugin::isPluginActive('webapplications')) {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginWebapplicationsWebapplication';
       }
 
       // Plugin fusioninventory
-      if ($plugin->isInstalled('fusioninventory') && $plugin->isActivated('fusioninventory')) {
+      if (Plugin::isPluginActive('fusioninventory')) {
          $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
       }
 
@@ -89,7 +88,7 @@ function plugin_init_tag() {
       $PLUGIN_HOOKS['use_massive_action']['tag'] = true;
 
       // Plugin uninstall : after uninstall action
-      if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
+      if (Plugin::isPluginActive("uninstall")) {
          //to prevent null global variable load plugin if needed
          if ($UNINSTALL_TYPES == null) {
             Plugin::load('uninstall');
