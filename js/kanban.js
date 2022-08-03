@@ -63,3 +63,24 @@ $(document).on('kanban:filter', (e, data) => {
       }
    });
 });
+
+$(document).on('click', '.kanban .kanban-item .kanban-plugin-content .tag_choice', (e) => {
+   const clicked_tag = $(e.currentTarget);
+   const kanban_obj = clicked_tag.closest('.kanban').data('js_class');
+   const tag_value = clicked_tag.text();
+   // Quote tag_value if it contains spaces
+    const tag_value_quoted = tag_value.includes(' ') ? `"${tag_value}"` : tag_value;
+   /** @type {SearchInput} */
+   const filter_input = kanban_obj.filter_input;
+   // This param should be a SearchToken but we cannot import in this file
+   const new_filter_node = filter_input.tokenToTagHtml({
+      term: tag_value_quoted,
+      tag: 'tag'
+   });
+   filter_input.displayed_input.find('.search-input-tag[data-tag="tag"]').remove();
+   // Insert new filter node before the ".search-input-tag-input" node
+   filter_input.displayed_input.find('.search-input-tag-input').before(new_filter_node);
+   // Refresh filters
+   filter_input.displayed_input.trigger('result_change');
+   kanban_obj.filter();
+});
