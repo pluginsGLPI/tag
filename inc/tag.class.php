@@ -790,6 +790,22 @@ class PluginTagTag extends CommonDropdown {
     * @return mixed(string/boolean) false if not itemtype found, the string itemtype if found
     */
    public static function getCurrentItemtype() {
+
+      $exclude_paths = [
+         '/ajax/',
+         '/front/locale.php',
+         '/front/cron.php',
+         '/front/marketplace.php',
+         '/front/config.form.php',
+         '/front/central.php'
+      ];
+
+      foreach ($exclude_paths as $path) {
+         if (strpos($_SERVER['PHP_SELF'], $path) !== false) {
+            return false;
+         }
+      }
+
       $itemtype = '';
       if (
           preg_match('/\/(?:marketplace|plugins)\/genericobject\/front\/object\.form.php/', $_SERVER['PHP_SELF'])
