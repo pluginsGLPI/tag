@@ -47,7 +47,8 @@ class PluginTagTag extends CommonDropdown {
     * @return array of string itemtypes
     */
    public static function getBlacklistItemtype() {
-      return [
+      $additionalTypes = Plugin::doHookFunction('tag_get_blacklisted_types', []);
+      return array_merge([
          'PluginTagTag',
          'PluginTagTagItem',
          'Itil_Project',
@@ -59,7 +60,7 @@ class PluginTagTag extends CommonDropdown {
          'PluginPrintercountersRecord',
          'ITILSolution',
          'ITILFollowup',
-      ];
+      ], $additionalTypes);
    }
 
    /**
