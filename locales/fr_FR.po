@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# alexandre delaunay <delaunay.alexandre@gmail.com>, 2017
+# Alexandre Delaunay <delaunay.alexandre@gmail.com>, 2017
 # Manu1400 <ehaguet@teclib.com>, 2016
 # Jérémy MOREAU <jmoreau@teclib.com>, 2014
 # Pierre <plebel@teclib.com>, 2016
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 10:35+0000\n"
+"POT-Creation-Date: 2022-09-13 12:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: alexandre delaunay <delaunay.alexandre@gmail.com>, 2017\n"
+"Last-Translator: Alexandre Delaunay <delaunay.alexandre@gmail.com>, 2017\n"
 "Language-Team: French (France) (http://www.transifex.com/teclib/glpi-plugin-tag/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,12 +29,12 @@ msgstr "Ajouter des étiquettes"
 msgid "HTML color"
 msgstr "Couleur HTML"
 
-#: setup.php:112
+#: setup.php:111
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr ""
 
-#: setup.php:116
+#: setup.php:115
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr ""
@@ -50,7 +50,7 @@ msgstr[0] "Etiquette"
 msgstr[1] "Etiquettes"
 msgstr[2] "Etiquettes"
 
-#: inc/config.class.php:38 inc/config.class.php:55 setup.php:152
+#: inc/config.class.php:38 inc/config.class.php:55 setup.php:151
 msgid "Tag Management"
 msgstr "Gestion des tags"
 
@@ -62,6 +62,6 @@ msgstr ""
 msgid "Tags location"
 msgstr ""
 
-#: inc/tag.class.php:682
+#: inc/tag.class.php:693
 msgid "View all tags"
 msgstr "Voir toutes les étiquettes"

@@ -5,13 +5,14 @@
 # Translators:
 # Arthur Schaefer <arthur.r.schaefer@gmail.com>, 2017
 # Eduardo Spinola <eduardo.spinola@gmail.com>, 2016
+# Rafael Santos <rafacss@gmail.com>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 10:35+0000\n"
+"POT-Creation-Date: 2022-09-13 12:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: Arthur Schaefer <arthur.r.schaefer@gmail.com>, 2017\n"
+"Last-Translator: Rafael Santos <rafacss@gmail.com>, 2022\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/teclib/glpi-plugin-tag/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,12 +28,12 @@ msgstr "Adicionar etiquetas"
 msgid "HTML color"
 msgstr "Cor HTML"
 
-#: setup.php:112
+#: setup.php:111
 msgctxt "filters"
 msgid "If the item has a tag"
-msgstr ""
+msgstr "Se o item tiver uma etiqueta"
 
-#: setup.php:116
+#: setup.php:115
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr ""
@@ -48,7 +49,7 @@ msgstr[0] "Etiqueta"
 msgstr[1] "Etiquetas"
 msgstr[2] "Etiquetas"
 
-#: inc/config.class.php:38 inc/config.class.php:55 setup.php:152
+#: inc/config.class.php:38 inc/config.class.php:55 setup.php:151
 msgid "Tag Management"
 msgstr "Gerenciamento de Etiquetas"
 
@@ -60,6 +61,6 @@ msgstr ""
 msgid "Tags location"
 msgstr ""
 
-#: inc/tag.class.php:682
+#: inc/tag.class.php:693
 msgid "View all tags"
 msgstr "Exibir todas etiquetas"

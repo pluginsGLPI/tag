@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 10:35+0000\n"
+"POT-Creation-Date: 2022-09-13 12:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/teclib/glpi-plugin-tag/language/nl_NL/)\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "HTML color"
 msgstr ""
 
-#: setup.php:112
+#: setup.php:111
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr ""
 
-#: setup.php:116
+#: setup.php:115
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr ""
@@ -45,7 +45,7 @@ msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/config.class.php:38 inc/config.class.php:55 setup.php:152
+#: inc/config.class.php:38 inc/config.class.php:55 setup.php:151
 msgid "Tag Management"
 msgstr ""
 
@@ -57,6 +57,6 @@ msgstr ""
 msgid "Tags location"
 msgstr ""
 
-#: inc/tag.class.php:682
+#: inc/tag.class.php:693
 msgid "View all tags"
 msgstr ""
