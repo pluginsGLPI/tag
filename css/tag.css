@@ -68,3 +68,7 @@
 .select2-results .tag_choice {
    padding: 2px 4px;
 }
+
+.kanban-plugin-content .tag_choice {
+   cursor: pointer;
+}
