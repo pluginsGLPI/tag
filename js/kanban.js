@@ -72,14 +72,17 @@ $(document).on('click', '.kanban .kanban-item .kanban-plugin-content .tag_choice
     const tag_value_quoted = tag_value.includes(' ') ? `"${tag_value}"` : tag_value;
    /** @type {SearchInput} */
    const filter_input = kanban_obj.filter_input;
-   // This param should be a SearchToken but we cannot import in this file
-   const new_filter_node = filter_input.tokenToTagHtml({
+   const token = {
       term: tag_value_quoted,
-      tag: 'tag'
-   });
+      tag: 'tag',
+      raw: 'tag:' + tag_value_quoted,
+   };
+   // This param should be a SearchToken but we cannot import in this file
+   const new_filter_node = filter_input.tokenToTagHtml(token);
    filter_input.displayed_input.find('.search-input-tag[data-tag="tag"]').remove();
    // Insert new filter node before the ".search-input-tag-input" node
-   filter_input.displayed_input.find('.search-input-tag-input').before(new_filter_node);
+   const last_inserted = $(new_filter_node).insertBefore(filter_input.displayed_input.find('.search-input-tag-input'));
+   last_inserted.data('token', token);
    // Refresh filters
    filter_input.displayed_input.trigger('result_change');
    kanban_obj.filter();
