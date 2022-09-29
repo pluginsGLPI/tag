@@ -117,12 +117,7 @@ class PluginTagTag extends CommonDropdown {
       echo Html::hidden("type_menu");
 
       // retrieve tags elements and existing values
-      $type_menu_elements = [];
-      foreach ($CFG_GLPI['plugin_tag_itemtypes'] as $group_label => $group_values) {
-         foreach ($group_values as $itemtype) {
-            $type_menu_elements[$group_label][$itemtype] = $itemtype::getTypeName();
-         }
-      }
+      $type_menu_elements = PluginTagTag::getSupportedItemtypes();
       $type_menu_values = !empty($this->fields['type_menu']) ? json_decode($this->fields['type_menu']) : [];
 
       // show the multiple dropdown
@@ -366,6 +361,7 @@ class PluginTagTag extends CommonDropdown {
       switch ($field) {
          case 'type_menu':
             $elements  = ['' => Dropdown::EMPTY_VALUE];
+            // TODO This method does not exists
             foreach (PluginTagTagitem::getItemtypes('all') as $itemtype) {
                $item                = getItemForItemtype($itemtype);
                $elements[$itemtype] = $item->getTypeName();
@@ -821,5 +817,176 @@ class PluginTagTag extends CommonDropdown {
 
    static function getIcon() {
       return "fas fa-tags";
+   }
+
+   /**
+    * Return a list of supported itemtypes.
+    *
+    * @return array
+    */
+   final public static function getSupportedItemtypes(): array {
+      global $CFG_GLPI, $PLUGIN_HOOKS;
+
+      /*
+       *
+      // define list of itemtype which can be associated with tags
+      $CFG_GLPI['plugin_tag_itemtypes'] = [
+         __('Assets')         => ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
+                                  'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem',
+                                  'Phone', 'Enclosure', 'PDU', 'PassiveDCEquipment'],
+         __('Assistance')     => ['Ticket', 'Problem', 'Change', 'TicketRecurrent',
+                                  'TicketTemplate'],
+         __('Management')     => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document',
+                                  'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain'],
+         __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
+         __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
+         __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
+      ];
+
+      if (Plugin::isPluginActive('appliances')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
+      }
+
+      // Plugin Webapplication
+      if (Plugin::isPluginActive('webapplications')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginWebapplicationsWebapplication';
+      }
+
+      // Plugin fusioninventory
+      if (Plugin::isPluginActive('fusioninventory')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
+      }
+       */
+
+      $assets_itemtypes = [
+         Computer::class,
+         Monitor::class,
+         Software::class,
+         NetworkEquipment::class,
+         Peripheral::class,
+         Printer::class,
+         CartridgeItem::class,
+         ConsumableItem::class,
+         Phone::class,
+         Rack::class,
+         Enclosure::class,
+         PDU::class,
+         PassiveDCEquipment::class,
+         Cable::class,
+      ];
+
+      $assistance_itemtypes = [
+         Ticket::class,
+         Problem::class,
+         Change::class,
+         TicketRecurrent::class,
+         RecurrentChange::class,
+         PlanningExternalEvent::class,
+      ];
+
+      $management_itemtypes = [
+         SoftwareLicense::class,
+         SoftwareVersion::class,
+         Budget::class,
+         Supplier::class,
+         Contact::class,
+         Contract::class,
+         Document::class,
+         Line::class,
+         Certificate::class,
+         Datacenter::class,
+         Cluster::class,
+         Domain::class,
+         Appliance::class,
+         Database::class,
+         DatabaseInstance::class,
+      ];
+
+      $tools_itemtypes = [
+         Project::class,
+         ProjectTask::class,
+         Reminder::class,
+         RSSFeed::class,
+      ];
+
+      $administration_itemtypes = [
+         User::class,
+         Group::class,
+         Entity::class,
+         Profile::class,
+      ];
+
+      $components_itemtypes = [];
+      foreach ($CFG_GLPI['device_types'] as $device_itemtype) {
+         $components_itemtypes[] = $device_itemtype;
+      }
+      sort($components_itemtypes, SORT_NATURAL);
+
+      $component_items_itemtypes = [];
+      foreach ($CFG_GLPI['itemdevices'] as $deviceitem_itemtype) {
+         $component_items_itemtypes[] = $deviceitem_itemtype;
+      }
+      sort($component_items_itemtypes, SORT_NATURAL);
+
+      $plugins_itemtypes = [];
+      foreach (($PLUGIN_HOOKS['plugin_tag_supported_itemtypes'] ?? []) as $plugin_key => $itemtype) {
+         $itemtype_specs = isPluginItemType($itemtype);
+         if ($itemtype_specs !== false) {
+            $plugins_itemtypes[] = $itemtype;
+         }
+      }
+
+      $dropdowns_sections  = [];
+      foreach (Dropdown::getStandardDropdownItemTypes() as $section => $itemtypes) {
+         $section_name = sprintf(
+            __('%s: %s'),
+            _n('Dropdown', 'Dropdowns', Session::getPluralNumber()),
+            $section
+         );
+         // TODO Remove tag on tag
+         $dropdowns_sections[$section_name] = array_keys($itemtypes);
+      }
+
+      $other_itemtypes = [
+         NetworkPort::class,
+         Notification::class,
+         NotificationTemplate::class,
+      ];
+
+      $all_itemtypes = [
+         _n('Asset', 'Assets', Session::getPluralNumber())         => $assets_itemtypes,
+         __('Assistance')                                          => $assistance_itemtypes,
+         __('Management')                                          => $management_itemtypes,
+         __('Tools')                                               => $tools_itemtypes,
+         __('Administration')                                      => $administration_itemtypes,
+         _n('Plugin', 'Plugins', Session::getPluralNumber())       => $plugins_itemtypes,
+         _n('Component', 'Components', Session::getPluralNumber()) => $components_itemtypes,
+         __('Component items', 'fields')                           => $component_items_itemtypes,
+      ] + $dropdowns_sections + [
+         __('Other')                                               => $other_itemtypes,
+      ];
+
+      $plugins_names = [];
+      foreach ($all_itemtypes as $section => $itemtypes) {
+         $named_itemtypes = [];
+         foreach ($itemtypes as $itemtype) {
+            $prefix = '';
+            if ($itemtype_specs = isPluginItemType($itemtype)) {
+               $plugin_key = $itemtype_specs['plugin'];
+               if (!array_key_exists($plugin_key, $plugins_names)) {
+                  $plugins_names[$plugin_key] = Plugin::getInfo($plugin_key, 'name');
+               }
+               $prefix = $plugins_names[$plugin_key] . ' - ';
+            }
+
+            $named_itemtypes[$itemtype] = $prefix . $itemtype::getTypeName(Session::getPluralNumber());
+         }
+         $all_itemtypes[$section] = $named_itemtypes;
+      }
+
+      // Remove empty lists (e.g. Plugin list).
+      $all_itemtypes = array_filter($all_itemtypes);
+
+      return $all_itemtypes;
    }
 }
