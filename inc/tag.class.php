@@ -591,6 +591,9 @@ class PluginTagTag extends CommonDropdown {
       if (isset($params['id'])) {
          $obj->getFromDB($params['id']);
       }
+       if ($obj->isNewItem()) {
+           $obj->getEmpty();
+       }
 
       // find values for this items
       $values = [];
