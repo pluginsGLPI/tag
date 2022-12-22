@@ -35,7 +35,7 @@ define ('PLUGIN_TAG_VERSION', '2.11.2');
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "10.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "10.0.99");
+define("PLUGIN_TAG_MAX_GLPI", "10.1.99");
 
 /**
  * Init hooks of the plugin.
@@ -134,6 +134,11 @@ function plugin_init_tag() {
       if (Session::isMultiEntitiesMode()) {
          $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/entity.js';
       }
+
+      $PLUGIN_HOOKS[Hooks::REDEFINE_API_SCHEMAS]['tag'] = 'plugin_tag_redefine_api_schemas';
+      $PLUGIN_HOOKS[Hooks::API_CONTROLLERS]['tag'] = [
+          PluginTagApicontroller::class
+      ];
 
       Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
       Plugin::registerClass('PluginTagConfig', ['addtabon' => 'Config']);

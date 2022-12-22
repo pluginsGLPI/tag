@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Api\HL\Doc as Doc;
+
 // Plugin hook after *Uninstall*
 function plugin_uninstall_after_tag($item) {
    $tagitem = new PluginTagTagItem();
@@ -275,4 +277,51 @@ function plugin_tag_getRuleActions($params = [])
    }
 
    return $actions;
+}
+
+function plugin_tag_redefine_api_schemas(array $data): array {
+    foreach ($data['schemas'] as &$schema) {
+        if (!isset($schema['x-itemtype'])) {
+            continue;
+        }
+        if (PluginTagTag::canItemtype($schema['x-itemtype'])) {
+            $schema['properties']['tags'] = [
+                'type' => Doc\Schema::TYPE_ARRAY,
+                'description' => 'Tags',
+                'items' => [
+                    'type' => Doc\Schema::TYPE_OBJECT,
+                    'x-join' => [
+                        // This is the join with the desired data
+                        'table' => PluginTagTag::getTable(),
+                        'fkey' => 'plugin_tag_tags_id',
+                        'field' => 'id',
+                        'ref_join' => [
+                            // This is the linking join between the main item and the data needed
+                            'table' => PluginTagTagItem::getTable(),
+                            'fkey' => 'id',
+                            'field' => 'items_id',
+                            'condition' => [
+                                'itemtype' => $schema['x-itemtype']
+                            ],
+                        ]
+                    ],
+                    'properties' => [
+                        'id' => [
+                            'type' => Doc\Schema::TYPE_INTEGER,
+                            'description' => 'ID',
+                        ],
+                        'name' => [
+                            'type' => Doc\Schema::TYPE_STRING,
+                            'description' => 'Name',
+                        ],
+                        'comment' => [
+                            'type' => Doc\Schema::TYPE_STRING,
+                            'description' => 'Comment',
+                        ],
+                    ]
+                ]
+            ];
+        }
+    }
+    return $data;
 }
