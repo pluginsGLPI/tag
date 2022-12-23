@@ -62,7 +62,7 @@ class PluginTagTagItem extends CommonDBRelation {
                PRIMARY KEY (`id`),
                UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-         $DB->query($query) or die($DB->error());
+         $DB->queryOrDie($query);
       }
 
       // fix indexes
@@ -79,8 +79,8 @@ class PluginTagTagItem extends CommonDBRelation {
    public static function uninstall() {
       global $DB;
 
-      return $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`")
-         or die($DB->error());
+      $migration = new Migration(PLUGIN_TAG_VERSION);
+      $migration->dropTable(getTableForItemType(__CLASS__));
    }
 
    /**
@@ -100,15 +100,28 @@ class PluginTagTagItem extends CommonDBRelation {
       $canedit = $tag->can($instID, UPDATE);
       $table  = getTableForItemType(__CLASS__);
 
-      $result = $DB->query("SELECT DISTINCT `itemtype`
-                            FROM `$table`
-                            WHERE `plugin_tag_tags_id` = '$instID'");
+      $it = $DB->request([
+         'SELECT' => ['itemtype'],
+         'DISTINCT' => true,
+         'FROM'   => $table,
+         'WHERE'  => ['plugin_tag_tags_id' => $instID]
+      ]);
+      $result = [];
+      foreach ($it as $data) {
+         $result[] = $data;
+      }
 
-      $result2 = $DB->query("SELECT `itemtype`, items_id
-                             FROM `$table`
-                             WHERE `plugin_tag_tags_id` = '$instID'");
+      $it2 = $DB->request([
+         'SELECT' => ['itemtype', 'items_id'],
+         'FROM'   => $table,
+         'WHERE'  => ['plugin_tag_tags_id' => $instID]
+      ]);
+      $result = [];
+      foreach ($it2 as $data) {
+         $result2[] = $data;
+      }
 
-      $number = $DB->numrows($result);
+      $number = count($result);
       $rand   = mt_rand();
 
       if ($canedit) {
@@ -172,11 +185,11 @@ class PluginTagTagItem extends CommonDBRelation {
       echo "</tr>";
 
       for ($i=0; $i < $number; $i++) {
-         $itemtype = $DB->result($result, $i, "itemtype");
+         $itemtype = $result[$i]['itemtype'];
          if (!($item = getItemForItemtype($itemtype))) {
             continue;
          }
-         $item_id = $DB->result($result2, $i, "items_id");
+         $item_id = $result2[$i]['items_id'];
 
          if ($item->canView()) {
             $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
