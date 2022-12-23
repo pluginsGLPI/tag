@@ -180,9 +180,7 @@ class PluginTagTag extends CommonDropdown {
          if (!empty($datas)) {
             foreach ($datas as $data) {
                $itemtypes = PluginTagTagItem::getItemtypes($data['type_menu']);
-               $DB->query("UPDATE `$table`
-                           SET `type_menu` = '".json_encode($itemtypes)."'
-                           WHERE `id` = '".$data['id']."'");
+               $DB->update($table, ['type_menu' => json_encode($itemtypes)], ['id' => $data['id']]);
             }
          }
       }
@@ -202,26 +200,27 @@ class PluginTagTag extends CommonDropdown {
    public static function uninstall() {
       global $DB;
 
-      $DB->query("DELETE FROM glpi_logs
-                  WHERE itemtype_link = '".__CLASS__."'
-                     OR itemtype = '".__CLASS__."'")
-         or die($DB->error());
+      $DB->deleteOrDie('glpi_logs', [
+         'OR' => [
+            'itemtype_link' => __CLASS__,
+            'itemtype'      => __CLASS__
+         ]
+      ]);
+      $DB->deleteOrDie('glpi_savedsearches', [
+         'itemtype'      => __CLASS__
+      ]);
+      $DB->deleteOrDie('glpi_savedsearches_users', [
+         'itemtype'      => __CLASS__
+      ]);
+      $DB->deleteOrDie('glpi_displaypreferences', [
+         'OR' => [
+            'itemtype'      => __CLASS__,
+            'num'           => self::S_OPTION
+         ]
+      ]);
 
-      $DB->query("DELETE FROM glpi_savedsearches
-                  WHERE itemtype = '".__CLASS__."'")
-         or die($DB->error());
-
-      $DB->query("DELETE FROM glpi_savedsearches_users
-                  WHERE itemtype = '".__CLASS__."'")
-         or die($DB->error());
-
-      $DB->query("DELETE FROM glpi_displaypreferences
-                  WHERE itemtype = '".__CLASS__."'
-                     OR num = ".self::S_OPTION)
-         or die($DB->error());
-
-      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`")
-         or die($DB->error());
+      $migration = new Migration(PLUGIN_TAG_VERSION);
+      $migration->dropTable(getTableForItemType(__CLASS__));
 
       return true;
    }
