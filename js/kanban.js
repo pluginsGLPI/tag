@@ -40,7 +40,7 @@ $(document).on('kanban:filter', (e, data) => {
       const card = $(item);
 
       let shown = true;
-      const tags = card.data('tags');
+      const tags = card.data('tags') ?? {};
       //lowercase tags
       const tags_lower = Object.values(tags).map(tag => tag.toLowerCase());
       const tagged = tags_lower.length > 0;
