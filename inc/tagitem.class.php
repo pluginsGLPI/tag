@@ -378,6 +378,9 @@ class PluginTagTagItem extends CommonDBRelation {
       $tag_values = !empty($item->input["_plugin_tag_tag_values"])
          ? $item->input["_plugin_tag_tag_values"]
          : [];
+      if (!is_array($tag_values)) {
+         $tag_values = [$tag_values];
+      }
       foreach ($tag_values as &$tag_value) {
          if (strpos($tag_value, "newtag_") !== false) {
             $tag_value = str_replace("newtag_", "", $tag_value);

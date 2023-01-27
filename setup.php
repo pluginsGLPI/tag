@@ -137,6 +137,8 @@ function plugin_init_tag() {
 
       Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
       Plugin::registerClass('PluginTagConfig', ['addtabon' => 'Config']);
+
+      $PLUGIN_HOOKS['use_rules']['tag']      = ['RuleTicket'];
    }
 }
 
