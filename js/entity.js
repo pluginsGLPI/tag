@@ -40,7 +40,7 @@ $(function() {
 });
 
 var setEntityTag = function() {
-    $('.entity-name, .entity-badge')
+    $('.entity-name, .entity-badge, .glpi-badge')
         .each(function() {
             var entity_element = $(this);
             entity_name = entity_element.attr('title');
