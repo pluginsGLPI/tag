@@ -379,6 +379,7 @@ class PluginTagTagItem extends CommonDBRelation {
          ? $item->input["_plugin_tag_tag_values"]
          : [];
       if (!is_array($tag_values)) {
+         // Business rule engine will add value as a unique string that must be converted to array.
          $tag_values = [$tag_values];
       }
       foreach ($tag_values as &$tag_value) {
