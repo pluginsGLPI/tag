@@ -258,3 +258,22 @@ function plugin_tag_post_init() {
       }
    }
 }
+
+function plugin_tag_getRuleActions($params = [])
+{
+   $actions = [];
+
+   switch ($params['rule_itemtype']) {
+      case "RuleTicket":
+         $actions['_plugin_tag_tag_values'] = [
+            'name'  => __("Add tags", 'tag'),
+            'type'  => 'dropdown',
+            'table' => PluginTagTag::getTable(),
+            'condition' => ['type_menu' => ['LIKE', '%\"Ticket\"%']],
+         ];
+
+         break;
+   }
+
+   return $actions;
+}
