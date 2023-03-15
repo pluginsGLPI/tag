@@ -642,7 +642,12 @@ class PluginTagTag extends CommonDropdown {
       }
 
       // create an input receiving the tag tokens
-      echo "<div class='btn-group btn-group-sm w-100'>";
+      $extra_class = "";
+      if ($obj instanceof CommonITILTask) {
+         $extra_class = "mb-3";
+      }
+
+      echo "<div class='btn-group btn-group-sm w-100 $extra_class'>";
 
       $rand = mt_rand();
       echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
@@ -663,9 +668,10 @@ class PluginTagTag extends CommonDropdown {
          $token_creation = "return null;";
       }
 
-      $readOnly = (!$tag::canUpdate() ||
-            ((($obj->isNewItem() && !$obj->canCreateItem())) ||
-            (!$obj->isNewItem() && !$obj->canUpdateItem())));
+      $readOnly = !$tag::canUpdate()
+         || ($obj->isNewItem() && !$obj->canCreateItem())
+         || (!$obj->isNewItem() && !$obj->canUpdateItem())
+      ;
 
       // call select2 lib for this input
       echo Html::scriptBlock("$(function() {
