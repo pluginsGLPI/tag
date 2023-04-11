@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# INOUE Daisuke, 2023
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Tag\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-11 19:57+0000\n"
+"PO-Revision-Date: 2015-09-18 12:56+0000\n"
+"Last-Translator: INOUE Daisuke, 2023\n"
+"Language-Team: Japanese (Japan) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ja_JP/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja_JP\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hook.php:182 hook.php:268
+msgid "Add tags"
+msgstr "タグを追加"
+
+#: inc/tag.class.php:105 inc/tag.class.php:353
+msgid "HTML color"
+msgstr "HTML カラー"
+
+#: setup.php:111
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "アイテムにタグがあったら"
+
+#: setup.php:115
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "アイテムにタグがついたら"
+
+#: hook.php:184
+msgid "Remove tags"
+msgstr "タグを削除"
+
+#: inc/tag.class.php:40 inc/tag.class.php:454
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "タグ"
+
+#: inc/config.class.php:38 inc/config.class.php:55 setup.php:153
+msgid "Tag Management"
+msgstr "タグ管理"
+
+#: inc/profile.class.php:34 inc/profile.class.php:58
+msgid "Tag management"
+msgstr "タグ管理"
+
+#: inc/config.class.php:56
+msgid "Tags location"
+msgstr "タグの表示位置"
+
+#: inc/tag.class.php:701
+msgid "View all tags"
+msgstr "すべてのタグを表示"
