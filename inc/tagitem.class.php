@@ -387,6 +387,10 @@ class PluginTagTagItem extends CommonDBRelation {
       $tag      = new PluginTagTag();
       $tag_item = new self();
 
+      if (!$tag::canUpdate()) {
+         return true;
+      }
+
       // create new values
       $tag_values = !empty($item->input["_plugin_tag_tag_values"])
          ? $item->input["_plugin_tag_tag_values"]
