@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Tag. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
- * @copyright Copyright (C) 2014-2022 by Teclib'.
+ * @copyright Copyright (C) 2014-2023 by Teclib'.
  * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
