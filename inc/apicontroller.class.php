@@ -62,7 +62,7 @@ final class PluginTagApicontroller extends AbstractController
     )]
     public function getTags(Request $request): Response
     {
-        return $this->searchBySchema($this->getKnownSchema('Tag'), $request->getParameters());
+        return \Glpi\Api\HL\Search::searchBySchema($this->getKnownSchema('Tag'), $request->getParameters());
     }
 
     #[Route(path: '/{id}', methods: ['GET'], requirements: ['id' => '\d+'])]
@@ -79,7 +79,7 @@ final class PluginTagApicontroller extends AbstractController
     )]
     public function getTag(Request $request, int $id): Response
     {
-        return $this->getOneBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
+        return \Glpi\Api\HL\Search::getOneBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
     }
 
     #[Route(path: '/', methods: ['POST'])]
@@ -93,7 +93,7 @@ final class PluginTagApicontroller extends AbstractController
     ])]
     public function createTag(Request $request): Response
     {
-        return $this->createBySchema($this->getKnownSchema('Tag'), $request->getParameters(), 'getTag');
+        return \Glpi\Api\HL\Search::createBySchema($this->getKnownSchema('Tag'), $request->getParameters(), 'getTag');
     }
 
     #[Route(path: '/{id}', methods: ['PATCH'], requirements: ['id' => '\d+'])]
@@ -119,7 +119,7 @@ final class PluginTagApicontroller extends AbstractController
     )]
     public function updateTag(Request $request, int $id): Response
     {
-        return $this->updateBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
+        return \Glpi\Api\HL\Search::updateBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
     }
 
     #[Route(path: '/{id}', methods: ['DELETE'], requirements: ['id' => '\d+'])]
@@ -136,6 +136,6 @@ final class PluginTagApicontroller extends AbstractController
     )]
     public function deleteTag(Request $request, int $id): Response
     {
-        return $this->deleteBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
+        return \Glpi\Api\HL\Search::deleteBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
     }
 }
