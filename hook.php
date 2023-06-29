@@ -280,6 +280,9 @@ function plugin_tag_getRuleActions($params = [])
 }
 
 function plugin_tag_redefine_api_schemas(array $data): array {
+    if (!Session::haveRight('plugin_tag_tag', READ)) {
+        return $data;
+    }
     foreach ($data['schemas'] as &$schema) {
         if (!isset($schema['x-itemtype'])) {
             continue;
