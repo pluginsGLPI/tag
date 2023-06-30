@@ -70,11 +70,7 @@ class PluginTagTag extends CommonDropdown {
     * @return bool
     */
    public static function canItemtype($itemtype = '') {
-      if (empty($itemtype)) {
-         return false;
-      }
-      return (!class_exists($itemtype)
-              || !in_array($itemtype, self::getBlacklistItemtype()));
+      return !empty($itemtype) && class_exists($itemtype) && !in_array($itemtype, self::getBlacklistItemtype());
    }
 
    public function showForm($ID, $options = []) {
