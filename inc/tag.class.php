@@ -139,7 +139,7 @@ class PluginTagTag extends CommonDropdown {
    }
 
    public static function install(Migration $migration) {
-      global $DB;
+      global $DB, $CFG_GLPI;
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
@@ -178,7 +178,7 @@ class PluginTagTag extends CommonDropdown {
          $datas = getAllDataFromTable($table, ['NOT' => ['type_menu' => null]]);
          if (!empty($datas)) {
             foreach ($datas as $data) {
-               $itemtypes = PluginTagTagItem::getItemtypes($data['type_menu']);
+               $itemtypes = $CFG_GLPI['plugin_tag_itemtypes'][$data['type_menu']] ?? [];
                $DB->update($table, ['type_menu' => json_encode($itemtypes)], ['id' => $data['id']]);
             }
          }
@@ -358,15 +358,19 @@ class PluginTagTag extends CommonDropdown {
    }
 
    static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
+       global $CFG_GLPI;
       if (!is_array($values)) {
          $values = [$field => $values];
       }
       switch ($field) {
          case 'type_menu':
             $elements  = ['' => Dropdown::EMPTY_VALUE];
-            foreach (PluginTagTagitem::getItemtypes('all') as $itemtype) {
-               $item                = getItemForItemtype($itemtype);
-               $elements[$itemtype] = $item->getTypeName();
+            $supported_itemtypes = $CFG_GLPI['plugin_tag_itemtypes'] ?? [];
+            foreach ($supported_itemtypes as $itemtypes) {
+                foreach ($itemtypes as $itemtype) {
+                    $item = getItemForItemtype($itemtype);
+                    $elements[$itemtype] = $item::getTypeName();
+                }
             }
 
             return Dropdown::showFromArray($name, $elements,
