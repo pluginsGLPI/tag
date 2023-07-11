@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# SeongHyeon Cho <jaymz9634@gmail.com>, 2020
+# 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-11 19:57+0000\n"
+"POT-Creation-Date: 2023-07-11 08:58+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>, 2020\n"
+"Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Add tags"
 msgstr "태그 추가"
 
-#: inc/tag.class.php:105 inc/tag.class.php:353
+#: inc/tag.class.php:104 inc/tag.class.php:352
 msgid "HTML color"
 msgstr "HTML 색상"
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Remove tags"
 msgstr "태그 제거"
 
-#: inc/tag.class.php:40 inc/tag.class.php:454
+#: inc/tag.class.php:40 inc/tag.class.php:457
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "태그"
@@ -57,6 +57,6 @@ msgstr "태그 관리"
 msgid "Tags location"
 msgstr ""
 
-#: inc/tag.class.php:701
+#: inc/tag.class.php:704
 msgid "View all tags"
 msgstr "모든 태그 보기"
