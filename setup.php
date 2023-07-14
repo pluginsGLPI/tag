@@ -61,8 +61,12 @@ function plugin_init_tag() {
                                   'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain'],
          __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
          __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
-         __('Setup')          => ['SLA', 'SlaLevel', 'Link', 'Webhook'],
+         __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
       ];
+
+      if (class_exists('Webhook')) {
+         $CFG_GLPI['plugin_tag_itemtypes'][__('Setup')][] = 'Webhook';
+      }
 
       if (Plugin::isPluginActive('appliances')) {
          $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
