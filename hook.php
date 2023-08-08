@@ -176,7 +176,7 @@ function plugin_tag_getDropdown() {
  * @return array the massive action list
  */
 function plugin_tag_MassiveActions($itemtype = '') {
-   if (PluginTagTag::canItemtype($itemtype) && is_a($itemtype, CommonDBTM::class, true) && $itemtype::canUpdate()) {      
+   if (PluginTagTag::canItemtype($itemtype) && is_a($itemtype, CommonDBTM::class, true) && $itemtype::canUpdate()) {
       return [
          'PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'addTag'
                => __("Add tags", 'tag'),
@@ -256,6 +256,13 @@ function plugin_tag_post_init() {
          $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
       }
    }
+
+   // Always define hook for tickets
+   // Needed for rules to function properly when a ticket is created from a mail
+   // collector
+   $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
+   $PLUGIN_HOOKS['pre_item_update']['tag'][Ticket::getType()] = ['PluginTagTagItem', 'updateItem'];
+   $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
 }
 
 function plugin_tag_getRuleActions($params = [])

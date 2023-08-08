@@ -379,7 +379,15 @@ class PluginTagTagItem extends CommonDBRelation {
    static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true) {
 
       if ($item->getID()
-          && !isset($item->input["_plugin_tag_tag_process_form"])) {
+         && !isset($item->input["_plugin_tag_tag_process_form"])
+         && !(
+            // Always trigger on newly created tickets, as they may come from
+            // the mail collector which wont set the _plugin_tag_tag_process_form
+            // flag
+            $item::getType() == Ticket::getType()
+            && $item->fields['date_creation'] == $_SESSION['glpi_currenttime']
+         )
+      ) {
          return true;
       }
 
