@@ -295,7 +295,7 @@ function plugin_tag_redefine_api_schemas(array $data): array {
                         'table' => PluginTagTag::getTable(),
                         'fkey' => 'plugin_tag_tags_id',
                         'field' => 'id',
-                        'ref_join' => [
+                        'ref-join' => [
                             // This is the linking join between the main item and the data needed
                             'table' => PluginTagTagItem::getTable(),
                             'fkey' => 'id', // ID field on the main join table
