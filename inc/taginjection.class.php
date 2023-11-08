@@ -28,7 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-/** @phpstan-ignore-next-line */
 class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionInjectionInterface
 {
     public static function getTable($classname = null)
