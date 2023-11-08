@@ -5,9 +5,9 @@ parameters:
     bootstrapFiles:
         - ../../inc/based_config.php
     paths:
-        - inc
-        - front
         - ajax
+        - front
+        - inc
         - hook.php
         - setup.php
     excludePaths:
