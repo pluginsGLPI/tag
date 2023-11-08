@@ -30,23 +30,23 @@
 
 class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionInjectionInterface
 {
-    static function getTable($classname = null)
+    public static function getTable($classname = null)
     {
         $parenttype = get_parent_class();
         return $parenttype::getTable();
     }
 
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         return parent::getTypeName(1);
     }
 
-    function isPrimaryType()
+    public function isPrimaryType()
     {
         return true;
     }
 
-    function connectedTo()
+    public function connectedTo()
     {
        //Note : Interesting to have GLPI core object (who can have a tag) here
         return [];
@@ -55,7 +55,7 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
    /**
     * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::getOptions()
    **/
-    function getOptions($primary_type = '')
+    public function getOptions($primary_type = '')
     {
 
         $tab = Search::getOptions(get_parent_class($this));
@@ -70,7 +70,7 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
    /**
     * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::addOrUpdateObject()
    **/
-    function addOrUpdateObject($values = [], $options = [])
+    public function addOrUpdateObject($values = [], $options = [])
     {
 
         $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);

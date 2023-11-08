@@ -34,7 +34,7 @@ class PluginTagTag extends CommonDropdown
     public $dohistory = true;
 
     const S_OPTION = 10500;
-    static $rightname = 'plugin_tag_tag';
+    public static $rightname = 'plugin_tag_tag';
 
     public static function getTypeName($nb = 1)
     {
@@ -233,14 +233,14 @@ class PluginTagTag extends CommonDropdown
         return true;
     }
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
         $tab    = [];
         $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
         return $tab;
     }
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         switch ($item->getType()) {
             case __CLASS__:
@@ -254,7 +254,7 @@ class PluginTagTag extends CommonDropdown
         return true;
     }
 
-    function defineTabs($options = [])
+    public function defineTabs($options = [])
     {
         $ong = [];
         $this->addDefaultFormTab($ong);
@@ -272,7 +272,7 @@ class PluginTagTag extends CommonDropdown
         ]);
     }
 
-    function getLinkedItems()
+    public function getLinkedItems()
     {
         global $DB;
 
@@ -287,7 +287,7 @@ class PluginTagTag extends CommonDropdown
     }
 
    // for massive actions
-    function haveChildren()
+    public function haveChildren()
     {
         $tagitems = new PluginTagTagItem();
         $data = $tagitems->find(['plugin_tag_tags_id' => $this->getID()]);
@@ -297,7 +297,7 @@ class PluginTagTag extends CommonDropdown
         return true;
     }
 
-    function rawSearchOptions()
+    public function rawSearchOptions()
     {
 
         $tab = [];
@@ -372,7 +372,7 @@ class PluginTagTag extends CommonDropdown
         return $tab;
     }
 
-    static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
+    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
     {
         global $CFG_GLPI;
         if (!is_array($values)) {
@@ -401,8 +401,7 @@ class PluginTagTag extends CommonDropdown
 
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
-
-    static function getSpecificValueToDisplay($field, $values, array $options = [])
+    public static function getSpecificValueToDisplay($field, $values, array $options = [])
     {
         switch ($field) {
             case 'type_menu':
@@ -428,7 +427,7 @@ class PluginTagTag extends CommonDropdown
    /**
     * @see https://github.com/pluginsGLPI/tag/issues/1
     */
-    static function parseItemtype($itemtype, $id = 0)
+    public static function parseItemtype($itemtype, $id = 0)
     {
         if ($itemtype == 'rule.generic') {
             $rule = new Rule();
@@ -447,7 +446,7 @@ class PluginTagTag extends CommonDropdown
     *                          - item the CommonDBTM object
     * @return bool|void False if the form was not shown. Otherwise nothing is returned and the form is displayed.
     */
-    static function showForItem($params = [])
+    public static function showForItem($params = [])
     {
         if (!self::canView()) {
             return false;
@@ -502,7 +501,7 @@ class PluginTagTag extends CommonDropdown
     *                          - content postKanbanContent content
     * @return array Array of params passed in in addition to the new content.
     */
-    static function preKanbanContent($params = [])
+    public static function preKanbanContent($params = [])
     {
         global $DB;
 
@@ -594,7 +593,7 @@ class PluginTagTag extends CommonDropdown
     *                           - id (optionnal)
     * @return nothing
     */
-    static function showTagDropdown($params = [])
+    public static function showTagDropdown($params = [])
     {
        // compute default params
         $default_params = [
@@ -742,7 +741,7 @@ class PluginTagTag extends CommonDropdown
         echo "</div>";
     }
 
-    static function getTagForEntityName($completename = "")
+    public static function getTagForEntityName($completename = "")
     {
         $plus_rootentity = sprintf(__('%1$s + %2$s'), '', __('Child entities'));
         $completename    = Html::entity_decode_deep($completename);
@@ -764,7 +763,7 @@ class PluginTagTag extends CommonDropdown
         return $out;
     }
 
-    static function getSingleTag($tag_id, $separator = '')
+    public static function getSingleTag($tag_id, $separator = '')
     {
         $plugintagtag = new self();
         $plugintagtag->getFromDB($tag_id);
@@ -777,7 +776,7 @@ class PluginTagTag extends CommonDropdown
               $separator . $plugintagtag->fields['name'] . '</span>';
     }
 
-    function prepareInputForAdd($input)
+    public function prepareInputForAdd($input)
     {
         if (!$this->checkMandatoryFields($input)) {
             return false;
@@ -786,7 +785,7 @@ class PluginTagTag extends CommonDropdown
         return $this->encodeSubtypes($input);
     }
 
-    function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input)
     {
         if (!$this->checkMandatoryFields($input)) {
             return false;
@@ -800,7 +799,7 @@ class PluginTagTag extends CommonDropdown
    *
    * @param type $input
    */
-    function encodeSubtypes($input)
+    public function encodeSubtypes($input)
     {
         if (!empty($input['type_menu'])) {
             $input['type_menu'] = json_encode(array_values($input['type_menu']));
@@ -815,7 +814,7 @@ class PluginTagTag extends CommonDropdown
    * @param array $input
    * @return boolean
    */
-    function checkMandatoryFields($input = [])
+    public function checkMandatoryFields($input = [])
     {
         $msg              = [];
         $checkKo          = false;
@@ -880,7 +879,7 @@ class PluginTagTag extends CommonDropdown
         return false;
     }
 
-    static function getIcon()
+    public static function getIcon()
     {
         return "fas fa-tags";
     }

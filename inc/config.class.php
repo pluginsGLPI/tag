@@ -32,7 +32,7 @@ class PluginTagConfig extends CommonDBTM
 {
     protected static $notable = true;
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
         if (!$withtemplate && $item->getType() === 'Config') {
@@ -79,7 +79,7 @@ class PluginTagConfig extends CommonDBTM
         Html::closeForm();
     }
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
 
         if ($item->getType() == 'Config') {

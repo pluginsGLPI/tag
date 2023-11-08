@@ -94,7 +94,7 @@ class PluginTagTagItem extends CommonDBRelation
     * @param PluginTagTag $tag
     * @return boolean
     */
-    static function showForTag(PluginTagTag $tag)
+    public static function showForTag(PluginTagTag $tag)
     {
         global $DB, $CFG_GLPI;
 
@@ -392,7 +392,7 @@ class PluginTagTagItem extends CommonDBRelation
     *
     * @return boolean
     */
-    static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true)
+    public static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true)
     {
 
         if (
@@ -467,7 +467,7 @@ class PluginTagTagItem extends CommonDBRelation
     * @param  CommonDBTM $item
     * @return boolean
     */
-    static function purgeItem(CommonDBTM $item)
+    public static function purgeItem(CommonDBTM $item)
     {
         $tagitem = new self();
         return $tagitem->deleteByCriteria([
@@ -476,7 +476,7 @@ class PluginTagTagItem extends CommonDBRelation
         ]);
     }
 
-    static function showMassiveActionsSubForm(MassiveAction $ma)
+    public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
 
         $itemtypes = array_keys($ma->items);
@@ -492,7 +492,7 @@ class PluginTagTagItem extends CommonDBRelation
         return parent::showMassiveActionsSubForm($ma);
     }
 
-    static function processMassiveActionsForOneItemtype(
+    public static function processMassiveActionsForOneItemtype(
         MassiveAction $ma,
         CommonDBTM $item,
         array $ids

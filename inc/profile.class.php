@@ -30,19 +30,19 @@
 
 class PluginTagProfile extends Profile
 {
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
         return self::createTabEntry(__('Tag management', 'tag'));
     }
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         $tagprofile = new self();
         $tagprofile->showForm($item->getID());
         return true;
     }
 
-    function showForm($ID, array $options = [])
+    public function showForm($ID, array $options = [])
     {
         if (!self::canView()) {
             return false;
