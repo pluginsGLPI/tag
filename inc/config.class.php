@@ -43,7 +43,6 @@ class PluginTagConfig extends CommonDBTM
 
     public function showConfigForm()
     {
-        global $CFG_GLPI;
         if (!Session::haveRight('config', UPDATE)) {
             return false;
         }
@@ -81,11 +80,11 @@ class PluginTagConfig extends CommonDBTM
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-
         if ($item->getType() == 'Config') {
             $config = new self();
             $config->showConfigForm();
         }
+        return true;
     }
 
     public static function uninstall()

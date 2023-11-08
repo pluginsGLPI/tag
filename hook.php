@@ -40,6 +40,7 @@ function plugin_uninstall_after_tag($item)
 
 function plugin_datainjection_populate_tag()
 {
+    /** @var array $INJECTABLE_TYPES */
     global $INJECTABLE_TYPES;
 
     $INJECTABLE_TYPES['PluginTagTagInjection'] = 'tag';
@@ -257,6 +258,7 @@ function plugin_tag_uninstall()
 
 function plugin_tag_post_init()
 {
+    /** @var array $PLUGIN_HOOKS */
     global $PLUGIN_HOOKS;
 
    // hook on object changes

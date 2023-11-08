@@ -78,6 +78,7 @@ class PluginTagTag extends CommonDropdown
 
     public function showForm($ID, $options = [])
     {
+        /** @var array $CFG_GLPI */
         global $CFG_GLPI;
 
         if (!$this->canViewItem()) {
@@ -147,6 +148,10 @@ class PluginTagTag extends CommonDropdown
 
     public static function install(Migration $migration)
     {
+        /**
+         * @var DBmysql $DB
+         * @var array   $CFG_GLPI
+         */
         global $DB, $CFG_GLPI;
 
         $default_charset = DBConnection::getDefaultCharset();
@@ -156,7 +161,7 @@ class PluginTagTag extends CommonDropdown
         $table = getTableForItemType(__CLASS__);
 
         if (!$DB->tableExists($table)) {
-            $DB->query("CREATE TABLE IF NOT EXISTS `$table` (
+            $query = "CREATE TABLE IF NOT EXISTS `$table` (
             `id`           int {$default_key_sign} NOT NULL auto_increment,
             `entities_id`  int {$default_key_sign} NOT NULL DEFAULT '0',
             `is_recursive` tinyint NOT NULL DEFAULT '1',
@@ -166,8 +171,13 @@ class PluginTagTag extends CommonDropdown
             `type_menu`    text,
             PRIMARY KEY (`id`),
             KEY `name` (`name`)
-         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;")
-             or die($DB->error());
+         ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+            if (method_exists($DB, 'doQueryOrDie')) {
+                $DB->doQueryOrDie($query);
+            } else {
+                /** @phpstan-ignore-next-line */
+                $DB->queryOrDie($query);
+            }
         }
 
         if (!$DB->fieldExists($table, 'type_menu')) {
@@ -206,6 +216,7 @@ class PluginTagTag extends CommonDropdown
 
     public static function uninstall()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $DB->deleteOrDie('glpi_logs', [
@@ -274,6 +285,7 @@ class PluginTagTag extends CommonDropdown
 
     public function getLinkedItems()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $query = "SELECT `itemtype`, `items_id`
@@ -374,6 +386,7 @@ class PluginTagTag extends CommonDropdown
 
     public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
     {
+        /** @var array $CFG_GLPI */
         global $CFG_GLPI;
         if (!is_array($values)) {
             $values = [$field => $values];
@@ -503,6 +516,7 @@ class PluginTagTag extends CommonDropdown
     */
     public static function preKanbanContent($params = [])
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         if (!Session::haveRight(PluginTagTag::$rightname, READ)) {
@@ -552,6 +566,7 @@ class PluginTagTag extends CommonDropdown
 
     public static function kanbanItemMetadata($params)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         if (!Session::haveRight(PluginTagTag::$rightname, READ)) {
@@ -591,7 +606,7 @@ class PluginTagTag extends CommonDropdown
     * @param  array  $params could contains theses keys:
     *                           - itemtype (mandatory)
     *                           - id (optionnal)
-    * @return nothing
+    * @return void
     */
     public static function showTagDropdown($params = [])
     {

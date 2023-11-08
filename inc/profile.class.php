@@ -71,5 +71,7 @@ class PluginTagProfile extends Profile
             Html::closeForm();
         }
         echo "</div>";
+
+        return true;
     }
 }

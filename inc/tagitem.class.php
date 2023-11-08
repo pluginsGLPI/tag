@@ -47,6 +47,7 @@ class PluginTagTagItem extends CommonDBRelation
 
     public static function install(Migration $migration)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset = DBConnection::getDefaultCharset();
@@ -64,7 +65,12 @@ class PluginTagTagItem extends CommonDBRelation
                PRIMARY KEY (`id`),
                UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->queryOrDie($query);
+            if (method_exists($DB, 'doQueryOrDie')) {
+                $DB->doQueryOrDie($query);
+            } else {
+                /** @phpstan-ignore-next-line  */
+                $DB->queryOrDie($query);
+            }
         }
 
        // fix indexes
@@ -82,8 +88,6 @@ class PluginTagTagItem extends CommonDBRelation
 
     public static function uninstall()
     {
-        global $DB;
-
         $migration = new Migration(PLUGIN_TAG_VERSION);
         $migration->dropTable(getTableForItemType(__CLASS__));
     }
@@ -96,6 +100,10 @@ class PluginTagTagItem extends CommonDBRelation
     */
     public static function showForTag(PluginTagTag $tag)
     {
+        /**
+         * @var DBmysql $DB
+         * @var array $CFG_GLPI
+         */
         global $DB, $CFG_GLPI;
 
         $instID = $tag->fields['id'];
@@ -122,7 +130,7 @@ class PluginTagTagItem extends CommonDBRelation
             'FROM'   => $table,
             'WHERE'  => ['plugin_tag_tags_id' => $instID]
         ]);
-        $result = [];
+        $result2 = [];
         foreach ($it2 as $data) {
             $result2[] = $data;
         }
@@ -382,6 +390,8 @@ class PluginTagTagItem extends CommonDBRelation
             Html::closeForm();
         }
         echo "</div>";
+
+        return true;
     }
 
    /**

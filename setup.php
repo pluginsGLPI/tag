@@ -45,6 +45,11 @@ define("PLUGIN_TAG_MAX_GLPI", "10.0.99");
  */
 function plugin_init_tag()
 {
+    /**
+     * @var array $PLUGIN_HOOKS
+     * @var array $UNINSTALL_TYPES
+     * @var array $CFG_GLPI
+     */
     global $PLUGIN_HOOKS, $UNINSTALL_TYPES, $CFG_GLPI;
 
     $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;

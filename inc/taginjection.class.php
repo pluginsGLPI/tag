@@ -28,6 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
+/** @phpstan-ignore-next-line */
 class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionInjectionInterface
 {
     public static function getTable($classname = null)
@@ -64,6 +65,7 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
         $options['ignore_fields'] = [3, 4, 6]; //id, entity, type_menu;
         $options['displaytype']   = ["dropdown" => [12]];
 
+        /** @phpstan-ignore-next-line */
         return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
     }
 
@@ -72,12 +74,13 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
    **/
     public function addOrUpdateObject($values = [], $options = [])
     {
-
+        /** @phpstan-ignore-next-line  */
         $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
         $lib->processAddOrUpdate();
         $results = $lib->getInjectionResults();
 
-       // Update field for add a default value
+        // Update field for add a default value
+        /** @phpstan-ignore-next-line  */
         if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
             $item = new parent();
             $item->update(['id'        => $results[get_parent_class()],
