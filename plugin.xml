@@ -2,7 +2,7 @@
    <name>Tag</name>
    <key>tag</key>
    <state>stable</state>
-   <logo>https://raw.githubusercontent.com/pluginsGLPI/tag/master/icon.png</logo>
+   <logo>https://raw.githubusercontent.com/pluginsGLPI/tag/main/icon.png</logo>
    <description>
       <short>
          <fr>Ajout de tags sur n'importe quel objet de GLPI</fr>
@@ -28,7 +28,7 @@
    <homepage>https://github.com/pluginsGLPI/tag</homepage>
    <download>https://github.com/pluginsGLPI/tag/releases</download>
    <issues>https://github.com/pluginsGLPI/tag/issues</issues>
-   <readme>https://github.com/pluginsGLPI/tag/blob/master/README.md</readme>
+   <readme>https://github.com/pluginsGLPI/tag/blob/main/README.md</readme>
    <authors>
       <author>TECLIB'</author>
    </authors>
@@ -230,6 +230,6 @@
       </cs>
    </tags>
    <screenshots>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/tag/master/tag.gif</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/tag/main/tag.gif</screenshot>
    </screenshots>
 </root>
