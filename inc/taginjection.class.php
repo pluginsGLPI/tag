@@ -48,19 +48,19 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
 
     public function connectedTo()
     {
-       //Note : Interesting to have GLPI core object (who can have a tag) here
+        //Note : Interesting to have GLPI core object (who can have a tag) here
         return [];
     }
 
-   /**
-    * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::getOptions()
-   **/
+    /**
+     * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::getOptions()
+     */
     public function getOptions($primary_type = '')
     {
 
         $tab = Search::getOptions(get_parent_class($this));
 
-       //Remove some options because some fields cannot be imported
+        //Remove some options because some fields cannot be imported
         $options['ignore_fields'] = [3, 4, 6]; //id, entity, type_menu;
         $options['displaytype']   = ["dropdown" => [12]];
 
@@ -68,9 +68,9 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
         return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
     }
 
-   /**
-    * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::addOrUpdateObject()
-   **/
+    /**
+     * @see plugins/datainjection/inc/PluginDatainjectionInjectionInterface::addOrUpdateObject()
+     */
     public function addOrUpdateObject($values = [], $options = [])
     {
         /** @phpstan-ignore-next-line  */

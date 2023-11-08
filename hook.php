@@ -207,19 +207,19 @@ function plugin_tag_install()
     $version   = plugin_version_tag();
     $migration = new Migration($version['version']);
 
-   // Parse inc directory
+    // Parse inc directory
     foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
-       // Load *.class.php files and get the class name
+        // Load *.class.php files and get the class name
         if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
             $classname = 'PluginTag' . ucfirst($matches[1]);
 
-           // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
+            // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
             if ($classname == 'PluginTagTaginjection') {
                 continue;
             }
 
             include_once($filepath);
-           // If the install method exists, load it
+            // If the install method exists, load it
             if (method_exists($classname, 'install')) {
                 $classname::install($migration);
             }
@@ -235,19 +235,19 @@ function plugin_tag_install()
  */
 function plugin_tag_uninstall()
 {
-   // Parse inc directory
+    // Parse inc directory
     foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
-       // Load *.class.php files and get the class name
+        // Load *.class.php files and get the class name
         if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
             $classname = 'PluginTag' . ucfirst($matches[1]);
 
-           // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
+            // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
             if ($classname == 'PluginTagTaginjection') {
                 continue;
             }
 
             include_once($filepath);
-           // If the uninstall method exists, load it
+            // If the uninstall method exists, load it
             if (method_exists($classname, 'uninstall')) {
                 $classname::uninstall();
             }
@@ -261,7 +261,7 @@ function plugin_tag_post_init()
     /** @var array $PLUGIN_HOOKS */
     global $PLUGIN_HOOKS;
 
-   // hook on object changes
+    // hook on object changes
     if ($itemtype = PluginTagTag::getCurrentItemtype()) {
         if (PluginTagTag::canItemtype($itemtype)) {
             $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
@@ -270,9 +270,9 @@ function plugin_tag_post_init()
         }
     }
 
-   // Always define hook for tickets
-   // Needed for rules to function properly when a ticket is created from a mail
-   // collector
+    // Always define hook for tickets
+    // Needed for rules to function properly when a ticket is created from a mail
+    // collector
     $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
     $PLUGIN_HOOKS['pre_item_update']['tag'][Ticket::getType()] = ['PluginTagTagItem', 'updateItem'];
     $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];

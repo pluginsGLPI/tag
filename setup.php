@@ -55,16 +55,19 @@ function plugin_init_tag()
     $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
 
     if (Plugin::isPluginActive("tag")) {
-       // define list of itemtype which can be associated with tags
+        // define list of itemtype which can be associated with tags
         $CFG_GLPI['plugin_tag_itemtypes'] = [
-            __('Assets')         => ['Computer', 'Monitor', 'Software', 'NetworkEquipment',
+            __('Assets')         => [
+                'Computer', 'Monitor', 'Software', 'NetworkEquipment',
                 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem',
                 'Phone', 'Enclosure', 'PDU', 'PassiveDCEquipment'
             ],
-            __('Assistance')     => ['Ticket', 'Problem', 'Change', 'TicketRecurrent',
+            __('Assistance')     => [
+                'Ticket', 'Problem', 'Change', 'TicketRecurrent',
                 'TicketTemplate'
             ],
-            __('Management')     => ['Budget', 'Supplier', 'Contact', 'Contract', 'Document',
+            __('Management')     => [
+                'Budget', 'Supplier', 'Contact', 'Contract', 'Document',
                 'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain'
             ],
             __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
@@ -80,28 +83,28 @@ function plugin_init_tag()
             $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
         }
 
-       // Plugin Webapplication
+        // Plugin Webapplication
         if (Plugin::isPluginActive('webapplications')) {
             $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginWebapplicationsWebapplication';
         }
 
-       // Plugin fusioninventory
+        // Plugin fusioninventory
         if (Plugin::isPluginActive('fusioninventory')) {
             $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
         }
 
-       // add link on plugin name in Configuration > Plugin
+        // add link on plugin name in Configuration > Plugin
         $PLUGIN_HOOKS['config_page']['tag'] = "front/tag.php";
 
-       // Wait all plugins are loaded to find the itemtype matching the current URL
+        // Wait all plugins are loaded to find the itemtype matching the current URL
         $PLUGIN_HOOKS['post_init']['tag'] = 'plugin_tag_post_init';
 
-       // Plugin use specific massive actions
+        // Plugin use specific massive actions
         $PLUGIN_HOOKS['use_massive_action']['tag'] = true;
 
-       // Plugin uninstall : after uninstall action
+        // Plugin uninstall : after uninstall action
         if (Plugin::isPluginActive("uninstall")) {
-           //to prevent null global variable load plugin if needed
+            //to prevent null global variable load plugin if needed
             if ($UNINSTALL_TYPES == null) {
                 Plugin::load('uninstall');
             }
@@ -110,7 +113,7 @@ function plugin_init_tag()
             }
         }
 
-       // insert tag dropdown into all possible itemtypes
+        // insert tag dropdown into all possible itemtypes
         $location = Config::getConfigurationValues('plugin:Tag')['tags_location'] ?? 0;
         if ($location === '1') {
             $PLUGIN_HOOKS['post_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
@@ -136,10 +139,10 @@ function plugin_init_tag()
         ];
         $PLUGIN_HOOKS[Hooks::KANBAN_ITEM_METADATA]['tag'] = ['PluginTagTag', 'kanbanItemMetadata'];
 
-       // plugin datainjection
+        // plugin datainjection
         $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
-       // add needed javascript & css files
+        // add needed javascript & css files
         $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
         $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/kanban.js';
         $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';

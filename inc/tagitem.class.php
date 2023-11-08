@@ -30,7 +30,7 @@
 
 class PluginTagTagItem extends CommonDBRelation
 {
-   // From CommonDBRelation
+    // From CommonDBRelation
     public static $itemtype_1    = 'PluginTagTag';
     public static $items_id_1    = 'plugin_tag_tags_id';
     public static $take_entity_1 = true;
@@ -57,14 +57,16 @@ class PluginTagTagItem extends CommonDBRelation
         $table = getTableForItemType(__CLASS__);
 
         if (!$DB->tableExists($table)) {
-            $query = "CREATE TABLE IF NOT EXISTS `$table` (
-               `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
-               `plugin_tag_tags_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
-               `items_id` INT {$default_key_sign} NOT NULL DEFAULT '1',
-               `itemtype` VARCHAR(255) NOT NULL DEFAULT '',
-               PRIMARY KEY (`id`),
-               UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+            $query = <<<SQL
+                CREATE TABLE IF NOT EXISTS `$table` (
+                    `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                    `plugin_tag_tags_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
+                    `items_id` INT {$default_key_sign} NOT NULL DEFAULT '1',
+                    `itemtype` VARCHAR(255) NOT NULL DEFAULT '',
+                    PRIMARY KEY (`id`),
+                    UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
+SQL;
             if (method_exists($DB, 'doQueryOrDie')) {
                 $DB->doQueryOrDie($query);
             } else {
@@ -73,7 +75,7 @@ class PluginTagTagItem extends CommonDBRelation
             }
         }
 
-       // fix indexes
+        // fix indexes
         $migration->dropKey($table, 'name');
         $migration->addKey(
             $table,
@@ -92,12 +94,12 @@ class PluginTagTagItem extends CommonDBRelation
         $migration->dropTable(getTableForItemType(__CLASS__));
     }
 
-   /**
-    * Display the list of available itemtype
-    *
-    * @param PluginTagTag $tag
-    * @return boolean
-    */
+    /**
+     * Display the list of available itemtype
+     *
+     * @param PluginTagTag $tag
+     * @return boolean
+     */
     public static function showForTag(PluginTagTag $tag)
     {
         /**
@@ -157,14 +159,11 @@ class PluginTagTagItem extends CommonDBRelation
                 }
             }
             echo "<tr class='tab_bg_1'><td>";
-            Dropdown::showSelectItemFromItemtypes(['itemtypes' => $itemtypes_to_show,
-                'entity_restrict'
-                                                       => ($tag->fields['is_recursive']
-                                                           ? getSonsOf(
-                                                               'glpi_entities',
-                                                               $tag->fields['entities_id']
-                                                           )
-                                                           : $tag->fields['entities_id']),
+            Dropdown::showSelectItemFromItemtypes([
+                'itemtypes' => $itemtypes_to_show,
+                'entity_restrict' => $tag->fields['is_recursive']
+                    ? getSonsOf('glpi_entities', $tag->fields['entities_id'])
+                    : $tag->fields['entities_id'],
                 'checkright' => true
             ]);
             echo "</td><td width='20%'>";
@@ -181,10 +180,9 @@ class PluginTagTagItem extends CommonDBRelation
         if ($canedit && $number) {
             Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
 
-            $massiveactionparams['specific_actions']
-               = [ 'MassiveAction:purge'
-                =>  _x('button', 'Delete permanently the relation with selected elements')
-               ];
+            $massiveactionparams['specific_actions'] = [
+                'MassiveAction:purge' => _x('button', 'Delete permanently the relation with selected elements')
+            ];
 
             Html::showMassiveActions($massiveactionparams);
         }
@@ -212,7 +210,7 @@ class PluginTagTagItem extends CommonDBRelation
             if ($item->canView()) {
                 $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
 
-               // For rules itemtypes (example : ruledictionnaryphonemodel)
+                // For rules itemtypes (example : ruledictionnaryphonemodel)
                 if (strtolower(substr($itemtype, 0, 4)) == 'rule' || $itemtype == "PluginResourcesRulechecklist") {
                     $itemtable = getTableForItemType('Rule');
                 } else {
@@ -265,7 +263,7 @@ class PluginTagTagItem extends CommonDBRelation
                     case 'RSSFeed':
                     case 'Reminder':
                     case 'Entity':
-                       //Possible to add (in code) condition to visibility :
+                        //Possible to add (in code) condition to visibility :
                         $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
                         break;
                     default:
@@ -349,7 +347,7 @@ class PluginTagTagItem extends CommonDBRelation
                     }
                     echo "<td class='center'>";
 
-                  // Show plugin name (is to delete remove any ambiguity) :
+                    // Show plugin name (is to delete remove any ambiguity) :
                     $pieces = preg_split('/(?=[A-Z])/', $itemtype);
                     if ($pieces[1] == 'Plugin') {
                         $plugin_name = $pieces[2];
@@ -365,7 +363,7 @@ class PluginTagTagItem extends CommonDBRelation
 
                     $entity = $data['entity'];
 
-                  //for Plugins :
+                    //for Plugins :
                     if ($data["entity"] == -1) {
                         $item->getFromDB($data['id']);
                         if (isset($item->fields["entities_id"])) {
@@ -375,10 +373,8 @@ class PluginTagTagItem extends CommonDBRelation
                     echo Dropdown::getDropdownName("glpi_entities", $entity);
 
                     echo "</td>";
-                    echo "<td class='center'>" .
-                    (isset($data["serial"]) ? "" . $data["serial"] . "" : "-") . "</td>";
-                    echo "<td class='center'>" .
-                    (isset($data["otherserial"]) ? "" . $data["otherserial"] . "" : "-") . "</td>";
+                    echo "<td class='center'>" . (isset($data["serial"]) ? "" . $data["serial"] . "" : "-") . "</td>";
+                    echo "<td class='center'>" . (isset($data["otherserial"]) ? "" . $data["otherserial"] . "" : "-") . "</td>";
                     echo "</tr>";
                 }
             }
@@ -394,14 +390,14 @@ class PluginTagTagItem extends CommonDBRelation
         return true;
     }
 
-   /**
-    * Add tags to an item
-    *
-    * @param CommonDBTM $item
-    * @param bool $delete_existing_tags
-    *
-    * @return boolean
-    */
+    /**
+     * Add tags to an item
+     *
+     * @param CommonDBTM $item
+     * @param bool $delete_existing_tags
+     *
+     * @return boolean
+     */
     public static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true)
     {
 
@@ -409,17 +405,17 @@ class PluginTagTagItem extends CommonDBRelation
             $item->getID()
             && !isset($item->input["_plugin_tag_tag_process_form"])
             && !(
-            // Always trigger on newly created tickets, as they may come from
-            // the mail collector which wont set the _plugin_tag_tag_process_form
-            // flag
-            $item::getType() == Ticket::getType()
-            && $item->fields['date_creation'] == $_SESSION['glpi_currenttime']
+                // Always trigger on newly created tickets, as they may come from
+                // the mail collector which wont set the _plugin_tag_tag_process_form
+                // flag
+                $item::getType() == Ticket::getType()
+                && $item->fields['date_creation'] == $_SESSION['glpi_currenttime']
             )
         ) {
             return true;
         }
 
-       // instanciate needed objects
+        // instanciate needed objects
         $tag      = new PluginTagTag();
         $tag_item = new self();
 
@@ -427,12 +423,12 @@ class PluginTagTagItem extends CommonDBRelation
             return true;
         }
 
-       // create new values
+        // create new values
         $tag_values = !empty($item->input["_plugin_tag_tag_values"])
          ? $item->input["_plugin_tag_tag_values"]
          : [];
         if (!is_array($tag_values)) {
-           // Business rule engine will add value as a unique string that must be converted to array.
+            // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];
         }
         foreach ($tag_values as &$tag_value) {
@@ -444,7 +440,7 @@ class PluginTagTagItem extends CommonDBRelation
             }
         }
 
-       // process actions
+        // process actions
         $existing_tags_ids = array_column(
             $tag_item->find(['items_id' => $item->getID(), 'itemtype' => $item->getType()]),
             'plugin_tag_tags_id'
@@ -452,7 +448,7 @@ class PluginTagTagItem extends CommonDBRelation
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
         $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
 
-       // link tags with the current item
+        // link tags with the current item
         foreach ($added_tags_ids as $tag_id) {
             $tag_item->add([
                 'plugin_tag_tags_id' => $tag_id,
@@ -471,12 +467,12 @@ class PluginTagTagItem extends CommonDBRelation
         return true;
     }
 
-   /**
-    * Delete all tags associated to an item
-    *
-    * @param  CommonDBTM $item
-    * @return boolean
-    */
+    /**
+     * Delete all tags associated to an item
+     *
+     * @param  CommonDBTM $item
+     * @return boolean
+     */
     public static function purgeItem(CommonDBTM $item)
     {
         $tagitem = new self();

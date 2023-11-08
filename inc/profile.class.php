@@ -55,10 +55,12 @@ class PluginTagProfile extends Profile
             echo "<form method='post' action='" . $profile->getFormURL() . "'>";
         }
 
-        $rights = [['itemtype'  => 'PluginTagTag',
-            'label'     => PluginTagTag::getTypeName(Session::getPluralNumber()),
-            'field'     => 'plugin_tag_tag'
-        ]
+        $rights = [
+            [
+                'itemtype'  => 'PluginTagTag',
+                'label'     => PluginTagTag::getTypeName(Session::getPluralNumber()),
+                'field'     => 'plugin_tag_tag'
+            ]
         ];
         $matrix_options['title'] = __('Tag management', 'tag');
         $profile->displayRightsChoiceMatrix($rights, $matrix_options);

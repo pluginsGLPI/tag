@@ -39,9 +39,10 @@ if (!Plugin::isPluginActive("tag")) {
 if (isset($_POST['add'])) {
     $item = new PluginTagTagItem();
 
-   // Check unicity :
+    // Check unicity :
     if (isset($_REQUEST['plugin_tag_tags_id'])) {
-        $found = $item->find(['plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
+        $found = $item->find([
+            'plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
             'items_id' => $_REQUEST['items_id'],
             'itemtype' => $_REQUEST['itemtype']
         ]);
