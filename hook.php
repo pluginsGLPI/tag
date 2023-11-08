@@ -29,134 +29,141 @@
  */
 
 // Plugin hook after *Uninstall*
-function plugin_uninstall_after_tag($item) {
-   $tagitem = new PluginTagTagItem();
-   $tagitem->deleteByCriteria([
-      'itemtype' => $item->getType(),
-      'items_id' => $item->getID()
-   ]);
+function plugin_uninstall_after_tag($item)
+{
+    $tagitem = new PluginTagTagItem();
+    $tagitem->deleteByCriteria([
+        'itemtype' => $item->getType(),
+        'items_id' => $item->getID()
+    ]);
 }
 
-function plugin_datainjection_populate_tag() {
-   global $INJECTABLE_TYPES;
+function plugin_datainjection_populate_tag()
+{
+    /** @var array $INJECTABLE_TYPES */
+    global $INJECTABLE_TYPES;
 
-   $INJECTABLE_TYPES['PluginTagTagInjection'] = 'tag';
+    $INJECTABLE_TYPES['PluginTagTagInjection'] = 'tag';
 }
 
-function plugin_tag_getAddSearchOptionsNew($itemtype) {
-   if (!PluginTagTag::canView() || !PluginTagTag::canItemtype($itemtype)) {
-      return [];
-   }
+function plugin_tag_getAddSearchOptionsNew($itemtype)
+{
+    if (!PluginTagTag::canView() || !PluginTagTag::canItemtype($itemtype)) {
+        return [];
+    }
 
-   $options = [
-      [
-         'id'            => PluginTagTag::S_OPTION,
-         'table'         => PluginTagTag::getTable(),
-         'field'         => 'name',
-         'name'          => PluginTagTag::getTypeName(2),
-         'datatype'      => 'dropdown',
-         'searchtype'    => ['equals','notequals','contains'],
-         'massiveaction' => false,
-         'forcegroupby'  => true,
-         'joinparams'    =>  [
-            'beforejoin' => [
-               'table'      => 'glpi_plugin_tag_tagitems',
-               'joinparams' => [
-                  'jointype' => 'itemtype_item'
-               ]
-            ]
-         ]
-      ]
-   ];
-
-   if ($itemtype != 'AllAssets') {
-      $item = new $itemtype;
-      if ($item->isEntityAssign()) {
-         $options [] = [
-            'id'            => (PluginTagTag::S_OPTION + 1),
+    $options = [
+        [
+            'id'            => PluginTagTag::S_OPTION,
             'table'         => PluginTagTag::getTable(),
             'field'         => 'name',
-            'name'          => PluginTagTag::getTypeName(2)." - ".__("Entity"),
-            'datatype'      => 'string',
-            'searchtype'    => 'contains',
+            'name'          => PluginTagTag::getTypeName(2),
+            'datatype'      => 'dropdown',
+            'searchtype'    => ['equals','notequals','contains'],
             'massiveaction' => false,
             'forcegroupby'  => true,
-            'usehaving'     => true,
             'joinparams'    =>  [
-               'condition'  => "AND 1=1", // to force distinct complex id than the previous option
-               'beforejoin' => [
-                  'table'      => 'glpi_plugin_tag_tagitems',
-                  'joinparams' => [
-                     'jointype'          => 'itemtype_item',
-                     'specific_itemtype' => 'Entity',
-                     'beforejoin' => [
-                        'table' => 'glpi_entities',
-                     ]
-                  ]
-               ]
+                'beforejoin' => [
+                    'table'      => 'glpi_plugin_tag_tagitems',
+                    'joinparams' => [
+                        'jointype' => 'itemtype_item'
+                    ]
+                ]
             ]
-         ];
-      }
-   }
+        ]
+    ];
 
-   return $options;
+    if ($itemtype != 'AllAssets') {
+        $item = new $itemtype();
+        if ($item->isEntityAssign()) {
+            $options [] = [
+                'id'            => (PluginTagTag::S_OPTION + 1),
+                'table'         => PluginTagTag::getTable(),
+                'field'         => 'name',
+                'name'          => PluginTagTag::getTypeName(2) . " - " . __("Entity"),
+                'datatype'      => 'string',
+                'searchtype'    => 'contains',
+                'massiveaction' => false,
+                'forcegroupby'  => true,
+                'usehaving'     => true,
+                'joinparams'    =>  [
+                    'condition'  => "AND 1=1", // to force distinct complex id than the previous option
+                    'beforejoin' => [
+                        'table'      => 'glpi_plugin_tag_tagitems',
+                        'joinparams' => [
+                            'jointype'          => 'itemtype_item',
+                            'specific_itemtype' => 'Entity',
+                            'beforejoin' => [
+                                'table' => 'glpi_entities',
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+    }
+
+    return $options;
 }
 
-function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "") {
-   switch ($field) {
-      case PluginTagTag::S_OPTION:
-      case PluginTagTag::S_OPTION+1:
-         $out = '<div class="tag_select select2-container" style="width: 100%;">
+function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "")
+{
+    switch ($field) {
+        case PluginTagTag::S_OPTION:
+        case PluginTagTag::S_OPTION + 1:
+            $out = '<div class="tag_select select2-container" style="width: 100%;">
                  <div class="select2-choices no-negative-margin">';
-         $separator = '';
-         foreach ($data[$num] as $tag) {
-            if (isset($tag['id']) && isset($tag['name'])) {
-               $out .= PluginTagTag::getSingleTag($tag['id'], $separator);
-               //For export (CSV, PDF) of GLPI core
-               $separator = '<span style="display:none">, </span>';
+            $separator = '';
+            foreach ($data[$num] as $tag) {
+                if (isset($tag['id']) && isset($tag['name'])) {
+                    $out .= PluginTagTag::getSingleTag($tag['id'], $separator);
+                   //For export (CSV, PDF) of GLPI core
+                    $separator = '<span style="display:none">, </span>';
+                }
             }
-         }
-         $out .= '</div></div>';
-         return $out;
-   }
+            $out .= '</div></div>';
+            return $out;
+    }
 
-   return "";
+    return "";
 }
 
 
-function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num) {
-   $searchopt = &Search::getOptions($itemtype);
-   $table     = $searchopt[$id]["table"];
-   $field     = $searchopt[$id]["field"];
+function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num)
+{
+    $searchopt = &Search::getOptions($itemtype);
+    $table     = $searchopt[$id]["table"];
+    $field     = $searchopt[$id]["field"];
 
-   if ($table.".".$field == "glpi_plugin_tag_tags.type_menu") {
-      $values = explode(",", $val);
-      $where  = "$link `ITEM_$num` LIKE '%".$values[0]."%'";
-      array_shift($values);
-      foreach ($values as $value) {
-         $value = trim($value);
-         $where .= " OR `ITEM_$num` LIKE '%$value%'";
-      }
-      return $where;
-   }
+    if ($table . "." . $field == "glpi_plugin_tag_tags.type_menu") {
+        $values = explode(",", $val);
+        $where  = "$link `ITEM_$num` LIKE '%" . $values[0] . "%'";
+        array_shift($values);
+        foreach ($values as $value) {
+            $value = trim($value);
+            $where .= " OR `ITEM_$num` LIKE '%$value%'";
+        }
+        return $where;
+    }
 }
 
-function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype) {
-   $searchopt = &Search::getOptions($itemtype);
-   $table     = $searchopt[$id]["table"];
-   $field     = $searchopt[$id]["field"];
+function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype)
+{
+    $searchopt = &Search::getOptions($itemtype);
+    $table     = $searchopt[$id]["table"];
+    $field     = $searchopt[$id]["field"];
 
-   if ($table.".".$field == "glpi_plugin_tag_tags.type_menu") {
-      switch ($searchtype) {
-         case 'equals':
-            return "`glpi_plugin_tag_tags`.`type_menu` LIKE '%\"$val\"%'";
+    if ($table . "." . $field == "glpi_plugin_tag_tags.type_menu") {
+        switch ($searchtype) {
+            case 'equals':
+                return "`glpi_plugin_tag_tags`.`type_menu` LIKE '%\"$val\"%'";
 
-         case 'notequals':
-            return "`glpi_plugin_tag_tags`.`type_menu` NOT LIKE '%\"$val\"%'";
-      }
-   }
+            case 'notequals':
+                return "`glpi_plugin_tag_tags`.`type_menu` NOT LIKE '%\"$val\"%'";
+        }
+    }
 
-   return "";
+    return "";
 }
 
 
@@ -165,8 +172,9 @@ function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype) {
  *
  * @return  array the list of dropdowns (label => class)
  */
-function plugin_tag_getDropdown() {
-   return ['PluginTagTag' => PluginTagTag::getTypeName(2)];
+function plugin_tag_getDropdown()
+{
+    return ['PluginTagTag' => PluginTagTag::getTypeName(2)];
 }
 
 /**
@@ -175,17 +183,18 @@ function plugin_tag_getDropdown() {
  * @param  string $itemtype
  * @return array the massive action list
  */
-function plugin_tag_MassiveActions($itemtype = '') {
-   if (PluginTagTag::canItemtype($itemtype) && is_a($itemtype, CommonDBTM::class, true) && $itemtype::canUpdate()) {
-      return [
-         'PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'addTag'
+function plugin_tag_MassiveActions($itemtype = '')
+{
+    if (PluginTagTag::canItemtype($itemtype) && is_a($itemtype, CommonDBTM::class, true) && $itemtype::canUpdate()) {
+        return [
+            'PluginTagTagItem' . MassiveAction::CLASS_ACTION_SEPARATOR . 'addTag'
                => __("Add tags", 'tag'),
-         'PluginTagTagItem'.MassiveAction::CLASS_ACTION_SEPARATOR.'removeTag'
+            'PluginTagTagItem' . MassiveAction::CLASS_ACTION_SEPARATOR . 'removeTag'
                => __("Remove tags", 'tag'),
-      ];
-   }
+        ];
+    }
 
-   return [];
+    return [];
 }
 
 /**
@@ -193,29 +202,30 @@ function plugin_tag_MassiveActions($itemtype = '') {
  *
  * @return boolean
  */
-function plugin_tag_install() {
-   $version   = plugin_version_tag();
-   $migration = new Migration($version['version']);
+function plugin_tag_install()
+{
+    $version   = plugin_version_tag();
+    $migration = new Migration($version['version']);
 
-   // Parse inc directory
-   foreach (glob(dirname(__FILE__).'/inc/*') as $filepath) {
-      // Load *.class.php files and get the class name
-      if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-         $classname = 'PluginTag' . ucfirst($matches[1]);
+    // Parse inc directory
+    foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
+        // Load *.class.php files and get the class name
+        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
+            $classname = 'PluginTag' . ucfirst($matches[1]);
 
-         // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
-         if ($classname == 'PluginTagTaginjection') {
-            continue;
-         }
+            // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
+            if ($classname == 'PluginTagTaginjection') {
+                continue;
+            }
 
-         include_once($filepath);
-         // If the install method exists, load it
-         if (method_exists($classname, 'install')) {
-            $classname::install($migration);
-         }
-      }
-   }
-   return true;
+            include_once($filepath);
+            // If the install method exists, load it
+            if (method_exists($classname, 'install')) {
+                $classname::install($migration);
+            }
+        }
+    }
+    return true;
 }
 
 /**
@@ -223,63 +233,66 @@ function plugin_tag_install() {
  *
  * @return boolean
  */
-function plugin_tag_uninstall() {
-   // Parse inc directory
-   foreach (glob(dirname(__FILE__).'/inc/*') as $filepath) {
-      // Load *.class.php files and get the class name
-      if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-         $classname = 'PluginTag' . ucfirst($matches[1]);
+function plugin_tag_uninstall()
+{
+    // Parse inc directory
+    foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
+        // Load *.class.php files and get the class name
+        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
+            $classname = 'PluginTag' . ucfirst($matches[1]);
 
-         // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
-         if ($classname == 'PluginTagTaginjection') {
-            continue;
-         }
+            // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
+            if ($classname == 'PluginTagTaginjection') {
+                continue;
+            }
 
-         include_once($filepath);
-         // If the uninstall method exists, load it
-         if (method_exists($classname, 'uninstall')) {
-            $classname::uninstall();
-         }
-      }
-   }
-   return true;
+            include_once($filepath);
+            // If the uninstall method exists, load it
+            if (method_exists($classname, 'uninstall')) {
+                $classname::uninstall();
+            }
+        }
+    }
+    return true;
 }
 
-function plugin_tag_post_init() {
-   global $PLUGIN_HOOKS;
+function plugin_tag_post_init()
+{
+    /** @var array $PLUGIN_HOOKS */
+    global $PLUGIN_HOOKS;
 
-   // hook on object changes
-   if ($itemtype = PluginTagTag::getCurrentItemtype()) {
-      if (PluginTagTag::canItemtype($itemtype)) {
-         $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-         $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = ['PluginTagTagItem', 'updateItem'];
-         $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
-      }
-   }
+    // hook on object changes
+    if ($itemtype = PluginTagTag::getCurrentItemtype()) {
+        if (PluginTagTag::canItemtype($itemtype)) {
+            $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype] = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
+        }
+    }
 
-   // Always define hook for tickets
-   // Needed for rules to function properly when a ticket is created from a mail
-   // collector
-   $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
-   $PLUGIN_HOOKS['pre_item_update']['tag'][Ticket::getType()] = ['PluginTagTagItem', 'updateItem'];
-   $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
+    // Always define hook for tickets
+    // Needed for rules to function properly when a ticket is created from a mail
+    // collector
+    $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS['pre_item_update']['tag'][Ticket::getType()] = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
 }
 
 function plugin_tag_getRuleActions($params = [])
 {
-   $actions = [];
+    $actions = [];
 
-   switch ($params['rule_itemtype']) {
-      case "RuleTicket":
-         $actions['_plugin_tag_tag_values'] = [
-            'name'  => __("Add tags", 'tag'),
-            'type'  => 'dropdown',
-            'table' => PluginTagTag::getTable(),
-            'condition' => ['type_menu' => ['LIKE', '%\"Ticket\"%']],
-         ];
+    switch ($params['rule_itemtype']) {
+        case "RuleTicket":
+            $actions['_plugin_tag_tag_values'] = [
+                'name'  => __("Add tags", 'tag'),
+                'type'  => 'dropdown',
+                'table' => PluginTagTag::getTable(),
+                'condition' => ['type_menu' => ['LIKE', '%\"Ticket\"%']],
+            ];
 
-         break;
-   }
+            break;
+    }
 
-   return $actions;
+    return $actions;
 }

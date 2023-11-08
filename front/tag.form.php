@@ -28,30 +28,32 @@
  * -------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
+include('../../../inc/includes.php');
 
 Session::checkRight(PluginTagTag::$rightname, UPDATE);
 
 if (!Plugin::isPluginActive("tag")) {
-   Html::displayNotFoundError();
+    Html::displayNotFoundError();
 }
 
 if (isset($_POST['add'])) {
-   $item = new PluginTagTagItem();
+    $item = new PluginTagTagItem();
 
-   // Check unicity :
-   if (isset($_REQUEST['plugin_tag_tags_id'])) {
-      $found = $item->find(['plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
-                            'items_id' => $_REQUEST['items_id'],
-                            'itemtype' => $_REQUEST['itemtype']]);
+    // Check unicity :
+    if (isset($_REQUEST['plugin_tag_tags_id'])) {
+        $found = $item->find([
+            'plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
+            'items_id' => $_REQUEST['items_id'],
+            'itemtype' => $_REQUEST['itemtype']
+        ]);
 
-      if (count($found) == 0) {
-         $item->add($_REQUEST);
-      }
-   } else {
-      $item->add($_REQUEST);
-   }
+        if (count($found) == 0) {
+            $item->add($_REQUEST);
+        }
+    } else {
+        $item->add($_REQUEST);
+    }
 }
 
 $dropdown = new PluginTagTag();
-include (GLPI_ROOT . "/front/dropdown.common.form.php");
+include(GLPI_ROOT . "/front/dropdown.common.form.php");

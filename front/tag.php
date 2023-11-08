@@ -28,10 +28,9 @@
  * -------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
+include('../../../inc/includes.php');
 
 if (Plugin::isPluginActive("tag")) {
-
-   $dropdown = new PluginTagTag();
-   include (GLPI_ROOT . "/front/dropdown.common.php");
+    $dropdown = new PluginTagTag();
+    include(GLPI_ROOT . "/front/dropdown.common.php");
 }
