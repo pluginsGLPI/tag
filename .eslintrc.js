@@ -35,7 +35,7 @@ module.exports = {
     },
     "overrides": [
         {
-            "files": [".eslintrc.js"],
+            "files": [".eslintrc.js", ".stylelintrc.js"],
             "env": {
                 "node": true
             }
