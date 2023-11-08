@@ -1,5 +1,4 @@
-dist/
-vendor/
+/dist/
+/node_modules/
+/vendor/
 .gh_token
-*.min.*
-
