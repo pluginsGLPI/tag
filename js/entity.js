@@ -56,11 +56,7 @@ var setEntityTag = function() {
                 },
                 success: function(response) {
                     entity_element.html(function() {
-                        if ($(this).html().indexOf(')') > 0) {
-                            return $(this).html().replace(/\)$/, response + ')');
-                        } else {
-                            return $(this).html() + response;
-                        }
+                        return $(this).html() + response;
                     });
                 }
             });
