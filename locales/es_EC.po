@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Soporte Infraestructura Standby, 2023
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Tag\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-05 15:14+0000\n"
+"PO-Revision-Date: 2015-09-18 12:56+0000\n"
+"Last-Translator: Soporte Infraestructura Standby, 2023\n"
+"Language-Team: Spanish (Ecuador) (http://app.transifex.com/teclib/glpi-plugin-tag/language/es_EC/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_EC\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: hook.php:191 hook.php:288
+msgid "Add tags"
+msgstr "Add tags"
+
+#: inc/tag.class.php:107 inc/tag.class.php:379
+msgid "HTML color"
+msgstr "HTML color"
+
+#: setup.php:126
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "Si el artículo tiene una etiqueta"
+
+#: setup.php:130
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "Si el artículo está etiquetado"
+
+#: hook.php:193
+msgid "Remove tags"
+msgstr "Eliminar etiquetas"
+
+#: inc/tag.class.php:41 inc/tag.class.php:493
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiquetas"
+msgstr[2] "Etiquetas"
+
+#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
+msgid "Tag Management"
+msgstr "Gestión de etiquetas"
+
+#: inc/profile.class.php:35 inc/profile.class.php:65
+msgid "Tag management"
+msgstr "Gestión de etiquetas"
+
+#: inc/config.class.php:57
+msgid "Tags location"
+msgstr "Etiquetas ubicación"
+
+#: inc/tag.class.php:749
+msgid "View all tags"
+msgstr "Ver todas las etiquetas"
