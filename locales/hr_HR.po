@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-11 08:58+0000\n"
+"POT-Creation-Date: 2023-12-05 15:14+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/hr_HR/)\n"
@@ -19,47 +19,47 @@ msgstr ""
 "Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: hook.php:182 hook.php:268
+#: hook.php:191 hook.php:288
 msgid "Add tags"
 msgstr "Dodaj oznake"
 
-#: inc/tag.class.php:104 inc/tag.class.php:352
+#: inc/tag.class.php:107 inc/tag.class.php:379
 msgid "HTML color"
 msgstr "HTML boja"
 
-#: setup.php:111
+#: setup.php:126
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "Ako predmet ima oznaku"
 
-#: setup.php:115
+#: setup.php:130
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Ako je predmet označen"
 
-#: hook.php:184
+#: hook.php:193
 msgid "Remove tags"
 msgstr "Ukloni oznake"
 
-#: inc/tag.class.php:40 inc/tag.class.php:457
+#: inc/tag.class.php:41 inc/tag.class.php:493
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Oznaka"
 msgstr[1] "Oznake"
 msgstr[2] "Oznaka"
 
-#: inc/config.class.php:38 inc/config.class.php:55 setup.php:153
+#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
 msgid "Tag Management"
 msgstr "Upravljanje oznakama"
 
-#: inc/profile.class.php:34 inc/profile.class.php:58
+#: inc/profile.class.php:35 inc/profile.class.php:65
 msgid "Tag management"
 msgstr "Upravljanje oznakama"
 
-#: inc/config.class.php:56
+#: inc/config.class.php:57
 msgid "Tags location"
 msgstr "Lokacija oznaka"
 
-#: inc/tag.class.php:704
+#: inc/tag.class.php:749
 msgid "View all tags"
 msgstr "Prikaži sve oznake"

@@ -4,13 +4,14 @@
 # 
 # Translators:
 # balucha <ondrej@odb.sk>, 2015-2017
+# feonsu <feonsu@gmail.com>, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-11 08:58+0000\n"
+"POT-Creation-Date: 2023-12-05 15:14+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: balucha <ondrej@odb.sk>, 2015-2017\n"
+"Last-Translator: feonsu <feonsu@gmail.com>, 2023\n"
 "Language-Team: Slovak (Slovakia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/sk_SK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,29 +19,29 @@ msgstr ""
 "Language: sk_SK\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: hook.php:182 hook.php:268
+#: hook.php:191 hook.php:288
 msgid "Add tags"
 msgstr "Pridať značky"
 
-#: inc/tag.class.php:104 inc/tag.class.php:352
+#: inc/tag.class.php:107 inc/tag.class.php:379
 msgid "HTML color"
 msgstr "Farba HTML"
 
-#: setup.php:111
+#: setup.php:126
 msgctxt "filters"
 msgid "If the item has a tag"
-msgstr ""
+msgstr "Ak má položka značku"
 
-#: setup.php:115
+#: setup.php:130
 msgctxt "filters"
 msgid "If the item is tagged"
-msgstr ""
+msgstr "Ak je položka označená"
 
-#: hook.php:184
+#: hook.php:193
 msgid "Remove tags"
 msgstr "Odstrániť značky"
 
-#: inc/tag.class.php:40 inc/tag.class.php:457
+#: inc/tag.class.php:41 inc/tag.class.php:493
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Značka"
@@ -48,18 +49,18 @@ msgstr[1] "Značky"
 msgstr[2] "Značky"
 msgstr[3] "Značky"
 
-#: inc/config.class.php:38 inc/config.class.php:55 setup.php:153
+#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
 msgid "Tag Management"
 msgstr "Správa značiek"
 
-#: inc/profile.class.php:34 inc/profile.class.php:58
+#: inc/profile.class.php:35 inc/profile.class.php:65
 msgid "Tag management"
-msgstr ""
+msgstr "Správa značiek"
 
-#: inc/config.class.php:56
+#: inc/config.class.php:57
 msgid "Tags location"
-msgstr ""
+msgstr "Umiestnenie značiek"
 
-#: inc/tag.class.php:704
+#: inc/tag.class.php:749
 msgid "View all tags"
 msgstr "Zobraziť všetky značky"

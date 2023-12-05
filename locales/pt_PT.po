@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-11 08:58+0000\n"
+"POT-Creation-Date: 2023-12-05 15:14+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Portugal) (http://app.transifex.com/teclib/glpi-plugin-tag/language/pt_PT/)\n"
@@ -17,47 +17,47 @@ msgstr ""
 "Language: pt_PT\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: hook.php:182 hook.php:268
+#: hook.php:191 hook.php:288
 msgid "Add tags"
 msgstr "Adicionar etiquetas"
 
-#: inc/tag.class.php:104 inc/tag.class.php:352
+#: inc/tag.class.php:107 inc/tag.class.php:379
 msgid "HTML color"
 msgstr "Cor HTML"
 
-#: setup.php:111
+#: setup.php:126
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr ""
 
-#: setup.php:115
+#: setup.php:130
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr ""
 
-#: hook.php:184
+#: hook.php:193
 msgid "Remove tags"
 msgstr "Remover etiquetas"
 
-#: inc/tag.class.php:40 inc/tag.class.php:457
+#: inc/tag.class.php:41 inc/tag.class.php:493
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Marcador"
 msgstr[1] "Tags"
 msgstr[2] "Tags"
 
-#: inc/config.class.php:38 inc/config.class.php:55 setup.php:153
+#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
 msgid "Tag Management"
 msgstr "Gerenciamento de Etiquetas"
 
-#: inc/profile.class.php:34 inc/profile.class.php:58
+#: inc/profile.class.php:35 inc/profile.class.php:65
 msgid "Tag management"
 msgstr ""
 
-#: inc/config.class.php:56
+#: inc/config.class.php:57
 msgid "Tags location"
 msgstr ""
 
-#: inc/tag.class.php:704
+#: inc/tag.class.php:749
 msgid "View all tags"
 msgstr "Exibir todas etiquetas"
