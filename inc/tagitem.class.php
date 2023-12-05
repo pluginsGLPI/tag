@@ -419,7 +419,8 @@ SQL;
         $tag      = new PluginTagTag();
         $tag_item = new self();
 
-        if (!$tag::canUpdate()) {
+        // Be careful to not check right if the change is coming from the cron
+        if (!isCommandLine() && !$tag::canUpdate()) {
             return true;
         }
 
