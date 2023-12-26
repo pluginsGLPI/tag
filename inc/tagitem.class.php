@@ -420,7 +420,7 @@ SQL;
         $tag_item = new self();
 
         // Be careful to not check right if the change is coming from the cron
-        if (!isCommandLine() && !$tag::canUpdate()) {
+        if (!Session::isCron() && !$tag::canUpdate()) {
             return true;
         }
 
