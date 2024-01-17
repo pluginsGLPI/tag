@@ -35,34 +35,18 @@ Html::header_nocache();
 Session::checkLoginUser();
 header('Content-Type: application/json');
 
-if (isset($_POST['plugin_tag_tags_id'], $_POST['itemtype'], $_POST['items_id'], $_POST['action'])) {
-    $tagId = $_POST['plugin_tag_tags_id'];
+if (isset($_POST['_plugin_tag_tag_values'], $_POST['itemtype'], $_POST['items_id'])) {
     $itemType = $_POST['itemtype'];
     $itemId = $_POST['items_id'];
-    $action = $_POST['action'];
 
-    if ($action === 'add') {
-        $tagItem = new PluginTagTagItem();
-        $tagItem->add([
-            'plugin_tag_tags_id' => $tagId,
-            'itemtype' => $itemType,
-            'items_id' => $itemId
-        ]);
+    $obj = new $itemType();
+    $obj->getFromDB($itemId);
+    $obj->input = $_POST;
+    $success = PluginTagTagItem::updateItem($obj);
+
+    if ($success) {
         Session::addMessageAfterRedirect(
-            __('Tag has been added'),
-            false,
-            INFO
-        );
-        echo json_encode(['success' => true]);
-    } elseif ($action === 'delete') {
-        $tagItem = new PluginTagTagItem();
-        $tagItem->deleteByCriteria([
-            'plugin_tag_tags_id' => $tagId,
-            'itemtype' => $itemType,
-            'items_id' => $itemId
-        ]);
-        Session::addMessageAfterRedirect(
-            __('Tag has been removed'),
+            __('Tag has been updated'),
             false,
             INFO
         );
@@ -70,9 +54,9 @@ if (isset($_POST['plugin_tag_tags_id'], $_POST['itemtype'], $_POST['items_id'], 
     } else {
         http_response_code(400);
         Session::addMessageAfterRedirect(
-            __('Invalid action'),
+            __('Tag has not been updated'),
             false,
-            INFO
+            ERROR
         );
         echo json_encode(['success' => false]);
     }

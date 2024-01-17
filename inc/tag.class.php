@@ -742,41 +742,6 @@ SQL;
             });
         ");
 
-        // save tag in AJAX mode when ITIL object is closed
-        if (!$readOnly && $obj instanceof CommonITILObject && $obj->isClosed()) {
-            echo Html::scriptBlock("
-                $(function() {
-                    var url = CFG_GLPI.root_doc + '/' + GLPI_PLUGINS_PATH.tag + '/ajax/tag.php';
-                    $('#tag_select_$rand').on('select2:select', function (e) {
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: {
-                                'plugin_tag_tags_id': e.params.data.id,
-                                'itemtype': '$itemtype',
-                                'items_id': " . $params['id'] . ",
-                                'action': 'add'
-                            }
-                        });
-                        displayAjaxMessageAfterRedirect();
-                    });
-                    $('#tag_select_$rand').on('select2:unselect', function (e) {
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: {
-                                'plugin_tag_tags_id': e.params.data.id,
-                                'itemtype': '$itemtype',
-                                'items_id': " . $params['id'] . ",
-                                'action': 'delete'
-                            }
-                        });
-                        displayAjaxMessageAfterRedirect();
-                    });
-                });
-            ");
-        }
-
         // Show tooltip
         if (self::canCreate()) {
             echo "<div class='btn btn-outline-secondary'>";
@@ -785,6 +750,40 @@ SQL;
                 ['link' => self::getSearchURL()]
             );
             echo "</div>";
+        }
+
+        // save tag in AJAX mode when ITIL object is closed
+        if (!$readOnly && $obj instanceof CommonITILObject && $obj->isClosed()) {
+            // save button
+            echo Html::submit(
+                "<i class='far fa-save'></i>",
+                [
+                    'name' => 'save_tag',
+                    'id' => 'save_tag',
+                    'class' => 'btn btn-outline-primary'
+                ]
+            );
+
+            $url = Plugin::getWebDir('tag', true) . '/ajax/tag.php';
+
+            echo Html::scriptBlock("
+                $(function() {
+                    $('#save_tag').on('click', function (e) {
+                        e.preventDefault();
+                        $.ajax({
+                            url: '$url',
+                            type: 'POST',
+                            data: {
+                                'itemtype': '$itemtype',
+                                'items_id': " . $params['id'] . ",
+                                '_plugin_tag_tag_values': $('#tag_select_$rand').val(),
+                                '_plugin_tag_tag_process_form': 1,
+                            }
+                        });
+                        displayAjaxMessageAfterRedirect();
+                    });
+                });
+            ");
         }
 
         echo "</div>";
