@@ -781,6 +781,8 @@ SQL;
                             }
                         });
                         displayAjaxMessageAfterRedirect();
+                        window.glpiUnsavedFormChanges = false;
+                        window.location.reload();
                     });
                 });
             ");
