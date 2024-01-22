@@ -46,7 +46,7 @@ if (isset($_POST['_plugin_tag_tag_values'], $_POST['itemtype'], $_POST['items_id
 
     if ($success) {
         Session::addMessageAfterRedirect(
-            __('Tags have been updated'),
+            __('Tags have been updated', 'tag'),
             false,
             INFO
         );
@@ -54,7 +54,7 @@ if (isset($_POST['_plugin_tag_tag_values'], $_POST['itemtype'], $_POST['items_id
     } else {
         http_response_code(400);
         Session::addMessageAfterRedirect(
-            __('Tags have not been updated'),
+            __('Tags have not been updated', 'tag'),
             false,
             ERROR
         );
@@ -63,7 +63,7 @@ if (isset($_POST['_plugin_tag_tag_values'], $_POST['itemtype'], $_POST['items_id
 } else {
     http_response_code(400);
     Session::addMessageAfterRedirect(
-        __('Missing parameters'),
+        __('Missing parameters', 'tag'),
         false,
         ERROR
     );
