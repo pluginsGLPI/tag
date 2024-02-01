@@ -4,7 +4,7 @@
   "private": true,
   "license": "GPL-2.0",
   "devDependencies": {
-    "@stylistic/eslint-plugin-js": "^1.5.3",
+    "@stylistic/eslint-plugin-js": "^1.5.4",
     "eslint": "^8.56.0",
     "stylelint": "^16.1.0",
     "stylelint-config-standard": "^36.0.0"
