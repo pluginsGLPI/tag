@@ -35,7 +35,7 @@ Html::header_nocache();
 Session::checkLoginUser();
 header('Content-Type: application/json');
 
-if (isset($_POST['_plugin_tag_tag_values'], $_POST['itemtype'], $_POST['items_id'])) {
+if (isset($_POST['itemtype'], $_POST['items_id'])) {
     $itemType = $_POST['itemtype'];
     $itemId = $_POST['items_id'];
 
