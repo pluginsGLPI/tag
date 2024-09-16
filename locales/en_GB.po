@@ -1,14 +1,14 @@
 # English translations for PACKAGE package.
-# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2024 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2023.
+# Automatically generated, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 15:14+0000\n"
-"PO-Revision-Date: 2023-12-05 15:14+0000\n"
+"POT-Creation-Date: 2024-09-16 00:40+0000\n"
+"PO-Revision-Date: 2024-09-16 00:40+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -35,6 +35,10 @@ msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "If the item is tagged"
 
+#: ajax/tag.php:66
+msgid "Missing parameters"
+msgstr "Missing parameters"
+
 #: hook.php:193
 msgid "Remove tags"
 msgstr "Remove tags"
@@ -52,6 +56,14 @@ msgstr "Tag Management"
 #: inc/profile.class.php:35 inc/profile.class.php:65
 msgid "Tag management"
 msgstr "Tag management"
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr "Tags have been updated"
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr "Tags have not been updated"
 
 #: inc/config.class.php:57
 msgid "Tags location"
