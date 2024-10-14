@@ -1,0 +1,23 @@
+{% extends "generic_show_form.html.twig" %}
+{% import 'components/form/fields_macros.html.twig' as fields %}
+{% set field_options = field_options ?? {} %}
+
+{% block more_fields %}
+    {{ fields.colorField(
+        'color',
+        item.fields['color'] ?? '#DDDDDD',
+        __('Background color'),
+        field_options
+    ) }}
+
+    {{ fields.dropdownArrayField(
+        'type_menu',
+        '',
+        type_menu_elements,
+        _n('Associated item type', 'Associated item types', get_plural_number()),
+        field_options|merge({
+            'values': type_menu_values,
+            'multiple': true
+        })
+    ) }}
+{% endblock %}
