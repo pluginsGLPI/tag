@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+
 class PluginTagTag extends CommonDropdown
 {
     // From CommonDBTM
@@ -86,36 +88,6 @@ class PluginTagTag extends CommonDropdown
         }
 
         $this->initForm($ID, $options);
-        $this->showFormHeader($options);
-
-        echo '<table class="tab_cadre_fixe">';
-        echo "<tr class='line0 tab_bg_2'>";
-        echo "<td><label for='name'>" . __('Name') . " <span class='red'>*</span></label></td>";
-        echo "<td>";
-        echo '<input type="text" id="name" name="name" value="' . $this->fields['name'] . '" size="40" required>';
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='line1 tab_bg_2'>";
-        echo "<td><label for='comment'>" . __('Description') . "</label></td>";
-        echo "<td>";
-        echo "<textarea name='comment' id ='comment' cols='45' rows='3'>" . $this->fields['comment'] . "</textarea>";
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='line1 tab_bg_2'>";
-        echo "<td><label>" . __('HTML color', 'tag') . "</label></td>";
-        echo "<td>";
-        Html::showColorField('color', ['value' => $this->fields['color'] ?: '#DDDDDD']);
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='line0 tab_bg_2'>";
-        echo "<td><label>" . _n('Associated item type', 'Associated item types', 2) . "</label></td>";
-        echo "</td>";
-        echo "<td>";
-        // show an hidden input to permist deletion of all values
-        echo Html::hidden("type_menu");
 
         // retrieve tags elements and existing values
         $type_menu_elements = [];
@@ -126,20 +98,12 @@ class PluginTagTag extends CommonDropdown
         }
         $type_menu_values = !empty($this->fields['type_menu']) ? json_decode($this->fields['type_menu']) : [];
 
-        // show the multiple dropdown
-        Dropdown::showFromArray(
-            "type_menu",
-            $type_menu_elements,
-            [
-                'values'   => $type_menu_values,
-                'multiple' => 'multiples'
-            ]
-        );
-
-        echo "</td>";
-        echo "</tr>";
-
-        $this->showFormButtons($options);
+        TemplateRenderer::getInstance()->display('@tag/forms/tag.html.twig', [
+            'item'               => $this,
+            'params'             => $options,
+            'type_menu_elements' => $type_menu_elements,
+            'type_menu_values'   => $type_menu_values,
+        ]);
 
         return true;
     }
@@ -164,12 +128,16 @@ class PluginTagTag extends CommonDropdown
                     `id`           int {$default_key_sign} NOT NULL auto_increment,
                     `entities_id`  int {$default_key_sign} NOT NULL DEFAULT '0',
                     `is_recursive` tinyint NOT NULL DEFAULT '1',
+                    `is_active`    tinyint NOT NULL DEFAULT '1',
                     `name`         varchar(255) NOT NULL DEFAULT '',
                     `comment`      text,
                     `color`        varchar(50) NOT NULL DEFAULT '',
                     `type_menu`    text,
                     PRIMARY KEY (`id`),
-                    KEY `name` (`name`)
+                    KEY `name` (`name`),
+                    KEY `entities_id` (`entities_id`),
+                    KEY `is_recursive` (`is_recursive`),
+                    KEY `is_active` (`is_active`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
             if (method_exists($DB, 'doQueryOrDie')) {
@@ -178,10 +146,19 @@ SQL;
                 /** @phpstan-ignore-next-line */
                 $DB->queryOrDie($query);
             }
-        }
+        } else {
+            if (!$DB->fieldExists($table, 'type_menu')) {
+                $migration->addField($table, 'type_menu', "text");
+            }
 
-        if (!$DB->fieldExists($table, 'type_menu')) {
-            $migration->addField($table, 'type_menu', "text");
+            if (!$DB->fieldExists($table, 'is_active')) {
+                $migration->addField($table, 'is_active', "tinyint NOT NULL DEFAULT '1'");
+            }
+
+            $migration->addKey($table, 'name');
+            $migration->addKey($table, 'entities_id');
+            $migration->addKey($table, 'is_recursive');
+            $migration->addKey($table, 'is_active');
             $migration->migrationOneTable($table);
         }
 
@@ -379,6 +356,14 @@ SQL;
             'name'          => __('HTML color', 'tag'),
             'searchtype'    => 'contains',
             'datatype'      => 'specific',
+        ];
+
+        $tab[] = [
+            'id'            => 8,
+            'table'         => $this->getTable(),
+            'field'         => 'is_active',
+            'name'          => __('Active'),
+            'datatype'      => 'bool',
         ];
 
         return $tab;
@@ -655,6 +640,7 @@ SQL;
 
         // Restrict tags finding by itemtype and entity
         $where = [
+            'is_active' => 1,
             'OR' => [
                 ['type_menu' => null],
                 ['type_menu' => ''],
