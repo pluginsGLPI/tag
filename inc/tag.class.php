@@ -149,10 +149,12 @@ SQL;
         } else {
             if (!$DB->fieldExists($table, 'type_menu')) {
                 $migration->addField($table, 'type_menu', "text");
+                $migration->migrationOneTable($table);
             }
 
             if (!$DB->fieldExists($table, 'is_active')) {
                 $migration->addField($table, 'is_active', "tinyint NOT NULL DEFAULT '1'");
+                $migration->migrationOneTable($table);
             }
 
             $migration->addKey($table, 'name');
