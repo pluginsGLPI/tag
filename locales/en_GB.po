@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-10 00:38+0000\n"
-"PO-Revision-Date: 2024-10-10 00:38+0000\n"
+"POT-Creation-Date: 2024-12-02 00:46+0000\n"
+"PO-Revision-Date: 2024-12-02 00:46+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Add tags"
 msgstr "Add tags"
 
-#: inc/tag.class.php:107 inc/tag.class.php:379
+#: inc/tag.class.php:358
 msgid "HTML color"
 msgstr "HTML color"
 
@@ -43,7 +43,7 @@ msgstr "Missing parameters"
 msgid "Remove tags"
 msgstr "Remove tags"
 
-#: inc/tag.class.php:41 inc/tag.class.php:493
+#: inc/tag.class.php:43 inc/tag.class.php:480
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
@@ -69,6 +69,6 @@ msgstr "Tags have not been updated"
 msgid "Tags location"
 msgstr "Tags location"
 
-#: inc/tag.class.php:749
+#: inc/tag.class.php:737
 msgid "View all tags"
 msgstr "View all tags"
