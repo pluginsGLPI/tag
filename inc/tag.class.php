@@ -702,8 +702,7 @@ SQL;
         }
 
         $readOnly = !$tag::canUpdate()
-            || ($obj->isNewItem() && !$obj->canCreateItem())
-            || (!$obj->isNewItem() && !$obj->canUpdateItem())
+            || !$obj->canUpdateItem()
         ;
 
        // call select2 lib for this input
