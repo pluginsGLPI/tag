@@ -706,7 +706,7 @@ SQL;
             || (!$obj->isNewItem() && !$obj->canUpdateItem())
         ;
 
-        if (is_array($params['id'])) {
+        if (is_array($params['id']) && $tag::canUpdate()) {
             $readOnly = false;
         }
 
