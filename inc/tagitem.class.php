@@ -492,7 +492,7 @@ SQL;
         switch ($ma->getAction()) {
             case 'addTag':
             case 'removeTag':
-                PluginTagTag::showTagDropdown(['itemtype' => $itemtype]);
+                PluginTagTag::showTagDropdown(['itemtype' => $itemtype, 'id' => array_keys($ma->items[$itemtype])]);
                 echo Html::submit(_sx('button', 'Save'));
                 return true;
         }
