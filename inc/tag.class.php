@@ -600,6 +600,7 @@ SQL;
             'id'       => 0,
             'itemtype' => '',
             'value'    => '',
+            'items_ids' => [],
         ];
         $params = array_merge($default_params, $params);
 
@@ -701,14 +702,17 @@ SQL;
             $token_creation = "return null;";
         }
 
-        $readOnly = !$tag::canUpdate()
-            || ($obj->isNewItem() && !$obj->canCreateItem())
-            || (!$obj->isNewItem() && !$obj->canUpdateItem())
-        ;
+        $all_itemtype_can_update = count(array_filter($params['items_ids'], function ($value) use ($obj) {
+            $obj->getFromDB($value);
+            return !$obj->canUpdateItem();
+        })) === 0;
 
-        if (is_array($params['id']) && $tag::canUpdate()) {
-            $readOnly = false;
-        }
+        $readOnly = !$tag::canUpdate()
+            || (empty($params['items_ids']) && (
+                ($obj->isNewItem() && !$obj->canCreateItem())
+                || (!$obj->isNewItem() && !$obj->canUpdateItem())
+            ))
+            || (isset($params['items_ids']) && !$all_itemtype_can_update);
 
        // call select2 lib for this input
         echo Html::scriptBlock("
