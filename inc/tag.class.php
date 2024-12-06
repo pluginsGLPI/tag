@@ -708,11 +708,9 @@ SQL;
         })) === 0;
 
         $readOnly = !$tag::canUpdate()
-            || (empty($params['items_ids']) && (
-                ($obj->isNewItem() && !$obj->canCreateItem())
-                || (!$obj->isNewItem() && !$obj->canUpdateItem())
-            ))
-            || (isset($params['items_ids']) && !$all_itemtype_can_update);
+            || ($obj->isNewItem() && !$obj->canCreateItem())
+            || (!$obj->isNewItem() && !$obj->canUpdateItem())
+            || (!empty($params['items_ids']) && !$all_itemtype_can_update);
 
        // call select2 lib for this input
         echo Html::scriptBlock("
