@@ -702,7 +702,8 @@ SQL;
             $token_creation = "return null;";
         }
 
-        $all_itemtype_can_update = count(array_filter($params['items_ids'], function ($value) use ($obj) {
+        // Returns false if at least one item in "items_ids" cannot be updated
+        $can_update_all = count(array_filter($params['items_ids'], function ($value) use ($obj) {
             $obj->getFromDB($value);
             return !$obj->canUpdateItem();
         })) === 0;
@@ -710,7 +711,7 @@ SQL;
         $readOnly = !$tag::canUpdate()
             || ($obj->isNewItem() && !$obj->canCreateItem())
             || (!$obj->isNewItem() && !$obj->canUpdateItem())
-            || (!empty($params['items_ids']) && !$all_itemtype_can_update);
+            || (!empty($params['items_ids']) && !$can_update_all);
 
        // call select2 lib for this input
         echo Html::scriptBlock("
