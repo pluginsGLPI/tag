@@ -75,7 +75,12 @@ class PluginTagTag extends CommonDropdown
      */
     public static function canItemtype($itemtype = '')
     {
-        return !empty($itemtype) && class_exists($itemtype) && !in_array($itemtype, self::getBlacklistItemtype());
+        $tags = new self();
+        $types_menu = [];
+        foreach ($tags->find(['is_active' => 1]) as $tag) {
+            $types_menu = array_merge($types_menu ,json_decode($tag['type_menu']));
+        }
+        return !empty($itemtype) && class_exists($itemtype) && !in_array($itemtype, self::getBlacklistItemtype()) && in_array($itemtype, $types_menu);
     }
 
     public function showForm($ID, $options = [])
