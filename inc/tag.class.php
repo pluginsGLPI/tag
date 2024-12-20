@@ -77,10 +77,15 @@ class PluginTagTag extends CommonDropdown
     {
         $tags = new self();
         $types_menu = [];
+        $use_global_tag = false;
         foreach ($tags->find(['is_active' => 1]) as $tag) {
-            $types_menu = array_merge($types_menu, json_decode($tag['type_menu']));
+            if ($tag['type_menu'] != null) {
+                $types_menu = array_merge($types_menu, json_decode($tag['type_menu']));
+            } else {
+                $use_global_tag = true;
+            }
         }
-        return !empty($itemtype) && class_exists($itemtype) && !in_array($itemtype, self::getBlacklistItemtype()) && in_array($itemtype, $types_menu);
+        return !empty($itemtype) && class_exists($itemtype) && !in_array($itemtype, self::getBlacklistItemtype()) && ($use_global_tag == true ? $use_global_tag : in_array($itemtype, $types_menu));
     }
 
     public function showForm($ID, $options = [])
