@@ -85,7 +85,10 @@ class PluginTagTag extends CommonDropdown
                 $use_global_tag = true;
             }
         }
-        return !empty($itemtype) && class_exists($itemtype) && !in_array($itemtype, self::getBlacklistItemtype()) && ($use_global_tag == true ? $use_global_tag : in_array($itemtype, $types_menu));
+        return !empty($itemtype) &&
+            class_exists($itemtype) &&
+            !in_array($itemtype, self::getBlacklistItemtype()) &&
+            ($use_global_tag || in_array($itemtype, $types_menu));
     }
 
     public function showForm($ID, $options = [])
