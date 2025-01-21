@@ -284,7 +284,7 @@ function plugin_tag_getRuleActions($params = [])
 
     switch ($params['rule_itemtype']) {
         case "RuleTicket":
-            $actions['_plugin_tag_tag_values'] = [
+            $actions['_plugin_tag_tag_from_rules'] = [
                 'name'  => __("Add tags", 'tag'),
                 'type'  => 'dropdown',
                 'table' => PluginTagTag::getTable(),

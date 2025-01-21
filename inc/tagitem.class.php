@@ -85,6 +85,34 @@ SQL;
         );
         $migration->migrationOneTable($table);
 
+        self::updateRuleActionTable($migration);
+
+        return true;
+    }
+
+    public static function updateRuleActionTable(Migration $migration)
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        $table = getTableForItemType(RuleAction::class);
+
+        if (!$DB->tableExists($table)) {
+            $query = <<<SQL
+                UPDATE `glpi_plugin_ruleactions`
+                SET `value` = '_plugin_tag_tag_from_rules'
+                WHERE `value` = '_plugin_tag_tag_values';
+SQL;
+            if (method_exists($DB, 'doQueryOrDie')) {
+                $DB->doQueryOrDie($query);
+            } else {
+                /** @phpstan-ignore-next-line  */
+                $DB->queryOrDie($query);
+            }
+        }
+
+        $migration->migrationOneTable($table);
+
         return true;
     }
 
@@ -420,7 +448,10 @@ SQL;
         $tag_item = new self();
 
         // Be careful to not check right if the change is coming from the cron
-        if (!Session::isCron() && !$tag::canUpdate()) {
+        if (
+            (!Session::isCron() && !$tag::canUpdate())
+            && !isset($item->input["_plugin_tag_tag_from_rules"])
+        ) {
             return true;
         }
 
@@ -428,10 +459,15 @@ SQL;
         $tag_values = !empty($item->input["_plugin_tag_tag_values"])
          ? $item->input["_plugin_tag_tag_values"]
          : [];
+        $tag_from_rules = !empty($item->input["_plugin_tag_tag_from_rules"])
+         ? [$item->input["_plugin_tag_tag_from_rules"]]
+         : [];
+        $tag_values = array_merge($tag_values, $tag_from_rules);
         if (!is_array($tag_values)) {
             // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];
         }
+
         foreach ($tag_values as &$tag_value) {
             if (strpos($tag_value, "newtag_") !== false) {
                 $tag_value = str_replace("newtag_", "", $tag_value);
