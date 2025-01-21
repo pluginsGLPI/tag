@@ -97,19 +97,15 @@ SQL;
 
         $table = getTableForItemType(RuleAction::class);
 
-        if (!$DB->tableExists($table)) {
-            $query = <<<SQL
-                UPDATE `glpi_plugin_ruleactions`
-                SET `value` = '_plugin_tag_tag_from_rules'
-                WHERE `value` = '_plugin_tag_tag_values';
-SQL;
-            if (method_exists($DB, 'doQueryOrDie')) {
-                $DB->doQueryOrDie($query);
-            } else {
-                /** @phpstan-ignore-next-line  */
-                $DB->queryOrDie($query);
-            }
-        }
+    $DB->updateOrDie(
+        $table,
+        [
+            `value` => '_plugin_tag_tag_from_rules'
+        ],
+        [
+            `value` => '_plugin_tag_tag_values'
+        ]
+    );
 
         $migration->migrationOneTable($table);
 
