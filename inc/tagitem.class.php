@@ -97,16 +97,15 @@ SQL;
 
         $table = getTableForItemType(RuleAction::class);
 
-    $DB->updateOrDie(
-        $table,
-        [
-            `value` => '_plugin_tag_tag_from_rules'
-        ],
-        [
-            `value` => '_plugin_tag_tag_values'
-        ]
-    );
-
+        $DB->updateOrDie(
+            $table,
+            [
+                `value` => '_plugin_tag_tag_from_rules'
+            ],
+            [
+                `value` => '_plugin_tag_tag_values'
+            ]
+        );
 
         return true;
     }
