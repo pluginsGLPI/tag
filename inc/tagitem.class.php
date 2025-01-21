@@ -107,7 +107,6 @@ SQL;
         ]
     );
 
-        $migration->migrationOneTable($table);
 
         return true;
     }
