@@ -100,10 +100,10 @@ SQL;
         $DB->updateOrDie(
             $table,
             [
-                `value` => '_plugin_tag_tag_from_rules'
+                'field' => '_plugin_tag_tag_from_rules'
             ],
             [
-                `value` => '_plugin_tag_tag_values'
+                'field' => '_plugin_tag_tag_values'
             ]
         );
 
