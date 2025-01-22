@@ -39,12 +39,11 @@ use User;
 
 final class TagRuleTest extends TagTestCase
 {
-    private const SELF_SERVICE_USER = ['login' => 'self-service', 'pass' => 'self-service'];
+    private const SELF_SERVICE_USER = ['login' => 'post-only', 'pass' => 'postonly'];
     private const TECH_USER = ['login' => 'tech', 'pass' => 'tech'];
 
     public function testRuleApplyingTagSelfServiceUser(): void
     {
-        $this->createSelfServiceUser();
         $user_id = $this->loginAs(self::SELF_SERVICE_USER);
         $tagID = $this->createTag('TicketTag');
         $this->createRule($tagID);
@@ -89,22 +88,6 @@ final class TagRuleTest extends TagTestCase
         );
         $this->isTicketTagged($ticket, $tagID1);
         $this->isTicketTagged($ticket, $tagID2);
-    }
-
-    private function createSelfServiceUser()
-    {
-        $item = new User();
-        $id = $item->add(
-            [
-                'name'          => self::SELF_SERVICE_USER['login'],
-                'password'      => self::SELF_SERVICE_USER['pass'],
-                'password2'     => self::SELF_SERVICE_USER['pass'],
-                '_profiles_id'  => getItemByTypeName(Profile::class, 'Self-Service', true),
-                '_is_recursive' => true,
-            ]
-        );
-        $this->assertIsInt($id);
-        $this->assertGreaterThan(0, $id);
     }
 
     private function loginAs(array $credentials): int
