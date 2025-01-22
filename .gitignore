@@ -2,3 +2,5 @@
 /node_modules/
 /vendor/
 .gh_token
+.phpunit.result.cache
+tests/files/
