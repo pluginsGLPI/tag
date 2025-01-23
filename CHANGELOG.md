@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Fix tagging of tickets from rules
+- Apply `tag`  based on rules in all cases (for example: the user is self-service)
 
 ## [2.12.1] - 2024-10-24
 
