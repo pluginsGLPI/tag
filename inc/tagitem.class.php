@@ -443,7 +443,8 @@ SQL;
 
         // Be careful to not check right if the change is coming from the cron
         if (
-            (!Session::isCron() && !$tag::canUpdate())
+            !Session::isCron()
+            && !$tag::canUpdate()
             && !isset($item->input["_plugin_tag_tag_from_rules"])
         ) {
             return true;
