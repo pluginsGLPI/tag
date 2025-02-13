@@ -62,6 +62,7 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
             'searchtype'    => ['equals','notequals','contains'],
             'massiveaction' => false,
             'forcegroupby'  => true,
+            'use_subquery'  => true,
             'joinparams'    =>  [
                 'beforejoin' => [
                     'table'      => 'glpi_plugin_tag_tagitems',
