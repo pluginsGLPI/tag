@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+## [2.12.2] - 2025-02-19
+
 ### Fixed
 
 - Apply `tag`  based on rules in all cases (for example: the user is self-service)
