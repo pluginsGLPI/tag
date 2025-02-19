@@ -52,27 +52,34 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
         return [];
     }
 
-    $options = [
-        [
-            'id'            => PluginTagTag::S_OPTION,
-            'table'         => PluginTagTag::getTable(),
-            'field'         => 'name',
-            'name'          => PluginTagTag::getTypeName(2),
-            'datatype'      => 'dropdown',
-            'searchtype'    => ['equals','notequals','contains'],
-            'massiveaction' => false,
-            'forcegroupby'  => true,
-            'use_subquery'  => true,
-            'joinparams'    =>  [
-                'beforejoin' => [
-                    'table'      => 'glpi_plugin_tag_tagitems',
-                    'joinparams' => [
-                        'jointype' => 'itemtype_item',
-                    ],
+    $glpiVersion = new Plugin();
+    $glpiVersion = $glpiVersion->getGlpiVersion();
+
+    $so_param = [
+        'id'            => PluginTagTag::S_OPTION,
+        'table'         => PluginTagTag::getTable(),
+        'field'         => 'name',
+        'name'          => PluginTagTag::getTypeName(2),
+        'datatype'      => 'dropdown',
+        'searchtype'    => ['equals','notequals','contains'],
+        'massiveaction' => false,
+        'forcegroupby'  => true,
+        'joinparams'    =>  [
+            'beforejoin' => [
+                'table'      => 'glpi_plugin_tag_tagitems',
+                'joinparams' => [
+                    'jointype' => 'itemtype_item',
                 ],
-            ],
-        ],
+            ]
+        ]
     ];
+
+    if (version_compare($glpiVersion, "10.0.19", '>=')) {
+        $so_param['use_subquery'] = true;
+        $so_param['joinparams']['beforejoin']['joinparams']['field'] = 'items_id';
+    }
+
+    $options[] = $so_param;
 
     if ($itemtype != 'AllAssets') {
         $item = new $itemtype();
