@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Apply `tag`  based on rules in all cases (for example: the user is self-service)
+- Preventing the addition of tags to objects without creation rights
+- See tag only on active itemtypes
 
 ## [2.12.1] - 2024-10-24
 
