@@ -457,7 +457,10 @@ SQL;
         $tag_from_rules = !empty($item->input["_plugin_tag_tag_from_rules"])
          ? [$item->input["_plugin_tag_tag_from_rules"]]
          : [];
-        $tag_values = array_merge($tag_values, $tag_from_rules);
+         $additional_tags_from_rules = !empty($item->input["_additional_tags_from_rules"])
+         ? $item->input["_additional_tags_from_rules"]
+         : [];
+        $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
         if (!is_array($tag_values)) {
             // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];

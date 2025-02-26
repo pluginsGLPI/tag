@@ -288,6 +288,11 @@ function plugin_tag_getRuleActions($params = [])
                 'name'  => __("Add tags", 'tag'),
                 'type'  => 'dropdown',
                 'table' => PluginTagTag::getTable(),
+                'force_actions' => [
+                    0 => "assign",
+                    1 => "append"
+                ],
+                'appendto' => '_additional_tags_from_rules',
                 'condition' => ['type_menu' => ['LIKE', '%\"Ticket\"%']],
             ];
 
