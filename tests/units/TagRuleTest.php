@@ -90,6 +90,29 @@ final class TagRuleTest extends TagTestCase
         $this->isTicketTagged($ticket, $tagID2);
     }
 
+    public function testMultipleRulesAppendingTags(): void
+    {
+        $user_id = $this->loginAs(self::TECH_USER);
+
+        $tagID1 = $this->createTag('TicketTag1');
+        $tagID2 = $this->createTag('TicketTag2');
+
+        $this->createRule($tagID1, 'content', 'Tag1', 'assign');
+
+        $this->createRule($tagID2, 'content', 'Tag2', 'append');
+
+        $ticket = $this->createTicket(
+            [
+                'name' => 'Ticket add Tag',
+                'content' => 'Add Tag1 & Tag2',
+                '_users_id_assign' => $user_id,
+            ]
+        );
+
+        $this->isTicketTagged($ticket, $tagID1);
+        $this->isTicketTagged($ticket, $tagID2);
+    }
+
     private function loginAs(array $credentials): int
     {
         $login = $credentials['login'];
@@ -118,13 +141,18 @@ final class TagRuleTest extends TagTestCase
         return $tag->getID();
     }
 
-    private function createRule(int $tagID): void
-    {
+    private function createRule(
+        int $tagID,
+        string $criteria_field = 'name',
+        string $criteria_pattern = 'Add Tag',
+        string $action_type = 'assign'
+    ): void {
         $rule       = new \Rule();
         $criteria   = new \RuleCriteria();
         $action     = new \RuleAction();
 
-        $rules_id = $rule->add(['name'        => 'Assign Tag',
+        $rules_id = $rule->add([
+            'name'        => "Rule for tag $tagID",
             'is_active'   => 1,
             'entities_id' => 0,
             'sub_type'    => 'RuleTicket',
@@ -138,9 +166,9 @@ final class TagRuleTest extends TagTestCase
             0,
             (int)$criteria->add([
                 'rules_id'  => $rules_id,
-                'criteria'  => 'name',
+                'criteria'  => $criteria_field,
                 'condition' => \Rule::PATTERN_CONTAIN,
-                'pattern'   => 'Add Tag'
+                'pattern'   => $criteria_pattern
             ])
         );
 
@@ -148,7 +176,7 @@ final class TagRuleTest extends TagTestCase
             0,
             (int)$action->add([
                 'rules_id'    => $rules_id,
-                'action_type' => 'assign',
+                'action_type' => $action_type,
                 'field'       => '_plugin_tag_tag_from_rules',
                 'value'       => $tagID
             ])
