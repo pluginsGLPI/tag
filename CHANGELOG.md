@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Fix the addition of multiple tags via rules
+
 ## [2.12.2] - 2025-02-19
 
 ### Fixed
