@@ -282,14 +282,20 @@ function plugin_tag_post_init()
 
 function plugin_tag_rule_matched($params = [])
 {
-    if ($params['sub_type'] == \RuleTicket::class) {
-        if (!empty($params['output'])) {
-            if (isset($params['output']['id'])) {
-                $ticket = new Ticket();
-                $ticket->getFromDB($params['output']['id']);
-                $ticket->input = $params['output'];
-                PluginTagTagItem::updateItem($ticket);
-            }
+    // Ensure tags are added when only actors are updated, as actor updates are processed in post_add
+    if (
+        $params['sub_type'] == \RuleTicket::class
+        && !empty($params['output'])
+        && isset($params['output']['id'])
+        && (
+            isset($params['output']["_plugin_tag_tag_from_rules"])
+            || isset($params['output']["_additional_tags_from_rules"])
+        )
+    ) {
+        $ticket = new Ticket();
+        if ($ticket->getFromDB($params['output']['id'])) {
+            $ticket->input = array_merge($ticket->input, $params['output']);
+            PluginTagTagItem::updateItem($ticket);
         }
     }
 }
