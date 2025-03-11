@@ -33,10 +33,8 @@ namespace GlpiPlugin\Tag\Tests\Units;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
 use PluginTagTagItem;
-use Profile;
 use Profile_User;
 use Ticket;
-use User;
 
 final class TagRuleTest extends TagTestCase
 {
@@ -245,6 +243,49 @@ final class TagRuleTest extends TagTestCase
         $this->isTicketTagged($ticket, $tagID3);
     }
 
+    public function testUpdateTicketWithOnlyActor(): void
+    {
+        $user_id = $this->loginAs(self::TECH_USER);
+
+        $tagID1 = $this->createTag('RuleTag1');
+
+        $user_id_2 = getItemByTypeName('User', 'post-only', true);
+
+        $group = new \Group();
+        $group->add([
+            'name' => 'Group for post-only'
+        ]);
+
+        $group_user = new \Group_User();
+        $group_user->add([
+            'groups_id' => $group->getID(),
+            'users_id' => $user_id_2
+        ]);
+
+        $this->createRule(
+            $tagID1,
+            '_groups_id_of_requester',
+            $group->getID(),
+            'assign',
+            \RuleTicket::ONUPDATE,
+            \Rule::PATTERN_IS
+        );
+
+        $ticket = $this->createTicket([
+            'name' => 'Update Ticket with Actor',
+            'content' => 'Initial content',
+            '_users_id_requester' => $user_id
+        ]);
+
+        $this->isTicketNotTagged($ticket, $tagID1);
+
+        $this->updateTicket($ticket->getID(), [
+            '_users_id_requester' => $user_id_2
+        ]);
+
+        $this->isTicketTagged($ticket, $tagID1);
+    }
+
     private function loginAs(array $credentials): int
     {
         global $DB;
@@ -291,9 +332,10 @@ final class TagRuleTest extends TagTestCase
     private function createRule(
         int $tagID,
         string $criteria_field = 'name',
-        string $criteria_pattern = 'Add Tag',
+        $criteria_pattern = 'Add Tag',
         string $action_type = 'assign',
-        int $condition = \RuleTicket::ONADD
+        int $condition = \RuleTicket::ONADD,
+        int $criteria_condition = \Rule::PATTERN_CONTAIN
     ): void {
         $rule       = new \Rule();
         $criteria   = new \RuleCriteria();
@@ -315,7 +357,7 @@ final class TagRuleTest extends TagTestCase
             (int)$criteria->add([
                 'rules_id'  => $rules_id,
                 'criteria'  => $criteria_field,
-                'condition' => \Rule::PATTERN_CONTAIN,
+                'condition' => $criteria_condition,
                 'pattern'   => $criteria_pattern
             ])
         );

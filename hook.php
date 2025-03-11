@@ -265,7 +265,7 @@ function plugin_tag_post_init()
     if ($itemtype = PluginTagTag::getCurrentItemtype()) {
         if (PluginTagTag::canItemtype($itemtype)) {
             $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['item_update']['tag'][$itemtype] = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS['item_update']['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
             $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
         }
     }
@@ -274,8 +274,30 @@ function plugin_tag_post_init()
     // Needed for rules to function properly when a ticket is created from a mail
     // collector
     $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['item_update']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS['item_update']['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
     $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
+
+    $PLUGIN_HOOKS['rule_matched']['tag'] = 'plugin_tag_rule_matched';
+}
+
+function plugin_tag_rule_matched($params = [])
+{
+    // Ensure tags are added when only actors are updated, as actor updates are processed in post_add
+    if (
+        $params['sub_type'] == \RuleTicket::class
+        && !empty($params['output'])
+        && isset($params['output']['id'])
+        && (
+            isset($params['output']["_plugin_tag_tag_from_rules"])
+            || isset($params['output']["_additional_tags_from_rules"])
+        )
+    ) {
+        $ticket = new Ticket();
+        if ($ticket->getFromDB($params['output']['id'])) {
+            $ticket->input = array_merge($ticket->input, $params['output']);
+            PluginTagTagItem::updateItem($ticket);
+        }
+    }
 }
 
 function plugin_tag_getRuleActions($params = [])

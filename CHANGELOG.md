@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Fix the addition of tag from a rule when updating actors only
 - Fix the addition of multiple tags via rules
 
 ## [2.12.2] - 2025-02-19
