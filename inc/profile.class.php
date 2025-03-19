@@ -37,8 +37,10 @@ class PluginTagProfile extends Profile
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        $tagprofile = new self();
-        $tagprofile->showForm($item->getID());
+        if ($item instanceof CommonDBTM) {
+            $tagprofile = new self();
+            $tagprofile->showForm($item->getID());
+        }
         return true;
     }
 
