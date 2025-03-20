@@ -156,12 +156,7 @@ class PluginTagTag extends CommonDropdown
                     KEY `is_active` (`is_active`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
-            if (method_exists($DB, 'doQueryOrDie')) {
-                $DB->doQueryOrDie($query);
-            } else {
-                /** @phpstan-ignore-next-line */
-                $DB->queryOrDie($query);
-            }
+            $DB->doQueryOrDie($query);
         } else {
             if (!$DB->fieldExists($table, 'type_menu')) {
                 $migration->addField($table, 'type_menu', "text");
@@ -248,14 +243,13 @@ SQL;
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        switch ($item->getType()) {
-            case __CLASS__:
-                switch ($tabnum) {
-                    case 2:
-                        $tagitem = new PluginTagTagItem();
-                        $tagitem->showForTag($item);
-                        break;
-                }
+        if ($item instanceof self) {
+            switch ($tabnum) {
+                case 2:
+                    $tagitem = new PluginTagTagItem();
+                    $tagitem->showForTag($item);
+                    break;
+            }
         }
         return true;
     }
@@ -412,7 +406,6 @@ SQL;
                         'value'   => $values[$field]
                     ]
                 );
-             break;
         }
 
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
@@ -513,7 +506,7 @@ SQL;
      *                          - itemtype The item type
      *                          - items_id The item's id
      *                          - content postKanbanContent content
-     * @return array Array of params passed in in addition to the new content.
+     * @return array|null Array of params passed in in addition to the new content.
      */
     public static function preKanbanContent($params = [])
     {
@@ -853,7 +846,7 @@ SQL;
     /**
      * Encode sub types
      *
-     * @param type $input
+     * @param array $input
      */
     public function encodeSubtypes($input)
     {
@@ -895,7 +888,7 @@ SQL;
     /**
      * Retrieve the current itemtype from the current page url
      *
-     * @return mixed(string/boolean) false if not itemtype found, the string itemtype if found
+     * @return string|boolean false if not itemtype found, the string itemtype if found
      */
     public static function getCurrentItemtype()
     {

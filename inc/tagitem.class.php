@@ -67,12 +67,7 @@ class PluginTagTagItem extends CommonDBRelation
                     UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
-            if (method_exists($DB, 'doQueryOrDie')) {
-                $DB->doQueryOrDie($query);
-            } else {
-                /** @phpstan-ignore-next-line  */
-                $DB->queryOrDie($query);
-            }
+            $DB->doQueryOrDie($query);
         }
 
         // fix indexes
@@ -461,11 +456,11 @@ SQL;
          $additional_tags_from_rules = !empty($item->input["_additional_tags_from_rules"])
          ? $item->input["_additional_tags_from_rules"]
          : [];
-        $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
         if (!is_array($tag_values)) {
             // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];
         }
+        $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
 
         foreach ($tag_values as &$tag_value) {
             if (strpos($tag_value, "newtag_") !== false) {
@@ -521,13 +516,13 @@ SQL;
     public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
 
-        $itemtypes = array_keys($ma->items);
+        $itemtypes = array_keys($ma->getItems());
         $itemtype = array_shift($itemtypes);
 
         switch ($ma->getAction()) {
             case 'addTag':
             case 'removeTag':
-                PluginTagTag::showTagDropdown(['itemtype' => $itemtype, 'items_ids' => array_keys($ma->items[$itemtype])]);
+                PluginTagTag::showTagDropdown(['itemtype' => $itemtype, 'items_ids' => array_keys($ma->getItems()[$itemtype])]);
                 echo Html::submit(_sx('button', 'Save'));
                 return true;
         }
@@ -542,7 +537,7 @@ SQL;
         $input = $ma->getInput();
         switch ($ma->getAction()) {
             case "addTag":
-                foreach ($ma->items as $itemtype => $items) {
+                foreach ($ma->getItems() as $itemtype => $items) {
                     $object = new $itemtype();
                     foreach ($items as $items_id) {
                         $object->fields['id'] = $items_id;
@@ -558,7 +553,7 @@ SQL;
                 break;
             case "removeTag":
                 $tagitem = new self();
-                foreach ($ma->items as $itemtype => $items) {
+                foreach ($ma->getItems() as $itemtype => $items) {
                     $object = new $itemtype();
                     foreach ($items as $items_id) {
                         if (
