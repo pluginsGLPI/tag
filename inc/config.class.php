@@ -59,11 +59,11 @@ class PluginTagConfig extends CommonDBTM
             'tags_location',
             [
                 __('Top'),
-                __('Bottom')
+                __('Bottom'),
             ],
             [
-                'value'  => $config['tags_location'] ?? 0
-            ]
+                'value'  => $config['tags_location'] ?? 0,
+            ],
         );
         echo '</td></tr>';
         echo '</table>';

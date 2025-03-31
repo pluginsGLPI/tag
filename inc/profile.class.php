@@ -61,8 +61,8 @@ class PluginTagProfile extends Profile
             [
                 'itemtype'  => 'PluginTagTag',
                 'label'     => PluginTagTag::getTypeName(Session::getPluralNumber()),
-                'field'     => 'plugin_tag_tag'
-            ]
+                'field'     => 'plugin_tag_tag',
+            ],
         ];
         $matrix_options['title'] = __('Tag management', 'tag');
         $profile->displayRightsChoiceMatrix($rights, $matrix_options);

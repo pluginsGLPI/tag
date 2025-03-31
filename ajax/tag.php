@@ -48,7 +48,7 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
         Session::addMessageAfterRedirect(
             __('Tags have been updated', 'tag'),
             false,
-            INFO
+            INFO,
         );
         echo json_encode(['success' => true]);
     } else {
@@ -56,7 +56,7 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
         Session::addMessageAfterRedirect(
             __('Tags have not been updated', 'tag'),
             false,
-            ERROR
+            ERROR,
         );
         echo json_encode(['success' => false]);
     }
@@ -65,7 +65,7 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
     Session::addMessageAfterRedirect(
         __('Missing parameters', 'tag'),
         false,
-        ERROR
+        ERROR,
     );
     echo json_encode(['success' => false]);
 }

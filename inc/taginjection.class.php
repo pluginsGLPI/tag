@@ -83,7 +83,7 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
         if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
             $item = new parent();
             $item->update(['id'        => $results[get_parent_class()],
-                'type_menu' => '0'
+                'type_menu' => '0',
             ]); //default value
         }
 

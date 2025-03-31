@@ -51,7 +51,7 @@ final class TagRuleTest extends TagTestCase
                 'name' => 'Ticket add Tag',
                 'content' => 'Ticket Add Tag',
                 '_users_id_assign'   => $user_id,
-            ]
+            ],
         );
         $this->isTicketTagged($ticket, $tagID);
     }
@@ -66,7 +66,7 @@ final class TagRuleTest extends TagTestCase
                 'name' => 'Ticket add Tag',
                 'content' => 'Ticket Add Tag',
                 '_users_id_assign'   => $user_id,
-            ]
+            ],
         );
         $this->isTicketTagged($ticket, $tagID);
     }
@@ -82,8 +82,8 @@ final class TagRuleTest extends TagTestCase
                 'name' => 'Ticket add Tag',
                 'content' => 'Ticket Add Tag',
                 '_users_id_assign'   => $user_id,
-                '_plugin_tag_tag_values' => [$tagID2]
-            ]
+                '_plugin_tag_tag_values' => [$tagID2],
+            ],
         );
         $this->isTicketTagged($ticket, $tagID1);
         $this->isTicketTagged($ticket, $tagID2);
@@ -105,7 +105,7 @@ final class TagRuleTest extends TagTestCase
                 'name' => 'Ticket add Tag',
                 'content' => 'Add Tag1 & Tag2',
                 '_users_id_assign' => $user_id,
-            ]
+            ],
         );
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -125,7 +125,7 @@ final class TagRuleTest extends TagTestCase
             'name' => 'Ticket add Tag',
             'content' => 'Test Content',
             '_users_id_assign' => $user_id,
-            '_plugin_tag_tag_values' => [$tagID2]
+            '_plugin_tag_tag_values' => [$tagID2],
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -146,7 +146,7 @@ final class TagRuleTest extends TagTestCase
             'name' => 'Ticket add Tag',
             'content' => 'Test Content',
             '_users_id_assign' => $user_id,
-            '_plugin_tag_tag_values' => [$tagID2]
+            '_plugin_tag_tag_values' => [$tagID2],
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -165,7 +165,7 @@ final class TagRuleTest extends TagTestCase
             'name' => 'Ticket Test',
             'content' => 'Initial content',
             '_users_id_assign' => $user_id,
-            '_plugin_tag_tag_values' => [$tagID2]
+            '_plugin_tag_tag_values' => [$tagID2],
         ]);
 
         $this->isTicketTagged($ticket, $tagID2);
@@ -174,7 +174,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated content',
-            '_plugin_tag_tag_values' => [$tagID3]
+            '_plugin_tag_tag_values' => [$tagID3],
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -194,7 +194,7 @@ final class TagRuleTest extends TagTestCase
             'name' => 'Ticket Test',
             'content' => 'Initial content',
             '_users_id_assign' => $user_id,
-            '_plugin_tag_tag_values' => [$tagID2]
+            '_plugin_tag_tag_values' => [$tagID2],
         ]);
 
         $this->isTicketTagged($ticket, $tagID2);
@@ -203,7 +203,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated content',
-            '_plugin_tag_tag_values' => [$tagID2, $tagID3]
+            '_plugin_tag_tag_values' => [$tagID2, $tagID3],
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -227,7 +227,7 @@ final class TagRuleTest extends TagTestCase
             'name' => 'Multiple Rules Test',
             'content' => 'Initial content',
             '_users_id_assign' => $user_id,
-            '_plugin_tag_tag_values' => [$tagID3]
+            '_plugin_tag_tag_values' => [$tagID3],
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -235,7 +235,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated for multiple rules',
-            '_plugin_tag_tag_values' => [$tagID1, $tagID3]
+            '_plugin_tag_tag_values' => [$tagID1, $tagID3],
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -253,13 +253,13 @@ final class TagRuleTest extends TagTestCase
 
         $group = new \Group();
         $group->add([
-            'name' => 'Group for post-only'
+            'name' => 'Group for post-only',
         ]);
 
         $group_user = new \Group_User();
         $group_user->add([
             'groups_id' => $group->getID(),
-            'users_id' => $user_id_2
+            'users_id' => $user_id_2,
         ]);
 
         $this->createRule(
@@ -268,19 +268,19 @@ final class TagRuleTest extends TagTestCase
             $group->getID(),
             'assign',
             \RuleTicket::ONUPDATE,
-            \Rule::PATTERN_IS
+            \Rule::PATTERN_IS,
         );
 
         $ticket = $this->createTicket([
             'name' => 'Update Ticket with Actor',
             'content' => 'Initial content',
-            '_users_id_requester' => $user_id
+            '_users_id_requester' => $user_id,
         ]);
 
         $this->isTicketNotTagged($ticket, $tagID1);
 
         $this->updateTicket($ticket->getID(), [
-            '_users_id_requester' => $user_id_2
+            '_users_id_requester' => $user_id_2,
         ]);
 
         $this->isTicketTagged($ticket, $tagID1);
@@ -299,12 +299,12 @@ final class TagRuleTest extends TagTestCase
         $DB->update(
             'glpi_profilerights',
             [
-                'rights' => CREATE | UPDATE | PURGE
+                'rights' => CREATE | UPDATE | PURGE,
             ],
             [
                 'profiles_id' => $user_profile,
                 'name'        => PluginTagTag::$rightname,
-            ]
+            ],
         );
 
         $this->login($login, $pass);
@@ -321,8 +321,8 @@ final class TagRuleTest extends TagTestCase
             [
                 'name' => $tagName,
                 'is_active' => 1,
-                'type_menu' => ['Ticket']
-            ]
+                'type_menu' => ['Ticket'],
+            ],
         );
         $this->assertGreaterThan(0, $tag->getID());
 
@@ -348,28 +348,28 @@ final class TagRuleTest extends TagTestCase
             'sub_type'    => 'RuleTicket',
             'match'       => \Rule::AND_MATCHING,
             'condition'   => $condition,
-            'description' => ''
+            'description' => '',
         ]);
-        $this->assertGreaterThan(0, (int)$rules_id);
+        $this->assertGreaterThan(0, (int) $rules_id);
 
         $this->assertGreaterThan(
             0,
-            (int)$criteria->add([
+            (int) $criteria->add([
                 'rules_id'  => $rules_id,
                 'criteria'  => $criteria_field,
                 'condition' => $criteria_condition,
-                'pattern'   => $criteria_pattern
-            ])
+                'pattern'   => $criteria_pattern,
+            ]),
         );
 
         $this->assertGreaterThan(
             0,
-            (int)$action->add([
+            (int) $action->add([
                 'rules_id'    => $rules_id,
                 'action_type' => $action_type,
                 'field'       => '_plugin_tag_tag_from_rules',
-                'value'       => $tagID
-            ])
+                'value'       => $tagID,
+            ]),
         );
 
         $this->assertTrue($rule->getRuleWithCriteriasAndActions($rules_id, 1, 1));

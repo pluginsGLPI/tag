@@ -60,15 +60,15 @@ function plugin_init_tag()
             __('Assets')         => [
                 'Computer', 'Monitor', 'Software', 'NetworkEquipment',
                 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem',
-                'Phone', 'Enclosure', 'PDU', 'PassiveDCEquipment'
+                'Phone', 'Enclosure', 'PDU', 'PassiveDCEquipment',
             ],
             __('Assistance')     => [
                 'Ticket', 'Problem', 'Change', 'TicketRecurrent',
-                'TicketTemplate'
+                'TicketTemplate',
             ],
             __('Management')     => [
                 'Budget', 'Supplier', 'Contact', 'Contract', 'Document',
-                'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain'
+                'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain',
             ],
             __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
             __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
@@ -124,12 +124,12 @@ function plugin_init_tag()
         $common_kanban_filters = [
             'tag' => [
                 'description' => _x('filters', 'If the item has a tag', 'tag'),
-                'supported_prefixes' => ['!']
+                'supported_prefixes' => ['!'],
             ],
             'tagged' => [
                 'description' => _x('filters', 'If the item is tagged', 'tag'),
-                'supported_prefixes' => ['!']
-            ]
+                'supported_prefixes' => ['!'],
+            ],
         ];
         $PLUGIN_HOOKS[Hooks::KANBAN_FILTERS]['tag'] = [
             'Project' => $common_kanban_filters,
@@ -176,8 +176,8 @@ function plugin_version_tag()
                 'min' => PLUGIN_TAG_MIN_GLPI,
                 'max' => PLUGIN_TAG_MAX_GLPI,
                 'dev' => true, //Required to allow 9.2-dev
-            ]
-        ]
+            ],
+        ],
     ];
 }
 
