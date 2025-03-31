@@ -34,7 +34,7 @@ function plugin_uninstall_after_tag($item)
     $tagitem = new PluginTagTagItem();
     $tagitem->deleteByCriteria([
         'itemtype' => $item->getType(),
-        'items_id' => $item->getID()
+        'items_id' => $item->getID(),
     ]);
 }
 
@@ -66,11 +66,11 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                 'beforejoin' => [
                     'table'      => 'glpi_plugin_tag_tagitems',
                     'joinparams' => [
-                        'jointype' => 'itemtype_item'
-                    ]
-                ]
-            ]
-        ]
+                        'jointype' => 'itemtype_item',
+                    ],
+                ],
+            ],
+        ],
     ];
 
     if ($itemtype != 'AllAssets') {
@@ -95,10 +95,10 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                             'specific_itemtype' => 'Entity',
                             'beforejoin' => [
                                 'table' => 'glpi_entities',
-                            ]
-                        ]
-                    ]
-                ]
+                            ],
+                        ],
+                    ],
+                ],
             ];
         }
     }
@@ -117,7 +117,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "")
             foreach ($data[$num] as $tag) {
                 if (isset($tag['id']) && isset($tag['name'])) {
                     $out .= PluginTagTag::getSingleTag($tag['id'], $separator);
-                   //For export (CSV, PDF) of GLPI core
+                    //For export (CSV, PDF) of GLPI core
                     $separator = '<span style="display:none">, </span>';
                 }
             }

@@ -76,7 +76,7 @@ SQL;
             $table,
             ['items_id', 'itemtype', 'plugin_tag_tags_id'],
             'unicity',
-            'UNIQUE INDEX'
+            'UNIQUE INDEX',
         );
         $migration->migrationOneTable($table);
 
@@ -95,11 +95,11 @@ SQL;
         $DB->updateOrDie(
             $table,
             [
-                'field' => '_plugin_tag_tag_from_rules'
+                'field' => '_plugin_tag_tag_from_rules',
             ],
             [
-                'field' => '_plugin_tag_tag_values'
-            ]
+                'field' => '_plugin_tag_tag_values',
+            ],
         );
 
         return true;
@@ -137,7 +137,7 @@ SQL;
             'SELECT' => ['itemtype'],
             'DISTINCT' => true,
             'FROM'   => $table,
-            'WHERE'  => ['plugin_tag_tags_id' => $instID]
+            'WHERE'  => ['plugin_tag_tags_id' => $instID],
         ]);
         $result = [];
         foreach ($it as $data) {
@@ -147,7 +147,7 @@ SQL;
         $it2 = $DB->request([
             'SELECT' => ['itemtype', 'items_id'],
             'FROM'   => $table,
-            'WHERE'  => ['plugin_tag_tags_id' => $instID]
+            'WHERE'  => ['plugin_tag_tags_id' => $instID],
         ]);
         $result2 = [];
         foreach ($it2 as $data) {
@@ -181,7 +181,7 @@ SQL;
                 'entity_restrict' => $tag->fields['is_recursive']
                     ? getSonsOf('glpi_entities', $tag->fields['entities_id'])
                     : $tag->fields['entities_id'],
-                'checkright' => true
+                'checkright' => true,
             ]);
             echo "</td><td width='20%'>";
             echo "<input type='hidden' name='plugin_tag_tags_id' value='$instID'>";
@@ -198,7 +198,7 @@ SQL;
             Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
 
             $massiveactionparams['specific_actions'] = [
-                'MassiveAction:purge' => _x('button', 'Delete permanently the relation with selected elements')
+                'MassiveAction:purge' => _x('button', 'Delete permanently the relation with selected elements'),
             ];
 
             Html::showMassiveActions($massiveactionparams);
@@ -247,10 +247,10 @@ SQL;
                                 'glpi_plugin_tag_tagitems' => 'items_id',
                                 [
                                     'AND' => [
-                                        'glpi_plugin_tag_tagitems.itemtype' => $itemtype
-                                    ]
-                                ]
-                            ]
+                                        'glpi_plugin_tag_tagitems.itemtype' => $itemtype,
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'WHERE'      => [
@@ -294,7 +294,7 @@ SQL;
                                     'ON' => [
                                         'glpi_entities' => 'id',
                                         $itemtable      => 'entities_id',
-                                    ]
+                                    ],
                                 ],
                             ];
                             array_unshift($criteria['ORDERBY'], 'glpi_entities.completename');
@@ -311,12 +311,12 @@ SQL;
                         $soft = new Software();
                         $soft->getFromDB($data['softwares_id']);
                         $data["name"] .= ' - ' . $soft->getName(); //This add name of software
-                    } else if ($itemtype == "PluginResourcesResource") {
+                    } elseif ($itemtype == "PluginResourcesResource") {
                         $data["name"] = formatUserName(
                             $data["id"],
                             "",
                             $data["name"],
-                            $data["firstname"]
+                            $data["firstname"],
                         );
                     }
 
@@ -339,7 +339,7 @@ SQL;
                             "ITEM_0"      => $data["name"],
                             "ITEM_0_2"    => $data["id"],
                             "id"          => $data["id"],
-                            "META_0"      => $data["name"]
+                            "META_0"      => $data["name"],
                         ]; //for PluginResourcesResource
 
                         if (isset($data["is_recursive"])) {
@@ -453,9 +453,9 @@ SQL;
         $tag_from_rules = !empty($item->input["_plugin_tag_tag_from_rules"])
          ? [$item->input["_plugin_tag_tag_from_rules"]]
          : [];
-         $additional_tags_from_rules = !empty($item->input["_additional_tags_from_rules"])
-         ? $item->input["_additional_tags_from_rules"]
-         : [];
+        $additional_tags_from_rules = !empty($item->input["_additional_tags_from_rules"])
+        ? $item->input["_additional_tags_from_rules"]
+        : [];
         if (!is_array($tag_values)) {
             // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];
@@ -474,7 +474,7 @@ SQL;
         // process actions
         $existing_tags_ids = array_column(
             $tag_item->find(['items_id' => $item->getID(), 'itemtype' => $item->getType()]),
-            'plugin_tag_tags_id'
+            'plugin_tag_tags_id',
         );
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
         $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
@@ -484,7 +484,7 @@ SQL;
             $tag_item->add([
                 'plugin_tag_tags_id' => $tag_id,
                 'items_id' => $item->getID(),
-                'itemtype' => $item->getType()
+                'itemtype' => $item->getType(),
             ]);
         }
         foreach ($removed_tags_ids as $tag_id) {

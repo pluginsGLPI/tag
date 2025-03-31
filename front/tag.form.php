@@ -44,7 +44,7 @@ if (isset($_POST['add'])) {
         $found = $item->find([
             'plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
             'items_id' => $_REQUEST['items_id'],
-            'itemtype' => $_REQUEST['itemtype']
+            'itemtype' => $_REQUEST['itemtype'],
         ]);
 
         if (count($found) == 0) {
