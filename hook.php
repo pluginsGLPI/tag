@@ -70,8 +70,8 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                 'joinparams' => [
                     'jointype' => 'itemtype_item',
                 ],
-            ]
-        ]
+            ],
+        ],
     ];
 
     if (version_compare($glpiVersion, "10.0.19", '>=')) {
