@@ -1,14 +1,14 @@
 # English translations for PACKAGE package.
-# Copyright (C) 2024 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2024.
+# Automatically generated, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-02 00:46+0000\n"
-"PO-Revision-Date: 2024-12-02 00:46+0000\n"
+"POT-Creation-Date: 2025-05-20 00:47+0000\n"
+"PO-Revision-Date: 2025-05-20 00:47+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:191 hook.php:288
+#: hook.php:199 hook.php:318
 msgid "Add tags"
 msgstr "Add tags"
 
-#: inc/tag.class.php:358
+#: inc/tag.class.php:368
 msgid "HTML color"
 msgstr "HTML color"
 
@@ -39,21 +39,21 @@ msgstr "If the item is tagged"
 msgid "Missing parameters"
 msgstr "Missing parameters"
 
-#: hook.php:193
+#: hook.php:201
 msgid "Remove tags"
 msgstr "Remove tags"
 
-#: inc/tag.class.php:43 inc/tag.class.php:480
+#: inc/tag.class.php:43 inc/tag.class.php:489
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: setup.php:169 inc/config.class.php:39 inc/config.class.php:56
+#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
 msgid "Tag Management"
 msgstr "Tag Management"
 
-#: inc/profile.class.php:35 inc/profile.class.php:65
+#: inc/profile.class.php:35 inc/profile.class.php:67
 msgid "Tag management"
 msgstr "Tag management"
 
@@ -69,6 +69,6 @@ msgstr "Tags have not been updated"
 msgid "Tags location"
 msgstr "Tags location"
 
-#: inc/tag.class.php:737
+#: inc/tag.class.php:753
 msgid "View all tags"
 msgstr "View all tags"
