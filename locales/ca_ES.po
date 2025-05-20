@@ -3,76 +3,73 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Davide Foschi (Argaar TantaRes) <argaar@gmail.com>, 2016
-# Davide <spam@habilitas.it>, 2024
-# Davide <spam@habilitas.it>, 2019
+# Nuria Costa <nuria.costa@uvic.cat>, 2025
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-13 00:47+0000\n"
+"POT-Creation-Date: 2025-05-20 00:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: Davide <spam@habilitas.it>, 2024\n"
-"Language-Team: Italian (Italy) (http://app.transifex.com/teclib/glpi-plugin-tag/language/it_IT/)\n"
+"Last-Translator: Nuria Costa <nuria.costa@uvic.cat>, 2025\n"
+"Language-Team: Catalan (Spain) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ca_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it_IT\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Language: ca_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: hook.php:199 hook.php:318
 msgid "Add tags"
-msgstr "Aggiungi Etichetta"
+msgstr "Afegeix etiquetes"
 
 #: inc/tag.class.php:368
 msgid "HTML color"
-msgstr "Colore HTML"
+msgstr "Color HTML"
 
 #: setup.php:126
 msgctxt "filters"
 msgid "If the item has a tag"
-msgstr "Se l'oggetto ha un'etichetta"
+msgstr "Si l'element té etiqueta"
 
 #: setup.php:130
 msgctxt "filters"
 msgid "If the item is tagged"
-msgstr "Se l'oggetto ha un'etichetta"
+msgstr "Si l'element està etiquetat"
 
 #: ajax/tag.php:66
 msgid "Missing parameters"
-msgstr "Parametri mancanti"
+msgstr "Paràmetres que falten"
 
 #: hook.php:201
 msgid "Remove tags"
-msgstr "Rimuovi etichetta"
+msgstr "Elimina etiquetes"
 
 #: inc/tag.class.php:43 inc/tag.class.php:489
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] "Etichetta"
-msgstr[1] "Etichette"
-msgstr[2] "Etichette"
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiquetes"
 
 #: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
 msgid "Tag Management"
-msgstr "Gestione Tag"
+msgstr "Gestió d'etiquetes"
 
 #: inc/profile.class.php:35 inc/profile.class.php:67
 msgid "Tag management"
-msgstr "Gestione etichette"
+msgstr "Gestió d'etiquetes"
 
 #: ajax/tag.php:49
 msgid "Tags have been updated"
-msgstr "Le etichette sono state aggiornate"
+msgstr "S'han actualitzat les etiquetes"
 
 #: ajax/tag.php:57
 msgid "Tags have not been updated"
-msgstr "Le etichete non sono state aggiornate"
+msgstr "No s'han actualitzat les etiquetes"
 
 #: inc/config.class.php:57
 msgid "Tags location"
-msgstr "Posizione delle etichette"
+msgstr "Ubicació de les etiquetes"
 
 #: inc/tag.class.php:753
 msgid "View all tags"
-msgstr "Visualizza tutte le etichette"
+msgstr "Visualitza totes les etiquetes"

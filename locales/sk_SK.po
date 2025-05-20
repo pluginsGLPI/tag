@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-15 00:41+0000\n"
+"POT-Creation-Date: 2025-05-13 00:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: feonsu <feonsu@gmail.com>, 2023-2024\n"
 "Language-Team: Slovak (Slovakia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/sk_SK/)\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Language: sk_SK\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: hook.php:191 hook.php:288
+#: hook.php:199 hook.php:318
 msgid "Add tags"
 msgstr "Pridať značky"
 
-#: inc/tag.class.php:358
+#: inc/tag.class.php:368
 msgid "HTML color"
 msgstr "Farba HTML"
 
@@ -41,11 +41,11 @@ msgstr "Ak je položka označená"
 msgid "Missing parameters"
 msgstr "Chýbajúce parametre"
 
-#: hook.php:193
+#: hook.php:201
 msgid "Remove tags"
 msgstr "Odstrániť značky"
 
-#: inc/tag.class.php:43 inc/tag.class.php:480
+#: inc/tag.class.php:43 inc/tag.class.php:489
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Značka"
@@ -53,11 +53,11 @@ msgstr[1] "Značky"
 msgstr[2] "Značky"
 msgstr[3] "Značky"
 
-#: setup.php:169 inc/config.class.php:39 inc/config.class.php:56
+#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
 msgid "Tag Management"
 msgstr "Správa značiek"
 
-#: inc/profile.class.php:35 inc/profile.class.php:65
+#: inc/profile.class.php:35 inc/profile.class.php:67
 msgid "Tag management"
 msgstr "Správa značiek"
 
@@ -73,6 +73,6 @@ msgstr "Značky neboli aktualizované"
 msgid "Tags location"
 msgstr "Umiestnenie značiek"
 
-#: inc/tag.class.php:737
+#: inc/tag.class.php:753
 msgid "View all tags"
 msgstr "Zobraziť všetky značky"
