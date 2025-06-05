@@ -1,5 +1,7 @@
 <?php
 
+use Glpi\DBAL\QueryExpression;
+
 /**
  * -------------------------------------------------------------------------
  * Tag plugin for GLPI
@@ -67,7 +69,7 @@ class PluginTagTagItem extends CommonDBRelation
                     UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
-            $DB->doQueryOrDie($query);
+            $DB->doQuery($query);
         }
 
         // fix indexes
@@ -92,7 +94,7 @@ SQL;
 
         $table = getTableForItemType(RuleAction::class);
 
-        $DB->updateOrDie(
+        $DB->update(
             $table,
             [
                 'field' => '_plugin_tag_tag_from_rules',

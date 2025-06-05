@@ -156,7 +156,7 @@ class PluginTagTag extends CommonDropdown
                     KEY `is_active` (`is_active`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
-            $DB->doQueryOrDie($query);
+            $DB->doQuery($query);
         } else {
             if (!$DB->fieldExists($table, 'type_menu')) {
                 $migration->addField($table, 'type_menu', "text");
@@ -209,19 +209,19 @@ SQL;
         /** @var DBmysql $DB */
         global $DB;
 
-        $DB->deleteOrDie('glpi_logs', [
+        $DB->delete('glpi_logs', [
             'OR' => [
                 'itemtype_link' => __CLASS__,
                 'itemtype'      => __CLASS__,
             ],
         ]);
-        $DB->deleteOrDie('glpi_savedsearches', [
+        $DB->delete('glpi_savedsearches', [
             'itemtype'      => __CLASS__,
         ]);
-        $DB->deleteOrDie('glpi_savedsearches_users', [
+        $DB->delete('glpi_savedsearches_users', [
             'itemtype'      => __CLASS__,
         ]);
-        $DB->deleteOrDie('glpi_displaypreferences', [
+        $DB->delete('glpi_displaypreferences', [
             'OR' => [
                 'itemtype'      => __CLASS__,
                 'num'           => self::S_OPTION,
@@ -476,25 +476,18 @@ SQL;
                 }
 
                 $field_class = "form-field row col-12 col-sm-6 px-3 mt-2 mb-n2";
-                $label_class = "col-form-label col-xxl-5 text-xxl-end";
                 $input_class = "col-xxl-7 field-container";
 
                 if ($item instanceof CommonITILObject) {
                     $field_class = "form-field row col-12 mb-2";
-                    $label_class = "col-form-label col-xxl-4 text-xxl-end";
                     $input_class = "col-xxl-8 field-container";
                 }
 
-                echo "<div class='$field_class'>";
-                echo "<div class='$label_class'>" . _n('Tag', 'Tags', 2, 'tag') . "</div>";
-                echo "<div class='$input_class'>";
                 self::showTagDropdown([
                     'itemtype' => $itemtype,
                     'id'       => $item->getId(),
                     'value'    => $value,
                 ]);
-                echo "</div>";
-                echo "</div>";
             }
         }
     }
@@ -613,20 +606,16 @@ SQL;
         ];
         $params = array_merge($default_params, $params);
 
-        // check itemtype
         $itemtype = self::parseItemtype($params['itemtype'], $params['id']);
         $obj = new $itemtype();
 
-        // Object must be an instance of CommonDBTM (or inherint of this)
         if (!$obj instanceof CommonDBTM) {
             return;
         }
 
-        // instanciate needed objects
         $tag      = new self();
         $tag_item = new PluginTagTagItem();
 
-        // retrieve current item
         if (isset($params['id'])) {
             $obj->getFromDB($params['id']);
         }
@@ -634,13 +623,10 @@ SQL;
             $obj->getEmpty();
         }
 
-        // find values for this items
         $values = [];
         if (!$obj->isNewItem()) {
             foreach (
-                $tag_item->find(['items_id' => $params['id'],
-                    'itemtype' => $itemtype,
-                ]) as $found_item
+                $tag_item->find(['items_id' => $params['id'], 'itemtype' => $itemtype]) as $found_item
             ) {
                 $values[] = $found_item['plugin_tag_tags_id'];
             }
@@ -650,7 +636,6 @@ SQL;
             $values = $params['value'];
         }
 
-        // Restrict tags finding by itemtype and entity
         $where = [
             'is_active' => 1,
             'OR' => [
@@ -664,54 +649,29 @@ SQL;
             $where += getEntitiesRestrictCriteria('', '', '', true);
         }
 
-        // found existing tags
-        $existing_tags = $tag->find($where, 'name');
-        $select2_tags = [];
-        foreach ($existing_tags as $existing_tag) {
-            $select2_tags[] = [
-                'id'       => $existing_tag['id'],
-                'text'     => $existing_tag['name'],
-                'color'    => $existing_tag['color'],
-                'selected' => in_array($existing_tag['id'], $values),
-            ];
-        }
-        // new tags restored from saved input
-        $new_tags = array_diff($values, array_column($existing_tags, 'id'));
-        foreach ($new_tags as $new_tag) {
-            $select2_tags[] = [
-                'id'       => $new_tag,
-                'text'     => preg_replace('/^newtag_(.+)/', '$1', $new_tag),
-                'selected' => true,
-            ];
+        $available_tags = $tag->find($where, 'name');
+        foreach ($available_tags as $tag_data) {
+            $available_tags[$tag_data['id']] = $tag_data['name'];
+            $available_tags_color[$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
+            // 'selected' => in_array($tag_data['id'], $values),
+            // 'color'    => $tag_data['color'] ?: '#DDDDDD',
         }
 
-        // create an input receiving the tag tokens
-        $extra_class = "";
-        if ($obj instanceof CommonITILTask) {
-            $extra_class = "mb-3";
+        $selected_tags = [];
+        $select_tags = $tag_item->find(['items_id' => $params['id'], 'itemtype' => $itemtype]);
+        foreach ($select_tags as $tag_item_data) {
+            $tag_data = $tag->getFromDB($tag_item_data['plugin_tag_tags_id']);
+            if ($tag_data) {
+                $selected_tags[] = $tag_item_data['plugin_tag_tags_id'];
+            }
         }
-
-        echo "<div class='btn-group btn-group-sm w-100 $extra_class'>";
 
         $rand = mt_rand();
-        echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
-        echo Html::select(
-            '_plugin_tag_tag_values[]',
-            [],
-            [
-                'id'       => "tag_select_$rand",
-                'class'    => 'tag_select',
-                'multiple' => 'multiple',
-            ],
-        );
 
-        // prefix value by 'newtag_' to differenciate created tag from existing ones
-        $token_creation = "return { id: 'newtag_'+ params.term, text: params.term };";
-        if (!self::canCreate()) {
-            $token_creation = "return null;";
-        }
+        $token_creation = self::canCreate()
+            ? "return { id: 'newtag_'+ params.term, text: params.term };"
+            : "return null;";
 
-        // Returns false if at least one item in "items_ids" cannot be updated
         $can_update_all = count(array_filter($params['items_ids'], function ($value) use ($obj) {
             $obj->getFromDB($value);
             return !$obj->canUpdateItem();
@@ -722,82 +682,42 @@ SQL;
             || (!$obj->isNewItem() && !$obj->canUpdateItem())
             || (!empty($params['items_ids']) && !$can_update_all);
 
-        // call select2 lib for this input
-        echo Html::scriptBlock("
-            $(function() {
-                $('#tag_select_$rand').select2({
-                    width: 'calc(100% - 20px)',
-                    templateResult: formatOptionResult,
-                    templateSelection: formatOptionSelection,
-                    formatSearching: '" . __("Loading...") . "',
-                    dropdownCssClass: 'tag_select_results',
-                    data: " . json_encode($select2_tags) . ",
-                    tags: true,
-                    tokenSeparators: [',', ';'],
-                    disabled: " . ($readOnly ? 'true' : 'false') . ",
-                    createTag: function (params) {
-                        var term = $.trim(params.term);
-                        if (term === '') {
-                            return null;
-                        }
-                        $token_creation
-                    }
-                });
-            });
-        ");
+        $can_create = self::canCreate();
+        // $tooltip = $can_create ? Html::showToolTip(
+        //     __("View all tags", 'tag'),
+        //     ['link' => self::getSearchURL()]
+        // ) : '';
 
-        // Show tooltip
-        if (self::canCreate()) {
-            echo "<div class='btn btn-outline-secondary'>";
-            echo Html::showToolTip(
-                __("View all tags", 'tag'),
-                ['link' => self::getSearchURL()],
-            );
-            echo "</div>";
-        }
-
-        // save tag in AJAX mode when ITIL object is closed
         if (!$readOnly && $obj instanceof CommonITILObject && $obj->isClosed()) {
-            // save button
-            echo Html::submit(
-                "<i class='far fa-save'></i>",
-                [
-                    'name' => 'save_tag',
-                    'id' => 'save_tag',
-                    'class' => 'btn btn-outline-primary',
-                ],
-            );
-
-            $url = Plugin::getWebDir('tag', true) . '/ajax/tag.php';
-
-            echo Html::scriptBlock("
-                $(function() {
-                    $('#save_tag').on('click', function (e) {
-                        e.preventDefault();
-                        $.ajax({
-                            url: '$url',
-                            type: 'POST',
-                            data: {
-                                'itemtype': '$itemtype',
-                                'items_id': " . $params['id'] . ",
-                                '_plugin_tag_tag_values': $('#tag_select_$rand').val(),
-                                '_plugin_tag_tag_process_form': 1,
-                            }
-                        });
-                        displayAjaxMessageAfterRedirect();
-                        window.glpiUnsavedFormChanges = false;
-                    });
-                });
-            ");
+            $show_save_button = true;
+            $url = plugin_tag_geturl() . '/ajax/tag.php';
         }
 
-        echo "</div>";
+        if ($obj instanceof CommonITILTask) {
+            $extra_class = "mb-3";
+        }
+
+        TemplateRenderer::getInstance()->display('@tag/tag_dropdown.html.twig', [
+            'extra_class'      => $extra_class ?? '',
+            'selected_tags'    => $selected_tags,
+            'available_tags'   => $available_tags,
+            'tags_color'       => $available_tags_color ?? [],
+            'rand'             => $rand,
+            'token_creation'   => $token_creation,
+            'readOnly'         => $readOnly,
+            'can_create'       => $can_create,
+            'show_save_button' => $show_save_button ?? false,
+            'url'              => $url ?? '',
+            'itemtype'         => $itemtype,
+            'icon'             => Computer::getIcon(),
+            'items_id'         => $params['id'],
+            'in_itilobject'    => $obj instanceof CommonITILObject,
+        ]);
     }
 
     public static function getTagForEntityName($completename = "")
     {
         $plus_rootentity = sprintf(__('%1$s + %2$s'), '', __('Child entities'));
-        $completename    = Html::entity_decode_deep($completename);
         $completename    = trim(str_replace($plus_rootentity, '', $completename));
         $entities_id     = Entity::getEntityIDByCompletename($completename);
 
@@ -916,7 +836,7 @@ SQL;
             )
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).php/', $_SERVER['PHP_SELF'], $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).form.php/', $_SERVER['HTTP_REFERER'], $matches)) {
             $itemtype = $matches[1];
         }
 
