@@ -1,0 +1,177 @@
+{#
+ # -------------------------------------------------------------------------
+ # Tag plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of Tag.
+ #
+ # Tag is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #
+ # Tag is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with Tag. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2014-2023 by Teclib'.
+ # @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ # @link      https://github.com/pluginsGLPI/tag
+ # -------------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+{% if not in_itilobject %}
+    <div class="hr-text mt-2">
+        <i class="fa-2x ti ti-tag"></i>
+        <span>{{ __('Tags', 'tag') }}</span>
+    </div>
+
+    {# For non itil object (new or not) we need to adapt class and boostrap layout #}
+    {% set class = is_new_item ? 'col-xxl-12' : 'col-xxl-9' %}
+    <div class="card-body d-flex flex-wrap">
+        <div class="col-12 {{ class }} flex-column">
+            <div class="d-flex flex-row flex-wrap flex-xl-nowrap">
+                <div class="row flex-row align-items-start flex-grow-1">
+                    <div class="row flex-row">
+{% endif %}
+
+<input type="hidden" name='_plugin_tag_tag_process_form', id='_plugin_tag_tag_process_form', value='1' />
+
+{% set tooltip_parts = [] %}
+
+{% if can_create %}
+    {% set tooltip_parts = tooltip_parts | merge([
+        '<a class="dropdown_tooltip btn btn-outline-secondary" target="_top" href="' ~ tag_search_url ~ '"><span class="fas fa-info fa-fw"></span></a>'
+    ]) %}
+{% endif %}
+
+{% if show_save_button %}
+    {% set tooltip_parts = tooltip_parts | merge([
+        '<button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary"><i class="far fa-save"></i></button>'
+    ]) %}
+{% endif %}
+
+{% set tooltip = tooltip_parts | join(' ') %}
+
+
+{{ fields.dropdownArrayField(
+    '_plugin_tag_tag_values',
+    null,
+    available_tags,
+    __('Tags', 'tag'),
+    {
+        values: selected_tags,
+        id: 'tag_select_',
+        rand: rand,
+        class: 'tag_select',
+        disabled: readOnly,
+        multiple: true,
+        full_width: in_itilobject ? true : false,
+        add_field_html : tooltip|raw,
+        field_class: in_itilobject ? 'col-12 col-sm-12' : 'col-12 col-sm-6  mb-2',
+        label_class: in_itilobject ? 'col-2 col-sm-2' : 'col-xxl-5 text-xxl-end',
+        input_class: (in_itilobject ? 'col-10 col-sm-10' : 'col-xxl-7') ~ (can_create ? ' btn-group btn-group-sm' : '')
+    }
+) }}
+
+<script>
+    $(document).ready(function() {
+        const tagsColor = {{ tags_color|json_encode|raw }};
+
+        function isDark(hexColor) {
+            if (!hexColor) return false;
+            hexColor = hexColor.replace('#', '');
+            const r = parseInt(hexColor.substr(0,2),16);
+            const g = parseInt(hexColor.substr(2,2),16);
+            const b = parseInt(hexColor.substr(4,2),16);
+            const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
+            return luminance < 0.5;
+        }
+
+        function applyTagColors($select) {
+            const selectedIds = $select.find('option:selected').map(function() {
+                return $(this).val();
+            }).get();
+
+            const $container = $select.nextAll('.select2').find('.select2-selection__rendered');
+            $container.find('.select2-selection__choice').each(function(index) {
+                const id = selectedIds[index];
+                const color = tagsColor[id];
+                if (color) {
+                    $(this).css('background-color', color);
+                    $(this).css('color', isDark(color) ? '#eeeeee' : '');
+                }
+            });
+        }
+
+        const $select = $('select[name="_plugin_tag_tag_values[]"]');
+
+        $select.each(function() {
+            applyTagColors($(this));
+        });
+
+        $select.on('change select2:select select2:unselect', function() {
+            applyTagColors($(this));
+        });
+
+        $select.on('select2:open', function() {
+            setTimeout(() => {
+                $('.select2-results__option').each(function() {
+                    const matches = this.id.match(/result-[^-]+-(\d+)$/);
+                    if (matches && matches[1]) {
+                        const color = tagsColor[matches[1]];
+                        // Cible uniquement le span SANS la classe select2-rendered__match
+                        $(this).find('span:not(.select2-rendered__match)').css({
+                            'background-color': color ? color : '',
+                            'padding': color ? '2px' : '',
+                            'color': (color && isDark(color)) ? '#fff' : '',
+                            'border-radius': '2px'
+                        });
+                    }
+                });
+            }, 0);
+        });
+    });
+</script>
+
+{% if show_save_button %}
+    <script>
+        $(function() {
+            $('#save_tag').on('click', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ url }}',
+                    type: 'POST',
+                    data: {
+                        'itemtype': '{{ itemtype }}',
+                        'items_id': {{ items_id }},
+                        '_plugin_tag_tag_values': $('#dropdown__plugin_tag_tag_values{{ rand }}').val(),
+                        '_plugin_tag_tag_process_form': 1,
+                    }
+                });
+                displayAjaxMessageAfterRedirect();
+                window.glpiUnsavedFormChanges = false;
+            });
+        });
+    </script>
+{% endif %}
+
+{% if not in_itilobject %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hr-text mt-2">
+        <i class="fa-2x {{ icon }}"></i>
+        <span>{{ itemtype }}</span>
+    </div>
+{% endif %}
