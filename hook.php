@@ -273,7 +273,7 @@ function plugin_tag_post_init()
     if ($itemtype = PluginTagTag::getCurrentItemtype()) {
         if (PluginTagTag::canItemtype($itemtype)) {
             $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['item_update']['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
             $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
         }
     }
@@ -282,7 +282,7 @@ function plugin_tag_post_init()
     // Needed for rules to function properly when a ticket is created from a mail
     // collector
     $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['item_update']['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS['pre_item_update']['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
     $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
 
     $PLUGIN_HOOKS['rule_matched']['tag'] = 'plugin_tag_rule_matched';
