@@ -238,7 +238,8 @@ SQL;
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
         $tab    = [];
-        $tab[2] = _n('Associated item', 'Associated items', 2); //Note : can add nb_element here
+
+        $tab[2] = self::createTabEntry(_n('Associated item', 'Associated items', 2), 0, $item::getType(), 'ti ti-list');
         return $tab;
     }
 
