@@ -239,7 +239,16 @@ SQL;
     {
         $tab    = [];
 
-        $tab[2] = self::createTabEntry(_n('Associated item', 'Associated items', 2), 0, $item::getType(), 'ti ti-list');
+        $nb = 0;
+        if (is_a($item, CommonDBTM::class, true)) {
+            if ($_SESSION['glpishow_count_on_tabs']) {
+                $nb = countElementsInTable(PluginTagTagItem::getTable(), [
+                    'plugin_tag_tags_id' => $item->getID(),
+                ]);
+            }
+        }
+
+        $tab[2] = self::createTabEntry(_n('Associated item', 'Associated items', 2), $nb, $item::getType(), 'ti ti-list');
         return $tab;
     }
 
