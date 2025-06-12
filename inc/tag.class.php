@@ -683,10 +683,6 @@ SQL;
             || (!empty($params['items_ids']) && !$can_update_all);
 
         $can_create = self::canCreate();
-        // $tooltip = $can_create ? Html::showToolTip(
-        //     __("View all tags", 'tag'),
-        //     ['link' => self::getSearchURL()]
-        // ) : '';
 
         if (!$readOnly && $obj instanceof CommonITILObject && $obj->isClosed()) {
             $show_save_button = true;
@@ -698,20 +694,22 @@ SQL;
         }
 
         TemplateRenderer::getInstance()->display('@tag/tag_dropdown.html.twig', [
-            'extra_class'      => $extra_class ?? '',
-            'selected_tags'    => $selected_tags,
-            'available_tags'   => $available_tags,
-            'tags_color'       => $available_tags_color ?? [],
-            'rand'             => $rand,
-            'token_creation'   => $token_creation,
-            'readOnly'         => $readOnly,
-            'can_create'       => $can_create,
-            'show_save_button' => $show_save_button ?? false,
-            'url'              => $url ?? '',
-            'itemtype'         => $itemtype,
-            'icon'             => Computer::getIcon(),
-            'items_id'         => $params['id'],
-            'in_itilobject'    => $obj instanceof CommonITILObject,
+            'extra_class'       => $extra_class ?? '',
+            'selected_tags'     => $selected_tags,
+            'available_tags'    => $available_tags,
+            'tags_color'        => $available_tags_color ?? [],
+            'rand'              => $rand,
+            'token_creation'    => $token_creation,
+            'readOnly'          => $readOnly,
+            'can_create'        => $can_create,
+            'show_save_button'  => $show_save_button ?? false,
+            'url'               => $url ?? '',
+            'itemtype'          => $itemtype,
+            'icon'              => Computer::getIcon(),
+            'items_id'          => $params['id'],
+            'in_itilobject'     => $obj instanceof CommonITILObject,
+            'is_new_item'       => $obj->isNewItem(),
+            'tag_search_url'    => self::getSearchURL(),
         ]);
     }
 

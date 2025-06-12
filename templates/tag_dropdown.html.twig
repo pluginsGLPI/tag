@@ -5,122 +5,143 @@
         <i class="fa-2x ti ti-tag"></i>
         <span>{{ __('Tags', 'tag') }}</span>
     </div>
+
+    {# For non itil object (new or not) we need to adapt class and boostrap layout #}
+    {% set class = is_new_item ? 'col-xxl-12' : 'col-xxl-9' %}
+    <div class="card-body d-flex flex-wrap">
+        <div class="col-12 {{ class }} flex-column">
+            <div class="d-flex flex-row flex-wrap flex-xl-nowrap">
+                <div class="row flex-row align-items-start flex-grow-1">
+                    <div class="row flex-row">
 {% endif %}
 
-<div class= {{ in_itilobject ? "row ms-5" : "row" }}>
-    <input type="hidden" name='_plugin_tag_tag_process_form', id='_plugin_tag_tag_process_form', value='1' />
+<input type="hidden" name='_plugin_tag_tag_process_form', id='_plugin_tag_tag_process_form', value='1' />
 
-    {{ fields.dropdownArrayField(
-        '_plugin_tag_tag_values',
-        null,
-        available_tags,
-        __('Tags', 'tag'),
-        {
-            values: selected_tags,
-            id: 'tag_select_',
-            class: 'tag_select',
-            disabled: readOnly,
-            multiple: true,
-            field_class: in_itilobject ? 'col-12 col-sm-12' : 'col-5 col-sm-5',
-            label_class: in_itilobject ? 'col-2 col-sm-2' : 'col-4 col-sm-4',
-            input_class: in_itilobject ? 'col-10 col-sm-10' : 'col-8 col-sm-8',
+{% set tooltip_parts = [] %}
+
+{% if can_create %}
+    {% set tooltip_parts = tooltip_parts | merge([
+        '<a class="dropdown_tooltip btn btn-outline-secondary" target="_top" href="' ~ tag_search_url ~ '"><span class="fas fa-info fa-fw"></span></a>'
+    ]) %}
+{% endif %}
+
+{% if show_save_button %}
+    {% set tooltip_parts = tooltip_parts | merge([
+        '<button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary"><i class="far fa-save"></i></button>'
+    ]) %}
+{% endif %}
+
+{% set tooltip = tooltip_parts | join(' ') %}
+
+
+{{ fields.dropdownArrayField(
+    '_plugin_tag_tag_values',
+    null,
+    available_tags,
+    __('Tags', 'tag'),
+    {
+        values: selected_tags,
+        id: 'tag_select_',
+        rand: rand,
+        class: 'tag_select',
+        disabled: readOnly,
+        multiple: true,
+        full_width: in_itilobject ? true : false,
+        add_field_html : tooltip|raw,
+        field_class: in_itilobject ? 'col-12 col-sm-12' : 'col-12 col-sm-6  mb-2',
+        label_class: in_itilobject ? 'col-2 col-sm-2' : 'col-xxl-5 text-xxl-end',
+        input_class: (in_itilobject ? 'col-10 col-sm-10' : 'col-xxl-7') ~ (can_create ? ' btn-group btn-group-sm' : '')
+    }
+) }}
+
+<script>
+    $(document).ready(function() {
+        const tagsColor = {{ tags_color|json_encode|raw }};
+
+        function isDark(hexColor) {
+            if (!hexColor) return false;
+            hexColor = hexColor.replace('#', '');
+            const r = parseInt(hexColor.substr(0,2),16);
+            const g = parseInt(hexColor.substr(2,2),16);
+            const b = parseInt(hexColor.substr(4,2),16);
+            const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
+            return luminance < 0.5;
         }
-    ) }}
 
-    <script>
-        $(document).ready(function() {
-            const tagsColor = {{ tags_color|json_encode|raw }};
+        function applyTagColors($select) {
+            const selectedIds = $select.find('option:selected').map(function() {
+                return $(this).val();
+            }).get();
 
-            function isDark(hexColor) {
-                if (!hexColor) return false;
-                hexColor = hexColor.replace('#', '');
-                const r = parseInt(hexColor.substr(0,2),16);
-                const g = parseInt(hexColor.substr(2,2),16);
-                const b = parseInt(hexColor.substr(4,2),16);
-                const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
-                return luminance < 0.5;
-            }
+            const $container = $select.nextAll('.select2').find('.select2-selection__rendered');
+            $container.find('.select2-selection__choice').each(function(index) {
+                const id = selectedIds[index];
+                const color = tagsColor[id];
+                if (color) {
+                    $(this).css('background-color', color);
+                    $(this).css('color', isDark(color) ? '#eeeeee' : '');
+                }
+            });
+        }
 
-            function applyTagColors($select) {
-                const selectedIds = $select.find('option:selected').map(function() {
-                    return $(this).val();
-                }).get();
+        const $select = $('select[name="_plugin_tag_tag_values[]"]');
 
-                const $container = $select.nextAll('.select2').find('.select2-selection__rendered');
-                $container.find('.select2-selection__choice').each(function(index) {
-                    const id = selectedIds[index];
-                    const color = tagsColor[id];
-                    if (color) {
-                        $(this).css('background-color', color);
-                        $(this).css('color', isDark(color) ? '#eeeeee' : '');
+        $select.each(function() {
+            applyTagColors($(this));
+        });
+
+        $select.on('change select2:select select2:unselect', function() {
+            applyTagColors($(this));
+        });
+
+        $select.on('select2:open', function() {
+            setTimeout(() => {
+                $('.select2-results__option').each(function() {
+                    const matches = this.id.match(/result-[^-]+-(\d+)$/);
+                    if (matches && matches[1]) {
+                        const color = tagsColor[matches[1]];
+                        // Cible uniquement le span SANS la classe select2-rendered__match
+                        $(this).find('span:not(.select2-rendered__match)').css({
+                            'background-color': color ? color : '',
+                            'padding': color ? '2px' : '',
+                            'color': (color && isDark(color)) ? '#fff' : '',
+                            'border-radius': '2px'
+                        });
                     }
                 });
-            }
+            }, 0);
+        });
+    });
+</script>
 
-            const $select = $('select[name="_plugin_tag_tag_values[]"]');
-
-            $select.each(function() {
-                applyTagColors($(this));
-            });
-
-            $select.on('change select2:select select2:unselect', function() {
-                applyTagColors($(this));
-            });
-
-            $select.on('select2:open', function() {
-                setTimeout(() => {
-                    $('.select2-results__option').each(function() {
-                        const matches = this.id.match(/result-[^-]+-(\d+)$/);
-                        if (matches && matches[1]) {
-                            const color = tagsColor[matches[1]];
-                            // Cible uniquement le span SANS la classe select2-rendered__match
-                            $(this).find('span:not(.select2-rendered__match)').css({
-                                'background-color': color ? color : '',
-                                'padding': color ? '2px' : '',
-                                'color': (color && isDark(color)) ? '#fff' : '',
-                                'border-radius': '2px'
-                            });
-                        }
-                    });
-                }, 0);
+{% if show_save_button %}
+    <script>
+        $(function() {
+            $('#save_tag').on('click', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ url }}',
+                    type: 'POST',
+                    data: {
+                        'itemtype': '{{ itemtype }}',
+                        'items_id': {{ items_id }},
+                        '_plugin_tag_tag_values': $('#dropdown__plugin_tag_tag_values{{ rand }}').val(),
+                        '_plugin_tag_tag_process_form': 1,
+                    }
+                });
+                displayAjaxMessageAfterRedirect();
+                window.glpiUnsavedFormChanges = false;
             });
         });
     </script>
-
-    {% if can_create %}
-        {# <div class="btn btn-outline-secondary">
-            {{ tooltip|raw }}
-        </div> #}
-    {% endif %}
-
-    {% if show_save_button %}
-        <button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary">
-            <i class="far fa-save"></i>
-            {{ __('Save') }}
-        </button>
-        <script>
-            $(function() {
-                $('#save_tag').on('click', function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: '{{ url }}',
-                        type: 'POST',
-                        data: {
-                            'itemtype': '{{ itemtype }}',
-                            'items_id': {{ items_id }},
-                            '_plugin_tag_tag_values': $('#tag_select_{{ rand }}').val(),
-                            '_plugin_tag_tag_process_form': 1,
-                        }
-                    });
-                    displayAjaxMessageAfterRedirect();
-                    window.glpiUnsavedFormChanges = false;
-                });
-            });
-        </script>
-    {% endif %}
-</div>
+{% endif %}
 
 {% if not in_itilobject %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="hr-text mt-2">
         <i class="fa-2x {{ icon }}"></i>
         <span>{{ itemtype }}</span>
