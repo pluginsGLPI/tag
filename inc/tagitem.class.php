@@ -233,7 +233,7 @@ SQL;
 
             Html::showMassiveActions($massiveactionparams);
         }
-        echo "<table class='tab_cadre_fixe'>";
+        echo "<table class='tab_cadre_fixehov'>";
         echo "<tr>";
 
         if ($canedit && $number) {
