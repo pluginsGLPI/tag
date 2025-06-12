@@ -195,7 +195,7 @@ SQL;
 
         // Add full rights to profiles that have READ or UPDATE config right
         $migration->addRight(self::$rightname);
-        $migration->addMessage( MessageType::Warning, "Tags now have rights. Please review all profiles to set the required level of rights.");
+        $migration->addMessage(MessageType::Warning, "Tags now have rights. Please review all profiles to set the required level of rights.");
 
         if (Session::haveRight(Config::$rightname, READ | UPDATE)) {
             // Update active profile to give access without having to logout/login
