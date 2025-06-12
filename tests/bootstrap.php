@@ -37,6 +37,7 @@ define('GLPI_LOG_DIR', __DIR__ . '/files/_logs');
 
 require_once __DIR__ . '/TagTestCase.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/TagTestCase.php';
 
 $kernel = new Kernel(Environment::TESTING->value);
 $kernel->boot();
