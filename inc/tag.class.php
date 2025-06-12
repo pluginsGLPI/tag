@@ -29,6 +29,7 @@
  */
 
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Message\MessageType;
 
 class PluginTagTag extends CommonDropdown
 {
@@ -194,7 +195,7 @@ SQL;
 
         // Add full rights to profiles that have READ or UPDATE config right
         $migration->addRight(self::$rightname);
-        $migration->displayWarning("Tags now have rights. Please review all profiles to set the required level of rights.");
+        $migration->addMessage( MessageType::Warning, "Tags now have rights. Please review all profiles to set the required level of rights.");
 
         if (Session::haveRight(Config::$rightname, READ | UPDATE)) {
             // Update active profile to give access without having to logout/login
@@ -281,7 +282,7 @@ SQL;
                 FROM `glpi_computers_items`
                 WHERE `computers_id` = '" . $this->getID() . "'";
         $tab = [];
-        foreach ($DB->request($query) as $data) {
+        foreach ($DB->doQuery($query) as $data) {
             $tab[$data['itemtype']][$data['items_id']] = $data['items_id'];
         }
         return $tab;
