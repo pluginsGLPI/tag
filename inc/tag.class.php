@@ -421,6 +421,7 @@ SQL;
 
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
+
     public static function getSpecificValueToDisplay($field, $values, array $options = [])
     {
         switch ($field) {
