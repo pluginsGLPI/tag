@@ -1,5 +1,7 @@
 <?php
 
+use Glpi\Plugin\Hooks;
+
 /**
  * -------------------------------------------------------------------------
  * Tag plugin for GLPI
@@ -272,18 +274,18 @@ function plugin_tag_post_init()
     // hook on object changes
     if ($itemtype = PluginTagTag::getCurrentItemtype()) {
         if (PluginTagTag::canItemtype($itemtype)) {
-            $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['item_update']['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
+            $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
         }
     }
 
     // Always define hook for tickets
     // Needed for rules to function properly when a ticket is created from a mail
     // collector
-    $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['item_update']['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
 
     $PLUGIN_HOOKS['rule_matched']['tag'] = 'plugin_tag_rule_matched';
 }
