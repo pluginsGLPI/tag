@@ -845,7 +845,7 @@ SQL;
             )
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).form.php/', $_SERVER['HTTP_REFERER'], $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).php/', $_SERVER['PHP_SELF'], $matches)) {
             $itemtype = $matches[1];
         }
 
