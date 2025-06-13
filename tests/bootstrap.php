@@ -38,3 +38,4 @@ define('TU_PASS', 'glpi');
 define('GLPI_LOG_LVL', 'DEBUG');
 
 require GLPI_ROOT . '/inc/includes.php';
+require_once __DIR__ . '/TagTestCase.php';
