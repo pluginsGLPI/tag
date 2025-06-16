@@ -442,6 +442,7 @@ SQL;
             && !$tag::canUpdate()
             && !isset($item->input["_plugin_tag_tag_from_rules"])
             && !isset($item->input["_additional_tags_from_rules"])
+            && !isset($item->input["_plugin_tag_tag_process_form"])
         ) {
             return true;
         }
@@ -461,6 +462,8 @@ SQL;
             $tag_values = [$tag_values];
         }
         $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
+
+
 
         foreach ($tag_values as &$tag_value) {
             if (strpos($tag_value, "newtag_") !== false) {
