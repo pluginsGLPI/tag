@@ -31,7 +31,11 @@
 namespace GlpiPlugin\Tag\Tests;
 
 use Auth;
+use CommonDBTM;
 use PHPUnit\Framework\TestCase;
+use PluginTagTag;
+use PluginTagTagItem;
+use Profile_User;
 use Session;
 
 abstract class TagTestCase extends TestCase
@@ -70,5 +74,64 @@ abstract class TagTestCase extends TestCase
         $ctime = $_SESSION['glpi_currenttime'];
         Session::destroy();
         $_SESSION['glpi_currenttime'] = $ctime;
+    }
+
+    public function loginAs(array $credentials): int
+    {
+        global $DB;
+
+        $login = $credentials['login'];
+        $pass  = $credentials['pass'];
+        $user  = getItemByTypeName('User', $login);
+        $user_profile = Profile_User::getUserProfiles($user->getID());
+        $user_profile = array_keys($user_profile)[0];
+
+        $DB->update(
+            'glpi_profilerights',
+            [
+                'rights' => CREATE | UPDATE | PURGE,
+            ],
+            [
+                'profiles_id' => $user_profile,
+                'name'        => PluginTagTag::$rightname,
+            ],
+        );
+
+        $this->login($login, $pass);
+
+        $this->assertNotNull($user);
+
+        return $user->getID();
+    }
+
+    public function createTag(string $tagName): int
+    {
+        $tag = new PluginTagTag();
+        $tag->add(
+            [
+                'name' => $tagName,
+                'is_active' => 1,
+                'type_menu' => ['Ticket'],
+            ],
+        );
+        $this->assertGreaterThan(0, $tag->getID());
+
+        return $tag->getID();
+    }
+
+    public function isItemTagged(CommonDBTM $item, int $tagID)
+    {
+        $tagItem = new PluginTagTagItem();
+        $ticketTag = $tagItem->getFromDBForItems(PluginTagTag::getById($tagID), $item);
+
+        $this->assertTrue($ticketTag);
+    }
+
+    public function isItemNotTagged(CommonDBTM $item, int $tagID): void
+    {
+        $tagItem = new PluginTagTagItem();
+        $ticketTag = $tagItem->getFromDBForItems(PluginTagTag::getById($tagID), $item);
+
+        $this->assertFalse($ticketTag);
     }
 }

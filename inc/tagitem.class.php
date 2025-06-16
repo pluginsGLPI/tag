@@ -442,6 +442,7 @@ SQL;
             && !$tag::canUpdate()
             && !isset($item->input["_plugin_tag_tag_from_rules"])
             && !isset($item->input["_additional_tags_from_rules"])
+            && !isset($item->input["_plugin_tag_tag_process_form"])
         ) {
             return true;
         }
