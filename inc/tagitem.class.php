@@ -463,8 +463,6 @@ SQL;
         }
         $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
 
-
-
         foreach ($tag_values as &$tag_value) {
             if (strpos($tag_value, "newtag_") !== false) {
                 $tag_value = str_replace("newtag_", "", $tag_value);
