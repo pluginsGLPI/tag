@@ -822,7 +822,6 @@ SQL;
      */
     public static function getCurrentItemtype()
     {
-        Toolbox::logDebug($_SERVER);
         $itemtype = '';
         if (
             preg_match('/\/(?:marketplace|plugins)\/genericobject\/front\/object\.form.php/', $_SERVER['REQUEST_URI'])
