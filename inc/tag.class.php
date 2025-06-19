@@ -748,7 +748,7 @@ SQL;
         $plugintagtag->getFromDB($tag_id);
         $color = $plugintagtag->fields["color"] ?: '#DDDDDD';
         $inv_color = idealTextColor($color);
-        $style = "background-color: $color; border: 1px solid $inv_color; color: $inv_color";
+        $style = "background-color: $color; color: $inv_color";
 
         return "<span class='select2-search-choice tag_choice'
                     style='padding-left:5px;$style'>" .
@@ -822,31 +822,32 @@ SQL;
      */
     public static function getCurrentItemtype()
     {
+        $request_uri = $_SERVER['REQUEST_URI'] ?? ''; // $_SERVER['REQUEST_URI'] from CLI context is empty
         $itemtype = '';
         if (
-            preg_match('/\/(?:marketplace|plugins)\/genericobject\/front\/object\.form.php/', $_SERVER['REQUEST_URI'])
+            preg_match('/\/(?:marketplace|plugins)\/genericobject\/front\/object\.form.php/', $request_uri)
             && array_key_exists('itemtype', $_GET)
         ) {
             $itemtype = $_GET['itemtype'];
         } elseif (
             preg_match(
                 '/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).form.php/',
-                $_SERVER['REQUEST_URI'],
+                $request_uri,
                 $matches,
             )
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).form.php/', $_SERVER['REQUEST_URI'], $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).form.php/', $request_uri, $matches)) {
             $itemtype = $matches[1];
         } elseif (
             preg_match(
                 '/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).php/',
-                $_SERVER['REQUEST_URI'],
+                $request_uri,
                 $matches,
             )
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).php/', $_SERVER['REQUEST_URI'], $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).php/', $request_uri, $matches)) {
             $itemtype = $matches[1];
         }
 
