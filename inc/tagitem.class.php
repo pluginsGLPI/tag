@@ -447,6 +447,15 @@ SQL;
             return true;
         }
 
+        if (
+            empty($item->input["_plugin_tag_tag_values"])
+            && empty($item->input["_plugin_tag_tag_from_rules"])
+            && empty($item->input["_additional_tags_from_rules"])
+            && empty($item->input["_plugin_tag_tag_process_form"])
+        ) {
+            return true;
+        }
+
         // create new values
         $tag_values = !empty($item->input["_plugin_tag_tag_values"])
          ? $item->input["_plugin_tag_tag_values"]
