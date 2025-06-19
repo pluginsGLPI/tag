@@ -27,7 +27,6 @@
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
-
 class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionInjectionInterface
 {
     public static function getTable($classname = null)
@@ -57,15 +56,17 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
      */
     public function getOptions($primary_type = '')
     {
+        if (class_exists('PluginDatainjectionCommonInjectionLib')) {
+            $tab = Search::getOptions(get_parent_class($this));
 
-        $tab = Search::getOptions(get_parent_class($this));
+            //Remove some options because some fields cannot be imported
+            $options['ignore_fields'] = [3, 4, 6]; //id, entity, type_menu;
+            $options['displaytype']   = ["dropdown" => [12]];
 
-        //Remove some options because some fields cannot be imported
-        $options['ignore_fields'] = [3, 4, 6]; //id, entity, type_menu;
-        $options['displaytype']   = ["dropdown" => [12]];
-
-        /** @phpstan-ignore-next-line */
-        return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
+            return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -73,20 +74,22 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
      */
     public function addOrUpdateObject($values = [], $options = [])
     {
-        /** @phpstan-ignore-next-line  */
-        $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
-        $lib->processAddOrUpdate();
-        $results = $lib->getInjectionResults();
+        if (class_exists('PluginDatainjectionCommonInjectionLib')) {
+            $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
+            $lib->processAddOrUpdate();
+            $results = $lib->getInjectionResults();
 
-        // Update field for add a default value
-        /** @phpstan-ignore-next-line  */
-        if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
-            $item = new parent();
-            $item->update(['id'        => $results[get_parent_class()],
-                'type_menu' => '0',
-            ]); //default value
+            // Update field for add a default value
+            if ($results['status'] == PluginDatainjectionCommonInjectionLib::SUCCESS) {
+                $item = new parent();
+                $item->update(['id'        => $results[get_parent_class()],
+                    'type_menu' => '0',
+                ]); //default value
+            }
+
+            return $results;
+        } else {
+            return [];
         }
-
-        return $results;
     }
 }
