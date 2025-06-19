@@ -143,11 +143,11 @@ function plugin_init_tag()
         $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
         // add needed javascript & css files
-        $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
-        $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/kanban.js';
-        $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'public/js/common.js';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'public/js/kanban.js';
+        $PLUGIN_HOOKS[Hooks::ADD_CSS]['tag'][]        = 'public/css/tag.css';
         if (Session::isMultiEntitiesMode()) {
-            $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/entity.js';
+            $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'public/js/entity.js';
         }
 
         Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
