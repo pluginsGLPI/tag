@@ -28,11 +28,4 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
-
-Session::checkLoginUser();
-
-if (Plugin::isPluginActive("tag")) {
-    $dropdown = new PluginTagTag();
-    include(GLPI_ROOT . "/front/dropdown.common.php");
-}
+interface PluginDatainjectionInjectionInterface {}
