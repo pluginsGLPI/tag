@@ -33,7 +33,7 @@ include('../../../inc/includes.php');
 Session::checkRight(PluginTagTag::$rightname, UPDATE);
 
 if (!Plugin::isPluginActive("tag")) {
-    Html::displayNotFoundError();
+    throw new \Glpi\Exception\Http\AccessDeniedHttpException();
 }
 
 if (isset($_POST['add'])) {
