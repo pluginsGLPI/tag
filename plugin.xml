@@ -39,9 +39,9 @@
          <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.12.3/glpi-tag-2.12.3.tar.bz2</download_url>
       </version>
       <version>
-         <num>2.13.0-beta3</num>
+         <num>2.13.0-beta4</num>
          <compatibility>~11.0.0</compatibility>
-         <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.13.0-beta3/glpi-tag-2.13.0-beta3.tar.bz2</download_url>
+         <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.13.0-beta4/glpi-tag-2.13.0-beta4.tar.bz2</download_url>
       </version>
       <version>
          <num>2.12.2</num>
