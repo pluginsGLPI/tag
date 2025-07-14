@@ -4,14 +4,16 @@
 # 
 # Translators:
 # Valllium, 2021
+# hamkms, 2025
+# hamkms, 2024
 # Nikolai Petrov <techobsl@yandex.ru>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 15:14+0000\n"
+"POT-Creation-Date: 2025-07-14 00:54+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: Valllium, 2021\n"
+"Last-Translator: hamkms, 2025\n"
 "Language-Team: Russian (Russia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,48 +21,60 @@ msgstr ""
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: hook.php:191 hook.php:288
+#: hook.php:199 hook.php:320
 msgid "Add tags"
 msgstr "Добавить тег"
 
-#: inc/tag.class.php:107 inc/tag.class.php:379
-msgid "HTML color"
-msgstr "Цвет HTML"
+#: hook.php:201
+msgid "Remove tags"
+msgstr "Удалить теги"
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr "Теги были обновлены"
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr "Теги не были обновлены"
+
+#: ajax/tag.php:66
+msgid "Missing parameters"
+msgstr "Отсутствующие параметры"
 
 #: setup.php:126
 msgctxt "filters"
 msgid "If the item has a tag"
-msgstr ""
+msgstr "Если сущность имеет тег"
 
 #: setup.php:130
 msgctxt "filters"
 msgid "If the item is tagged"
-msgstr ""
+msgstr "Если для сущности задан тег"
 
-#: hook.php:193
-msgid "Remove tags"
-msgstr "Удалить тег"
-
-#: inc/tag.class.php:41 inc/tag.class.php:493
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "тег"
-msgstr[1] "тегов"
-msgstr[2] "тегов"
-msgstr[3] "тегов"
-
-#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
+#: setup.php:169 inc/config.class.php:39 inc/config.class.php:56
 msgid "Tag Management"
-msgstr "Управление тегами"
-
-#: inc/profile.class.php:35 inc/profile.class.php:65
-msgid "Tag management"
 msgstr "Управление тегами"
 
 #: inc/config.class.php:57
 msgid "Tags location"
 msgstr "Расположение тегов"
 
-#: inc/tag.class.php:749
+#: inc/tag.class.php:43 inc/tag.class.php:489
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "тег"
+msgstr[1] "тегов"
+msgstr[2] "тегов"
+msgstr[3] "Теги"
+
+#: inc/tag.class.php:368
+msgid "HTML color"
+msgstr "Цвет HTML"
+
+#: inc/tag.class.php:753
 msgid "View all tags"
 msgstr "Просмотреть все теги"
+
+#: inc/profile.class.php:35 inc/profile.class.php:67
+msgid "Tag management"
+msgstr "Управление тегами"
