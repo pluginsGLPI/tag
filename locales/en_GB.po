@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 00:47+0000\n"
-"PO-Revision-Date: 2025-05-20 00:47+0000\n"
+"POT-Creation-Date: 2025-07-15 00:53+0000\n"
+"PO-Revision-Date: 2025-07-15 00:53+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -17,13 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:199 hook.php:318
+#: hook.php:199 hook.php:320
 msgid "Add tags"
 msgstr "Add tags"
 
-#: inc/tag.class.php:368
-msgid "HTML color"
-msgstr "HTML color"
+#: hook.php:201
+msgid "Remove tags"
+msgstr "Remove tags"
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr "Tags have been updated"
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr "Tags have not been updated"
+
+#: ajax/tag.php:66
+msgid "Missing parameters"
+msgstr "Missing parameters"
 
 #: setup.php:126
 msgctxt "filters"
@@ -35,13 +47,13 @@ msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "If the item is tagged"
 
-#: ajax/tag.php:66
-msgid "Missing parameters"
-msgstr "Missing parameters"
+#: setup.php:169 inc/config.class.php:39 inc/config.class.php:56
+msgid "Tag Management"
+msgstr "Tag Management"
 
-#: hook.php:201
-msgid "Remove tags"
-msgstr "Remove tags"
+#: inc/config.class.php:57
+msgid "Tags location"
+msgstr "Tags location"
 
 #: inc/tag.class.php:43 inc/tag.class.php:489
 msgid "Tag"
@@ -49,26 +61,14 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: inc/config.class.php:39 inc/config.class.php:56 setup.php:169
-msgid "Tag Management"
-msgstr "Tag Management"
-
-#: inc/profile.class.php:35 inc/profile.class.php:67
-msgid "Tag management"
-msgstr "Tag management"
-
-#: ajax/tag.php:49
-msgid "Tags have been updated"
-msgstr "Tags have been updated"
-
-#: ajax/tag.php:57
-msgid "Tags have not been updated"
-msgstr "Tags have not been updated"
-
-#: inc/config.class.php:57
-msgid "Tags location"
-msgstr "Tags location"
+#: inc/tag.class.php:368
+msgid "HTML color"
+msgstr "HTML color"
 
 #: inc/tag.class.php:753
 msgid "View all tags"
 msgstr "View all tags"
+
+#: inc/profile.class.php:35 inc/profile.class.php:67
+msgid "Tag management"
+msgstr "Tag management"
