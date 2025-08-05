@@ -23,7 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "GlpiPlugin\\Tag\\Tests\\": "tests"
+            "GlpiPlugin\\Tag\\Tests\\": "tests",
+            "GlpiPlugin\\Tag\\": "inc/"
         }
     },
     "autoload-dev": {
