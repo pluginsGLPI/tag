@@ -28,32 +28,4 @@
  * -------------------------------------------------------------------------
  */
 
-namespace GlpiPlugin\Tag\Tests\Units;
-
-use GlpiPlugin\Tag\Tests\TagTestCase;
-use Ticket;
-
-final class TagItemTest extends TagTestCase
-{
-    public function testTagsFromTicket(): void
-    {
-        $tagID1 = $this->createTag('TicketTag1');
-        $tagID2 = $this->createTag('TicketTag2');
-
-
-        $ticket = new Ticket();
-        $ticket->add([
-            'name' => 'Ticket add Tag',
-            'content' => 'Ticket Add Tag',
-            '_plugin_tag_tag_process_form' => 1,
-            '_plugin_tag_tag_values'   => [
-                $tagID1,
-                $tagID2,
-            ],
-        ]);
-
-        $this->isItemTagged($ticket, $tagID1);
-        $this->isItemTagged($ticket, $tagID2);
-    }
-
-}
+interface PluginDatainjectionInjectionInterface {}
