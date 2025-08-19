@@ -28,6 +28,36 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\DBAL\QueryExpression;
+
+/**
+ * -------------------------------------------------------------------------
+ * Tag plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of Tag.
+ *
+ * Tag is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Tag is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Tag. If not, see <http://www.gnu.org/licenses/>.
+ * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2014-2023 by Teclib'.
+ * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @link      https://github.com/pluginsGLPI/tag
+ * -------------------------------------------------------------------------
+ */
+
 class PluginTagTagItem extends CommonDBRelation
 {
     // From CommonDBRelation
@@ -67,7 +97,7 @@ class PluginTagTagItem extends CommonDBRelation
                     UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
-            $DB->doQueryOrDie($query);
+            $DB->doQuery($query);
         }
 
         // fix indexes
@@ -92,7 +122,7 @@ SQL;
 
         $table = getTableForItemType(RuleAction::class);
 
-        $DB->updateOrDie(
+        $DB->update(
             $table,
             [
                 'field' => '_plugin_tag_tag_from_rules',
@@ -203,7 +233,7 @@ SQL;
 
             Html::showMassiveActions($massiveactionparams);
         }
-        echo "<table class='tab_cadre_fixe'>";
+        echo "<table class='tab_cadre_fixehov'>";
         echo "<tr>";
 
         if ($canedit && $number) {
