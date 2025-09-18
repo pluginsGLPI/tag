@@ -426,7 +426,8 @@ SQL;
                 // the mail collector which wont set the _plugin_tag_tag_process_form
                 // flag
                 $item::getType() == Ticket::getType()
-                && $item->fields['date_creation'] == $_SESSION['glpi_currenttime']
+                // Allow a few seconds difference if glpi_currenttime changed
+                && abs(strtotime($item->fields['date_creation']) - strtotime($_SESSION['glpi_currenttime'])) < 5
             )
         ) {
             return true;
