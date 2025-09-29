@@ -648,13 +648,16 @@ SQL;
             $values = $params['value'];
         }
 
+        /** @var DBmysql $DB */
+        global $DB;
+
         $where = [
             'is_active' => 1,
             'OR' => [
                 ['type_menu' => null],
                 ['type_menu' => ''],
                 ['type_menu' => 0],
-                ['type_menu' => ['LIKE', '%"' . $itemtype . '"%']],
+                new \Glpi\DBAL\QueryExpression("JSON_CONTAINS(type_menu, " . $DB->quote('"' . addslashes($itemtype) . '"') . ")"),
             ],
         ];
         if ($obj->isEntityAssign()) {
@@ -665,8 +668,6 @@ SQL;
         foreach ($available_tags as $tag_data) {
             $available_tags[$tag_data['id']] = $tag_data['name'];
             $available_tags_color[$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
-            // 'selected' => in_array($tag_data['id'], $values),
-            // 'color'    => $tag_data['color'] ?: '#DDDDDD',
         }
 
         $selected_tags = [];
@@ -720,6 +721,7 @@ SQL;
             'icon'              => Computer::getIcon(),
             'items_id'          => $params['id'],
             'in_itilobject'     => $obj instanceof CommonITILObject,
+            'is_form'           => $obj instanceof \Glpi\Form\Form,
             'is_new_item'       => $obj->isNewItem(),
             'tag_search_url'    => self::getSearchURL(),
         ]);

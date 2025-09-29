@@ -29,10 +29,13 @@
 {% import 'components/form/fields_macros.html.twig' as fields %}
 
 {% if not in_itilobject %}
-    <div class="hr-text mt-2">
-        <i class="fa-2x ti ti-tag"></i>
-        <span>{{ __('Tags', 'tag') }}</span>
-    </div>
+
+    {% if not is_form %}
+        <div class="hr-text mt-2">
+            <i class="fa-2x ti ti-tag"></i>
+            <span>{{ __('Tags', 'tag') }}</span>
+        </div>
+    {% endif %}
 
     {# For non itil object (new or not) we need to adapt class and boostrap layout #}
     {% set class = is_new_item ? 'col-xxl-12' : 'col-xxl-9' %}
@@ -61,6 +64,40 @@
 
 {% set tooltip = tooltip_parts | join(' ') %}
 
+{% set tagDropdownOptions = {
+    'in_itilobject': {
+        'full_width': true,
+        'field_class': 'col-12 col-sm-12',
+        'label_class': 'col-2 col-sm-2',
+        'input_class': 'col-10 col-sm-10' ~ (can_create ? ' btn-group btn-group-sm' : ''),
+        'is_horizontal': true,
+        'align_label_right': true
+    },
+    'is_form': {
+        'full_width': true,
+        'field_class': 'col-12 col-sm-12',
+        'label_class': 'form-label',
+        'input_class': 'w-100' ~ (can_create ? ' btn-group btn-group-sm' : ''),
+        'is_horizontal': false,
+        'align_label_right': false
+    },
+    'default': {
+        'full_width': false,
+        'field_class': 'col-12 col-sm-6 mb-2',
+        'label_class': 'col-xxl-5 text-xxl-end',
+        'input_class': 'col-xxl-7' ~ (can_create ? ' btn-group btn-group-sm' : ''),
+        'is_horizontal': true,
+        'align_label_right': true
+    }
+} %}
+
+{% if in_itilobject %}
+    {% set currentOptions = tagDropdownOptions.in_itilobject %}
+{% elseif is_form is defined and is_form %}
+    {% set currentOptions = tagDropdownOptions.is_form %}
+{% else %}
+    {% set currentOptions = tagDropdownOptions.default %}
+{% endif %}
 
 {{ fields.dropdownArrayField(
     '_plugin_tag_tag_values',
@@ -74,11 +111,12 @@
         class: 'tag_select',
         disabled: readOnly,
         multiple: true,
-        full_width: in_itilobject ? true : false,
+        full_width: currentOptions.full_width,
         add_field_html : tooltip|raw,
-        field_class: in_itilobject ? 'col-12 col-sm-12' : 'col-12 col-sm-6  mb-2',
-        label_class: in_itilobject ? 'col-2 col-sm-2' : 'col-xxl-5 text-xxl-end',
-        input_class: (in_itilobject ? 'col-10 col-sm-10' : 'col-xxl-7') ~ (can_create ? ' btn-group btn-group-sm' : '')
+        field_class: currentOptions.field_class,
+        label_class: currentOptions.label_class,
+        input_class: currentOptions.input_class,
+        align_label_right: currentOptions.align_label_right
     }
 ) }}
 
@@ -170,8 +208,10 @@
             </div>
         </div>
     </div>
-    <div class="hr-text mt-2">
-        <i class="fa-2x {{ icon }}"></i>
-        <span>{{ itemtype|itemtype_name }}</span>
-    </div>
+    {% if not is_form %}
+        <div class="hr-text mt-2">
+            <i class="fa-2x {{ icon }}"></i>
+            <span>{{ itemtype|itemtype_name }}</span>
+        </div>
+    {% endif %}
 {% endif %}
