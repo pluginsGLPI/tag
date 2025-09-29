@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.12.5] - 2025-09-29
+
+### Fixed
+
+- Fix the addition of tag via rules when users in different time zones are notified during ticket creation (#273)
+
 ## [2.12.4] - 2025-08-22
 
 ### Fixed
