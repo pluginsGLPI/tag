@@ -30,12 +30,12 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_TAG_VERSION', '2.12.5');
+define('PLUGIN_TAG_VERSION', '2.13.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "10.0.11");
+define("PLUGIN_TAG_MIN_GLPI", "11.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "10.0.99");
+define("PLUGIN_TAG_MAX_GLPI", "11.0.99");
 
 /**
  * Init hooks of the plugin.
@@ -71,7 +71,7 @@ function plugin_init_tag()
                 'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain',
             ],
             __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
-            __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
+            __('Administration') => ['User', 'Group', 'Entity', 'Profile', 'Glpi\\Form\\Form'],
             __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
         ];
 
@@ -143,11 +143,11 @@ function plugin_init_tag()
         $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
         // add needed javascript & css files
-        $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/common.js';
-        $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/kanban.js';
-        $PLUGIN_HOOKS['add_css']['tag'][]        = 'css/tag.css';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/common.js';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/kanban.js';
+        $PLUGIN_HOOKS[Hooks::ADD_CSS]['tag'][]        = 'css/tag.css';
         if (Session::isMultiEntitiesMode()) {
-            $PLUGIN_HOOKS['add_javascript']['tag'][] = 'js/entity.js';
+            $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/entity.js';
         }
 
         Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
@@ -170,7 +170,7 @@ function plugin_version_tag()
         'version'        => PLUGIN_TAG_VERSION,
         'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
         'homepage'       => 'https://github.com/pluginsGLPI/tag',
-        'license'        => '<a href="' . Plugin::getWebDir('tag') . '/LICENSE" target="_blank">GPLv2+</a>',
+        'license'        => '<a href="' . plugin_tag_geturl() . '/LICENSE" target="_blank">GPLv2+</a>',
         'requirements'   => [
             'glpi' => [
                 'min' => PLUGIN_TAG_MIN_GLPI,
@@ -195,4 +195,11 @@ function idealTextColor($hexTripletColor)
             + ($components['G'] * 0.587)
             + ($components['B'] * 0.114);
     return (((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff");
+}
+
+function plugin_tag_geturl(): string
+{
+    /** @var array $CFG_GLPI */
+    global $CFG_GLPI;
+    return sprintf('%s/plugins/tag', $CFG_GLPI['url_base']);
 }

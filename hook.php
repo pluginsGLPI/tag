@@ -28,6 +28,36 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Plugin\Hooks;
+
+/**
+ * -------------------------------------------------------------------------
+ * Tag plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of Tag.
+ *
+ * Tag is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Tag is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Tag. If not, see <http://www.gnu.org/licenses/>.
+ * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2014-2023 by Teclib'.
+ * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @link      https://github.com/pluginsGLPI/tag
+ * -------------------------------------------------------------------------
+ */
+
 // Plugin hook after *Uninstall*
 function plugin_uninstall_after_tag($item)
 {
@@ -272,20 +302,27 @@ function plugin_tag_post_init()
     // hook on object changes
     if ($itemtype = PluginTagTag::getCurrentItemtype()) {
         if (PluginTagTag::canItemtype($itemtype)) {
-            $PLUGIN_HOOKS['item_add']['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['item_update']['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['pre_item_update']['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS['pre_item_purge']['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
+            $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
         }
     }
 
     // Always define hook for tickets
     // Needed for rules to function properly when a ticket is created from a mail
     // collector
-    $PLUGIN_HOOKS['item_add']['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['item_update']['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['pre_item_update']['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS['pre_item_purge']['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
+
+    // Always define hook for Form (GLPI 11 namespace class)
+    // Needed because getCurrentItemtype() doesn't handle namespaces correctly
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag']['Glpi\\Form\\Form']        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag']['Glpi\\Form\\Form']     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag']['Glpi\\Form\\Form']     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag']['Glpi\\Form\\Form']  = ['PluginTagTagItem', 'purgeItem'];
 
     $PLUGIN_HOOKS['rule_matched']['tag'] = 'plugin_tag_rule_matched';
 }
