@@ -71,7 +71,7 @@ function plugin_init_tag()
                 'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain',
             ],
             __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
-            __('Administration') => ['User', 'Group', 'Entity', 'Profile'],
+            __('Administration') => ['User', 'Group', 'Entity', 'Profile', 'Glpi\\Form\\Form'],
             __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
         ];
 

@@ -317,6 +317,13 @@ function plugin_tag_post_init()
     $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
     $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
 
+    // Always define hook for Form (GLPI 11 namespace class)
+    // Needed because getCurrentItemtype() doesn't handle namespaces correctly
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag']['Glpi\\Form\\Form']        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag']['Glpi\\Form\\Form']     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag']['Glpi\\Form\\Form']     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag']['Glpi\\Form\\Form']  = ['PluginTagTagItem', 'purgeItem'];
+
     $PLUGIN_HOOKS['rule_matched']['tag'] = 'plugin_tag_rule_matched';
 }
 
