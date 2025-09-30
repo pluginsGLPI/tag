@@ -30,7 +30,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_TAG_VERSION', '2.13.0-beta5');
+define('PLUGIN_TAG_VERSION', '2.13.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "11.0.0");
