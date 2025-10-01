@@ -487,14 +487,6 @@ SQL;
                     $value = $item->input['_plugin_tag_tag_values'];
                 }
 
-                $field_class = "form-field row col-12 col-sm-6 px-3 mt-2 mb-n2";
-                $input_class = "col-xxl-7 field-container";
-
-                if ($item instanceof CommonITILObject) {
-                    $field_class = "form-field row col-12 mb-2";
-                    $input_class = "col-xxl-8 field-container";
-                }
-
                 self::showTagDropdown([
                     'itemtype' => $itemtype,
                     'id'       => $item->getId(),
@@ -706,6 +698,8 @@ SQL;
             $extra_class = "mb-3";
         }
 
+        $tag_location = Config::getConfigurationValues('plugin:Tag')['tags_location'] ?? 0;
+
         TemplateRenderer::getInstance()->display('@tag/tag_dropdown.html.twig', [
             'extra_class'       => $extra_class ?? '',
             'selected_tags'     => $selected_tags,
@@ -724,6 +718,7 @@ SQL;
             'is_form'           => $obj instanceof \Glpi\Form\Form,
             'is_new_item'       => $obj->isNewItem(),
             'tag_search_url'    => self::getSearchURL(),
+            'tag_location'      => $tag_location,
         ]);
     }
 
