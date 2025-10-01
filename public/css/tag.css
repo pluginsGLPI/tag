@@ -29,16 +29,12 @@
 .select2-container .select2-selection.select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
    margin-top: 7px !important;
    margin-right: 3px! important;
-   margin-bottom: 0px !important;
-   margin-left: 0px !important;
    padding-bottom: 1px !important;
 }
 
 .select2-container .select2-selection.select2-selection--multiple .select2-selection__rendered .select2-selection__choice .select2-selection__choice__remove {
    margin-left: 3px !important;
-   margin-top: 0px !important;
    margin-right: 3px !important;
-   margin-bottom: 0px !important;
 }
 
 
