@@ -1,11 +1,14 @@
 version: 2
 updates:
+  # ---------------------------------
+  # --- Usage sur la branche MAIN ---
+  # ---------------------------------
   # Ensure GitHub Actions are used in their latest version
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
-    target-branch: [“main”, “10.0/bugfixes”]
+    target-branch: "main"
 
   # Strategy for composer dependencies
   - package-ecosystem: "composer"
@@ -19,7 +22,7 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: "development"
-    target-branch: [“main”, “10.0/bugfixes”]
+    target-branch: "main"
 
   # Strategy for npm dependencies
   - package-ecosystem: "npm"
@@ -33,4 +36,36 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: "development"
-    target-branch: [“main”, “10.0/bugfixes”]
+    target-branch: "main"
+
+  # ------------------------------------------
+  # --- Usage sur la branche 10.0/bugfixes ---
+  # ------------------------------------------
+  # Ensure GitHub Actions are used in their latest version
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    target-branch: "10.0/bugfixes"
+
+  # Strategy for composer dependencies
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    allow:
+      - dependency-type: "direct"
+    open-pull-requests-limit: 100
+    versioning-strategy: "increase"
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+    target-branch: "10.0/bugfixes"
+
+  # Strategy for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    allow:
+      - dependency-type: "development"
