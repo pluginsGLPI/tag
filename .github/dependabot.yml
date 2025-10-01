@@ -5,6 +5,7 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    target-branch: [“main”, “10.0/bugfixes”]
 
   # Strategy for composer dependencies
   - package-ecosystem: "composer"
@@ -18,6 +19,7 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: "development"
+    target-branch: [“main”, “10.0/bugfixes”]
 
   # Strategy for npm dependencies
   - package-ecosystem: "npm"
@@ -31,3 +33,4 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: "development"
+    target-branch: [“main”, “10.0/bugfixes”]
