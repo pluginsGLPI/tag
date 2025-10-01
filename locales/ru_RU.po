@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-14 00:54+0000\n"
+"POT-Creation-Date: 2025-10-01 00:51+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: hamkms, 2025\n"
 "Language-Team: Russian (Russia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ru_RU/)\n"
@@ -21,25 +21,9 @@ msgstr ""
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: hook.php:199 hook.php:320
-msgid "Add tags"
-msgstr "Добавить тег"
-
-#: hook.php:201
-msgid "Remove tags"
-msgstr "Удалить теги"
-
-#: ajax/tag.php:49
-msgid "Tags have been updated"
-msgstr "Теги были обновлены"
-
-#: ajax/tag.php:57
-msgid "Tags have not been updated"
-msgstr "Теги не были обновлены"
-
-#: ajax/tag.php:66
-msgid "Missing parameters"
-msgstr "Отсутствующие параметры"
+#: templates/tag_dropdown.html.twig
+msgid "Tags"
+msgstr ""
 
 #: setup.php:126
 msgctxt "filters"
@@ -55,11 +39,15 @@ msgstr "Если для сущности задан тег"
 msgid "Tag Management"
 msgstr "Управление тегами"
 
+#: inc/profile.class.php:35 inc/profile.class.php:67
+msgid "Tag management"
+msgstr "Управление тегами"
+
 #: inc/config.class.php:57
 msgid "Tags location"
 msgstr "Расположение тегов"
 
-#: inc/tag.class.php:43 inc/tag.class.php:489
+#: inc/tag.class.php:44
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "тег"
@@ -67,14 +55,26 @@ msgstr[1] "тегов"
 msgstr[2] "тегов"
 msgstr[3] "Теги"
 
-#: inc/tag.class.php:368
+#: inc/tag.class.php:379
 msgid "HTML color"
 msgstr "Цвет HTML"
 
-#: inc/tag.class.php:753
-msgid "View all tags"
-msgstr "Просмотреть все теги"
+#: hook.php:229 hook.php:357
+msgid "Add tags"
+msgstr "Добавить тег"
 
-#: inc/profile.class.php:35 inc/profile.class.php:67
-msgid "Tag management"
-msgstr "Управление тегами"
+#: hook.php:231
+msgid "Remove tags"
+msgstr "Удалить теги"
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr "Теги были обновлены"
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr "Теги не были обновлены"
+
+#: ajax/tag.php:66
+msgid "Missing parameters"
+msgstr "Отсутствующие параметры"

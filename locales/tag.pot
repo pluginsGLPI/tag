@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-25 00:51+0000\n"
+"POT-Creation-Date: 2025-10-01 00:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,24 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:199 hook.php:320
-msgid "Add tags"
-msgstr ""
-
-#: hook.php:201
-msgid "Remove tags"
-msgstr ""
-
-#: ajax/tag.php:49
-msgid "Tags have been updated"
-msgstr ""
-
-#: ajax/tag.php:57
-msgid "Tags have not been updated"
-msgstr ""
-
-#: ajax/tag.php:66
-msgid "Missing parameters"
+#: templates/tag_dropdown.html.twig
+msgid "Tags"
 msgstr ""
 
 #: setup.php:126
@@ -52,24 +36,40 @@ msgstr ""
 msgid "Tag Management"
 msgstr ""
 
+#: inc/profile.class.php:35 inc/profile.class.php:67
+msgid "Tag management"
+msgstr ""
+
 #: inc/config.class.php:57
 msgid "Tags location"
 msgstr ""
 
-#: inc/tag.class.php:43 inc/tag.class.php:489
+#: inc/tag.class.php:44
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tag.class.php:368
+#: inc/tag.class.php:379
 msgid "HTML color"
 msgstr ""
 
-#: inc/tag.class.php:753
-msgid "View all tags"
+#: hook.php:229 hook.php:357
+msgid "Add tags"
 msgstr ""
 
-#: inc/profile.class.php:35 inc/profile.class.php:67
-msgid "Tag management"
+#: hook.php:231
+msgid "Remove tags"
+msgstr ""
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr ""
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr ""
+
+#: ajax/tag.php:66
+msgid "Missing parameters"
 msgstr ""

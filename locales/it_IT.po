@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-14 00:54+0000\n"
+"POT-Creation-Date: 2025-10-01 00:51+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Davide <spam@habilitas.it>, 2024\n"
 "Language-Team: Italian (Italy) (http://app.transifex.com/teclib/glpi-plugin-tag/language/it_IT/)\n"
@@ -20,25 +20,9 @@ msgstr ""
 "Language: it_IT\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: hook.php:199 hook.php:320
-msgid "Add tags"
-msgstr "Aggiungi Etichetta"
-
-#: hook.php:201
-msgid "Remove tags"
-msgstr "Rimuovi etichetta"
-
-#: ajax/tag.php:49
-msgid "Tags have been updated"
-msgstr "Le etichette sono state aggiornate"
-
-#: ajax/tag.php:57
-msgid "Tags have not been updated"
-msgstr "Le etichete non sono state aggiornate"
-
-#: ajax/tag.php:66
-msgid "Missing parameters"
-msgstr "Parametri mancanti"
+#: templates/tag_dropdown.html.twig
+msgid "Tags"
+msgstr ""
 
 #: setup.php:126
 msgctxt "filters"
@@ -54,25 +38,41 @@ msgstr "Se l'oggetto ha un'etichetta"
 msgid "Tag Management"
 msgstr "Gestione Tag"
 
+#: inc/profile.class.php:35 inc/profile.class.php:67
+msgid "Tag management"
+msgstr "Gestione etichette"
+
 #: inc/config.class.php:57
 msgid "Tags location"
 msgstr "Posizione delle etichette"
 
-#: inc/tag.class.php:43 inc/tag.class.php:489
+#: inc/tag.class.php:44
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etichetta"
 msgstr[1] "Etichette"
 msgstr[2] "Etichette"
 
-#: inc/tag.class.php:368
+#: inc/tag.class.php:379
 msgid "HTML color"
 msgstr "Colore HTML"
 
-#: inc/tag.class.php:753
-msgid "View all tags"
-msgstr "Visualizza tutte le etichette"
+#: hook.php:229 hook.php:357
+msgid "Add tags"
+msgstr "Aggiungi Etichetta"
 
-#: inc/profile.class.php:35 inc/profile.class.php:67
-msgid "Tag management"
-msgstr "Gestione etichette"
+#: hook.php:231
+msgid "Remove tags"
+msgstr "Rimuovi etichetta"
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr "Le etichette sono state aggiornate"
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr "Le etichete non sono state aggiornate"
+
+#: ajax/tag.php:66
+msgid "Missing parameters"
+msgstr "Parametri mancanti"

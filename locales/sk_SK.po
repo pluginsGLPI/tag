@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-14 00:54+0000\n"
+"POT-Creation-Date: 2025-10-01 00:51+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: feonsu <feonsu@gmail.com>, 2023-2024\n"
 "Language-Team: Slovak (Slovakia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/sk_SK/)\n"
@@ -19,25 +19,9 @@ msgstr ""
 "Language: sk_SK\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: hook.php:199 hook.php:320
-msgid "Add tags"
-msgstr "Pridať značky"
-
-#: hook.php:201
-msgid "Remove tags"
-msgstr "Odstrániť značky"
-
-#: ajax/tag.php:49
-msgid "Tags have been updated"
-msgstr "Značky boli aktualizované"
-
-#: ajax/tag.php:57
-msgid "Tags have not been updated"
-msgstr "Značky neboli aktualizované"
-
-#: ajax/tag.php:66
-msgid "Missing parameters"
-msgstr "Chýbajúce parametre"
+#: templates/tag_dropdown.html.twig
+msgid "Tags"
+msgstr ""
 
 #: setup.php:126
 msgctxt "filters"
@@ -53,11 +37,15 @@ msgstr "Ak je položka označená"
 msgid "Tag Management"
 msgstr "Správa značiek"
 
+#: inc/profile.class.php:35 inc/profile.class.php:67
+msgid "Tag management"
+msgstr "Správa značiek"
+
 #: inc/config.class.php:57
 msgid "Tags location"
 msgstr "Umiestnenie značiek"
 
-#: inc/tag.class.php:43 inc/tag.class.php:489
+#: inc/tag.class.php:44
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Značka"
@@ -65,14 +53,26 @@ msgstr[1] "Značky"
 msgstr[2] "Značky"
 msgstr[3] "Značky"
 
-#: inc/tag.class.php:368
+#: inc/tag.class.php:379
 msgid "HTML color"
 msgstr "Farba HTML"
 
-#: inc/tag.class.php:753
-msgid "View all tags"
-msgstr "Zobraziť všetky značky"
+#: hook.php:229 hook.php:357
+msgid "Add tags"
+msgstr "Pridať značky"
 
-#: inc/profile.class.php:35 inc/profile.class.php:67
-msgid "Tag management"
-msgstr "Správa značiek"
+#: hook.php:231
+msgid "Remove tags"
+msgstr "Odstrániť značky"
+
+#: ajax/tag.php:49
+msgid "Tags have been updated"
+msgstr "Značky boli aktualizované"
+
+#: ajax/tag.php:57
+msgid "Tags have not been updated"
+msgstr "Značky neboli aktualizované"
+
+#: ajax/tag.php:66
+msgid "Missing parameters"
+msgstr "Chýbajúce parametre"
