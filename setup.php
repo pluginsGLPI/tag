@@ -64,7 +64,7 @@ function plugin_init_tag()
             ],
             __('Assistance')     => [
                 'Ticket', 'Problem', 'Change', 'TicketRecurrent',
-                'TicketTemplate',
+                'TicketTemplate', 'PlanningExternalEvent',
             ],
             __('Management')     => [
                 'Budget', 'Supplier', 'Contact', 'Contract', 'Document',
