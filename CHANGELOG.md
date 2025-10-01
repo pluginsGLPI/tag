@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix menu icon
 
+### Added
+
+- Add `External Event` for associated item types
+
+
 ## [2.13.0] - 2025-09-30
 
 ### Added
