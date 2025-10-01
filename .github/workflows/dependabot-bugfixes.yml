@@ -1,0 +1,34 @@
+name: Dependabot for bugfix branches
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * 1"
+
+jobs:
+  update-bugfix-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Dependabot Script
+        uses: dependabot/dependabot-script@v0.7.0
+        with:
+          directory: /
+          package-ecosystem: "composer"
+          target-branch: ${{ github.ref_name }}
+          commit-message: "deps: bump dependencies"
+
+      - name: List bugfix branches
+        id: branches
+        run: |
+          echo "branches=$(git branch -r | grep 'origin/.*/bugfixes$' | sed 's|origin/||' | tr '\n' ' ')" >> $GITHUB_ENV
+
+      - name: Run Dependabot on each bugfix branch
+        run: |
+          for branch in $branches; do
+            echo "Processing branch $branch"
+            gh workflow run dependabot-script.yml --ref $branch
+          done
