@@ -1,5 +1,5 @@
-const glpiStylelintConfig = require('../../.stylelintrc.js');
-
-module.exports = [
-  ...glpiStylelintConfig
-];
+module.exports = {
+  extends: [
+    '../../.stylelintrc.js'
+  ],
+};
