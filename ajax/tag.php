@@ -28,8 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-include("../../../inc/includes.php");
-
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 Session::checkLoginUser();
@@ -46,7 +44,7 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
 
     if ($success) {
         Session::addMessageAfterRedirect(
-            __('Tags have been updated', 'tag'),
+            __s('Tags have been updated', 'tag'),
             false,
             INFO,
         );
@@ -54,7 +52,7 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
     } else {
         http_response_code(400);
         Session::addMessageAfterRedirect(
-            __('Tags have not been updated', 'tag'),
+            __s('Tags have not been updated', 'tag'),
             false,
             ERROR,
         );
@@ -63,7 +61,7 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
 } else {
     http_response_code(400);
     Session::addMessageAfterRedirect(
-        __('Missing parameters', 'tag'),
+        __s('Missing parameters', 'tag'),
         false,
         ERROR,
     );

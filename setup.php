@@ -27,7 +27,7 @@
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
-
+use Glpi\Form\Form;
 use Glpi\Plugin\Hooks;
 
 define('PLUGIN_TAG_VERSION', '2.13.0');
@@ -57,40 +57,40 @@ function plugin_init_tag()
     if (Plugin::isPluginActive("tag")) {
         // define list of itemtype which can be associated with tags
         $CFG_GLPI['plugin_tag_itemtypes'] = [
-            __('Assets')         => [
+            __s('Assets')         => [
                 'Computer', 'Monitor', 'Software', 'NetworkEquipment',
                 'Peripheral', 'Printer', 'CartridgeItem', 'ConsumableItem',
                 'Phone', 'Enclosure', 'PDU', 'PassiveDCEquipment',
             ],
-            __('Assistance')     => [
+            __s('Assistance')     => [
                 'Ticket', 'Problem', 'Change', 'TicketRecurrent',
                 'TicketTemplate', 'PlanningExternalEvent',
             ],
-            __('Management')     => [
+            __s('Management')     => [
                 'Budget', 'Supplier', 'Contact', 'Contract', 'Document',
                 'Line', 'Certificate', 'Appliance', 'Cluster', 'Domain',
             ],
-            __('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
-            __('Administration') => ['User', 'Group', 'Entity', 'Profile', 'Glpi\\Form\\Form'],
-            __('Setup')          => ['SLA', 'SlaLevel', 'Link'],
+            __s('Tools')          => ['Project', 'Reminder', 'RSSFeed', 'KnowbaseItem', 'ProjectTask'],
+            __s('Administration') => ['User', 'Group', 'Entity', 'Profile', Form::class],
+            __s('Setup')          => ['SLA', 'SlaLevel', 'Link'],
         ];
 
         if (class_exists('Webhook')) {
-            $CFG_GLPI['plugin_tag_itemtypes'][__('Setup')][] = 'Webhook';
+            $CFG_GLPI['plugin_tag_itemtypes'][__s('Setup')][] = 'Webhook';
         }
 
         if (Plugin::isPluginActive('appliances')) {
-            $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginAppliancesAppliance';
+            $CFG_GLPI['plugin_tag_itemtypes'][__s('Assets')][] = 'PluginAppliancesAppliance';
         }
 
         // Plugin Webapplication
         if (Plugin::isPluginActive('webapplications')) {
-            $CFG_GLPI['plugin_tag_itemtypes'][__('Assets')][] = 'PluginWebapplicationsWebapplication';
+            $CFG_GLPI['plugin_tag_itemtypes'][__s('Assets')][] = 'PluginWebapplicationsWebapplication';
         }
 
         // Plugin fusioninventory
         if (Plugin::isPluginActive('fusioninventory')) {
-            $CFG_GLPI['plugin_tag_itemtypes'][__('FusionInventory')][] = 'PluginFusioninventoryTask';
+            $CFG_GLPI['plugin_tag_itemtypes'][__s('FusionInventory')][] = 'PluginFusioninventoryTask';
         }
 
         // add link on plugin name in Configuration > Plugin
@@ -166,7 +166,7 @@ function plugin_init_tag()
 function plugin_version_tag()
 {
     return [
-        'name'       => __('Tag Management', 'tag'),
+        'name'       => __s('Tag Management', 'tag'),
         'version'        => PLUGIN_TAG_VERSION,
         'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
         'homepage'       => 'https://github.com/pluginsGLPI/tag',

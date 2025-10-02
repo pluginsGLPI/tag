@@ -31,8 +31,12 @@
 namespace GlpiPlugin\Tag\Tests\Units;
 
 use GlpiPlugin\Tag\Tests\TagTestCase;
-use PluginTagTag;
-use PluginTagTagItem;
+use Group;
+use Group_User;
+use Rule;
+use RuleAction;
+use RuleCriteria;
+use RuleTicket;
 use Ticket;
 
 final class TagRuleTest extends TagTestCase
@@ -118,7 +122,7 @@ final class TagRuleTest extends TagTestCase
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
-        $this->createRule($tagID1, 'name', 'Add Tag', 'assign', \RuleTicket::ONADD);
+        $this->createRule($tagID1, 'name', 'Add Tag', 'assign', RuleTicket::ONADD);
 
         $ticket = $this->createTicket([
             'name' => 'Ticket add Tag',
@@ -139,7 +143,7 @@ final class TagRuleTest extends TagTestCase
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
-        $this->createRule($tagID1, 'name', 'Add Tag', 'append', \RuleTicket::ONADD);
+        $this->createRule($tagID1, 'name', 'Add Tag', 'append', RuleTicket::ONADD);
 
         $ticket = $this->createTicket([
             'name' => 'Ticket add Tag',
@@ -169,7 +173,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->isItemTagged($ticket, $tagID2);
 
-        $this->createRule($tagID1, 'content', 'Updated content', 'assign', \RuleTicket::ONUPDATE);
+        $this->createRule($tagID1, 'content', 'Updated content', 'assign', RuleTicket::ONUPDATE);
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated content',
@@ -198,7 +202,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->isItemTagged($ticket, $tagID2);
 
-        $this->createRule($tagID1, 'content', 'Updated content', 'append', \RuleTicket::ONUPDATE);
+        $this->createRule($tagID1, 'content', 'Updated content', 'append', RuleTicket::ONUPDATE);
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated content',
@@ -218,9 +222,9 @@ final class TagRuleTest extends TagTestCase
         $tagID2 = $this->createTag('RuleTag2');
         $tagID3 = $this->createTag('ManualTag');
 
-        $this->createRule($tagID1, 'name', 'Multiple Rules', 'assign', \RuleTicket::ONADD);
+        $this->createRule($tagID1, 'name', 'Multiple Rules', 'assign', RuleTicket::ONADD);
 
-        $this->createRule($tagID2, 'content', 'Updated for multiple rules', 'append', \RuleTicket::ONUPDATE);
+        $this->createRule($tagID2, 'content', 'Updated for multiple rules', 'append', RuleTicket::ONUPDATE);
 
         $ticket = $this->createTicket([
             'name' => 'Multiple Rules Test',
@@ -250,12 +254,12 @@ final class TagRuleTest extends TagTestCase
 
         $user_id_2 = getItemByTypeName('User', 'post-only', true);
 
-        $group = new \Group();
+        $group = new Group();
         $group->add([
             'name' => 'Group for post-only',
         ]);
 
-        $group_user = new \Group_User();
+        $group_user = new Group_User();
         $group_user->add([
             'groups_id' => $group->getID(),
             'users_id' => $user_id_2,
@@ -266,8 +270,8 @@ final class TagRuleTest extends TagTestCase
             '_groups_id_of_requester',
             $group->getID(),
             'assign',
-            \RuleTicket::ONUPDATE,
-            \Rule::PATTERN_IS,
+            RuleTicket::ONUPDATE,
+            Rule::PATTERN_IS,
         );
 
         $ticket = $this->createTicket([
@@ -290,19 +294,19 @@ final class TagRuleTest extends TagTestCase
         string $criteria_field = 'name',
         $criteria_pattern = 'Add Tag',
         string $action_type = 'assign',
-        int $condition = \RuleTicket::ONADD,
-        int $criteria_condition = \Rule::PATTERN_CONTAIN
+        int $condition = RuleTicket::ONADD,
+        int $criteria_condition = Rule::PATTERN_CONTAIN
     ): void {
-        $rule       = new \Rule();
-        $criteria   = new \RuleCriteria();
-        $action     = new \RuleAction();
+        $rule       = new Rule();
+        $criteria   = new RuleCriteria();
+        $action     = new RuleAction();
 
         $rules_id = $rule->add([
             'name'        => "Rule for tag $tagID",
             'is_active'   => 1,
             'entities_id' => 0,
             'sub_type'    => 'RuleTicket',
-            'match'       => \Rule::AND_MATCHING,
+            'match'       => Rule::AND_MATCHING,
             'condition'   => $condition,
             'description' => '',
         ]);
