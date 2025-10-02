@@ -28,12 +28,12 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
+use Glpi\Exception\Http\AccessDeniedHttpException;
 
 Session::checkRight(PluginTagTag::$rightname, UPDATE);
 
 if (!Plugin::isPluginActive("tag")) {
-    throw new \Glpi\Exception\Http\AccessDeniedHttpException();
+    throw new AccessDeniedHttpException();
 }
 
 if (isset($_POST['add'])) {

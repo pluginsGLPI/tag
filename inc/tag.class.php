@@ -27,8 +27,9 @@
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
-
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\DBAL\QueryExpression;
+use Glpi\Form\Form;
 use Glpi\Message\MessageType;
 
 class PluginTagTag extends CommonDropdown
@@ -41,7 +42,7 @@ class PluginTagTag extends CommonDropdown
 
     public static function getTypeName($nb = 1)
     {
-        return _n('Tag', 'Tags', $nb, 'tag');
+        return _sn('Tag', 'Tags', $nb, 'tag');
     }
 
     /**
@@ -137,7 +138,7 @@ class PluginTagTag extends CommonDropdown
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
 
         if (!$DB->tableExists($table)) {
             $query = <<<SQL
@@ -212,25 +213,25 @@ SQL;
 
         $DB->delete('glpi_logs', [
             'OR' => [
-                'itemtype_link' => __CLASS__,
-                'itemtype'      => __CLASS__,
+                'itemtype_link' => self::class,
+                'itemtype'      => self::class,
             ],
         ]);
         $DB->delete('glpi_savedsearches', [
-            'itemtype'      => __CLASS__,
+            'itemtype'      => self::class,
         ]);
         $DB->delete('glpi_savedsearches_users', [
-            'itemtype'      => __CLASS__,
+            'itemtype'      => self::class,
         ]);
         $DB->delete('glpi_displaypreferences', [
             'OR' => [
-                'itemtype'      => __CLASS__,
+                'itemtype'      => self::class,
                 'num'           => self::S_OPTION,
             ],
         ]);
 
         $migration = new Migration(PLUGIN_TAG_VERSION);
-        $migration->dropTable(getTableForItemType(__CLASS__));
+        $migration->dropTable(getTableForItemType(self::class));
 
         return true;
     }
@@ -240,15 +241,13 @@ SQL;
         $tab    = [];
 
         $nb = 0;
-        if (is_a($item, CommonDBTM::class, true)) {
-            if ($_SESSION['glpishow_count_on_tabs']) {
-                $nb = countElementsInTable(PluginTagTagItem::getTable(), [
-                    'plugin_tag_tags_id' => $item->getID(),
-                ]);
-            }
+        if (is_a($item, CommonDBTM::class, true) && $_SESSION['glpishow_count_on_tabs']) {
+            $nb = countElementsInTable(PluginTagTagItem::getTable(), [
+                'plugin_tag_tags_id' => $item->getID(),
+            ]);
         }
 
-        $tab[2] = self::createTabEntry(_n('Associated item', 'Associated items', 2), $nb, $item::getType(), 'ti ti-list');
+        $tab[2] = self::createTabEntry(_sn('Associated item', 'Associated items', 2), $nb, $item::getType(), 'ti ti-list');
         return $tab;
     }
 
@@ -269,7 +268,7 @@ SQL;
     {
         $ong = [];
         $this->addDefaultFormTab($ong);
-        $this->addStandardTab(__CLASS__, $ong, $options);
+        $this->addStandardTab(self::class, $ong, $options);
         $this->addStandardTab('PluginTagTagItem', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
         return $ong;
@@ -303,10 +302,7 @@ SQL;
     {
         $tagitems = new PluginTagTagItem();
         $data = $tagitems->find(['plugin_tag_tags_id' => $this->getID()]);
-        if (count($data) == 0) {
-            return false;
-        }
-        return true;
+        return count($data) != 0;
     }
 
     public function rawSearchOptions()
@@ -316,14 +312,14 @@ SQL;
 
         $tab[] = [
             'id'            => 'common',
-            'name'          => __('Characteristics'),
+            'name'          => __s('Characteristics'),
         ];
 
         $tab[] = [
             'id'            => 1,
             'table'         => $this->getTable(),
             'field'         => 'name',
-            'name'          => __('Name'),
+            'name'          => __s('Name'),
             'datatype'      => 'itemlink',
             'massiveaction' => true,
         ];
@@ -332,7 +328,7 @@ SQL;
             'id'            => 2,
             'table'         => $this->getTable(),
             'field'         => 'comment',
-            'name'          => __('Description'),
+            'name'          => __s('Description'),
             'datatype'      => 'string',
             'massiveaction' => true,
         ];
@@ -341,7 +337,7 @@ SQL;
             'id'            => 3,
             'table'         => $this->getTable(),
             'field'         => 'id',
-            'name'          => __('ID'),
+            'name'          => __s('ID'),
             'datatype'      => 'number',
             'massiveaction' => false,
         ];
@@ -351,7 +347,7 @@ SQL;
             'table'         => 'glpi_entities',
             'field'         => 'completename',
             'linkfield'     => 'entities_id',
-            'name'          => __('Entity'),
+            'name'          => __s('Entity'),
             'datatype'      => 'dropdown',
         ];
 
@@ -359,7 +355,7 @@ SQL;
             'id'            => 5,
             'table'         => $this->getTable(),
             'field'         => 'is_recursive',
-            'name'          => __('Child entities'),
+            'name'          => __s('Child entities'),
             'datatype'      => 'bool',
         ];
 
@@ -367,7 +363,7 @@ SQL;
             'id'            => 6,
             'table'         => $this->getTable(),
             'field'         => 'type_menu',
-            'name'          => _n('Associated item type', 'Associated item types', 2),
+            'name'          => _sn('Associated item type', 'Associated item types', 2),
             'searchtype'    => ['equals', 'notequals'],
             'datatype'      => 'specific',
         ];
@@ -376,7 +372,7 @@ SQL;
             'id'            => 7,
             'table'         => $this->getTable(),
             'field'         => 'color',
-            'name'          => __('HTML color', 'tag'),
+            'name'          => __s('HTML color', 'tag'),
             'searchtype'    => 'contains',
             'datatype'      => 'specific',
         ];
@@ -385,7 +381,7 @@ SQL;
             'id'            => 8,
             'table'         => $this->getTable(),
             'field'         => 'is_active',
-            'name'          => __('Active'),
+            'name'          => __s('Active'),
             'datatype'      => 'bool',
         ];
 
@@ -584,7 +580,7 @@ SQL;
                 ],
             ]);
 
-            $params['metadata']['tags'] = $params['metadata']['tags'] ?? [];
+            $params['metadata']['tags'] ??= [];
             foreach ($iterator as $data) {
                 $params['metadata']['tags'][] = $data['name'];
             }
@@ -649,7 +645,7 @@ SQL;
                 ['type_menu' => null],
                 ['type_menu' => ''],
                 ['type_menu' => 0],
-                new \Glpi\DBAL\QueryExpression("JSON_CONTAINS(type_menu, " . $DB->quote('"' . addslashes($itemtype) . '"') . ")"),
+                new QueryExpression("JSON_CONTAINS(type_menu, " . $DB->quote('"' . addslashes($itemtype) . '"') . ")"),
             ],
         ];
         if ($obj->isEntityAssign()) {
@@ -715,7 +711,7 @@ SQL;
             'icon'              => Computer::getIcon(),
             'items_id'          => $params['id'],
             'in_itilobject'     => $obj instanceof CommonITILObject,
-            'is_form'           => $obj instanceof \Glpi\Form\Form,
+            'is_form'           => $obj instanceof Form,
             'is_new_item'       => $obj->isNewItem(),
             'tag_search_url'    => self::getSearchURL(),
             'tag_location'      => $tag_location,
@@ -724,7 +720,7 @@ SQL;
 
     public static function getTagForEntityName($completename = "")
     {
-        $plus_rootentity = sprintf(__('%1$s + %2$s'), '', __('Child entities'));
+        $plus_rootentity = sprintf(__s('%1$s + %2$s'), '', __s('Child entities'));
         $completename    = trim(str_replace($plus_rootentity, '', $completename));
         $entities_id     = Entity::getEntityIDByCompletename($completename);
 
@@ -794,19 +790,17 @@ SQL;
     {
         $msg              = [];
         $checkKo          = false;
-        $mandatory_fields = ['name' => __('Name')];
+        $mandatory_fields = ['name' => __s('Name')];
 
         foreach ($input as $key => $value) {
-            if (isset($mandatory_fields[$key])) {
-                if (empty($value)) {
-                    $msg[]   = $mandatory_fields[$key];
-                    $checkKo = true;
-                }
+            if (isset($mandatory_fields[$key]) && empty($value)) {
+                $msg[]   = $mandatory_fields[$key];
+                $checkKo = true;
             }
         }
 
         if ($checkKo) {
-            Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
+            Session::addMessageAfterRedirect(sprintf(__s("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
             return false;
         }
         return true;

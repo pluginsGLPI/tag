@@ -32,7 +32,7 @@ class PluginTagProfile extends Profile
 {
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        return self::createTabEntry(__('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
+        return self::createTabEntry(__s('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
     }
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
@@ -64,7 +64,7 @@ class PluginTagProfile extends Profile
                 'field'     => 'plugin_tag_tag',
             ],
         ];
-        $matrix_options['title'] = __('Tag management', 'tag');
+        $matrix_options['title'] = __s('Tag management', 'tag');
         $profile->displayRightsChoiceMatrix($rights, $matrix_options);
 
         if ($canedit) {

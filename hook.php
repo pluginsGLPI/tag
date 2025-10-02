@@ -27,7 +27,7 @@
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
-
+use Glpi\Form\Form;
 use Glpi\Plugin\Hooks;
 
 /**
@@ -118,7 +118,7 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                 'id'            => (PluginTagTag::S_OPTION + 1),
                 'table'         => PluginTagTag::getTable(),
                 'field'         => 'name',
-                'name'          => PluginTagTag::getTypeName(2) . " - " . __("Entity"),
+                'name'          => PluginTagTag::getTypeName(2) . " - " . __s("Entity"),
                 'datatype'      => 'string',
                 'searchtype'    => 'contains',
                 'massiveaction' => false,
@@ -226,9 +226,9 @@ function plugin_tag_MassiveActions($itemtype = '')
     if (PluginTagTag::canItemtype($itemtype) && is_a($itemtype, CommonDBTM::class, true) && $itemtype::canUpdate()) {
         return [
             'PluginTagTagItem' . MassiveAction::CLASS_ACTION_SEPARATOR . 'addTag'
-               => __("Add tags", 'tag'),
+               => __s("Add tags", 'tag'),
             'PluginTagTagItem' . MassiveAction::CLASS_ACTION_SEPARATOR . 'removeTag'
-               => __("Remove tags", 'tag'),
+               => __s("Remove tags", 'tag'),
         ];
     }
 
@@ -246,7 +246,7 @@ function plugin_tag_install()
     $migration = new Migration($version['version']);
 
     // Parse inc directory
-    foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
+    foreach (glob(__DIR__ . '/inc/*') as $filepath) {
         // Load *.class.php files and get the class name
         if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
             $classname = 'PluginTag' . ucfirst($matches[1]);
@@ -274,7 +274,7 @@ function plugin_tag_install()
 function plugin_tag_uninstall()
 {
     // Parse inc directory
-    foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
+    foreach (glob(__DIR__ . '/inc/*') as $filepath) {
         // Load *.class.php files and get the class name
         if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
             $classname = 'PluginTag' . ucfirst($matches[1]);
@@ -300,13 +300,11 @@ function plugin_tag_post_init()
     global $PLUGIN_HOOKS;
 
     // hook on object changes
-    if ($itemtype = PluginTagTag::getCurrentItemtype()) {
-        if (PluginTagTag::canItemtype($itemtype)) {
-            $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
-            $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
-        }
+    if (($itemtype = PluginTagTag::getCurrentItemtype()) && PluginTagTag::canItemtype($itemtype)) {
+        $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][$itemtype]        = ['PluginTagTagItem', 'updateItem'];
+        $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
+        $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][$itemtype]     = ['PluginTagTagItem', 'updateItem'];
+        $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][$itemtype]  = ['PluginTagTagItem', 'purgeItem'];
     }
 
     // Always define hook for tickets
@@ -319,10 +317,10 @@ function plugin_tag_post_init()
 
     // Always define hook for Form (GLPI 11 namespace class)
     // Needed because getCurrentItemtype() doesn't handle namespaces correctly
-    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag']['Glpi\\Form\\Form']        = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag']['Glpi\\Form\\Form']     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag']['Glpi\\Form\\Form']     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag']['Glpi\\Form\\Form']  = ['PluginTagTagItem', 'purgeItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][Form::class]        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][Form::class]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][Form::class]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][Form::class]  = ['PluginTagTagItem', 'purgeItem'];
 
     $PLUGIN_HOOKS['rule_matched']['tag'] = 'plugin_tag_rule_matched';
 }
@@ -331,7 +329,7 @@ function plugin_tag_rule_matched($params = [])
 {
     // Ensure tags are added when only actors are updated, as actor updates are processed in post_add
     if (
-        $params['sub_type'] == \RuleTicket::class
+        $params['sub_type'] == RuleTicket::class
         && !empty($params['output'])
         && isset($params['output']['id'])
         && (
@@ -354,7 +352,7 @@ function plugin_tag_getRuleActions($params = [])
     switch ($params['rule_itemtype']) {
         case "RuleTicket":
             $actions['_plugin_tag_tag_from_rules'] = [
-                'name'  => __("Add tags", 'tag'),
+                'name'  => __s("Add tags", 'tag'),
                 'type'  => 'dropdown',
                 'table' => PluginTagTag::getTable(),
                 'force_actions' => ['assign', 'append'],

@@ -84,7 +84,7 @@ class PluginTagTagItem extends CommonDBRelation
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
 
         if (!$DB->tableExists($table)) {
             $query = <<<SQL
@@ -138,7 +138,7 @@ SQL;
     public static function uninstall()
     {
         $migration = new Migration(PLUGIN_TAG_VERSION);
-        $migration->dropTable(getTableForItemType(__CLASS__));
+        $migration->dropTable(getTableForItemType(self::class));
     }
 
     /**
@@ -161,7 +161,7 @@ SQL;
         }
 
         $canedit = $tag->can($instID, UPDATE);
-        $table  = getTableForItemType(__CLASS__);
+        $table  = getTableForItemType(self::class);
 
         $it = $DB->request([
             'SELECT' => ['itemtype'],
@@ -193,7 +193,7 @@ SQL;
                action='" . Toolbox::getItemTypeFormURL('PluginTagTag') . "'>";
 
             echo "<table class='tab_cadre_fixe'>";
-            echo "<tr class='tab_bg_2'><th colspan='2'>" . __('Add an item') . "</th></tr>";
+            echo "<tr class='tab_bg_2'><th colspan='2'>" . __s('Add an item') . "</th></tr>";
 
             if (!empty($tag->fields['type_menu'])) {
                 $itemtypes_to_show = json_decode($tag->fields['type_menu']);
@@ -201,7 +201,7 @@ SQL;
                 $itemtypes_to_show = [];
                 foreach ($CFG_GLPI['plugin_tag_itemtypes'] as $menu_entry) {
                     foreach ($menu_entry as $default_itemtype) {
-                        array_push($itemtypes_to_show, $default_itemtype);
+                        $itemtypes_to_show[] = $default_itemtype;
                     }
                 }
             }
@@ -225,7 +225,7 @@ SQL;
 
         echo "<div class='spaced'>";
         if ($canedit && $number) {
-            Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
+            Html::openMassiveActionsForm('mass' . self::class . $rand);
 
             $massiveactionparams['specific_actions'] = [
                 'MassiveAction:purge' => _x('button', 'Delete permanently the relation with selected elements'),
@@ -237,14 +237,14 @@ SQL;
         echo "<tr>";
 
         if ($canedit && $number) {
-            echo "<th width='10'>" . Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand) . "</th>";
+            echo "<th width='10'>" . Html::getCheckAllAsCheckbox('mass' . self::class . $rand) . "</th>";
         }
 
-        echo  "<th>" . __('Type') . "</th>";
-        echo  "<th>" . __('Name') . "</th>";
-        echo  "<th>" . __('Entity') . "</th>";
-        echo  "<th>" . __('Serial number') . "</th>";
-        echo  "<th>" . __('Inventory number') . "</th>";
+        echo  "<th>" . __s('Type') . "</th>";
+        echo  "<th>" . __s('Name') . "</th>";
+        echo  "<th>" . __s('Entity') . "</th>";
+        echo  "<th>" . __s('Serial number') . "</th>";
+        echo  "<th>" . __s('Inventory number') . "</th>";
         echo "</tr>";
 
         for ($i = 0; $i < $number; $i++) {
@@ -353,7 +353,7 @@ SQL;
                     $linkname = $data[$column];
 
                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
-                        $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+                        $linkname = sprintf(__s('%1$s (%2$s)'), $linkname, $data["id"]);
                     }
 
                     $name = "<a href=\"" . Toolbox::getItemTypeFormURL($itemtype) . "?id=" . $data["id"] . "\">" . $linkname . "</a>";
@@ -388,7 +388,7 @@ SQL;
                     if ($canedit) {
                         echo "<td width='10'>";
                         if ($item->canUpdate()) {
-                            Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
+                            Html::showMassiveActionCheckBox(self::class, $data["IDD"]);
                         }
                         echo "</td>";
                     }
@@ -504,7 +504,7 @@ SQL;
         $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
 
         foreach ($tag_values as &$tag_value) {
-            if (strpos($tag_value, "newtag_") !== false) {
+            if (str_contains($tag_value, "newtag_")) {
                 $tag_value = str_replace("newtag_", "", $tag_value);
                 $tag_value = $tag->add([
                     'name' => $tag_value,
