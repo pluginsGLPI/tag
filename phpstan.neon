@@ -4,7 +4,6 @@ parameters:
     level: 5
     paths:
         - ajax
-        - front
         - inc
         - stubs
         - hook.php

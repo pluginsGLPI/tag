@@ -23,37 +23,47 @@
  * along with Tag. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
  * @copyright Copyright (C) 2014-2023 by Teclib'.
+ * @copyright Copyright (C) 2025 by the advancedforms plugin team.
  * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @license   MIT https://opensource.org/licenses/mit-license.php
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
 
-use Glpi\Exception\Http\AccessDeniedHttpException;
+namespace GlpiPlugin\Tag\Tests;
 
-Session::checkRight(PluginTagTag::$rightname, UPDATE);
+use Glpi\Controller\Form\RendererController;
+use Glpi\Form\Form;
+use Glpi\Tests\FormTesterTrait;
+use GlpiPlugin\Tag\Tests\TagTestCase;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Request;
 
-if (!Plugin::isPluginActive("tag")) {
-    throw new AccessDeniedHttpException();
-}
+abstract class QuestionTypeTestCase extends TagTestCase
+{
+    use FormTesterTrait;
 
-if (isset($_POST['add'])) {
-    $item = new PluginTagTagItem();
+    protected function renderFormEditor(Form $form): Crawler
+    {
+        $this->login();
+        ob_start();
+        (new Form())->showForm($form->getId());
+        return new Crawler(ob_get_clean());
+    }
 
-    // Check unicity :
-    if (isset($_REQUEST['plugin_tag_tags_id'])) {
-        $found = $item->find([
-            'plugin_tag_tags_id' => $_REQUEST['plugin_tag_tags_id'],
-            'items_id' => $_REQUEST['items_id'],
-            'itemtype' => $_REQUEST['itemtype'],
-        ]);
-
-        if (count($found) == 0) {
-            $item->add($_REQUEST);
-        }
-    } else {
-        $item->add($_REQUEST);
+    protected function renderHelpdeskForm(Form $form): Crawler
+    {
+        $this->login();
+        $controller = new RendererController();
+        $response = $controller->__invoke(
+            Request::create(
+                '',
+                'GET',
+                [
+                    'id' => $form->getID(),
+                ],
+            ),
+        );
+        return new Crawler($response->getContent());
     }
 }
-
-$dropdown = new PluginTagTag();
-include(GLPI_ROOT . "/front/dropdown.common.form.php");

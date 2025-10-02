@@ -30,45 +30,15 @@
 
 namespace GlpiPlugin\Tag\Tests;
 
-use Auth;
 use CommonDBTM;
-use PHPUnit\Framework\TestCase;
+use DbTestCase;
 use PluginTagTag;
 use PluginTagTagItem;
 use Profile_User;
 use Session;
 
-abstract class TagTestCase extends TestCase
+abstract class TagTestCase extends DbTestCase
 {
-    protected function setUp(): void
-    {
-        global $DB;
-        $DB->beginTransaction();
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        global $DB;
-        $DB->rollback();
-        parent::tearDown();
-    }
-
-    protected function login(
-        string $user_name = TU_USER,
-        string $user_pass = TU_PASS,
-        bool $noauto = true,
-        bool $expected = true
-    ): Auth {
-        Session::destroy();
-        Session::start();
-
-        $auth = new Auth();
-        $this->assertEquals($expected, $auth->login($user_name, $user_pass, $noauto));
-
-        return $auth;
-    }
-
     protected function logOut()
     {
         $ctime = $_SESSION['glpi_currenttime'];

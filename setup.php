@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 use Glpi\Form\Form;
+use Glpi\Form\Migration\TypesConversionMapper;
+use Glpi\Form\QuestionType\QuestionTypesManager;
 use Glpi\Plugin\Hooks;
 
 define('PLUGIN_TAG_VERSION', '2.13.0');
@@ -154,6 +156,9 @@ function plugin_init_tag()
         Plugin::registerClass('PluginTagConfig', ['addtabon' => 'Config']);
 
         $PLUGIN_HOOKS['use_rules']['tag']      = ['RuleTicket'];
+
+        // Register tag question type
+        registerPluginTypes();
     }
 }
 
@@ -202,4 +207,19 @@ function plugin_tag_geturl(): string
     /** @var array $CFG_GLPI */
     global $CFG_GLPI;
     return sprintf('%s/plugins/tag', $CFG_GLPI['url_base']);
+}
+
+function registerPluginTypes(): void
+{
+    $types = QuestionTypesManager::getInstance();
+    $type_mapper = TypesConversionMapper::getInstance();
+
+    // Register question type category
+    $types->registerPluginCategory(new PluginTagQuestionTypeCategory());
+
+    // Register question type
+    $types->registerPluginQuestionType(new PluginTagQuestionType());
+
+    // Register mapper for legacy question type
+    $type_mapper->registerPluginQuestionTypeConverter('tag', new PluginTagQuestionType());
 }

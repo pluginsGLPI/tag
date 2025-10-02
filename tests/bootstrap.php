@@ -28,15 +28,11 @@
  * -------------------------------------------------------------------------
  */
 
-use Glpi\Application\Environment;
-use Glpi\Kernel\Kernel;
+require __DIR__ . '/../../../tests/bootstrap.php';
 
-define('TU_USER', 'glpi');
-define('TU_PASS', 'glpi');
-define('GLPI_LOG_DIR', __DIR__ . '/files/_logs');
+if (!Plugin::isPluginActive("tag")) {
+    throw new RuntimeException("Plugin tag is not active in the test database");
+}
 
 require_once __DIR__ . '/TagTestCase.php';
-require_once __DIR__ . '/../../../vendor/autoload.php';
-
-$kernel = new Kernel(Environment::TESTING->value);
-$kernel->boot();
+require_once __DIR__ . '/QuestionTypeTestCase.php';

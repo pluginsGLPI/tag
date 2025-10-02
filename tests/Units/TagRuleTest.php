@@ -48,7 +48,7 @@ final class TagRuleTest extends TagTestCase
     {
         $user_id = $this->loginAs(self::SELF_SERVICE_USER);
         $tagID = $this->createTag('TicketTag');
-        $this->createRule($tagID);
+        $this->createTagRule($tagID);
         $ticket = $this->createTicket(
             [
                 'name' => 'Ticket add Tag',
@@ -63,7 +63,7 @@ final class TagRuleTest extends TagTestCase
     {
         $user_id = $this->loginAs(self::TECH_USER);
         $tagID = $this->createTag('TicketTag');
-        $this->createRule($tagID);
+        $this->createTagRule($tagID);
         $ticket = $this->createTicket(
             [
                 'name' => 'Ticket add Tag',
@@ -79,7 +79,7 @@ final class TagRuleTest extends TagTestCase
         $user_id = $this->loginAs(self::TECH_USER);
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
-        $this->createRule($tagID1);
+        $this->createTagRule($tagID1);
         $ticket = $this->createTicket(
             [
                 'name' => 'Ticket add Tag',
@@ -99,9 +99,9 @@ final class TagRuleTest extends TagTestCase
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
-        $this->createRule($tagID1, 'content', 'Tag1', 'assign');
+        $this->createTagRule($tagID1, 'content', 'Tag1', 'assign');
 
-        $this->createRule($tagID2, 'content', 'Tag2', 'append');
+        $this->createTagRule($tagID2, 'content', 'Tag2', 'append');
 
         $ticket = $this->createTicket(
             [
@@ -122,7 +122,7 @@ final class TagRuleTest extends TagTestCase
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
-        $this->createRule($tagID1, 'name', 'Add Tag', 'assign', RuleTicket::ONADD);
+        $this->createTagRule($tagID1, 'name', 'Add Tag', 'assign', RuleTicket::ONADD);
 
         $ticket = $this->createTicket([
             'name' => 'Ticket add Tag',
@@ -143,7 +143,7 @@ final class TagRuleTest extends TagTestCase
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
-        $this->createRule($tagID1, 'name', 'Add Tag', 'append', RuleTicket::ONADD);
+        $this->createTagRule($tagID1, 'name', 'Add Tag', 'append', RuleTicket::ONADD);
 
         $ticket = $this->createTicket([
             'name' => 'Ticket add Tag',
@@ -173,7 +173,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->isItemTagged($ticket, $tagID2);
 
-        $this->createRule($tagID1, 'content', 'Updated content', 'assign', RuleTicket::ONUPDATE);
+        $this->createTagRule($tagID1, 'content', 'Updated content', 'assign', RuleTicket::ONUPDATE);
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated content',
@@ -202,7 +202,7 @@ final class TagRuleTest extends TagTestCase
 
         $this->isItemTagged($ticket, $tagID2);
 
-        $this->createRule($tagID1, 'content', 'Updated content', 'append', RuleTicket::ONUPDATE);
+        $this->createTagRule($tagID1, 'content', 'Updated content', 'append', RuleTicket::ONUPDATE);
 
         $this->updateTicket($ticket->getID(), [
             'content' => 'Updated content',
@@ -222,9 +222,9 @@ final class TagRuleTest extends TagTestCase
         $tagID2 = $this->createTag('RuleTag2');
         $tagID3 = $this->createTag('ManualTag');
 
-        $this->createRule($tagID1, 'name', 'Multiple Rules', 'assign', RuleTicket::ONADD);
+        $this->createTagRule($tagID1, 'name', 'Multiple Rules', 'assign', RuleTicket::ONADD);
 
-        $this->createRule($tagID2, 'content', 'Updated for multiple rules', 'append', RuleTicket::ONUPDATE);
+        $this->createTagRule($tagID2, 'content', 'Updated for multiple rules', 'append', RuleTicket::ONUPDATE);
 
         $ticket = $this->createTicket([
             'name' => 'Multiple Rules Test',
@@ -265,7 +265,7 @@ final class TagRuleTest extends TagTestCase
             'users_id' => $user_id_2,
         ]);
 
-        $this->createRule(
+        $this->createTagRule(
             $tagID1,
             '_groups_id_of_requester',
             $group->getID(),
@@ -289,7 +289,7 @@ final class TagRuleTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID1);
     }
 
-    private function createRule(
+    private function createTagRule(
         int $tagID,
         string $criteria_field = 'name',
         $criteria_pattern = 'Add Tag',
