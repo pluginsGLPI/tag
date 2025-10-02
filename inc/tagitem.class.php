@@ -488,7 +488,9 @@ SQL;
             'plugin_tag_tags_id',
         );
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
-        $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
+        // Only remove existing tags if we actually have tag values to process AND delete_existing_tags is true
+        // This prevents removing tags when updating an item without explicitly managing tags
+        $removed_tags_ids = ($delete_existing_tags && !empty($tag_values)) ? array_diff($existing_tags_ids, $tag_values) : [];
 
         // link tags with the current item
         foreach ($added_tags_ids as $tag_id) {
