@@ -1,5 +1,5 @@
 module.exports = {
     extends: [
-      '../../.stylelintrc.js'
+        '../../.stylelintrc.js'
     ],
 };
