@@ -241,7 +241,7 @@ SQL;
         $tab    = [];
 
         $nb = 0;
-        if (is_a($item, CommonDBTM::class, true) && $_SESSION['glpishow_count_on_tabs']) {
+        if ($item instanceof CommonDBTM && $_SESSION['glpishow_count_on_tabs']) {
             $nb = countElementsInTable(PluginTagTagItem::getTable(), [
                 'plugin_tag_tags_id' => $item->getID(),
             ]);
