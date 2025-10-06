@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:51+0000\n"
-"PO-Revision-Date: 2025-10-01 00:51+0000\n"
+"POT-Creation-Date: 2025-10-06 00:44+0000\n"
+"PO-Revision-Date: 2025-10-06 00:44+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -31,11 +31,12 @@ msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "If the item is tagged"
 
-#: setup.php:169 inc/config.class.php:39 inc/config.class.php:56
+#: setup.php:169 inc/profile.class.php:35 inc/config.class.php:39
+#: inc/config.class.php:56
 msgid "Tag Management"
 msgstr "Tag Management"
 
-#: inc/profile.class.php:35 inc/profile.class.php:67
+#: inc/profile.class.php:67
 msgid "Tag management"
 msgstr "Tag management"
 
@@ -43,17 +44,17 @@ msgstr "Tag management"
 msgid "Tags location"
 msgstr "Tags location"
 
-#: inc/tag.class.php:44
+#: inc/tag.class.php:45
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: inc/tag.class.php:379
+#: inc/tag.class.php:375
 msgid "HTML color"
 msgstr "HTML color"
 
-#: hook.php:229 hook.php:357
+#: hook.php:229 hook.php:355
 msgid "Add tags"
 msgstr "Add tags"
 
@@ -61,14 +62,14 @@ msgstr "Add tags"
 msgid "Remove tags"
 msgstr "Remove tags"
 
-#: ajax/tag.php:49
+#: ajax/tag.php:47
 msgid "Tags have been updated"
 msgstr "Tags have been updated"
 
-#: ajax/tag.php:57
+#: ajax/tag.php:55
 msgid "Tags have not been updated"
 msgstr "Tags have not been updated"
 
-#: ajax/tag.php:66
+#: ajax/tag.php:64
 msgid "Missing parameters"
 msgstr "Missing parameters"
