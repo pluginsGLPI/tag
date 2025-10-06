@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 00:51+0000\n"
+"POT-Creation-Date: 2025-10-03 00:42+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: EpicIT33, 2025\n"
 "Language-Team: French (France) (http://app.transifex.com/teclib/glpi-plugin-tag/language/fr_FR/)\n"
@@ -37,11 +37,12 @@ msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Si l'élément est tagué"
 
-#: setup.php:169 inc/config.class.php:39 inc/config.class.php:56
+#: setup.php:169 inc/profile.class.php:35 inc/config.class.php:39
+#: inc/config.class.php:56
 msgid "Tag Management"
 msgstr "Gestion des tags"
 
-#: inc/profile.class.php:35 inc/profile.class.php:67
+#: inc/profile.class.php:67
 msgid "Tag management"
 msgstr "Gestion des tags"
 
@@ -49,18 +50,18 @@ msgstr "Gestion des tags"
 msgid "Tags location"
 msgstr "Localisation des tags"
 
-#: inc/tag.class.php:44
+#: inc/tag.class.php:45
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiquette"
 msgstr[1] "Etiquettes"
 msgstr[2] "Etiquettes"
 
-#: inc/tag.class.php:379
+#: inc/tag.class.php:375
 msgid "HTML color"
 msgstr "Couleur HTML"
 
-#: hook.php:229 hook.php:357
+#: hook.php:229 hook.php:355
 msgid "Add tags"
 msgstr "Ajouter des étiquettes"
 
@@ -68,14 +69,14 @@ msgstr "Ajouter des étiquettes"
 msgid "Remove tags"
 msgstr "Supprimer des étiquettes"
 
-#: ajax/tag.php:49
+#: ajax/tag.php:47
 msgid "Tags have been updated"
 msgstr "Les tags ont été mis à jour"
 
-#: ajax/tag.php:57
+#: ajax/tag.php:55
 msgid "Tags have not been updated"
 msgstr "Les tags n'ont pas été mis à jour"
 
-#: ajax/tag.php:66
+#: ajax/tag.php:64
 msgid "Missing parameters"
 msgstr "Paramètres manquants"
