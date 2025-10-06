@@ -6,6 +6,7 @@ parameters:
         - ajax
         - inc
         - stubs
+        - tests
         - hook.php
         - setup.php
     scanDirectories:
