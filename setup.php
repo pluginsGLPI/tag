@@ -27,6 +27,8 @@
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
+
+use Glpi\Application\ImportMapGenerator;
 use Glpi\Form\Form;
 use Glpi\Form\Migration\TypesConversionMapper;
 use Glpi\Form\QuestionType\QuestionTypesManager;
@@ -151,6 +153,8 @@ function plugin_init_tag()
         if (Session::isMultiEntitiesMode()) {
             $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/entity.js';
         }
+
+        ImportMapGenerator::getInstance()->registerModulesPath('tag', '/public/js/modules');
 
         Plugin::registerClass('PluginTagProfile', ['addtabon' => ['Profile']]);
         Plugin::registerClass('PluginTagConfig', ['addtabon' => 'Config']);

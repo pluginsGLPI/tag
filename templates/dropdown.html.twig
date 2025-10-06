@@ -93,64 +93,13 @@
 ) }}
 
 <script>
-    $(document).ready(function() {
-        const tagsColor = {{ tags_color|json_encode|raw }};
-
-        function isDark(hexColor) {
-            if (!hexColor) return false;
-            hexColor = hexColor.replace('#', '');
-            const r = parseInt(hexColor.substr(0,2),16);
-            const g = parseInt(hexColor.substr(2,2),16);
-            const b = parseInt(hexColor.substr(4,2),16);
-            const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
-            return luminance < 0.5;
-        }
-
-        function applyTagColors($select) {
-            const selectedIds = $select.find('option:selected').map(function() {
-                return $(this).val();
-            }).get();
-
-            const $container = $select.nextAll('.select2').find('.select2-selection__rendered');
-            $container.find('.select2-selection__choice').each(function(index) {
-                const id = selectedIds[index];
-                const color = tagsColor[id];
-                if (color) {
-                    $(this).css('background-color', color);
-                    $(this).css('color', isDark(color) ? '#eeeeee' : '');
-
-                    // Also style the remove button for better visibility
-                    $(this).find('.select2-selection__choice__remove').css('color', isDark(color) ? '#eeeeee' : '');
-                }
-            });
-        }
-
-        const $select = $('select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]');
-
-        $select.each(function() {
-            applyTagColors($(this));
-        });
-
-        $select.on('change select2:select select2:unselect', function() {
-            applyTagColors($(this));
-        });
-
-        $select.on('select2:open', function() {
-            setTimeout(() => {
-                $('.select2-results__option').each(function() {
-                    const matches = this.id.match(/result-[^-]+-(\d+)$/);
-                    if (matches && matches[1]) {
-                        const color = tagsColor[matches[1]];
-                        // Cible uniquement le span SANS la classe select2-rendered__match
-                        $(this).find('span:not(.select2-rendered__match)').css({
-                            'background-color': color ? color : '',
-                            'padding': color ? '2px' : '',
-                            'color': (color && isDark(color)) ? '#fff' : '',
-                            'border-radius': '2px'
-                        });
-                    }
-                });
-            }, 0);
+    import(GLPI_PLUGINS_PATH.tag + "/js/modules/TagDropdownColorizer.js").then((m) => {
+        $(document).ready(function() {
+            new m.GlpiPluginTagTagDropdownColorizer(
+                {{ tags_color|json_encode|raw }},
+                'select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]',
+                $(document)
+            );
         });
     });
 </script>
