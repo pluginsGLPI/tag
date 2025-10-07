@@ -711,6 +711,7 @@ SQL;
             'icon'              => Computer::getIcon(),
             'items_id'          => $params['id'],
             'in_itilobject'     => $obj instanceof CommonITILObject,
+            'is_dropdown'       => $obj instanceof CommonDropdown,
             'is_form'           => $obj instanceof Form,
             'is_new_item'       => $obj->isNewItem(),
             'tag_search_url'    => self::getSearchURL(),
