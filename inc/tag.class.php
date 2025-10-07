@@ -288,6 +288,7 @@ SQL;
         /** @var DBmysql $DB */
         global $DB;
 
+        $tab= [];
         $iterator = $DB->request([
             'SELECT'    => [
                 'itemtype_peripheral',
@@ -303,6 +304,8 @@ SQL;
         foreach ($iterator as $data) {
             $tab[$data['itemtype_peripheral']][$data['items_id_peripheral']] = $data['items_id_peripheral'];
         }
+
+        return $tab;
     }
 
     // for massive actions
