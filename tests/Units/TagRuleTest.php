@@ -332,7 +332,7 @@ final class TagRuleTest extends TagTestCase
             ]),
         );
 
-        $this->assertTrue($rule->getRuleWithCriteriasAndActions($rules_id, 1, 1));
+        $this->assertTrue($rule->getRuleWithCriteriasAndActions($rules_id, true, true));
         $this->assertCount(1, $rule->criterias);
         $this->assertCount(1, $rule->actions);
     }

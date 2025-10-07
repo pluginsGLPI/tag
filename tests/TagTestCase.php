@@ -69,8 +69,6 @@ abstract class TagTestCase extends DbTestCase
 
         $this->login($login, $pass);
 
-        $this->assertNotNull($user);
-
         return $user->getID();
     }
 
