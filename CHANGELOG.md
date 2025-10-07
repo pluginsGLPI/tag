@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix menu icon
 - Fix dropdown UI
+- Fix get linked items (move `glpi_computers_items` to `glpi_assets_assets_peripheralassets`)
 
 ### Added
 
