@@ -45,7 +45,7 @@
 <script>
     $(document).on('glpi-form-editor-question-type-changed', (event, question, type) => {
         if (type === 'PluginTagQuestionType') {
-            import(GLPI_PLUGINS_PATH.tag + "/js/modules/TagDropdownColorizer.js").then((m) => {
+            import("plugins/js/modules/TagDropdownColorizer.js").then((m) => {
                 new m.GlpiPluginTagTagDropdownColorizer(
                     {{ tags_color|json_encode|raw }},
                     'select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]',
