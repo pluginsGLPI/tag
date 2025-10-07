@@ -10,11 +10,8 @@ parameters:
         - hook.php
         - setup.php
     scanDirectories:
-        - ../../inc
         - ../../src
+        - ../../tests
     bootstrapFiles:
         - ../../stubs/glpi_constants.php
         - ../../vendor/autoload.php
-        - ../../tests/GLPITestCase.php
-        - ../../tests/DbTestCase.php
-        - tests/TagTestCase.php
