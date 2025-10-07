@@ -288,7 +288,7 @@ SQL;
         /** @var DBmysql $DB */
         global $DB;
 
-        $tab= [];
+        $tab = [];
         $iterator = $DB->request([
             'SELECT'    => [
                 'itemtype_peripheral',
