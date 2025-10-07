@@ -63,7 +63,7 @@ class PluginTagQuestionType extends AbstractQuestionType implements FormQuestion
     public function formatRawAnswer(mixed $answer, Question $question): string
     {
         if (!is_array($answer)) {
-            throw new LogicException('Answer must be an array');
+            return '';
         }
 
         if (count(array_filter($answer, 'is_numeric')) !== count($answer)) {
@@ -134,7 +134,7 @@ class PluginTagQuestionType extends AbstractQuestionType implements FormQuestion
         return self::class;
     }
 
-    private function getAvailableTags(?Form $form = null): array
+    public function getAvailableTags(?Form $form = null): array
     {
         $active_entities_ids = Session::getActiveEntities();
         if ($active_entities_ids === [] && $form) {
