@@ -28,6 +28,7 @@
  * -------------------------------------------------------------------------
  */
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Asset\Asset_PeripheralAsset;
 use Glpi\DBAL\QueryExpression;
 use Glpi\Form\Form;
 use Glpi\Message\MessageType;
@@ -287,13 +288,23 @@ SQL;
         /** @var DBmysql $DB */
         global $DB;
 
-        $query = "SELECT `itemtype`, `items_id`
-                FROM `glpi_computers_items`
-                WHERE `computers_id` = '" . $this->getID() . "'";
         $tab = [];
-        foreach ($DB->doQuery($query) as $data) {
-            $tab[$data['itemtype']][$data['items_id']] = $data['items_id'];
+        $iterator = $DB->request([
+            'SELECT'    => [
+                'itemtype_peripheral',
+                'items_id_peripheral',
+            ],
+            'FROM'      => getTableForItemType(Asset_PeripheralAsset::class),
+            'WHERE'     => [
+                'itemtype_asset'                => Computer::class,
+                'items_id_asset'                => $this->getID(),
+            ],
+        ]);
+
+        foreach ($iterator as $data) {
+            $tab[$data['itemtype_peripheral']][$data['items_id_peripheral']] = $data['items_id_peripheral'];
         }
+
         return $tab;
     }
 
