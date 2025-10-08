@@ -81,8 +81,8 @@ final class TagQuestionTypeMigrationTest extends QuestionTypeTestCase
         $this->assertTrue($DB->insert(
             'glpi_plugin_formcreator_forms',
             [
-                'name' => $question_name
-            ]
+                'name' => $question_name,
+            ],
         ));
         $form_id = $DB->insertId();
 
@@ -91,7 +91,7 @@ final class TagQuestionTypeMigrationTest extends QuestionTypeTestCase
             'glpi_plugin_formcreator_sections',
             [
                 'plugin_formcreator_forms_id' => $form_id,
-            ]
+            ],
         ));
 
         $section_id = $DB->insertId();
@@ -105,7 +105,7 @@ final class TagQuestionTypeMigrationTest extends QuestionTypeTestCase
                 'fieldtype'                      => 'tag',
                 'row'                            => 0,
                 'col'                            => 0,
-            ]
+            ],
         ));
 
         // Process migration
@@ -116,7 +116,6 @@ final class TagQuestionTypeMigrationTest extends QuestionTypeTestCase
         // Verify that the question has been migrated correctly
         /** @var Question $question */
         $question = getItemByTypeName(Question::class, $question_name);
-        /** @var AbstractQuestionTypeSelectable $question_type */
         $question_type = $question->getQuestionType();
         $this->assertInstanceOf(PluginTagQuestionType::class, $question_type);
     }
