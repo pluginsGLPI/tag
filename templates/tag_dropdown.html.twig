@@ -28,51 +28,34 @@
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
 
-<input type="hidden" name='_plugin_tag_tag_process_form', id='_plugin_tag_tag_process_form', value='1' />
-
-{% set tooltip_parts = [] %}
-
-{% if can_create %}
-    {% set tooltip_parts = tooltip_parts | merge([
-        '<a class="dropdown_tooltip btn btn-outline-secondary" target="_top" href="' ~ tag_search_url ~ '"><span class="fas fa-info fa-fw"></span></a>'
-    ]) %}
-{% endif %}
-
-{% if show_save_button %}
-    {% set tooltip_parts = tooltip_parts | merge([
-        '<button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary"><i class="far fa-save"></i></button>'
-    ]) %}
-{% endif %}
-
-{% set tooltip = tooltip_parts | join(' ') %}
-
 {% set tagDropdownOptions = {
     'in_itilobject': {
         'full_width': true,
         'field_class': 'col-12 col-sm-12',
         'label_class': 'col-2 col-sm-2',
-        'input_class': 'col-10 col-sm-10' ~ (can_create ? ' btn-group btn-group-sm' : ''),
+        'input_class': 'col-10 col-sm-10',
         'is_horizontal': true,
-        'align_label_right': true
+        'align_label_right': true,
+        'mb': 'mb-2'
     },
     'is_form': {
         'full_width': true,
         'field_class': 'col-12 col-sm-12',
         'label_class': 'form-label',
-        'input_class': 'w-100' ~ (can_create ? ' btn-group btn-group-sm' : ''),
+        'input_class': 'w-100',
         'is_horizontal': false,
-        'align_label_right': false
+        'align_label_right': false,
+        'mb': 'mb-2'
     },
     'default': {
         'full_width': false,
-        'field_class': 'col-12 col-sm-6 mb-2',
+        'field_class': 'col-12 col-sm-6',
         'label_class': 'col-xxl-5 text-xxl-end',
-        'input_class': 'col-xxl-7' ~ (can_create ? ' btn-group btn-group-sm' : ''),
+        'input_class': 'col-xxl-7',
         'is_horizontal': true,
         'align_label_right': true
     }
 } %}
-
 
 {% if in_itilobject %}
     {% set currentOptions = tagDropdownOptions.in_itilobject %}
@@ -82,132 +65,47 @@
     {% set currentOptions = tagDropdownOptions.default %}
 {% endif %}
 
-
-{% set padding = tag_location ? "padding-top: 0;" : "" %}
-
-
 {% if is_form is defined and is_form == false and in_itilobject == false %}
-
-{% set class = is_new_item ? 'col-xxl-12' : 'col-xxl-9' %}
-
-<div class="card-body d-flex flex-wrap" style="{{ padding }}">
-    <div class="col-12 {{ class }} flex-column">
-         <div class="d-flex flex-row flex-wrap flex-xl-nowrap">
-            <div class="row flex-row align-items-start flex-grow-1" style="min-width: 0;">
-               <div class="row flex-row">
+    {% if is_dropdown is defined and is_dropdown %}
+        <div class="card-body row">
+    {% else %}
+            {% set class = is_new_item ? 'col-xxl-12' : 'col-xxl-9' %}
+        <div class="card-body d-flex flex-wrap">
+            <input type="hidden" name='_plugin_tag_tag_process_form', id='_plugin_tag_tag_process_form', value='1' />
+            <div class="col-12 {{ class }} flex-column">
+                <div class="d-flex flex-row flex-wrap flex-xl-nowrap">
+                    <div class="row flex-row align-items-start flex-grow-1" style="min-width: 0;">
+                        <div class="row flex-row">
+    {% endif %}
 {% endif %}
 
-
-                    {{ fields.dropdownArrayField(
-                        '_plugin_tag_tag_values',
-                        null,
-                        available_tags,
-                        __('Tags', 'tag'),
-                        {
-                            values: selected_tags,
-                            id: 'tag_select_',
-                            rand: rand,
-                            class: 'tag_select',
-                            disabled: readOnly,
-                            multiple: true,
-                            full_width: currentOptions.full_width,
-                            add_field_html : tooltip|raw,
-                            field_class: currentOptions.field_class,
-                            label_class: currentOptions.label_class,
-                            input_class: currentOptions.input_class,
-                            align_label_right: currentOptions.align_label_right
-                        }
-                    ) }}
+{% include "@tag/dropdown.html.twig" with {
+    'input_name'     : '_plugin_tag_tag_values',
+    'selected_tags'  : selected_tags,
+    'available_tags' : available_tags,
+    'tags_color'     : tags_color,
+    'rand'           : rand,
+    'dropdown_params': {
+        'id'               : 'tag_select_',
+        'disabled'         : readOnly,
+        'full_width'       : currentOptions.full_width,
+        'field_class'      : currentOptions.field_class,
+        'label_class'      : currentOptions.label_class,
+        'input_class'      : currentOptions.input_class,
+        'align_label_right': currentOptions.align_label_right,
+        'is_horizontal'    : currentOptions.is_horizontal,
+        'mb'               : currentOptions.mb|default(''),
+    }
+} %}
 
 {% if is_form is defined and is_form == false and in_itilobject == false %}
+    {% if is_dropdown is defined and is_dropdown %}
+        </div>
+    {% else %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    {% endif %}
 {% endif %}
-
-
-
-<script>
-    $(document).ready(function() {
-        const tagsColor = {{ tags_color|json_encode|raw }};
-
-        function isDark(hexColor) {
-            if (!hexColor) return false;
-            hexColor = hexColor.replace('#', '');
-            const r = parseInt(hexColor.substr(0,2),16);
-            const g = parseInt(hexColor.substr(2,2),16);
-            const b = parseInt(hexColor.substr(4,2),16);
-            const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
-            return luminance < 0.5;
-        }
-
-        function applyTagColors($select) {
-            const selectedIds = $select.find('option:selected').map(function() {
-                return $(this).val();
-            }).get();
-
-            const $container = $select.nextAll('.select2').find('.select2-selection__rendered');
-            $container.find('.select2-selection__choice').each(function(index) {
-                const id = selectedIds[index];
-                const color = tagsColor[id];
-                if (color) {
-                    $(this).css('background-color', color);
-                    $(this).css('color', isDark(color) ? '#eeeeee' : '');
-                }
-            });
-        }
-
-        const $select = $('select[name="_plugin_tag_tag_values[]"]');
-
-        $select.each(function() {
-            applyTagColors($(this));
-        });
-
-        $select.on('change select2:select select2:unselect', function() {
-            applyTagColors($(this));
-        });
-
-        $select.on('select2:open', function() {
-            setTimeout(() => {
-                $('.select2-results__option').each(function() {
-                    const matches = this.id.match(/result-[^-]+-(\d+)$/);
-                    if (matches && matches[1]) {
-                        const color = tagsColor[matches[1]];
-                        // Cible uniquement le span SANS la classe select2-rendered__match
-                        $(this).find('span:not(.select2-rendered__match)').css({
-                            'background-color': color ? color : '',
-                            'padding': color ? '2px' : '',
-                            'color': (color && isDark(color)) ? '#fff' : '',
-                            'border-radius': '2px'
-                        });
-                    }
-                });
-            }, 0);
-        });
-    });
-</script>
-
-{% if show_save_button %}
-    <script>
-        $(function() {
-            $('#save_tag').on('click', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '{{ url }}',
-                    type: 'POST',
-                    data: {
-                        'itemtype': '{{ itemtype }}',
-                        'items_id': {{ items_id }},
-                        '_plugin_tag_tag_values': $('#dropdown__plugin_tag_tag_values{{ rand }}').val(),
-                        '_plugin_tag_tag_process_form': 1,
-                    }
-                });
-                displayAjaxMessageAfterRedirect();
-                window.glpiUnsavedFormChanges = false;
-            });
-        });
-    </script>
-{% endif %}
-

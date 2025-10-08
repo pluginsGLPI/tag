@@ -39,7 +39,6 @@ use Rector\ValueObject\PhpVersion;
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/ajax',
-        __DIR__ . '/front',
         __DIR__ . '/inc',
         __DIR__ . '/stubs',
         __DIR__ . '/tests',

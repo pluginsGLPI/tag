@@ -4,7 +4,6 @@
 >
     <projectFiles>
         <directory name="ajax" />
-        <directory name="front" />
         <directory name="inc" />
         <directory name="stubs" />
         <directory name="tests" />
