@@ -1,4 +1,6 @@
-/*!
+<?php
+
+/**
  * -------------------------------------------------------------------------
  * Tag plugin for GLPI
  * -------------------------------------------------------------------------
@@ -26,36 +28,22 @@
  * -------------------------------------------------------------------------
  */
 
-.select2-container .select2-selection.select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
-   margin-top: 7px !important;
+use Glpi\Form\QuestionType\QuestionTypeCategoryInterface;
 
-}
+class PluginTagQuestionTypeCategory implements QuestionTypeCategoryInterface
+{
+    public function getLabel(): string
+    {
+        return __('Tag', 'tag');
+    }
 
-.select2-container .select2-selection.select2-selection--multiple .select2-selection__rendered .select2-selection__choice .select2-selection__choice__remove {
-   margin-right: 3px !important;
-}
+    public function getIcon(): string
+    {
+        return 'ti ti-tag';
+    }
 
-
-.tag_choice {
-   border-radius: 3px;
-   padding: 4px 8px;
-   margin: 2px;
-   display: inline-block;
-   font-size: 11px;
-}
-
-.tab_cadre_pager span.tag_choice {
-   margin: 2px;
-}
-
-.select2-results .tag_choice {
-   padding: 2px 4px;
-}
-
-.kanban-plugin-content .tag_choice {
-   cursor: pointer;
-}
-
-[data-glpi-itildestination-field-config-display-condition="specific_values"] > div > [data-glpi-plugin-tag-dropdown-uuid] ~ div.btn {
-   border-top-right-radius: 0;
+    public function getWeight(): int
+    {
+        return 1000;
+    }
 }

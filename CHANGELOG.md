@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Add `External Event` for associated item types
-
+- Implement `Tag` question type for new GLPI forms
+- Implement `Tag` config field for ITIL form destinations
 
 ## [2.13.0] - 2025-09-30
 
