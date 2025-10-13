@@ -162,7 +162,7 @@ function plugin_init_tag()
         $PLUGIN_HOOKS['use_rules']['tag']      = ['RuleTicket'];
 
         // Register tag question type
-        registerPluginTypes();
+        plugin_tag_register_plugin_types();
     }
 }
 
@@ -213,7 +213,7 @@ function plugin_tag_geturl(): string
     return sprintf('%s/plugins/tag', $CFG_GLPI['url_base']);
 }
 
-function registerPluginTypes(): void
+function plugin_tag_register_plugin_types(): void
 {
     $types = QuestionTypesManager::getInstance();
     $type_mapper = TypesConversionMapper::getInstance();
