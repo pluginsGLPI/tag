@@ -34,6 +34,10 @@ header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 Session::checkLoginUser();
 
+if (!PluginTagTag::canView()) {
+    return "";
+}
+
 if (!isset($_REQUEST['name'])) {
     exit;
 }
