@@ -30,7 +30,7 @@
 
 use Glpi\Form\QuestionType\QuestionTypeCategoryInterface;
 
-class PluginTagQuestionTypeCategory implements QuestionTypeCategoryInterface
+final class PluginTagQuestionTypeCategory implements QuestionTypeCategoryInterface
 {
     public function getLabel(): string
     {

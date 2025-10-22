@@ -35,7 +35,7 @@ use Glpi\Form\Question;
 use Glpi\Form\QuestionType\AbstractQuestionType;
 use Glpi\Form\QuestionType\QuestionTypeCategoryInterface;
 
-class PluginTagQuestionType extends AbstractQuestionType implements FormQuestionDataConverterInterface
+final class PluginTagQuestionType extends AbstractQuestionType implements FormQuestionDataConverterInterface
 {
     #[Override]
     public function getCategory(): QuestionTypeCategoryInterface
