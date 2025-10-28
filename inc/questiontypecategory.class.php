@@ -28,11 +28,22 @@
  * -------------------------------------------------------------------------
  */
 
-require __DIR__ . '/../../../tests/bootstrap.php';
+use Glpi\Form\QuestionType\QuestionTypeCategoryInterface;
 
-if (!Plugin::isPluginActive("tag")) {
-    throw new RuntimeException("Plugin tag is not active in the test database");
+final class PluginTagQuestionTypeCategory implements QuestionTypeCategoryInterface
+{
+    public function getLabel(): string
+    {
+        return __('Tag', 'tag');
+    }
+
+    public function getIcon(): string
+    {
+        return 'ti ti-tag';
+    }
+
+    public function getWeight(): int
+    {
+        return 1000;
+    }
 }
-
-require_once __DIR__ . '/TagTestCase.php';
-require_once __DIR__ . '/QuestionTypeTestCase.php';
