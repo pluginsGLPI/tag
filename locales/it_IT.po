@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-03 00:42+0000\n"
+"POT-Creation-Date: 2025-10-29 00:48+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Davide <spam@habilitas.it>, 2024\n"
 "Language-Team: Italian (Italy) (http://app.transifex.com/teclib/glpi-plugin-tag/language/it_IT/)\n"
@@ -20,24 +20,31 @@ msgstr ""
 "Language: it_IT\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: templates/tag_dropdown.html.twig
+#: templates/dropdown.html.twig
 msgid "Tags"
 msgstr ""
 
-#: setup.php:126
+#: setup.php:130
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "Se l'oggetto ha un'etichetta"
 
-#: setup.php:130
+#: setup.php:134
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Se l'oggetto ha un'etichetta"
 
-#: setup.php:169 inc/profile.class.php:35 inc/config.class.php:39
+#: setup.php:178 inc/profile.class.php:35 inc/config.class.php:39
 #: inc/config.class.php:56
 msgid "Tag Management"
 msgstr "Gestione Tag"
+
+#: inc/questiontypecategory.class.php:37 inc/tag.class.php:46
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etichetta"
+msgstr[1] "Etichette"
+msgstr[2] "Etichette"
 
 #: inc/profile.class.php:67
 msgid "Tag management"
@@ -47,14 +54,7 @@ msgstr "Gestione etichette"
 msgid "Tags location"
 msgstr "Posizione delle etichette"
 
-#: inc/tag.class.php:45
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etichetta"
-msgstr[1] "Etichette"
-msgstr[2] "Etichette"
-
-#: inc/tag.class.php:375
+#: inc/tag.class.php:386
 msgid "HTML color"
 msgstr "Colore HTML"
 
