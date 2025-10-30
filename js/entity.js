@@ -48,7 +48,7 @@ var setEntityTag = function() {
                 return; // consider this return as a continue in a jquery each
             }
             entity_element.addClass('tags_already_set');
-    
+
             $.ajax({
                 url: CFG_GLPI.root_doc + '/' + GLPI_PLUGINS_PATH.tag + '/ajax/get_entity_tags.php',
                 data: {
