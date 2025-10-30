@@ -55,3 +55,7 @@
 .kanban-plugin-content .tag_choice {
    cursor: pointer;
 }
+
+[data-glpi-itildestination-field-config-display-condition="specific_values"] > div > [data-glpi-plugin-tag-dropdown-uuid] ~ div.btn {
+   border-top-right-radius: 0;
+}

@@ -29,6 +29,8 @@
  */
 
 use Glpi\Application\ImportMapGenerator;
+use Glpi\Form\Destination\AbstractCommonITILFormDestination;
+use Glpi\Form\Destination\FormDestinationManager;
 use Glpi\Form\Form;
 use Glpi\Form\Migration\TypesConversionMapper;
 use Glpi\Form\QuestionType\QuestionTypesManager;
@@ -37,7 +39,7 @@ use Glpi\Plugin\Hooks;
 define('PLUGIN_TAG_VERSION', '2.13.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "11.0.0");
+define("PLUGIN_TAG_MIN_GLPI", "11.0.1");
 // Maximum GLPI version, exclusive
 define("PLUGIN_TAG_MAX_GLPI", "11.0.99");
 
@@ -217,12 +219,19 @@ function plugin_tag_register_plugin_types(): void
 {
     $types = QuestionTypesManager::getInstance();
     $type_mapper = TypesConversionMapper::getInstance();
+    $destination_manager = FormDestinationManager::getInstance();
 
     // Register question type category
     $types->registerPluginCategory(new PluginTagQuestionTypeCategory());
 
     // Register question type
     $types->registerPluginQuestionType(new PluginTagQuestionType());
+
+    // Register question type itil fields
+    $destination_manager->registerPluginCommonITILConfigField(
+        AbstractCommonITILFormDestination::class,
+        new PluginTagDestinationField(),
+    );
 
     // Register mapper for legacy question type
     $type_mapper->registerPluginQuestionTypeConverter('tag', new PluginTagQuestionType());
