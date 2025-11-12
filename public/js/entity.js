@@ -50,7 +50,7 @@ var setEntityTag = function() {
             entity_element.addClass('tags_already_set');
     
             $.ajax({
-                url: CFG_GLPI.root_doc + '/' + GLPI_PLUGINS_PATH.tag + '/ajax/get_entity_tags.php',
+                url: CFG_GLPI.root_doc + '/plugins/tag/ajax/get_entity_tags.php',
                 data: {
                     'name': entity_name,
                 },
