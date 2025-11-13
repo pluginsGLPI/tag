@@ -34,9 +34,9 @@
    </authors>
    <versions>
       <version>
-         <num>2.13.1</num>
+         <num>2.14.0</num>
          <compatibility>~11.0.1</compatibility>
-         <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.13.1/glpi-tag-2.13.1.tar.bz2</download_url>
+         <download_url>https://github.com/pluginsGLPI/tag/releases/download/2.14.0/glpi-tag-2.14.0.tar.bz2</download_url>
       </version>
       <version>
          <num>2.12.5</num>
