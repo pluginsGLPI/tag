@@ -26,9 +26,7 @@
  # -------------------------------------------------------------------------
  #}
 
-{% import 'components/form/fields_macros.html.twig' as fields %}
-
-{% set tagDropdownOptions = {
+{% set tag_dropdown_options = {
     'in_itilobject': {
         'full_width': true,
         'field_class': 'col-12 col-sm-12',
@@ -58,11 +56,11 @@
 } %}
 
 {% if in_itilobject %}
-    {% set currentOptions = tagDropdownOptions.in_itilobject %}
+    {% set current_options = tag_dropdown_options.in_itilobject %}
 {% elseif is_form is defined and is_form %}
-    {% set currentOptions = tagDropdownOptions.is_form %}
+    {% set current_options = tag_dropdown_options.is_form %}
 {% else %}
-    {% set currentOptions = tagDropdownOptions.default %}
+    {% set current_options = tag_dropdown_options.default %}
 {% endif %}
 
 {% if is_form is defined and is_form == false and in_itilobject == false %}
@@ -88,13 +86,13 @@
     'dropdown_params': {
         'id'               : 'tag_select_',
         'disabled'         : readOnly,
-        'full_width'       : currentOptions.full_width,
-        'field_class'      : currentOptions.field_class,
-        'label_class'      : currentOptions.label_class,
-        'input_class'      : currentOptions.input_class,
-        'align_label_right': currentOptions.align_label_right,
-        'is_horizontal'    : currentOptions.is_horizontal,
-        'mb'               : currentOptions.mb|default(''),
+        'full_width'       : current_options.full_width,
+        'field_class'      : current_options.field_class,
+        'label_class'      : current_options.label_class,
+        'input_class'      : current_options.input_class,
+        'align_label_right': current_options.align_label_right,
+        'is_horizontal'    : current_options.is_horizontal,
+        'mb'               : current_options.mb|default(''),
     }
 } %}
 

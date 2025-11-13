@@ -34,7 +34,7 @@ final class PluginTagQuestionTypeCategory implements QuestionTypeCategoryInterfa
 {
     public function getLabel(): string
     {
-        return __('Tag', 'tag');
+        return __s('Tag', 'tag');
     }
 
     public function getIcon(): string

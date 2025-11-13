@@ -38,6 +38,7 @@ class PluginTagConfig extends CommonDBTM
         if (!$withtemplate && $item->getType() === 'Config') {
             return self::createTabEntry(__s('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
         }
+
         return '';
     }
 
@@ -46,6 +47,7 @@ class PluginTagConfig extends CommonDBTM
         if (!Session::haveRight('config', UPDATE)) {
             return false;
         }
+
         $config = Config::getConfigurationValues('plugin:Tag');
 
         echo "<form name='form' action=\"" . Toolbox::getItemTypeFormURL('Config') . "\" method='post'>";
@@ -76,6 +78,7 @@ class PluginTagConfig extends CommonDBTM
         echo '</table>';
         echo '</div>';
         Html::closeForm();
+        return null;
     }
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
@@ -84,6 +87,7 @@ class PluginTagConfig extends CommonDBTM
             $config = new self();
             $config->showConfigForm();
         }
+
         return true;
     }
 

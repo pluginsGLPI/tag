@@ -39,6 +39,9 @@ use GlpiPlugin\Tag\Tests\TagTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 
+use function Safe\ob_get_clean;
+use function Safe\ob_start;
+
 abstract class QuestionTypeTestCase extends TagTestCase
 {
     use FormTesterTrait;

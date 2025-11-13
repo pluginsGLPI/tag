@@ -36,6 +36,8 @@ use Glpi\Form\Migration\TypesConversionMapper;
 use Glpi\Form\QuestionType\QuestionTypesManager;
 use Glpi\Plugin\Hooks;
 
+use function Safe\define;
+
 define('PLUGIN_TAG_VERSION', '2.13.0');
 
 // Minimal GLPI version, inclusive
@@ -114,6 +116,7 @@ function plugin_init_tag()
             if ($UNINSTALL_TYPES == null) {
                 Plugin::load('uninstall');
             }
+
             foreach ($UNINSTALL_TYPES as $u_itemtype) {
                 $PLUGIN_HOOKS['plugin_uninstall_after']['tag'][$u_itemtype] = 'plugin_uninstall_after_tag';
             }
@@ -126,6 +129,7 @@ function plugin_init_tag()
         } else {
             $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
         }
+
         $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
         $common_kanban_filters = [
             'tag' => [

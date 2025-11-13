@@ -84,12 +84,12 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
         $twig = TemplateRenderer::getInstance();
         return $twig->render('@tag/question_dropdown.html.twig', [
             'input_name'      => 'default_value',
-            'selected_tags'   => empty($question?->fields['default_value']) ? [] : explode(',', $question->fields['default_value']),
+            'selected_tags'   => empty($question?->fields['default_value']) ? [] : explode(',', (string) $question->fields['default_value']),
             'available_tags'  => $available_tags,
             'tags_color'      => $available_tags_color,
             'dropdown_params' => [
                 'no_label' => true,
-                'init'     => $question !== null,
+                'init'     => $question instanceof Question,
             ],
         ]);
     }
@@ -102,7 +102,7 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
         $twig = TemplateRenderer::getInstance();
         return $twig->render('@tag/question_dropdown.html.twig', [
             'input_name'          => $question->getEndUserInputName(),
-            'selected_tags'       => empty($question?->fields['default_value']) ? [] : explode(',', $question->fields['default_value']),
+            'selected_tags'       => empty($question?->fields['default_value']) ? [] : explode(',', (string) $question->fields['default_value']),
             'available_tags'      => $available_tags,
             'tags_color'          => $available_tags_color,
             'show_search_tooltip' => false,
@@ -159,6 +159,7 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
             $available_tags[$id] = $data['name'];
             $available_tags_color[$id] = $data['color'] ?: '#DDDDDD';
         }
+
         return [$available_tags, $available_tags_color];
     }
 }
