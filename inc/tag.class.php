@@ -33,6 +33,10 @@ use Glpi\DBAL\QueryExpression;
 use Glpi\Form\Form;
 use Glpi\Message\MessageType;
 
+use function Safe\json_decode;
+use function Safe\json_encode;
+use function Safe\preg_match;
+
 class PluginTagTag extends CommonDropdown
 {
     // From CommonDBTM
@@ -604,11 +608,11 @@ SQL;
         $params = array_merge($default_params, $params);
 
         $itemtype = self::parseItemtype($params['itemtype'], $params['id']);
-        $obj = new $itemtype();
-
-        if (!$obj instanceof CommonDBTM) {
+        if (!is_a($itemtype, CommonDBTM::class, true)) {
             return;
         }
+
+        $obj = new $itemtype();
 
         $tag      = new self();
         $tag_item = new PluginTagTagItem();
@@ -826,20 +830,20 @@ SQL;
                 '/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).form.php/',
                 (string) $request_uri,
                 $matches,
-            )
+            ) !== 0
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).form.php/', (string) $request_uri, $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).form.php/', (string) $request_uri, $matches) !== 0) {
             $itemtype = $matches[1];
         } elseif (
             preg_match(
                 '/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).php/',
                 (string) $request_uri,
                 $matches,
-            )
+            ) !== 0
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).php/', (string) $request_uri, $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).php/', (string) $request_uri, $matches) !== 0) {
             $itemtype = $matches[1];
         }
 

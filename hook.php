@@ -30,6 +30,9 @@
 use Glpi\Form\Form;
 use Glpi\Plugin\Hooks;
 
+use function Safe\glob;
+use function Safe\preg_match;
+
 /**
  * -------------------------------------------------------------------------
  * Tag plugin for GLPI
@@ -111,7 +114,7 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
 
     $options[] = $so_param;
 
-    if ($itemtype != 'AllAssets') {
+    if (!is_a($itemtype, AllAssets::class, true) && is_a($itemtype, CommonDBTM::class, true)) {
         $item = new $itemtype();
         if ($item->isEntityAssign()) {
             $options [] = [
@@ -251,7 +254,7 @@ function plugin_tag_install()
     // Parse inc directory
     foreach (glob(__DIR__ . '/inc/*') as $filepath) {
         // Load *.class.php files and get the class name
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
+        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches) !== 0) {
             $classname = 'PluginTag' . ucfirst($matches[1]);
 
             // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
@@ -280,7 +283,7 @@ function plugin_tag_uninstall()
     // Parse inc directory
     foreach (glob(__DIR__ . '/inc/*') as $filepath) {
         // Load *.class.php files and get the class name
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
+        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches) !== 0) {
             $classname = 'PluginTag' . ucfirst($matches[1]);
 
             // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)

@@ -30,6 +30,10 @@
 
 use Glpi\DBAL\QueryExpression;
 
+use function Safe\json_decode;
+use function Safe\preg_split;
+use function Safe\strtotime;
+
 /**
  * -------------------------------------------------------------------------
  * Tag plugin for GLPI
@@ -321,22 +325,24 @@ SQL;
                         $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
                         break;
                     default:
-                        $obj = new $itemtype();
-                        $obj->getFromDB($item_id);
+                        if (is_a($itemtype, CommonDBTM::class, true)) {
+                            $obj = new $itemtype();
+                            $obj->getFromDB($item_id);
 
-                        if (isset($obj->fields['entities_id'])) {
-                            $criteria['SELECT'][] = 'glpi_entities.id AS entity';
-                            $criteria['LEFT JOIN'] = [
-                                'glpi_entities' => [
-                                    'ON' => [
-                                        'glpi_entities' => 'id',
-                                        $itemtable      => 'entities_id',
+                            if (isset($obj->fields['entities_id'])) {
+                                $criteria['SELECT'][] = 'glpi_entities.id AS entity';
+                                $criteria['LEFT JOIN'] = [
+                                    'glpi_entities' => [
+                                        'ON' => [
+                                            'glpi_entities' => 'id',
+                                            $itemtable      => 'entities_id',
+                                        ],
                                     ],
-                                ],
-                            ];
-                            array_unshift($criteria['ORDERBY'], 'glpi_entities.completename');
-                        } else {
-                            $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
+                                ];
+                                array_unshift($criteria['ORDERBY'], 'glpi_entities.completename');
+                            } else {
+                                $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
+                            }
                         }
 
                         break;
@@ -384,8 +390,8 @@ SQL;
                             $datas["is_recursive"] = $data["is_recursive"];
                         }
 
-                        Plugin::load(strtolower($plugin_name), true);
-                        $function_giveitem = 'plugin_' . strtolower($plugin_name) . '_giveItem';
+                        Plugin::load(strtolower((string) $plugin_name), true);
+                        $function_giveitem = 'plugin_' . strtolower((string) $plugin_name) . '_giveItem';
                         if (function_exists($function_giveitem)) { // For security
                             $name = call_user_func($function_giveitem, $itemtype, 1, $datas, 0);
                         }
@@ -592,15 +598,17 @@ SQL;
         switch ($ma->getAction()) {
             case "addTag":
                 foreach ($ma->getItems() as $itemtype => $items) {
-                    $object = new $itemtype();
-                    foreach ($items as $items_id) {
-                        $object->fields['id'] = $items_id;
-                        $object->input        = $input;
-                        if (self::updateItem($object, false)) {
-                            $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
-                        } else {
-                            $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
-                            $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                    if (is_a($itemtype, CommonDBTM::class, true)) {
+                        $object = new $itemtype();
+                        foreach ($items as $items_id) {
+                            $object->fields['id'] = $items_id;
+                            $object->input        = $input;
+                            if (self::updateItem($object, false)) {
+                                $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                            } else {
+                                $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                                $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                            }
                         }
                     }
                 }
@@ -609,7 +617,6 @@ SQL;
             case "removeTag":
                 $tagitem = new self();
                 foreach ($ma->getItems() as $itemtype => $items) {
-                    $object = new $itemtype();
                     foreach ($items as $items_id) {
                         if (
                             $tagitem->deleteByCriteria([

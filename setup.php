@@ -36,6 +36,8 @@ use Glpi\Form\Migration\TypesConversionMapper;
 use Glpi\Form\QuestionType\QuestionTypesManager;
 use Glpi\Plugin\Hooks;
 
+use function Safe\define;
+
 define('PLUGIN_TAG_VERSION', '2.13.0');
 
 // Minimal GLPI version, inclusive
