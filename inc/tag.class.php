@@ -39,6 +39,7 @@ class PluginTagTag extends CommonDropdown
     public $dohistory = true;
 
     public const S_OPTION = 10500;
+
     public static $rightname = 'plugin_tag_tag';
 
     public static function getTypeName($nb = 1)
@@ -88,7 +89,7 @@ class PluginTagTag extends CommonDropdown
 
         foreach ($tags->find(['is_active' => 1]) as $tag) {
             if (!empty($tag['type_menu'])) {
-                $types_menu = array_merge($types_menu, json_decode($tag['type_menu']));
+                $types_menu = array_merge($types_menu, json_decode((string) $tag['type_menu']));
             } else {
                 $use_global_tag = true;
             }
@@ -115,7 +116,8 @@ class PluginTagTag extends CommonDropdown
                 $type_menu_elements[$group_label][$itemtype] = $itemtype::getTypeName();
             }
         }
-        $type_menu_values = !empty($this->fields['type_menu']) ? json_decode($this->fields['type_menu']) : [];
+
+        $type_menu_values = empty($this->fields['type_menu']) ? [] : json_decode((string) $this->fields['type_menu']);
 
         TemplateRenderer::getInstance()->display('@tag/forms/tag.html.twig', [
             'item'               => $this,
@@ -143,7 +145,7 @@ class PluginTagTag extends CommonDropdown
 
         if (!$DB->tableExists($table)) {
             $query = <<<SQL
-                CREATE TABLE IF NOT EXISTS `$table` (
+                CREATE TABLE IF NOT EXISTS `{$table}` (
                     `id`           int {$default_key_sign} NOT NULL auto_increment,
                     `entities_id`  int {$default_key_sign} NOT NULL DEFAULT '0',
                     `is_recursive` tinyint NOT NULL DEFAULT '1',
@@ -181,7 +183,7 @@ SQL;
         // Version 0.90-1.1
         // Disable cache on field list as cache wes not pruned after adding field
         $fields = $DB->listFields($table, false);
-        if (stristr($fields['type_menu']["Type"], 'varchar') !== false) {
+        if (stristr((string) $fields['type_menu']["Type"], 'varchar') !== false) {
             $migration->changeField($table, 'type_menu', 'type_menu', 'text');
             $migration->dropKey($table, 'type_menu');
             $migration->migrationOneTable($table);
@@ -254,14 +256,11 @@ SQL;
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        if ($item instanceof self) {
-            switch ($tabnum) {
-                case 2:
-                    $tagitem = new PluginTagTagItem();
-                    $tagitem->showForTag($item);
-                    break;
-            }
+        if ($item instanceof self && $tabnum === 2) {
+            $tagitem = new PluginTagTagItem();
+            $tagitem->showForTag($item);
         }
+
         return true;
     }
 
@@ -318,85 +317,64 @@ SQL;
 
     public function rawSearchOptions()
     {
-
-        $tab = [];
-
-        $tab[] = [
+        return [[
             'id'            => 'common',
             'name'          => __s('Characteristics'),
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 1,
             'table'         => $this->getTable(),
             'field'         => 'name',
             'name'          => __s('Name'),
             'datatype'      => 'itemlink',
             'massiveaction' => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 2,
             'table'         => $this->getTable(),
             'field'         => 'comment',
             'name'          => __s('Description'),
             'datatype'      => 'string',
             'massiveaction' => true,
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 3,
             'table'         => $this->getTable(),
             'field'         => 'id',
             'name'          => __s('ID'),
             'datatype'      => 'number',
             'massiveaction' => false,
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 4,
             'table'         => 'glpi_entities',
             'field'         => 'completename',
             'linkfield'     => 'entities_id',
             'name'          => __s('Entity'),
             'datatype'      => 'dropdown',
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 5,
             'table'         => $this->getTable(),
             'field'         => 'is_recursive',
             'name'          => __s('Child entities'),
             'datatype'      => 'bool',
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 6,
             'table'         => $this->getTable(),
             'field'         => 'type_menu',
             'name'          => _sn('Associated item type', 'Associated item types', 2),
             'searchtype'    => ['equals', 'notequals'],
             'datatype'      => 'specific',
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 7,
             'table'         => $this->getTable(),
             'field'         => 'color',
             'name'          => __s('HTML color', 'tag'),
             'searchtype'    => 'contains',
             'datatype'      => 'specific',
-        ];
-
-        $tab[] = [
+        ], [
             'id'            => 8,
             'table'         => $this->getTable(),
             'field'         => 'is_active',
             'name'          => __s('Active'),
             'datatype'      => 'bool',
-        ];
-
-        return $tab;
+        ]];
     }
 
     public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
@@ -406,24 +384,24 @@ SQL;
         if (!is_array($values)) {
             $values = [$field => $values];
         }
-        switch ($field) {
-            case 'type_menu':
-                $elements  = ['' => Dropdown::EMPTY_VALUE];
-                $supported_itemtypes = $CFG_GLPI['plugin_tag_itemtypes'] ?? [];
-                foreach ($supported_itemtypes as $itemtypes) {
-                    foreach ($itemtypes as $itemtype) {
-                        $item = getItemForItemtype($itemtype);
-                        $elements[$itemtype] = $item::getTypeName();
-                    }
-                }
 
-                return Dropdown::showFromArray(
-                    $name,
-                    $elements,
-                    ['display' => false,
-                        'value'   => $values[$field],
-                    ],
-                );
+        if ($field === 'type_menu') {
+            $elements  = ['' => Dropdown::EMPTY_VALUE];
+            $supported_itemtypes = $CFG_GLPI['plugin_tag_itemtypes'] ?? [];
+            foreach ($supported_itemtypes as $itemtypes) {
+                foreach ($itemtypes as $itemtype) {
+                    $item = getItemForItemtype($itemtype);
+                    $elements[$itemtype] = $item::getTypeName();
+                }
+            }
+
+            return Dropdown::showFromArray(
+                $name,
+                $elements,
+                ['display' => false,
+                    'value'   => $values[$field],
+                ],
+            );
         }
 
         return parent::getSpecificValueToSelect($field, $name, $values, $options);
@@ -433,20 +411,21 @@ SQL;
     {
         switch ($field) {
             case 'type_menu':
-                $itemtypes = json_decode($values[$field]);
+                $itemtypes = json_decode((string) $values[$field]);
                 if (!is_array($itemtypes)) {
                     return "&nbsp;";
                 }
+
                 $itemtype_names = [];
                 foreach ($itemtypes as $itemtype) {
                     $item = getItemForItemtype($itemtype);
                     $itemtype_names[] = $item->getTypeName();
                 }
-                $out = implode(", ", $itemtype_names);
-                return $out;
+
+                return implode(", ", $itemtype_names);
             case 'color':
                 $color = $values[$field] ?: '#DDDDDD';
-                return "<div style='background-color: $color;'>&nbsp;</div>";
+                return sprintf("<div style='background-color: %s;'>&nbsp;</div>", $color);
         }
 
         return parent::getSpecificValueToDisplay($field, $values, $options);
@@ -462,6 +441,7 @@ SQL;
             $rule->getFromDB($id);
             return $rule->fields["sub_type"];
         }
+
         return $itemtype;
     }
 
@@ -472,7 +452,7 @@ SQL;
      *
      * @param  array $params should contains theses keys:
      *                          - item the CommonDBTM object
-     * @return bool|void False if the form was not shown. Otherwise nothing is returned and the form is displayed.
+     * @return bool|null False if the form was not shown. Otherwise nothing is returned and the form is displayed.
      */
     public static function showForItem($params = [])
     {
@@ -485,7 +465,7 @@ SQL;
             && $params['item'] instanceof CommonDBTM
         ) {
             $item     = $params['item'];
-            $itemtype = get_class($item);
+            $itemtype = $item::class;
 
             if (self::canItemtype($itemtype)) {
                 // manage values after a redirect (ex ticket creation, after a cat change)
@@ -501,6 +481,8 @@ SQL;
                 ]);
             }
         }
+
+        return null;
     }
 
     /**
@@ -525,6 +507,7 @@ SQL;
             if (!isset($params['content'])) {
                 $params['content'] = "";
             }
+
             $iterator = $DB->request([
                 'SELECT'    => [
                     'name',
@@ -552,13 +535,15 @@ SQL;
                 $name = $data['name'];
                 $color = $data['color'] ?: '#DDDDDD';
                 $textcolor = idealTextColor($color);
-                $style = "background-color: {$color}; color: {$textcolor};";
-                $content .= "<span class='tag_choice' style='{$style}' title='{$title}'>{$name}</span>&nbsp;&nbsp;";
+                $style = sprintf('background-color: %s; color: %s;', $color, $textcolor);
+                $content .= sprintf("<span class='tag_choice' style='%s' title='%s'>%s</span>&nbsp;&nbsp;", $style, $title, $name);
             }
+
             $content .= "</div>";
             $params['content'] .= $content;
             return $params;
         }
+
         return null;
     }
 
@@ -596,6 +581,7 @@ SQL;
                 $params['metadata']['tags'][] = $data['name'];
             }
         }
+
         return $params;
     }
 
@@ -630,6 +616,7 @@ SQL;
         if (isset($params['id'])) {
             $obj->getFromDB($params['id']);
         }
+
         if ($obj->isNewItem()) {
             $obj->getEmpty();
         }
@@ -642,7 +629,7 @@ SQL;
                 $values[] = $found_item['plugin_tag_tags_id'];
             }
         } elseif (is_string($params['value'])) {
-            $values = !empty($params['value']) ? explode(',', $params['value']) : [];
+            $values = empty($params['value']) ? [] : explode(',', $params['value']);
         } elseif (is_array($params['value'])) {
             $values = $params['value'];
         }
@@ -656,7 +643,7 @@ SQL;
                 ['type_menu' => null],
                 ['type_menu' => ''],
                 ['type_menu' => 0],
-                new QueryExpression("JSON_CONTAINS(type_menu, " . $DB->quote('"' . addslashes($itemtype) . '"') . ")"),
+                new QueryExpression("JSON_CONTAINS(type_menu, " . $DB->quote('"' . addslashes((string) $itemtype) . '"') . ")"),
             ],
         ];
         if ($obj->isEntityAssign()) {
@@ -684,10 +671,10 @@ SQL;
             ? "return { id: 'newtag_'+ params.term, text: params.term };"
             : "return null;";
 
-        $can_update_all = count(array_filter($params['items_ids'], function ($value) use ($obj) {
+        $can_update_all = array_filter($params['items_ids'], function ($value) use ($obj) {
             $obj->getFromDB($value);
             return !$obj->canUpdateItem();
-        })) === 0;
+        }) === [];
 
         $readOnly = !$tag::canUpdate()
             || ($obj->isNewItem() && !$obj->canCreateItem())
@@ -751,13 +738,14 @@ SQL;
     {
         $plugintagtag = new self();
         $plugintagtag->getFromDB($tag_id);
+
         $color = $plugintagtag->fields["color"] ?: '#DDDDDD';
         $inv_color = idealTextColor($color);
-        $style = "background-color: $color; color: $inv_color";
+        $style = sprintf('background-color: %s; color: %s', $color, $inv_color);
 
         return "<span class='select2-search-choice tag_choice'
-                    style='padding-left:5px;$style'>" .
-              $separator . $plugintagtag->fields['name'] . '</span>';
+                    style='padding-left:5px;{$style}'>"
+              . $separator . $plugintagtag->fields['name'] . '</span>';
     }
 
     public function prepareInputForAdd($input)
@@ -815,6 +803,7 @@ SQL;
             Session::addMessageAfterRedirect(sprintf(__s("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
             return false;
         }
+
         return true;
     }
 
@@ -828,29 +817,29 @@ SQL;
         $request_uri = $_SERVER['REQUEST_URI'] ?? ''; // $_SERVER['REQUEST_URI'] from CLI context is empty
         $itemtype = '';
         if (
-            preg_match('/\/(?:marketplace|plugins)\/genericobject\/front\/object\.form.php/', $request_uri)
+            preg_match('/\/(?:marketplace|plugins)\/genericobject\/front\/object\.form.php/', (string) $request_uri)
             && array_key_exists('itemtype', $_GET)
         ) {
             $itemtype = $_GET['itemtype'];
         } elseif (
             preg_match(
                 '/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).form.php/',
-                $request_uri,
+                (string) $request_uri,
                 $matches,
             )
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).form.php/', $request_uri, $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).form.php/', (string) $request_uri, $matches)) {
             $itemtype = $matches[1];
         } elseif (
             preg_match(
                 '/\/(?:marketplace|plugins)\/([a-zA-Z]+)\/front\/([a-zA-Z]+).php/',
-                $request_uri,
+                (string) $request_uri,
                 $matches,
             )
         ) {
             $itemtype = 'Plugin' . ucfirst($matches[1]) . ucfirst($matches[2]);
-        } elseif (preg_match('/([a-zA-Z]+).php/', $request_uri, $matches)) {
+        } elseif (preg_match('/([a-zA-Z]+).php/', (string) $request_uri, $matches)) {
             $itemtype = $matches[1];
         }
 

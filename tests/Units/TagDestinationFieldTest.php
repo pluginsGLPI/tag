@@ -30,7 +30,6 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
-use User;
 use Glpi\Form\AnswersHandler\AnswersHandler;
 use Glpi\Form\Form;
 use Glpi\Tests\FormBuilder;
@@ -43,6 +42,7 @@ use PluginTagQuestionType;
 use PluginTagTag;
 use PluginTagTagItem;
 use tests\units\Glpi\Form\Destination\CommonITILField\AbstractDestinationFieldTest;
+use User;
 
 include_once __DIR__ . '/../../../../tests/abstracts/AbstractDestinationFieldTest.php';
 
@@ -152,8 +152,8 @@ final class TagDestinationFieldTest extends AbstractDestinationFieldTest
                     PluginTagDestinationFieldStrategy::SPECIFIC_ANSWERS,
                     PluginTagDestinationFieldStrategy::LAST_VALID_ANSWER,
                 ],
-                specific_tag_ids: [$answers['tags'][0]->getID()],
                 specific_question_ids: [$this->getQuestionId($form, "Tag 1")],
+                specific_tag_ids: [$answers['tags'][0]->getID()],
             ),
             answers: $answers['answers'],
             expected_tag_ids: [

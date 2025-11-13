@@ -40,10 +40,10 @@ enum PluginTagDestinationFieldStrategy: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::NO_TAGS           => __("No tags"),
-            self::SPECIFIC_VALUES   => __("Specific tags"),
-            self::SPECIFIC_ANSWERS  => __("Answers from specific questions"),
-            self::LAST_VALID_ANSWER => __('Answer to last "Tag" question'),
+            self::NO_TAGS           => __s("No tags"),
+            self::SPECIFIC_VALUES   => __s("Specific tags"),
+            self::SPECIFIC_ANSWERS  => __s("Answers from specific questions"),
+            self::LAST_VALID_ANSWER => __s('Answer to last "Tag" question'),
         };
     }
 
@@ -66,7 +66,7 @@ enum PluginTagDestinationFieldStrategy: string
         ?array $question_ids,
         AnswersSet $answers_set,
     ): array {
-        if (empty($question_ids)) {
+        if ($question_ids === null || $question_ids === []) {
             return [];
         }
 

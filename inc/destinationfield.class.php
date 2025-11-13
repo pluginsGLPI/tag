@@ -56,7 +56,7 @@ class PluginTagDestinationField extends AbstractConfigField
         FormDestination $destination,
         JsonFieldInterface $config,
         string $input_name,
-        array $display_options
+        array $display_options,
     ): string {
         if (!$config instanceof PluginTagDestinationFieldConfig) {
             throw new InvalidArgumentException("Unexpected config class");
@@ -83,7 +83,7 @@ class PluginTagDestinationField extends AbstractConfigField
 
             // Specific additional config for SPECIFIC_ANSWERS strategy
             'specific_answers_extra_field' => [
-                'empty_label'     => __("Select questions..."),
+                'empty_label'     => __s("Select questions..."),
                 'values'          => $config->getSpecificQuestionIds(),
                 'input_name'      => $input_name . "[" . PluginTagDestinationFieldConfig::SPECIFIC_QUESTION_IDS . "]",
                 'possible_values' => $this->getTagQuestionsValuesForDropdown($form),
@@ -95,7 +95,7 @@ class PluginTagDestinationField extends AbstractConfigField
     public function applyConfiguratedValueToInputUsingAnswers(
         JsonFieldInterface $config,
         array $input,
-        AnswersSet $answers_set
+        AnswersSet $answers_set,
     ): array {
         if (!$config instanceof PluginTagDestinationFieldConfig) {
             throw new InvalidArgumentException("Unexpected config class");
@@ -153,6 +153,7 @@ class PluginTagDestinationField extends AbstractConfigField
         foreach (PluginTagDestinationFieldStrategy::cases() as $strategies) {
             $values[$strategies->value] = $strategies->getLabel();
         }
+
         return $values;
     }
 

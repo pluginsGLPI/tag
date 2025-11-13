@@ -37,7 +37,9 @@ class PluginTagDestinationFieldConfig implements
 {
     // Unique reference to hardcoded names used for serialization and forms input names
     public const STRATEGIES            = 'strategies';
+
     public const SPECIFIC_QUESTION_IDS = 'specific_question_ids';
+
     public const SPECIFIC_TAG_IDS      = 'specific_tag_ids';
 
     /**
@@ -46,9 +48,9 @@ class PluginTagDestinationFieldConfig implements
      * @param array<int>|null $specific_tag_ids
      */
     public function __construct(
-        private array $strategies,
-        private ?array $specific_question_ids = null,
-        private ?array $specific_tag_ids      = null,
+        private readonly array $strategies,
+        private readonly ?array $specific_question_ids = null,
+        private readonly ?array $specific_tag_ids      = null,
     ) {}
 
     #[Override]

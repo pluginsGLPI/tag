@@ -62,11 +62,15 @@ class PluginTagTagItem extends CommonDBRelation
 {
     // From CommonDBRelation
     public static $itemtype_1    = 'PluginTagTag';
+
     public static $items_id_1    = 'plugin_tag_tags_id';
+
     public static $take_entity_1 = true;
 
     public static $itemtype_2    = 'itemtype';
+
     public static $items_id_2    = 'items_id';
+
     public static $take_entity_2 = false;
 
 
@@ -88,7 +92,7 @@ class PluginTagTagItem extends CommonDBRelation
 
         if (!$DB->tableExists($table)) {
             $query = <<<SQL
-                CREATE TABLE IF NOT EXISTS `$table` (
+                CREATE TABLE IF NOT EXISTS `{$table}` (
                     `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_tag_tags_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
                     `items_id` INT {$default_key_sign} NOT NULL DEFAULT '1',
@@ -144,7 +148,6 @@ SQL;
     /**
      * Display the list of available itemtype
      *
-     * @param PluginTagTag $tag
      * @return boolean
      */
     public static function showForTag(PluginTagTag $tag)
@@ -189,14 +192,14 @@ SQL;
 
         if ($canedit) {
             echo "<div class='firstbloc'>";
-            echo "<form name='tagitem_form$rand' id='tagitem_form$rand' method='post'
+            echo "<form name='tagitem_form{$rand}' id='tagitem_form{$rand}' method='post'
                action='" . Toolbox::getItemTypeFormURL('PluginTagTag') . "'>";
 
             echo "<table class='tab_cadre_fixe'>";
             echo "<tr class='tab_bg_2'><th colspan='2'>" . __s('Add an item') . "</th></tr>";
 
             if (!empty($tag->fields['type_menu'])) {
-                $itemtypes_to_show = json_decode($tag->fields['type_menu']);
+                $itemtypes_to_show = json_decode((string) $tag->fields['type_menu']);
             } else {
                 $itemtypes_to_show = [];
                 foreach ($CFG_GLPI['plugin_tag_itemtypes'] as $menu_entry) {
@@ -205,6 +208,7 @@ SQL;
                     }
                 }
             }
+
             echo "<tr class='tab_bg_1'><td>";
             Dropdown::showSelectItemFromItemtypes([
                 'itemtypes' => $itemtypes_to_show,
@@ -214,7 +218,7 @@ SQL;
                 'checkright' => true,
             ]);
             echo "</td><td width='20%'>";
-            echo "<input type='hidden' name='plugin_tag_tags_id' value='$instID'>";
+            echo sprintf("<input type='hidden' name='plugin_tag_tags_id' value='%s'>", $instID);
             echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='btn btn-primary'>";
             echo "</td></tr>";
 
@@ -233,6 +237,7 @@ SQL;
 
             Html::showMassiveActions($massiveactionparams);
         }
+
         echo "<table class='tab_cadre_fixehov'>";
         echo "<tr>";
 
@@ -252,13 +257,14 @@ SQL;
             if (!($item = getItemForItemtype($itemtype))) {
                 continue;
             }
+
             $item_id = $result2[$i]['items_id'];
 
             if ($item->canView()) {
-                $column = (strtolower(substr($itemtype, 0, 6)) == "device") ? "designation" : "name";
+                $column = (strtolower(substr((string) $itemtype, 0, 6)) === "device") ? "designation" : "name";
 
                 // For rules itemtypes (example : ruledictionnaryphonemodel)
-                if (strtolower(substr($itemtype, 0, 4)) == 'rule' || $itemtype == "PluginResourcesRulechecklist") {
+                if (strtolower(substr((string) $itemtype, 0, 4)) === 'rule' || $itemtype == "PluginResourcesRulechecklist") {
                     $itemtable = getTableForItemType('Rule');
                 } else {
                     $itemtable = getTableForItemType($itemtype);
@@ -305,6 +311,7 @@ SQL;
                         ) {
                             $criteria['LEFT JOIN'] = $visibility_crit['LEFT JOIN'];
                         }
+
                         break;
                     case 'Profile':
                     case 'RSSFeed':
@@ -331,6 +338,7 @@ SQL;
                         } else {
                             $criteria['SELECT'][] = new QueryExpression('-1 AS ' . $DB::quoteName('entity'));
                         }
+
                         break;
                 }
 
@@ -356,13 +364,13 @@ SQL;
                         $linkname = sprintf(__s('%1$s (%2$s)'), $linkname, $data["id"]);
                     }
 
-                    $name = "<a href=\"" . Toolbox::getItemTypeFormURL($itemtype) . "?id=" . $data["id"] . "\">" . $linkname . "</a>";
+                    $name = '<a href="' . Toolbox::getItemTypeFormURL($itemtype) . "?id=" . $data["id"] . '">' . $linkname . "</a>";
 
                     if (
                         $itemtype == 'PluginProjetProjet'
                         || $itemtype == 'PluginResourcesResource'
                     ) {
-                        $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                        $pieces = preg_split('/(?=[A-Z])/', (string) $itemtype);
                         $plugin_name = $pieces[2];
 
                         $datas = ["entities_id" => $data["entity"],
@@ -390,12 +398,14 @@ SQL;
                         if ($item->canUpdate()) {
                             Html::showMassiveActionCheckBox(self::class, $data["IDD"]);
                         }
+
                         echo "</td>";
                     }
+
                     echo "<td class='center'>";
 
                     // Show plugin name (is to delete remove any ambiguity) :
-                    $pieces = preg_split('/(?=[A-Z])/', $itemtype);
+                    $pieces = preg_split('/(?=[A-Z])/', (string) $itemtype);
                     if ($pieces[1] == 'Plugin') {
                         $plugin_name = $pieces[2];
                         if (function_exists("plugin_version_" . $plugin_name)) { // For security
@@ -417,6 +427,7 @@ SQL;
                             $entity = $item->fields["entities_id"];
                         }
                     }
+
                     echo Dropdown::getDropdownName("glpi_entities", $entity);
 
                     echo "</td>";
@@ -426,12 +437,14 @@ SQL;
                 }
             }
         }
+
         echo "</table>";
         if ($canedit && $number) {
             $massiveactionparams['ontop'] = false;
             Html::showMassiveActions($massiveactionparams);
             Html::closeForm();
         }
+
         echo "</div>";
 
         return true;
@@ -440,8 +453,6 @@ SQL;
     /**
      * Add tags to an item
      *
-     * @param CommonDBTM $item
-     * @param bool $delete_existing_tags
      *
      * @return boolean
      */
@@ -457,7 +468,7 @@ SQL;
                 // flag
                 $item::getType() == Ticket::getType()
                 // Allow a few seconds difference if glpi_currenttime changed
-                && abs(strtotime($item->fields['date_creation']) - strtotime($_SESSION['glpi_currenttime'])) < 5
+                && abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) < 5
             )
         ) {
             return true;
@@ -488,23 +499,24 @@ SQL;
         }
 
         // create new values
-        $tag_values = !empty($item->input["_plugin_tag_tag_values"])
-         ? $item->input["_plugin_tag_tag_values"]
-         : [];
-        $tag_from_rules = !empty($item->input["_plugin_tag_tag_from_rules"])
-         ? [$item->input["_plugin_tag_tag_from_rules"]]
-         : [];
-        $additional_tags_from_rules = !empty($item->input["_additional_tags_from_rules"])
-        ? $item->input["_additional_tags_from_rules"]
-        : [];
+        $tag_values = empty($item->input["_plugin_tag_tag_values"])
+         ? []
+         : $item->input["_plugin_tag_tag_values"];
+        $tag_from_rules = empty($item->input["_plugin_tag_tag_from_rules"])
+         ? []
+         : [$item->input["_plugin_tag_tag_from_rules"]];
+        $additional_tags_from_rules = empty($item->input["_additional_tags_from_rules"])
+        ? []
+        : $item->input["_additional_tags_from_rules"];
         if (!is_array($tag_values)) {
             // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];
         }
+
         $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
 
         foreach ($tag_values as &$tag_value) {
-            if (str_contains($tag_value, "newtag_")) {
+            if (str_contains((string) $tag_value, "newtag_")) {
                 $tag_value = str_replace("newtag_", "", $tag_value);
                 $tag_value = $tag->add([
                     'name' => $tag_value,
@@ -528,6 +540,7 @@ SQL;
                 'itemtype' => $item->getType(),
             ]);
         }
+
         foreach ($removed_tags_ids as $tag_id) {
             $tag_item->deleteByCriteria([
                 'plugin_tag_tags_id' => $tag_id,
@@ -542,7 +555,6 @@ SQL;
     /**
      * Delete all tags associated to an item
      *
-     * @param  CommonDBTM $item
      * @return boolean
      */
     public static function purgeItem(CommonDBTM $item)
@@ -567,13 +579,14 @@ SQL;
                 echo Html::submit(_sx('button', 'Save'));
                 return true;
         }
+
         return parent::showMassiveActionsSubForm($ma);
     }
 
     public static function processMassiveActionsForOneItemtype(
         MassiveAction $ma,
         CommonDBTM $item,
-        array $ids
+        array $ids,
     ) {
         $input = $ma->getInput();
         switch ($ma->getAction()) {
@@ -591,6 +604,7 @@ SQL;
                         }
                     }
                 }
+
                 break;
             case "removeTag":
                 $tagitem = new self();
@@ -611,6 +625,7 @@ SQL;
                         }
                     }
                 }
+
                 break;
         }
     }

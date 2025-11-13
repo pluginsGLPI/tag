@@ -65,23 +65,23 @@
             ])|raw }}
         </div>
     {% endset %}
-    {% set tooltip_parts = tooltip_parts | merge([show_tooltip]) %}
+    {% set tooltip_parts = tooltip_parts|merge([show_tooltip]) %}
 {% endif %}
 
 {% if show_save_button is defined and show_save_button %}
-    {% set tooltip_parts = tooltip_parts | merge([
+    {% set tooltip_parts = tooltip_parts|merge([
         '<button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary"><i class="far fa-save"></i></button>'
     ]) %}
 {% endif %}
 
-{% set tooltip = tooltip_parts | join(' ') %}
+{% set tooltip = tooltip_parts|join(' ') %}
 {% if tooltip|length > 0 %}
     {% if options.no_label|default(false) %}
         {% set existing_add_field_class = options.add_field_class|default('') %}
-        {% set options = options | merge({'add_field_class': (existing_add_field_class ~ ' btn-group btn-group-sm')}) %}
+        {% set options = options|merge({'add_field_class': (existing_add_field_class ~ ' btn-group btn-group-sm')}) %}
     {% else %}
         {% set existing_input_class = options.input_class|default('') %}
-        {% set options = options | merge({'input_class': (existing_input_class ~ ' btn-group btn-group-sm')}) %}
+        {% set options = options|merge({'input_class': (existing_input_class ~ ' btn-group btn-group-sm')}) %}
     {% endif %}
 {% endif %}
 

@@ -26,9 +26,7 @@
  # -------------------------------------------------------------------------
  #}
 
-{% import 'components/form/fields_macros.html.twig' as fields %}
-
-{% set tagDropdownOptions = {
+{% set tag_dropdown_options = {
     'in_itilobject': {
         'full_width': true,
         'field_class': 'col-12 col-sm-12',
@@ -58,11 +56,11 @@
 } %}
 
 {% if in_itilobject %}
-    {% set currentOptions = tagDropdownOptions.in_itilobject %}
+    {% set current_options = tag_dropdown_options.in_itilobject %}
 {% elseif is_form is defined and is_form %}
-    {% set currentOptions = tagDropdownOptions.is_form %}
+    {% set current_options = tag_dropdown_options.is_form %}
 {% else %}
-    {% set currentOptions = tagDropdownOptions.default %}
+    {% set current_options = tag_dropdown_options.default %}
 {% endif %}
 
 {% if is_form is defined and is_form == false and in_itilobject == false %}

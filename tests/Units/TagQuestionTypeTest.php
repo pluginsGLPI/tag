@@ -47,7 +47,7 @@ final class TagQuestionTypeTest extends QuestionTypeTestCase
         // Assert: check that Tag question type category is registered
         $this->assertContains(
             PluginTagQuestionTypeCategory::class,
-            array_map(fn($category) => get_class($category), $categories),
+            array_map(fn($category) => $category::class, $categories),
         );
     }
 
@@ -60,7 +60,7 @@ final class TagQuestionTypeTest extends QuestionTypeTestCase
         // Assert: check that Tag question type is registered
         $this->assertContains(
             PluginTagQuestionType::class,
-            array_map(fn($type) => get_class($type), $types),
+            array_map(fn($type) => $type::class, $types),
         );
     }
 
@@ -69,6 +69,7 @@ final class TagQuestionTypeTest extends QuestionTypeTestCase
         // Arrange: create form with Tag question
         $builder = new FormBuilder("My form");
         $builder->addQuestion("My question", PluginTagQuestionType::class);
+
         $form = $this->createForm($builder);
 
         // Act: render form editor
@@ -87,6 +88,7 @@ final class TagQuestionTypeTest extends QuestionTypeTestCase
         // Arrange: create form with Tag question
         $builder = new FormBuilder("My form");
         $builder->addQuestion("My question", PluginTagQuestionType::class);
+
         $form = $this->createForm($builder);
 
         // Act: render helpdesk form

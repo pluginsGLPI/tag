@@ -42,6 +42,7 @@ use Ticket;
 final class TagRuleTest extends TagTestCase
 {
     private const SELF_SERVICE_USER = ['login' => 'post-only', 'pass' => 'postonly'];
+
     private const TECH_USER = ['login' => 'tech', 'pass' => 'tech'];
 
     public function testRuleApplyingTagSelfServiceUser(): void
@@ -295,14 +296,14 @@ final class TagRuleTest extends TagTestCase
         $criteria_pattern = 'Add Tag',
         string $action_type = 'assign',
         int $condition = RuleTicket::ONADD,
-        int $criteria_condition = Rule::PATTERN_CONTAIN
+        int $criteria_condition = Rule::PATTERN_CONTAIN,
     ): void {
         $rule       = new Rule();
         $criteria   = new RuleCriteria();
         $action     = new RuleAction();
 
         $rules_id = $rule->add([
-            'name'        => "Rule for tag $tagID",
+            'name'        => 'Rule for tag ' . $tagID,
             'is_active'   => 1,
             'entities_id' => 0,
             'sub_type'    => 'RuleTicket',

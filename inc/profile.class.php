@@ -41,6 +41,7 @@ class PluginTagProfile extends Profile
             $tagprofile = new self();
             $tagprofile->showForm($item->getID());
         }
+
         return true;
     }
 
@@ -74,6 +75,7 @@ class PluginTagProfile extends Profile
             echo "</div>\n";
             Html::closeForm();
         }
+
         echo "</div>";
 
         return true;

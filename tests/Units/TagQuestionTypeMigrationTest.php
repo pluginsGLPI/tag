@@ -43,8 +43,6 @@ final class TagQuestionTypeMigrationTest extends QuestionTypeTestCase
     {
         global $DB;
 
-        parent::setUpBeforeClass();
-
         $tables = $DB->listTables('glpi\_plugin\_formcreator\_%');
         foreach ($tables as $table) {
             $DB->dropTable($table['TABLE_NAME']);
@@ -67,8 +65,6 @@ final class TagQuestionTypeMigrationTest extends QuestionTypeTestCase
         foreach ($tables as $table) {
             $DB->dropTable($table['TABLE_NAME']);
         }
-
-        parent::tearDownAfterClass();
     }
 
     public function testTagsQuestionIsMigrated(): void

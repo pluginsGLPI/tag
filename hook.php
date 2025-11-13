@@ -159,8 +159,8 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "")
                     $separator = '<span style="display:none">, </span>';
                 }
             }
-            $out .= '</div></div>';
-            return $out;
+
+            return $out . '</div></div>';
     }
 
     return "";
@@ -173,16 +173,19 @@ function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num)
     $table     = $searchopt[$id]["table"];
     $field     = $searchopt[$id]["field"];
 
-    if ($table . "." . $field == "glpi_plugin_tag_tags.type_menu") {
-        $values = explode(",", $val);
-        $where  = "$link `ITEM_$num` LIKE '%" . $values[0] . "%'";
+    if ($table . "." . $field === "glpi_plugin_tag_tags.type_menu") {
+        $values = explode(",", (string) $val);
+        $where  = sprintf("%s `ITEM_%s` LIKE '%%", $link, $num) . $values[0] . "%'";
         array_shift($values);
         foreach ($values as $value) {
             $value = trim($value);
-            $where .= " OR `ITEM_$num` LIKE '%$value%'";
+            $where .= sprintf(" OR `ITEM_%s` LIKE '%%%s%%'", $num, $value);
         }
+
         return $where;
     }
+
+    return null;
 }
 
 function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype)
@@ -191,13 +194,13 @@ function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype)
     $table     = $searchopt[$id]["table"];
     $field     = $searchopt[$id]["field"];
 
-    if ($table . "." . $field == "glpi_plugin_tag_tags.type_menu") {
+    if ($table . "." . $field === "glpi_plugin_tag_tags.type_menu") {
         switch ($searchtype) {
             case 'equals':
-                return "`glpi_plugin_tag_tags`.`type_menu` LIKE '%\"$val\"%'";
+                return sprintf("`glpi_plugin_tag_tags`.`type_menu` LIKE '%%\"%s\"%%'", $val);
 
             case 'notequals':
-                return "`glpi_plugin_tag_tags`.`type_menu` NOT LIKE '%\"$val\"%'";
+                return sprintf("`glpi_plugin_tag_tags`.`type_menu` NOT LIKE '%%\"%s\"%%'", $val);
         }
     }
 
@@ -252,7 +255,7 @@ function plugin_tag_install()
             $classname = 'PluginTag' . ucfirst($matches[1]);
 
             // Don't load Datainjection mapping lass (no install + bug if datainjection is not installed and activated)
-            if ($classname == 'PluginTagTaginjection') {
+            if ($classname === 'PluginTagTaginjection') {
                 continue;
             }
 
@@ -263,6 +266,7 @@ function plugin_tag_install()
             }
         }
     }
+
     return true;
 }
 
@@ -280,7 +284,7 @@ function plugin_tag_uninstall()
             $classname = 'PluginTag' . ucfirst($matches[1]);
 
             // Don't load Datainjection mapping lass (no uninstall + bug if datainjection is not installed and activated)
-            if ($classname == 'PluginTagTaginjection') {
+            if ($classname === 'PluginTagTaginjection') {
                 continue;
             }
 
@@ -291,6 +295,7 @@ function plugin_tag_uninstall()
             }
         }
     }
+
     return true;
 }
 
@@ -349,18 +354,15 @@ function plugin_tag_getRuleActions($params = [])
 {
     $actions = [];
 
-    switch ($params['rule_itemtype']) {
-        case "RuleTicket":
-            $actions['_plugin_tag_tag_from_rules'] = [
-                'name'  => __s("Add tags", 'tag'),
-                'type'  => 'dropdown',
-                'table' => PluginTagTag::getTable(),
-                'force_actions' => ['assign', 'append'],
-                'appendto' => '_additional_tags_from_rules',
-                'condition' => ['type_menu' => ['LIKE', '%\"Ticket\"%']],
-            ];
-
-            break;
+    if ($params['rule_itemtype'] === "RuleTicket") {
+        $actions['_plugin_tag_tag_from_rules'] = [
+            'name'  => __s("Add tags", 'tag'),
+            'type'  => 'dropdown',
+            'table' => PluginTagTag::getTable(),
+            'force_actions' => ['assign', 'append'],
+            'appendto' => '_additional_tags_from_rules',
+            'condition' => ['type_menu' => ['LIKE', '%\"Ticket\"%']],
+        ];
     }
 
     return $actions;
