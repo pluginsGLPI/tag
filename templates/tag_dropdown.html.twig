@@ -75,6 +75,8 @@
                     <div class="row flex-row align-items-start flex-grow-1" style="min-width: 0;">
                         <div class="row flex-row">
     {% endif %}
+{% elseif in_itilobject == true %}
+    <input type="hidden" name='_plugin_tag_tag_process_form', id='_plugin_tag_tag_process_form', value='1' />
 {% endif %}
 
 {% include "@tag/dropdown.html.twig" with {
