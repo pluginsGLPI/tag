@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Fixed
 
-- Fix missing tag saving on ITIL objects
+- Improve tag handling: correctly add, update, and remove tags
 
 ## [2.14.0] - 2025-11-13
 
