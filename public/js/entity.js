@@ -47,6 +47,9 @@ var setEntityTag = function() {
             if (entity_element.hasClass('tags_already_set')) {
                 return; // consider this return as a continue in a jquery each
             }
+            if (!entity_name) {
+                return;
+            }
             entity_element.addClass('tags_already_set');
     
             $.ajax({
