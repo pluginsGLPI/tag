@@ -415,7 +415,7 @@ SQL;
     {
         switch ($field) {
             case 'type_menu':
-                $itemtypes = json_decode((string) $values[$field]);
+                $itemtypes = !empty($values[$field]) ? json_decode((string) $values[$field], true) : [];
                 if (!is_array($itemtypes)) {
                     return "&nbsp;";
                 }
