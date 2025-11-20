@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Improve tag handling: correctly add, update, and remove tags
+
 ## [2.14.1] - 2025-11-20
 
-## Fixed
+### Fixed
 
 - Improve tag handling: correctly add, update, and remove tags
 
