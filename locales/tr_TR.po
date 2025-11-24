@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 00:48+0000\n"
+"POT-Creation-Date: 2025-11-24 00:51+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2022,2024-2025\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-plugin-tag/language/tr_TR/)\n"
@@ -22,52 +22,57 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiketler"
 
-#: setup.php:130
+#: setup.php:136
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "Ögenin etiketi varsa"
 
-#: setup.php:134
+#: setup.php:140
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Öge etiketlenmişse"
 
-#: setup.php:178 inc/profile.class.php:35 inc/config.class.php:39
-#: inc/config.class.php:56
+#: setup.php:184 inc/profile.class.php:35 inc/config.class.php:39
+#: inc/config.class.php:58
 msgid "Tag Management"
 msgstr "Etiket yönetimi"
 
-#: inc/questiontypecategory.class.php:37 inc/tag.class.php:46
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiket"
 msgstr[1] "Etiket"
 
-#: inc/profile.class.php:67
+#: inc/profile.class.php:68
 msgid "Tag management"
 msgstr "Etiket yönetimi"
 
-#: inc/config.class.php:57
+#: inc/config.class.php:59
 msgid "Tags location"
 msgstr "Etiketlerin konumu"
 
-#: inc/tag.class.php:386
+#: inc/tag.class.php:372
 msgid "HTML color"
 msgstr "HTML rengi"
 
-#: hook.php:229 hook.php:355
+#: hook.php:235 hook.php:362
 msgid "Add tags"
 msgstr "Etiket ekle"
 
-#: hook.php:231
+#: hook.php:237
 msgid "Remove tags"
 msgstr "Etiket sil"
 
-#: ajax/tag.php:47
+#: ajax/tag.php:45
+msgid "Invalid item type"
+msgstr "Öge türü geçersiz"
+
+#: ajax/tag.php:55
 msgid "Tags have been updated"
 msgstr "Etiketler güncellendi"
 
-#: ajax/tag.php:55
+#: ajax/tag.php:61
 msgid "Tags have not been updated"
 msgstr "Etiketler güncellenmedi"
 
