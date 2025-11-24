@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 00:47+0000\n"
+"POT-Creation-Date: 2025-11-14 00:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: INOUE Daisuke, 2023,2025\n"
 "Language-Team: Japanese (Japan) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ja_JP/)\n"
@@ -22,51 +22,56 @@ msgstr ""
 msgid "Tags"
 msgstr "タグ"
 
-#: setup.php:130
+#: setup.php:136
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "アイテムにタグがあったら"
 
-#: setup.php:134
+#: setup.php:140
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "アイテムにタグがついたら"
 
-#: setup.php:178 inc/profile.class.php:35 inc/config.class.php:39
-#: inc/config.class.php:56
+#: setup.php:184 inc/profile.class.php:35 inc/config.class.php:39
+#: inc/config.class.php:58
 msgid "Tag Management"
 msgstr "タグ管理"
 
-#: inc/questiontypecategory.class.php:37 inc/tag.class.php:46
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "タグ"
 
-#: inc/profile.class.php:67
+#: inc/profile.class.php:68
 msgid "Tag management"
 msgstr "タグ管理"
 
-#: inc/config.class.php:57
+#: inc/config.class.php:59
 msgid "Tags location"
 msgstr "タグの表示位置"
 
-#: inc/tag.class.php:386
+#: inc/tag.class.php:372
 msgid "HTML color"
 msgstr "HTML カラー"
 
-#: hook.php:229 hook.php:355
+#: hook.php:235 hook.php:362
 msgid "Add tags"
 msgstr "タグを追加"
 
-#: hook.php:231
+#: hook.php:237
 msgid "Remove tags"
 msgstr "タグを削除"
 
-#: ajax/tag.php:47
+#: ajax/tag.php:45
+msgid "Invalid item type"
+msgstr ""
+
+#: ajax/tag.php:55
 msgid "Tags have been updated"
 msgstr "タグを更新しました"
 
-#: ajax/tag.php:55
+#: ajax/tag.php:61
 msgid "Tags have not been updated"
 msgstr "タグを更新していません"
 

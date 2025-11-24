@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 00:48+0000\n"
+"POT-Creation-Date: 2025-11-14 00:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: hamkms, 2025\n"
 "Language-Team: Russian (Russia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ru_RU/)\n"
@@ -25,22 +25,23 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: setup.php:130
+#: setup.php:136
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "Если сущность имеет тег"
 
-#: setup.php:134
+#: setup.php:140
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Если для сущности задан тег"
 
-#: setup.php:178 inc/profile.class.php:35 inc/config.class.php:39
-#: inc/config.class.php:56
+#: setup.php:184 inc/profile.class.php:35 inc/config.class.php:39
+#: inc/config.class.php:58
 msgid "Tag Management"
 msgstr "Управление тегами"
 
-#: inc/questiontypecategory.class.php:37 inc/tag.class.php:46
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "тег"
@@ -48,31 +49,35 @@ msgstr[1] "тегов"
 msgstr[2] "тегов"
 msgstr[3] "Теги"
 
-#: inc/profile.class.php:67
+#: inc/profile.class.php:68
 msgid "Tag management"
 msgstr "Управление тегами"
 
-#: inc/config.class.php:57
+#: inc/config.class.php:59
 msgid "Tags location"
 msgstr "Расположение тегов"
 
-#: inc/tag.class.php:386
+#: inc/tag.class.php:372
 msgid "HTML color"
 msgstr "Цвет HTML"
 
-#: hook.php:229 hook.php:355
+#: hook.php:235 hook.php:362
 msgid "Add tags"
 msgstr "Добавить тег"
 
-#: hook.php:231
+#: hook.php:237
 msgid "Remove tags"
 msgstr "Удалить теги"
 
-#: ajax/tag.php:47
+#: ajax/tag.php:45
+msgid "Invalid item type"
+msgstr ""
+
+#: ajax/tag.php:55
 msgid "Tags have been updated"
 msgstr "Теги были обновлены"
 
-#: ajax/tag.php:55
+#: ajax/tag.php:61
 msgid "Tags have not been updated"
 msgstr "Теги не были обновлены"
 
