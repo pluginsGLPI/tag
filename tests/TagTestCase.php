@@ -31,7 +31,7 @@
 namespace GlpiPlugin\Tag\Tests;
 
 use CommonDBTM;
-use DbTestCase;
+use Glpi\Tests\DbTestCase;
 use PluginTagTag;
 use PluginTagTagItem;
 use Profile_User;

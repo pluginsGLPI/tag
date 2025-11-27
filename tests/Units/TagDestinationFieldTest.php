@@ -32,6 +32,7 @@ namespace GlpiPlugin\Tag\Tests\Units;
 
 use Glpi\Form\AnswersHandler\AnswersHandler;
 use Glpi\Form\Form;
+use Glpi\Tests\AbstractDestinationFieldTest;
 use Glpi\Tests\FormBuilder;
 use Glpi\Tests\FormTesterTrait;
 use Override;
@@ -41,7 +42,6 @@ use PluginTagDestinationFieldStrategy;
 use PluginTagQuestionType;
 use PluginTagTag;
 use PluginTagTagItem;
-use tests\units\Glpi\Form\Destination\CommonITILField\AbstractDestinationFieldTest;
 use User;
 
 include_once __DIR__ . '/../../../../tests/abstracts/AbstractDestinationFieldTest.php';

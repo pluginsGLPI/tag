@@ -29,10 +29,8 @@
  */
 
 require __DIR__ . '/../../../tests/bootstrap.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-if (!Plugin::isPluginActive("tag")) {
-    throw new RuntimeException("Plugin tag is not active in the test database");
+if (!Plugin::isPluginActive('tag')) {
+    throw new RuntimeException('Plugin tag is not active in the test database');
 }
-
-require_once __DIR__ . '/TagTestCase.php';
-require_once __DIR__ . '/QuestionTypeTestCase.php';
