@@ -38,7 +38,7 @@ use Glpi\Plugin\Hooks;
 
 use function Safe\define;
 
-define('PLUGIN_TAG_VERSION', '2.14.1');
+define('PLUGIN_TAG_VERSION', '2.14.2');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "11.0.1");
