@@ -460,6 +460,7 @@ SQL;
      */
     public static function showForItem($params = [])
     {
+        Toolbox::logDebug("here1");
         if (!self::canView()) {
             return false;
         }
@@ -598,6 +599,7 @@ SQL;
      */
     public static function showTagDropdown($params = [])
     {
+        Toolbox::logDebug("here");
         // compute default params
         $default_params = [
             'id'       => 0,
