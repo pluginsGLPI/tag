@@ -460,7 +460,6 @@ SQL;
      */
     public static function showForItem($params = [])
     {
-        Toolbox::logDebug("here1");
         if (!self::canView()) {
             return false;
         }
