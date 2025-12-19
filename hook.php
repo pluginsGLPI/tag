@@ -97,11 +97,16 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
         'searchtype'    => ['equals','notequals','contains'],
         'massiveaction' => false,
         'forcegroupby'  => true,
+        'usehaving'     => true,
         'joinparams'    =>  [
             'beforejoin' => [
                 'table'      => 'glpi_plugin_tag_tagitems',
                 'joinparams' => [
                     'jointype' => 'itemtype_item',
+                    'specific_itemtype' => $itemtype,
+                    'beforejoin' => [
+                        'table' => getTableForItemType($itemtype),
+                    ],
                 ],
             ],
         ],
@@ -172,7 +177,7 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "")
 
 function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num)
 {
-    $searchopt = &Search::getOptions($itemtype);
+    $searchopt = Search::getOptions($itemtype);
     $table     = $searchopt[$id]["table"];
     $field     = $searchopt[$id]["field"];
 
@@ -193,7 +198,7 @@ function plugin_tag_addHaving($link, $nott, $itemtype, $id, $val, $num)
 
 function plugin_tag_addWhere($link, $nott, $itemtype, $id, $val, $searchtype)
 {
-    $searchopt = &Search::getOptions($itemtype);
+    $searchopt = Search::getOptions($itemtype);
     $table     = $searchopt[$id]["table"];
     $field     = $searchopt[$id]["field"];
 
