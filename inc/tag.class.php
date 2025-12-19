@@ -598,7 +598,6 @@ SQL;
      */
     public static function showTagDropdown($params = [])
     {
-        Toolbox::logDebug("here");
         // compute default params
         $default_params = [
             'id'       => 0,
