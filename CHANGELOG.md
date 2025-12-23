@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix tag search
-
+- Fix quote display in tag destination field strategy labels
 
 ## [2.14.2] - 2025-12-02
 
