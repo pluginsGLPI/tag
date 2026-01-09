@@ -705,7 +705,7 @@ SQL;
             || ($obj->isNewItem() && !$obj->canCreateItem())
             || (!$obj->isNewItem() && !$obj->canUpdateItem())
             || (!empty($params['items_ids']) && !$can_update_all);
-        
+
         if (!$readOnly) {
             echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
         }
