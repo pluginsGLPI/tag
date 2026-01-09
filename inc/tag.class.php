@@ -694,7 +694,21 @@ SQL;
         echo "<div class='btn-group btn-group-sm w-100 $extra_class'>";
 
         $rand = mt_rand();
-        echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
+
+        // Returns false if at least one item in "items_ids" cannot be updated
+        $can_update_all = count(array_filter($params['items_ids'], function ($value) use ($obj) {
+            $obj->getFromDB($value);
+            return !$obj->canUpdateItem();
+        })) === 0;
+
+        $readOnly = !$tag::canUpdate()
+            || ($obj->isNewItem() && !$obj->canCreateItem())
+            || (!$obj->isNewItem() && !$obj->canUpdateItem())
+            || (!empty($params['items_ids']) && !$can_update_all);
+        
+        if (!$readOnly) {
+            echo Html::hidden('_plugin_tag_tag_process_form', ['value' => '1',]);
+        }
         echo Html::select(
             '_plugin_tag_tag_values[]',
             [],
@@ -710,17 +724,6 @@ SQL;
         if (!self::canCreate()) {
             $token_creation = "return null;";
         }
-
-        // Returns false if at least one item in "items_ids" cannot be updated
-        $can_update_all = count(array_filter($params['items_ids'], function ($value) use ($obj) {
-            $obj->getFromDB($value);
-            return !$obj->canUpdateItem();
-        })) === 0;
-
-        $readOnly = !$tag::canUpdate()
-            || ($obj->isNewItem() && !$obj->canCreateItem())
-            || (!$obj->isNewItem() && !$obj->canUpdateItem())
-            || (!empty($params['items_ids']) && !$can_update_all);
 
         // call select2 lib for this input
         echo Html::scriptBlock("
