@@ -35,6 +35,7 @@ use Glpi\Form\Form;
 use Glpi\Form\Migration\TypesConversionMapper;
 use Glpi\Form\QuestionType\QuestionTypesManager;
 use Glpi\Plugin\Hooks;
+use GlpiPlugin\Webapplications\Webapplication;
 
 use function Safe\define;
 
@@ -92,8 +93,8 @@ function plugin_init_tag()
         }
 
         // Plugin Webapplication
-        if (Plugin::isPluginActive('webapplications')) {
-            $CFG_GLPI['plugin_tag_itemtypes'][__s('Assets')][] = 'PluginWebapplicationsWebapplication';
+        if (Plugin::isPluginActive('webapplications') && class_exists(Webapplication::class)) {
+            $CFG_GLPI['plugin_tag_itemtypes'][__s('Assets')][] = Webapplication::class;
         }
 
         // Plugin fusioninventory

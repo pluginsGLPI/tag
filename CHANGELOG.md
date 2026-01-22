@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix tag search
+- Fix `webapplication` plugin integration
 
 ## [2.14.3] - 2025-12-22
 
