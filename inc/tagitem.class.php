@@ -299,7 +299,7 @@ SQL;
                         'glpi_plugin_tag_tagitems.plugin_tag_tags_id' => $instID,
                     ] + getEntitiesRestrictCriteria($itemtable, '', '', $item->maybeRecursive()),
                     'ORDERBY'    => [
-                    ]
+                    ],
                 ];
 
                 if ($column !== '') {
