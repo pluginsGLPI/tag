@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix tag search
 - Fix `webapplication` plugin integration
+- Prevent SQL error when column `name` not exist from `Item_Device`
 
 ## [2.14.3] - 2025-12-22
 

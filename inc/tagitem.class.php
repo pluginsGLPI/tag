@@ -265,7 +265,9 @@ SQL;
             $item_id = $result2[$i]['items_id'];
 
             if ($item->canView()) {
-                $column = (strtolower(substr((string) $itemtype, 0, 6)) === "device") ? "designation" : "name";
+                $column = (stripos((string) $itemtype, 'item_device') !== false)
+                ? ''
+                : ((stripos((string) $itemtype, 'device') === 0) ? 'designation' : 'name');
 
                 // For rules itemtypes (example : ruledictionnaryphonemodel)
                 if (strtolower(substr((string) $itemtype, 0, 4)) === 'rule' || $itemtype == "PluginResourcesRulechecklist") {
@@ -297,9 +299,14 @@ SQL;
                         'glpi_plugin_tag_tagitems.plugin_tag_tags_id' => $instID,
                     ] + getEntitiesRestrictCriteria($itemtable, '', '', $item->maybeRecursive()),
                     'ORDERBY'    => [
-                        $itemtable . '.' . $column,
-                    ],
+                    ]
                 ];
+
+                if ($column !== '') {
+                    $criteria['ORDERBY'] = [
+                        $itemtable . '.' . $column,
+                    ];
+                }
 
                 if ($item->maybeTemplate()) {
                     $criteria['WHERE'][$itemtable . '.is_template'] = 0;
@@ -364,7 +371,7 @@ SQL;
                         );
                     }
 
-                    $linkname = $data[$column];
+                    $linkname = $data[$column] ?? "";
 
                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
                         $linkname = sprintf(__s('%1$s (%2$s)'), $linkname, $data["id"]);
