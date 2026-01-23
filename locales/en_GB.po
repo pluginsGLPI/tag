@@ -1,14 +1,14 @@
 # English translations for PACKAGE package.
-# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2025.
+# Automatically generated, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 00:51+0000\n"
-"PO-Revision-Date: 2025-12-16 00:51+0000\n"
+"POT-Creation-Date: 2026-01-23 00:53+0000\n"
+"PO-Revision-Date: 2026-01-23 00:53+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -21,17 +21,17 @@ msgstr ""
 msgid "Tags"
 msgstr "Tags"
 
-#: setup.php:136
+#: setup.php:137
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "If the item has a tag"
 
-#: setup.php:140
+#: setup.php:141
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "If the item is tagged"
 
-#: setup.php:184 inc/profile.class.php:35 inc/config.class.php:39
+#: setup.php:185 inc/profile.class.php:35 inc/config.class.php:39
 #: inc/config.class.php:58
 msgid "Tag Management"
 msgstr "Tag Management"
@@ -55,11 +55,11 @@ msgstr "Tags location"
 msgid "HTML color"
 msgstr "HTML color"
 
-#: hook.php:235 hook.php:362
+#: hook.php:239 hook.php:366
 msgid "Add tags"
 msgstr "Add tags"
 
-#: hook.php:237
+#: hook.php:241
 msgid "Remove tags"
 msgstr "Remove tags"
 

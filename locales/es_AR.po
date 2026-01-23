@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alan Ivés Lehoux, 2025
+# Alan Lehoux, 2025
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 00:51+0000\n"
+"POT-Creation-Date: 2026-01-23 00:53+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: Alan Ivés Lehoux, 2025\n"
+"Last-Translator: Alan Lehoux, 2025\n"
 "Language-Team: Spanish (Argentina) (http://app.transifex.com/teclib/glpi-plugin-tag/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,17 +22,17 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: setup.php:136
+#: setup.php:137
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "Si el elemento tiene una etiqueta"
 
-#: setup.php:140
+#: setup.php:141
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Si el elemento está etiquetado"
 
-#: setup.php:184 inc/profile.class.php:35 inc/config.class.php:39
+#: setup.php:185 inc/profile.class.php:35 inc/config.class.php:39
 #: inc/config.class.php:58
 msgid "Tag Management"
 msgstr "Gestión de Etiquetas"
@@ -57,11 +57,11 @@ msgstr "Ubicación de etiquetas"
 msgid "HTML color"
 msgstr "Color HTML"
 
-#: hook.php:235 hook.php:362
+#: hook.php:239 hook.php:366
 msgid "Add tags"
 msgstr "Agregar etiquetas"
 
-#: hook.php:237
+#: hook.php:241
 msgid "Remove tags"
 msgstr "Quitar etiquetas"
 

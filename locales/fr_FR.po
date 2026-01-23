@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 00:48+0000\n"
+"POT-Creation-Date: 2026-01-23 00:53+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: EpicIT33, 2025\n"
 "Language-Team: French (France) (http://app.transifex.com/teclib/glpi-plugin-tag/language/fr_FR/)\n"
@@ -27,17 +27,17 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: setup.php:136
+#: setup.php:137
 msgctxt "filters"
 msgid "If the item has a tag"
 msgstr "Si l'élément a un tag"
 
-#: setup.php:140
+#: setup.php:141
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Si l'élément est tagué"
 
-#: setup.php:184 inc/profile.class.php:35 inc/config.class.php:39
+#: setup.php:185 inc/profile.class.php:35 inc/config.class.php:39
 #: inc/config.class.php:58
 msgid "Tag Management"
 msgstr "Gestion des tags"
@@ -62,11 +62,11 @@ msgstr "Localisation des tags"
 msgid "HTML color"
 msgstr "Couleur HTML"
 
-#: hook.php:235 hook.php:362
+#: hook.php:239 hook.php:366
 msgid "Add tags"
 msgstr "Ajouter des étiquettes"
 
-#: hook.php:237
+#: hook.php:241
 msgid "Remove tags"
 msgstr "Supprimer des étiquettes"
 
