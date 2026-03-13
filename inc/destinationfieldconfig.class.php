@@ -57,7 +57,7 @@ class PluginTagDestinationFieldConfig implements
     public static function jsonDeserialize(array $data): self
     {
         $strategies = array_map(
-            fn($value) => PluginTagDestinationFieldStrategy::tryFrom($value),
+            PluginTagDestinationFieldStrategy::tryFrom(...),
             $data[self::STRATEGIES] ?? [],
         );
         if ($strategies === []) {

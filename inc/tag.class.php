@@ -71,7 +71,7 @@ class PluginTagTag extends CommonDropdown
             'PluginPrintercountersRecord',
             'ITILSolution',
             'ITILFollowup',
-            'TicketSatisfaction'
+            'TicketSatisfaction',
         ];
     }
 
@@ -317,7 +317,7 @@ SQL;
     {
         $tagitems = new PluginTagTagItem();
         $data = $tagitems->find(['plugin_tag_tags_id' => $this->getID()]);
-        return count($data) != 0;
+        return count($data) !== 0;
     }
 
     public function rawSearchOptions()

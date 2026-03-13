@@ -66,7 +66,7 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
             return '';
         }
 
-        if (count(array_filter($answer, 'is_numeric')) !== count($answer)) {
+        if (count(array_filter($answer, is_numeric(...))) !== count($answer)) {
             throw new LogicException('Answer must be an array of numeric IDs');
         }
 
