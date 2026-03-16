@@ -102,7 +102,7 @@ enum PluginTagDestinationFieldStrategy: string
         AnswersSet $answers_set,
     ): array {
         $valid_answers = $answers_set->getAnswersByType(PluginTagQuestionType::class);
-        if (count($valid_answers) == 0) {
+        if ($valid_answers === []) {
             return [];
         }
 
