@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-23 00:53+0000\n"
+"POT-Creation-Date: 2026-03-17 01:04+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: INOUE Daisuke, 2023,2025\n"
 "Language-Team: Japanese (Japan) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ja_JP/)\n"
@@ -21,39 +21,6 @@ msgstr ""
 #: templates/dropdown.html.twig
 msgid "Tags"
 msgstr "タグ"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "アイテムにタグがあったら"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "アイテムにタグがついたら"
-
-#: setup.php:185 inc/profile.class.php:35 inc/config.class.php:39
-#: inc/config.class.php:58
-msgid "Tag Management"
-msgstr "タグ管理"
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "タグ"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "タグ管理"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "タグの表示位置"
-
-#: inc/tag.class.php:372
-msgid "HTML color"
-msgstr "HTML カラー"
 
 #: hook.php:239 hook.php:366
 msgid "Add tags"
@@ -78,3 +45,36 @@ msgstr "タグを更新していません"
 #: ajax/tag.php:64
 msgid "Missing parameters"
 msgstr "パラメーターがありません"
+
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "タグ管理"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "タグの表示位置"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "タグ管理"
+
+#: inc/tag.class.php:51 inc/questiontypecategory.class.php:37
+#: inc/destinationfield.class.php:44
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "タグ"
+
+#: inc/tag.class.php:373
+msgid "HTML color"
+msgstr "HTML カラー"
+
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "アイテムにタグがあったら"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "アイテムにタグがついたら"
