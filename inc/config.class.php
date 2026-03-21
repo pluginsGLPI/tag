@@ -28,13 +28,14 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+
 class PluginTagConfig extends CommonDBTM
 {
     protected static $notable = true;
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-
         if (!$withtemplate && $item->getType() === 'Config') {
             return self::createTabEntry(__s('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
         }
@@ -50,35 +51,14 @@ class PluginTagConfig extends CommonDBTM
 
         $config = Config::getConfigurationValues('plugin:Tag');
 
-        echo "<form name='form' action=\"" . Toolbox::getItemTypeFormURL('Config') . "\" method='post'>";
-        echo "<input type='hidden' name='config_class' value='" . self::class . "'>";
-        echo "<input type='hidden' name='config_context' value='plugin:Tag'>";
-        echo "<div class='center' id='tabsbody'>";
-        echo "<table class='tab_cadre_fixe'><thead>";
-        echo "<th colspan='4'>" . __s('Tag Management', 'tag') . '</th></thead>';
-        echo '<td>' . __s('Tags location', 'tag') . '</td><td>';
-        Dropdown::showFromArray(
-            'tags_location',
-            [
-                __s('Top'),
-                __s('Bottom'),
-            ],
-            [
-                'value'  => $config['tags_location'] ?? 0,
-            ],
-        );
-        echo '</td></tr>';
-        echo '</table>';
+        TemplateRenderer::getInstance()->display('@tag/forms/config.html.twig', [
+            'form_action'    => Toolbox::getItemTypeFormURL('Config'),
+            'config_class'   => self::class,
+            'config_context' => 'plugin:Tag',
+            'tags_location'  => (int) ($config['tags_location'] ?? 0),
+        ]);
 
-        echo "<table class='tab_cadre_fixe'>";
-        echo "<tr class='tab_bg_2'>";
-        echo "<td colspan='4' class='center'>";
-        echo "<input type='submit' name='update' class='submit' value=\"" . _sx('button', 'Save') . '">';
-        echo '</td></tr>';
-        echo '</table>';
-        echo '</div>';
-        Html::closeForm();
-        return null;
+        return true;
     }
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
