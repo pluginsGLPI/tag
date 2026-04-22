@@ -30,17 +30,19 @@
 
 use Glpi\Api\HL\Controller\AbstractController;
 use Glpi\Api\HL\Doc as Doc;
+use Glpi\Api\HL\ResourceAccessor;
 use Glpi\Api\HL\Route;
+use Glpi\Api\HL\RouteVersion;
 use Glpi\Http\Request;
 use Glpi\Http\Response;
 
-#[Route(path: '/Tag', priority: 1, tags: ['Tag'])]
+#[Route(path: '/Plugin/Tag', priority: 1, tags: ['PluginTag'])]
 final class PluginTagApicontroller extends AbstractController
 {
     protected static function getRawKnownSchemas(): array
     {
         return [
-            'Tag' => [
+            'PluginTag' => [
                 'type' => Doc\Schema::TYPE_OBJECT,
                 'x-itemtype' => PluginTagTag::class,
                 'properties' => [
@@ -57,85 +59,62 @@ final class PluginTagApicontroller extends AbstractController
     }
 
     #[Route(path: '/', methods: ['GET'])]
-    #[Doc\Route(
-        description: 'List or search tags'
-    )]
+    #[RouteVersion('2.3.0')]
+    #[Doc\SearchRoute('PluginTag')]
     public function getTags(Request $request): Response
     {
-        return \Glpi\Api\HL\Search::searchBySchema($this->getKnownSchema('Tag'), $request->getParameters());
+        return ResourceAccessor::searchBySchema(
+            $this->getKnownSchema('PluginTag', $this->getAPIVersion($request)),
+            $request->getParameters()
+        );
     }
 
     #[Route(path: '/{id}', methods: ['GET'], requirements: ['id' => '\d+'])]
-    #[Doc\Route(
-        description: 'Get a tag by ID',
-        parameters: [
-            [
-                'name' => 'id',
-                'description' => 'The ID of the tag',
-                'location' => Doc\Parameter::LOCATION_PATH,
-                'schema' => ['type' => Doc\Schema::TYPE_INTEGER]
-            ]
-        ]
-    )]
+    #[RouteVersion('2.3.0')]
+    #[Doc\GetRoute('PluginTag')]
     public function getTag(Request $request, int $id): Response
     {
-        return \Glpi\Api\HL\Search::getOneBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
+        return ResourceAccessor::getOneBySchema(
+            $this->getKnownSchema('PluginTag', $this->getAPIVersion($request)),
+            $request->getAttributes(),
+            $request->getParameters(),
+            $id
+        );
     }
 
     #[Route(path: '/', methods: ['POST'])]
-    #[Doc\Route(description: 'Create a new tag', parameters: [
-        [
-            'name' => '_',
-            'location' => Doc\Parameter::LOCATION_BODY,
-            'type' => Doc\Schema::TYPE_OBJECT,
-            'schema' => 'Tag',
-        ]
-    ])]
+    #[RouteVersion('2.3.0')]
+    #[Doc\CreateRoute('PluginTag')]
     public function createTag(Request $request): Response
     {
-        return \Glpi\Api\HL\Search::createBySchema($this->getKnownSchema('Tag'), $request->getParameters(), 'getTag');
+        return ResourceAccessor::createBySchema(
+            $this->getKnownSchema('PluginTag', $this->getAPIVersion($request)),
+            $request->getParameters(),
+            [self::class, 'getTag']
+        );
     }
 
     #[Route(path: '/{id}', methods: ['PATCH'], requirements: ['id' => '\d+'])]
-    #[Doc\Route(
-        description: 'Update a tag by ID',
-        parameters: [
-            [
-                'name' => 'id',
-                'description' => 'The ID of the tag',
-                'location' => Doc\Parameter::LOCATION_PATH,
-                'schema' => ['type' => Doc\Schema::TYPE_INTEGER]
-            ],
-            [
-                'name' => '_',
-                'location' => Doc\Parameter::LOCATION_BODY,
-                'type' => Doc\Schema::TYPE_OBJECT,
-                'schema' => 'Tag',
-            ]
-        ],
-        responses: [
-            ['schema' => 'Tag']
-        ]
-    )]
+    #[RouteVersion('2.3.0')]
+    #[Doc\UpdateRoute('PluginTag')]
     public function updateTag(Request $request, int $id): Response
     {
-        return \Glpi\Api\HL\Search::updateBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
+        return ResourceAccessor::updateBySchema(
+            $this->getKnownSchema('PluginTag', $this->getAPIVersion($request)),
+            $request->getAttributes(),
+            $request->getParameters(),
+        );
     }
 
     #[Route(path: '/{id}', methods: ['DELETE'], requirements: ['id' => '\d+'])]
-    #[Doc\Route(
-        description: 'Delete a tag by ID',
-        parameters: [
-            [
-                'name' => 'id',
-                'description' => 'The ID of the tag',
-                'location' => Doc\Parameter::LOCATION_PATH,
-                'schema' => ['type' => Doc\Schema::TYPE_INTEGER]
-            ]
-        ]
-    )]
+    #[Doc\DeleteRoute('PluginTag')]
     public function deleteTag(Request $request, int $id): Response
     {
-        return \Glpi\Api\HL\Search::deleteBySchema($this->getKnownSchema('Tag'), $request->getAttributes(), $request->getParameters(), $id);
+        return ResourceAccessor::deleteBySchema(
+            $this->getKnownSchema('PluginTag', $this->getAPIVersion($request)),
+            $request->getAttributes(),
+            $request->getParameters(),
+            $id
+        );
     }
 }

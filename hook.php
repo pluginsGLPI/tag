@@ -388,6 +388,7 @@ function plugin_tag_redefine_api_schemas(array $data): array {
                 'description' => 'Tags',
                 'items' => [
                     'type' => Doc\Schema::TYPE_OBJECT,
+                    'x-full-schema' => 'PluginTag',
                     'x-join' => [
                         // This is the join with the desired data
                         'table' => PluginTagTag::getTable(),
@@ -412,10 +413,6 @@ function plugin_tag_redefine_api_schemas(array $data): array {
                         'name' => [
                             'type' => Doc\Schema::TYPE_STRING,
                             'description' => 'Name',
-                        ],
-                        'comment' => [
-                            'type' => Doc\Schema::TYPE_STRING,
-                            'description' => 'Comment',
                         ],
                     ]
                 ]
