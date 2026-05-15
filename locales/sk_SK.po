@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 01:04+0000\n"
+"POT-Creation-Date: 2026-05-13 01:54+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: feonsu <feonsu@gmail.com>, 2023-2024,2026\n"
 "Language-Team: Slovak (Slovakia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/sk_SK/)\n"
@@ -22,14 +22,6 @@ msgstr ""
 #: templates/dropdown.html.twig
 msgid "Tags"
 msgstr "Značky"
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr "Pridať značky"
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr "Odstrániť značky"
 
 #: ajax/tag.php:45
 msgid "Invalid item type"
@@ -47,32 +39,6 @@ msgstr "Značky neboli aktualizované"
 msgid "Missing parameters"
 msgstr "Chýbajúce parametre"
 
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
-msgid "Tag Management"
-msgstr "Správa značiek"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Umiestnenie značiek"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Správa značiek"
-
-#: inc/tag.class.php:51 inc/questiontypecategory.class.php:37
-#: inc/destinationfield.class.php:44
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Značka"
-msgstr[1] "Značky"
-msgstr[2] "Značky"
-msgstr[3] "Značky"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "Farba HTML"
-
 #: setup.php:137
 msgctxt "filters"
 msgid "If the item has a tag"
@@ -82,3 +48,37 @@ msgstr "Ak má položka značku"
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Ak je položka označená"
+
+#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
+msgid "Tag Management"
+msgstr "Správa značiek"
+
+#: hook.php:239 hook.php:366
+msgid "Add tags"
+msgstr "Pridať značky"
+
+#: hook.php:241
+msgid "Remove tags"
+msgstr "Odstrániť značky"
+
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
+#: inc/tag.class.php:51
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Značka"
+msgstr[1] "Značky"
+msgstr[2] "Značky"
+msgstr[3] "Značky"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Umiestnenie značiek"
+
+#: inc/tag.class.php:373
+msgid "HTML color"
+msgstr "Farba HTML"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Správa značiek"
