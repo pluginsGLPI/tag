@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 01:04+0000\n"
+"POT-Creation-Date: 2026-05-13 01:54+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2022,2024-2025\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-plugin-tag/language/tr_TR/)\n"
@@ -21,14 +21,6 @@ msgstr ""
 #: templates/dropdown.html.twig
 msgid "Tags"
 msgstr "Etiketler"
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr "Etiket ekle"
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr "Etiket sil"
 
 #: ajax/tag.php:45
 msgid "Invalid item type"
@@ -46,30 +38,6 @@ msgstr "Etiketler güncellenmedi"
 msgid "Missing parameters"
 msgstr "Parametreler eksik"
 
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
-msgid "Tag Management"
-msgstr "Etiket yönetimi"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Etiketlerin konumu"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Etiket yönetimi"
-
-#: inc/tag.class.php:51 inc/questiontypecategory.class.php:37
-#: inc/destinationfield.class.php:44
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiket"
-msgstr[1] "Etiket"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "HTML rengi"
-
 #: setup.php:137
 msgctxt "filters"
 msgid "If the item has a tag"
@@ -79,3 +47,35 @@ msgstr "Ögenin etiketi varsa"
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Öge etiketlenmişse"
+
+#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
+msgid "Tag Management"
+msgstr "Etiket yönetimi"
+
+#: hook.php:239 hook.php:366
+msgid "Add tags"
+msgstr "Etiket ekle"
+
+#: hook.php:241
+msgid "Remove tags"
+msgstr "Etiket sil"
+
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
+#: inc/tag.class.php:51
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiket"
+msgstr[1] "Etiket"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Etiketlerin konumu"
+
+#: inc/tag.class.php:373
+msgid "HTML color"
+msgstr "HTML rengi"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Etiket yönetimi"
