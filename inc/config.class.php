@@ -36,7 +36,7 @@ class PluginTagConfig extends CommonDBTM
     {
 
         if (!$withtemplate && $item->getType() === 'Config') {
-            return self::createTabEntry(__s('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
+            return self::createTabEntry(__('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
         }
 
         return '';
@@ -55,7 +55,7 @@ class PluginTagConfig extends CommonDBTM
         echo "<input type='hidden' name='config_context' value='plugin:Tag'>";
         echo "<div class='center' id='tabsbody'>";
         echo "<table class='tab_cadre_fixe'><thead>";
-        echo "<th colspan='4'>" . __s('Tag Management', 'tag') . '</th></thead>';
+        echo "<th colspan='4'>" . __('Tag Management', 'tag') . '</th></thead>';
         echo '<td>' . __s('Tags location', 'tag') . '</td><td>';
         Dropdown::showFromArray(
             'tags_location',
