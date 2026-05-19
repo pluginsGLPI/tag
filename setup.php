@@ -182,7 +182,7 @@ function plugin_init_tag()
 function plugin_version_tag()
 {
     return [
-        'name'       => __s('Tag Management', 'tag'),
+        'name'       => __('Tag Management', 'tag'),
         'version'        => PLUGIN_TAG_VERSION,
         'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
         'homepage'       => 'https://github.com/pluginsGLPI/tag',

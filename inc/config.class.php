@@ -36,7 +36,7 @@ class PluginTagConfig extends CommonDBTM
     {
 
         if (!$withtemplate && $item->getType() === 'Config') {
-            return self::createTabEntry(__s('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
+            return self::createTabEntry(__('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
         }
 
         return '';
