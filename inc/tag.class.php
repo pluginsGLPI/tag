@@ -706,6 +706,7 @@ SQL;
             'extra_class'       => $extra_class ?? '',
             'selected_tags'     => $selected_tags,
             'available_tags'    => $available_tags,
+            'condition'         => $where,
             'tags_color'        => $available_tags_color ?? [],
             'rand'              => $rand,
             'token_creation'    => $token_creation,

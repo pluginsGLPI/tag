@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Prevent the tag field from appearing in the satisfaction survey.
 - Fix display translations
 - Removed tag rights during plugin uninstall
+- Fix tag dropdown to allow tag creation directly from the field
 
 ## [2.14.3] - 2025-12-22
 

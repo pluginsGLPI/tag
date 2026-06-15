@@ -72,7 +72,8 @@ export class GlpiPluginTagTagDropdownColorizer {
         });
 
         $select.on('change select2:select select2:unselect', (event) => {
-            this.applyTagColors($(event.target));
+            const $target = $(event.target);
+            setTimeout(() => this.applyTagColors($target), 0);
         });
 
         $select.on('select2:open', () => {
