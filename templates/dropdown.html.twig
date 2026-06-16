@@ -39,7 +39,7 @@
     'values'  : selected_tags,
     'multiple': true,
     'mb'      : '',
-    'condition': condition,
+    'condition': condition|default([]),
     'specific_tags': {
         'data-glpi-plugin-tag-dropdown-uuid': rand
     }
