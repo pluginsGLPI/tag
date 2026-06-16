@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Prevent SQL error when column `name` not exist from `Item_Device`
 - Prevent the tag field from appearing in the satisfaction survey.
 - Fix display translations
+- Removed tag rights during plugin uninstall
 
 ## [2.14.3] - 2025-12-22
 
