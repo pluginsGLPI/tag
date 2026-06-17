@@ -79,13 +79,12 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
     #[Override]
     public function renderAdministrationTemplate(?Question $question): string
     {
-        [$available_tags, $available_tags_color, $condition] = $this->getAvailableTags();
+        [$available_tags_color, $condition] = $this->getAvailableTags();
 
         $twig = TemplateRenderer::getInstance();
         return $twig->render('@tag/question_dropdown.html.twig', [
             'input_name'      => 'default_value',
             'selected_tags'   => empty($question?->fields['default_value']) ? [] : explode(',', (string) $question->fields['default_value']),
-            'available_tags'  => $available_tags,
             'condition'       => $condition,
             'tags_color'      => $available_tags_color,
             'dropdown_params' => [
@@ -98,13 +97,12 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
     #[Override]
     public function renderEndUserTemplate(Question $question): string
     {
-        [$available_tags, $available_tags_color, $condition] = $this->getAvailableTags($question->getForm());
+        [$available_tags_color, $condition] = $this->getAvailableTags($question->getForm());
 
         $twig = TemplateRenderer::getInstance();
         return $twig->render('@tag/question_dropdown.html.twig', [
             'input_name'          => $question->getEndUserInputName(),
             'selected_tags'       => empty($question?->fields['default_value']) ? [] : explode(',', (string) $question->fields['default_value']),
-            'available_tags'      => $available_tags,
             'condition'           => $condition,
             'tags_color'          => $available_tags_color,
             'show_search_tooltip' => false,
@@ -144,7 +142,6 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
         }
 
         $tag                  = new PluginTagTag();
-        $available_tags       = [];
         $available_tags_color = [];
         $condition = [
             'is_active' => 1,
@@ -160,10 +157,9 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
         $result               = $tag->find($condition, 'name');
 
         foreach ($result as $id => $data) {
-            $available_tags[$id] = $data['name'];
             $available_tags_color[$id] = $data['color'] ?: '#DDDDDD';
         }
 
-        return [$available_tags, $available_tags_color, $condition];
+        return [$available_tags_color, $condition];
     }
 }

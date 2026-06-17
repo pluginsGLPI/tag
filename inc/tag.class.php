@@ -660,7 +660,6 @@ SQL;
 
         $available_tags = $tag->find($where, 'name');
         foreach ($available_tags as $tag_data) {
-            $available_tags[$tag_data['id']] = $tag_data['name'];
             $available_tags_color[$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
         }
 
@@ -705,7 +704,6 @@ SQL;
         TemplateRenderer::getInstance()->display('@tag/tag_dropdown.html.twig', [
             'extra_class'       => $extra_class ?? '',
             'selected_tags'     => $selected_tags,
-            'available_tags'    => $available_tags,
             'condition'         => $where,
             'tags_color'        => $available_tags_color ?? [],
             'rand'              => $rand,

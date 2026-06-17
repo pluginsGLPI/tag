@@ -62,7 +62,7 @@ class PluginTagDestinationField extends AbstractConfigField
             throw new InvalidArgumentException("Unexpected config class");
         }
 
-        [$available_tags, $available_tags_color] = (new PluginTagQuestionType())->getAvailableTags();
+        [$available_tags_color, $condition] = (new PluginTagQuestionType())->getAvailableTags();
 
         $twig = TemplateRenderer::getInstance();
         return $twig->render('@tag/destinationfield.html.twig', [
@@ -77,8 +77,8 @@ class PluginTagDestinationField extends AbstractConfigField
             'specific_values_extra_field' => [
                 'input_name'     => $input_name . "[" . PluginTagDestinationFieldConfig::SPECIFIC_TAG_IDS . "]",
                 'selected_tags'  => $config->getSpecificTagIDs() ?? [],
-                'available_tags' => $available_tags,
                 'tags_color'     => $available_tags_color,
+                'condition'      => $condition,
             ],
 
             // Specific additional config for SPECIFIC_ANSWERS strategy
