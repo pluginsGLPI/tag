@@ -238,11 +238,8 @@ SQL;
             ],
         ]);
 
-        $DB->delete(ProfileRight::getTable(), [
-            'OR' => [
-                'name'      => self::$rightname,
-            ],
-        ]);
+        $profileRight = new ProfileRight();
+        $profileRight->deleteByCriteria(['name' => self::$rightname]);
 
         $migration = new Migration(PLUGIN_TAG_VERSION);
         $migration->dropTable(getTableForItemType(self::class));
