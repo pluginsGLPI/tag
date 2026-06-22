@@ -40,8 +40,6 @@
     'multiple': true,
     'mb'      : '',
     'condition': condition|default([]),
-    'templateResult': 'formatOptionResult',
-    'templateSelection': 'formatOptionSelection',
     'specific_tags': {
         'data-glpi-plugin-tag-dropdown-uuid': rand
     }
@@ -81,46 +79,6 @@
     {% endif %}
 {% endif %}
 
-<script>
-    const colors = {{ tags_color|json_encode|raw }};
-
-    function formatOptionSelection(option, container) {
-        var color = colors[option.id] || option.color || '#DDDDDD';
-        var invertedcolor = idealTextColor(color);
-
-        $(container)
-            .css("background-color", color)
-            .css("border-color", invertedcolor)
-            .css("color", invertedcolor)
-            .children('.select2-selection__choice__remove')
-            .css("color", invertedcolor);
-
-        var _elt = $('<span></span>');
-        _elt.html(escapeMarkupText(option.text));
-        return _elt;
-    };
-
-    function formatOptionResult(option) {
-        if (!option.id) {
-            return option.text;
-        }
-
-        var color = colors[option.id];
-        var $span = $('<span class="tag_choice"></span>').text(option.text);
-
-        if (color) {
-            $span.css({
-                'background-color': color,
-                'color': idealTextColor(color),
-                'padding': '2px 4px',
-                'border-radius': '2px',
-            });
-        }
-
-        return $span;
-    };
-</script>
-
 {{ fields.dropdownField(
     'PluginTagTag',
     input_name,
@@ -131,6 +89,18 @@
         'add_field_html': tooltip,
     })
 ) }}
+
+<script>
+    import(GLPI_PLUGINS_PATH.tag + "/js/modules/TagDropdownColorizer.js").then((m) => {
+        $(document).ready(function() {
+            new m.GlpiPluginTagTagDropdownColorizer(
+                {{ tags_color|json_encode|raw }},
+                'select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]',
+                $(document)
+            );
+        });
+    });
+</script>
 
 {% if show_save_button is defined and show_save_button %}
     <script>
