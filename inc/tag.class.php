@@ -674,10 +674,6 @@ SQL;
 
         $rand = mt_rand();
 
-        $token_creation = self::canCreate()
-            ? "return { id: 'newtag_'+ params.term, text: params.term };"
-            : "return null;";
-
         $can_update_all = array_filter($params['items_ids'], function ($value) use ($obj) {
             $obj->getFromDB($value);
             return !$obj->canUpdateItem();
@@ -707,7 +703,6 @@ SQL;
             'condition'         => $where,
             'tags_color'        => $available_tags_color ?? [],
             'rand'              => $rand,
-            'token_creation'    => $token_creation,
             'readOnly'          => $readOnly,
             'can_create'        => $can_create,
             'show_save_button'  => $show_save_button ?? false,

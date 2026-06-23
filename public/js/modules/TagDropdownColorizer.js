@@ -54,7 +54,7 @@ export class GlpiPluginTagTagDropdownColorizer {
     /**
      * Get background color for a given tag options.
      * 
-     * @param {array} options 
+     * @param {object} options 
      * @returns {string}
      */
     getBackgroundColor(options) {
@@ -64,7 +64,7 @@ export class GlpiPluginTagTagDropdownColorizer {
     /**
      * Get style for a given tag options.
      * 
-     * @param {array} options 
+     * @param {object} options 
      * @returns {object}
      */
     tagStyle(options) {
@@ -80,11 +80,11 @@ export class GlpiPluginTagTagDropdownColorizer {
     /**
      * Apply tag colors to the results of the select2 dropdown.
      * 
-     * @param {array} options 
+     * @param {object} options 
      * @returns {object}
      */
     applyTagColorsResults(options) {
-        if (options.itemtype == 'Entity') {
+        if (options.itemtype === 'Entity') {
             return;
         }
         return $('<span class="tag_choice"></span>')
@@ -95,7 +95,7 @@ export class GlpiPluginTagTagDropdownColorizer {
     /**
      * Apply tag colors to the selected items of the select2 dropdown.
      * 
-     * @param {array} options 
+     * @param {object} options 
      * @param {HTMLElement} container
      * @returns {object}
      */
