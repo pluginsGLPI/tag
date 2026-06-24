@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+### Changed
+
+- Migrate config form to Twig template (Bootstrap 5 card layout)
+
 ### Fixed
 
 - Fix tag search
