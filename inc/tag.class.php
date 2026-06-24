@@ -544,7 +544,7 @@ SQL;
                 $color = $data['color'] ?: '#DDDDDD';
                 $textcolor = idealTextColor($color);
                 $style = sprintf('background-color: %s; color: %s;', $color, $textcolor);
-                $content .= sprintf("<span class='tag_choice' style='%s' title='%s'>%s</span>&nbsp;&nbsp;", $style, $title, htmlentities($name, ENT_QUOTES, "UTF-8"));
+                $content .= sprintf("<span class='tag_choice' style='%s' title='%s'>%s</span>&nbsp;&nbsp;", $style, $title, htmlentities((string) $name, ENT_QUOTES, "UTF-8"));
             }
 
             $content .= "</div>";
