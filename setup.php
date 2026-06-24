@@ -39,7 +39,7 @@ use GlpiPlugin\Webapplications\Webapplication;
 
 use function Safe\define;
 
-define('PLUGIN_TAG_VERSION', '2.14.3');
+define('PLUGIN_TAG_VERSION', '2.14.4');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_TAG_MIN_GLPI", "11.0.1");
