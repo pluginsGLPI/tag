@@ -34,9 +34,9 @@
     {% include "@tag/dropdown.html.twig" with {
         'input_name'         : specific_values_extra_field.input_name,
         'selected_tags'      : specific_values_extra_field.selected_tags,
-        'available_tags'     : specific_values_extra_field.available_tags,
         'tags_color'         : specific_values_extra_field.tags_color,
         'show_search_tooltip': show_search_tooltip|default(true),
+        'condition'          : condition,
         'dropdown_params'    : {
             'no_label'   : true,
             'mb'         : '',

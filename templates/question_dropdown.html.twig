@@ -35,11 +35,11 @@
 {% include "@tag/dropdown.html.twig" with {
     'input_name'         : input_name,
     'selected_tags'      : selected_tags,
-    'available_tags'     : available_tags,
     'tags_color'         : tags_color,
     'rand'               : rand,
     'show_search_tooltip': show_search_tooltip|default(true),
-    'dropdown_params'    : dropdown_params
+    'dropdown_params'    : dropdown_params,
+    'condition'          : condition,
 } %}
 
 <script>

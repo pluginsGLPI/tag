@@ -35,6 +35,12 @@ export class GlpiPluginTagTagDropdownColorizer {
         this.init();
     }
 
+    /**
+     * Check if color is more dark than light.
+     * 
+     * @param {string} hexColor 
+     * @returns {boolean}
+     */
     isDark(hexColor) {
         if (!hexColor) return false;
         hexColor = hexColor.replace('#', '');
@@ -45,52 +51,84 @@ export class GlpiPluginTagTagDropdownColorizer {
         return luminance < 0.5;
     }
 
-    applyTagColors($select) {
+    /**
+     * Get background color for a given tag options.
+     * 
+     * @param {object} options 
+     * @returns {string}
+     */
+    getBackgroundColor(options) {
+        return this.tagsColor[options.id] ?? '#DDDDDD';
+    }
+
+    /**
+     * Get style for a given tag options.
+     * 
+     * @param {object} options 
+     * @returns {object}
+     */
+    tagStyle(options) {
+        const backgroundColor = this.getBackgroundColor(options);
+        return {
+            'background-color': backgroundColor,
+            'color': this.isDark(backgroundColor) ? '#fff' : '',
+            'padding': '2px 4px',
+            'border-radius': '2px',
+        }
+    }
+
+    /**
+     * Apply tag colors to the results of the select2 dropdown.
+     * 
+     * @param {object} options 
+     * @returns {object}
+     */
+    applyTagColorsResults(options) {
+        if (options.itemtype === 'Entity') {
+            return;
+        }
+        return $('<span class="tag_choice"></span>')
+            .text(options.text)
+            .css(this.tagStyle(options));
+    }
+
+    /**
+     * Apply tag colors to the selected items of the select2 dropdown.
+     * 
+     * @param {object} options 
+     * @param {HTMLElement} container
+     * @returns {object}
+     */
+    applyTagColorsSelection(options, container) {
+        $(container).css(this.tagStyle(options));
+        return $('<span></span>').text(options.text);
+    }
+
+    /**
+     * Initialize the colorizer for the select2 dropdown.
+     * 
+     * @returns {void}
+     */
+    init() {
+        const $select = this.$container.find(this.selector);
+        const select2Instance = $select.data('select2');
+        if (!select2Instance) {
+            return;
+        }
+
+        //Set the templates
+        select2Instance.options.set('templateResult', this.applyTagColorsResults.bind(this));
+        select2Instance.options.set('templateSelection', this.applyTagColorsSelection.bind(this));
+
+        // Apply colors to selected elements when the page loads
         const selectedIds = $select.find('option:selected').map(function() {
             return $(this).val();
         }).get();
 
-        const $container = $select.nextAll('.select2').find('.select2-selection__rendered');
-        $container.find('.select2-selection__choice').each((index, element) => {
-            const id = selectedIds[index];
-            const color = this.tagsColor[id];
-            if (color) {
-                $(element).css('background-color', color);
-                $(element).css('color', this.isDark(color) ? '#eeeeee' : '');
-
-                // Also style the remove button for better visibility
-                $(element).find('.select2-selection__choice__remove').css('color', this.isDark(color) ? '#eeeeee' : '');
+        $select.nextAll('.select2').find('.select2-selection__choice').each((index, selected_tag) => {
+            if (selectedIds[index]) {
+                $(selected_tag).css(this.tagStyle({ id: selectedIds[index] }));
             }
-        });
-    }
-
-    init() {
-        const $select = this.$container.find(this.selector);
-
-        $select.each((index, element) => {
-            this.applyTagColors($(element));
-        });
-
-        $select.on('change select2:select select2:unselect', (event) => {
-            this.applyTagColors($(event.target));
-        });
-
-        $select.on('select2:open', () => {
-            setTimeout(() => {
-                $('.select2-results__option').each((index, element) => {
-                    const matches = element.id.match(/result-[^-]+-(\d+)$/);
-                    if (matches && matches[1]) {
-                        const color = this.tagsColor[matches[1]];
-                        // Cible uniquement le span SANS la classe select2-rendered__match
-                        $(element).find('span:not(.select2-rendered__match)').css({
-                            'background-color': color ? color : '',
-                            'padding': color ? '2px' : '',
-                            'color': (color && this.isDark(color)) ? '#fff' : '',
-                            'border-radius': '2px'
-                        });
-                    }
-                });
-            }, 0);
         });
     }
 }

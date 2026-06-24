@@ -39,17 +39,11 @@
     'values'  : selected_tags,
     'multiple': true,
     'mb'      : '',
-    'add_data_attributes': {
-        'glpi-plugin-tag-dropdown-uuid': rand
+    'condition': condition|default([]),
+    'specific_tags': {
+        'data-glpi-plugin-tag-dropdown-uuid': rand
     }
 }|merge(dropdown_params|default({})) %}
-
-{% set field %}
-    {% do call('Dropdown::showFromArray', [input_name, available_tags, {
-        'value': null,
-        'rand': rand,
-     }|merge(options)]) %}
-{% endset %}
 
 {% set tooltip_parts = [] %}
 
@@ -85,11 +79,15 @@
     {% endif %}
 {% endif %}
 
-{{ fields.field(
+{{ fields.dropdownField(
+    'PluginTagTag',
     input_name,
-    field ~ tooltip,
+    selected_tags,
     __('Tags', 'tag'),
-    options|merge({'id': 'dropdown_' ~ input_name|replace({'[': '_', ']': '_'}) ~ rand})
+    options|merge({
+        'rand': rand,
+        'add_field_html': tooltip,
+    })
 ) }}
 
 <script>

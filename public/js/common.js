@@ -52,37 +52,3 @@ var idealTextColor = function(hexTripletColor) {
     var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
     return ((255 - bgDelta) < nThreshold) ? "#000000" : "#E6E6E6";
 };
-
-var formatOptionSelection = function(option, container) {
-    var color = (typeof option.color !== 'undefined' && option.color !== '')
-        ? option.color
-        : '#DDDDDD';
-    var invertedcolor = idealTextColor(color);
-
-    $(container)
-        .css("background-color", color)
-        .css("border-color", invertedcolor)
-        .css("color", invertedcolor)
-        .children('.select2-selection__choice__remove')
-        .css("color", invertedcolor);
-
-    var _elt = $('<span></span>');
-    _elt.html(escapeMarkupText(option.text));
-    return _elt;
-};
-
-var formatOptionResult = function(option) {
-
-    var color = (typeof option.color !== 'undefined' && option.color !== '')
-        ? option.color
-        : '#DDDDDD';
-    var invertedcolor = idealTextColor(color);
-
-    var template = `
-        <span class="tag_choice" style="background-color: ${color}; color: ${invertedcolor}">
-            ${option.text}
-        </span>
-   `;
-
-    return $(template);
-};

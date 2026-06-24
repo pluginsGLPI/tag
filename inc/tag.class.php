@@ -660,7 +660,6 @@ SQL;
 
         $available_tags = $tag->find($where, 'name');
         foreach ($available_tags as $tag_data) {
-            $available_tags[$tag_data['id']] = $tag_data['name'];
             $available_tags_color[$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
         }
 
@@ -674,10 +673,6 @@ SQL;
         }
 
         $rand = mt_rand();
-
-        $token_creation = self::canCreate()
-            ? "return { id: 'newtag_'+ params.term, text: params.term };"
-            : "return null;";
 
         $can_update_all = array_filter($params['items_ids'], function ($value) use ($obj) {
             $obj->getFromDB($value);
@@ -705,10 +700,9 @@ SQL;
         TemplateRenderer::getInstance()->display('@tag/tag_dropdown.html.twig', [
             'extra_class'       => $extra_class ?? '',
             'selected_tags'     => $selected_tags,
-            'available_tags'    => $available_tags,
+            'condition'         => $where,
             'tags_color'        => $available_tags_color ?? [],
             'rand'              => $rand,
-            'token_creation'    => $token_creation,
             'readOnly'          => $readOnly,
             'can_create'        => $can_create,
             'show_save_button'  => $show_save_button ?? false,
