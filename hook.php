@@ -27,6 +27,8 @@
  * @link      https://github.com/pluginsGLPI/tag
  * -------------------------------------------------------------------------
  */
+
+use Glpi\Cache\CacheManager;
 use Glpi\Form\Form;
 use Glpi\Plugin\Hooks;
 
@@ -272,6 +274,10 @@ function plugin_tag_install()
                 $classname::install($migration);
             }
         }
+    }
+
+    if (version_compare(GLPI_VERSION, '11.0.9', '<')) {
+        (new CacheManager())->resetAllCaches();
     }
 
     return true;
