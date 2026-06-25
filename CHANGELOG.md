@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+## [2.14.5] - 2026-06-25
+
 ### Fixed
 
 - Clear twig cache on install
