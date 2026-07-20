@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Harden tag input handling and rendering across a few endpoints and templates
 - Fix massive update of associated item types when GLPI provides a scalar value
+- Allow selecting multiple associated item types in massive updates
 
 ## [2.14.5] - 2026-06-25
 

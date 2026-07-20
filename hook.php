@@ -386,3 +386,28 @@ function plugin_tag_getRuleActions($params = [])
 
     return $actions;
 }
+
+/**
+ * Display plugin-specific fields for the update massive action.
+ *
+ * @param array $params Massive action field parameters
+ *
+ */
+function plugin_tag_MassiveActionsFieldsDisplay(array $params): bool
+{
+    if (
+        ($params['itemtype'] ?? null) !== PluginTagTag::class
+        || ($params['options']['field'] ?? null) !== 'type_menu'
+    ) {
+        return false;
+    }
+
+    echo PluginTagTag::getSpecificValueToSelect(
+        'type_menu',
+        'type_menu',
+        ['type_menu' => []],
+        ['multiple' => true],
+    );
+
+    return true;
+}

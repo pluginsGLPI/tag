@@ -385,17 +385,29 @@ SQL;
         ]];
     }
 
-    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
-    {
+    public static function getSpecificValueToSelect(
+        $field,
+        $name = '',
+        $values = '',
+        array $options = [],
+    ) {
         /** @var array $CFG_GLPI */
         global $CFG_GLPI;
+
         if (!is_array($values)) {
             $values = [$field => $values];
         }
 
         if ($field === 'type_menu') {
-            $elements  = ['' => Dropdown::EMPTY_VALUE];
+            $multiple = (bool) ($options['multiple'] ?? false);
+
+            // Do not add an empty option to a multiple dropdown.
+            $elements = $multiple
+                ? []
+                : ['' => Dropdown::EMPTY_VALUE];
+
             $supported_itemtypes = $CFG_GLPI['plugin_tag_itemtypes'] ?? [];
+
             foreach ($supported_itemtypes as $itemtypes) {
                 foreach ($itemtypes as $itemtype) {
                     $item = getItemForItemtype($itemtype);
@@ -403,16 +415,47 @@ SQL;
                 }
             }
 
+            $selected = $values[$field] ?? ($multiple ? [] : '');
+
+            if ($multiple) {
+                if (!is_array($selected)) {
+                    $selected = $selected === ''
+                        ? []
+                        : [$selected];
+                }
+
+                return Dropdown::showFromArray(
+                    $name,
+                    $elements,
+                    [
+                        'display'  => false,
+                        'multiple' => true,
+                        'values'   => array_values($selected),
+                    ],
+                );
+            }
+
+            // Preserve the original single-select behavior.
+            if (is_array($selected)) {
+                $selected = reset($selected) ?: '';
+            }
+
             return Dropdown::showFromArray(
                 $name,
                 $elements,
-                ['display' => false,
-                    'value'   => $values[$field],
+                [
+                    'display' => false,
+                    'value'   => $selected,
                 ],
             );
         }
 
-        return parent::getSpecificValueToSelect($field, $name, $values, $options);
+        return parent::getSpecificValueToSelect(
+            $field,
+            $name,
+            $values,
+            $options,
+        );
     }
 
     public static function getSpecificValueToDisplay($field, $values, array $options = [])
