@@ -795,7 +795,13 @@ SQL;
     public function encodeSubtypes($input)
     {
         if (!empty($input['type_menu'])) {
-            $input['type_menu'] = json_encode(array_values($input['type_menu']));
+            $type_menu = $input['type_menu'];
+
+            if (!is_array($type_menu)) {
+                $type_menu = [$type_menu];
+            }
+
+            $input['type_menu'] = json_encode(array_values($type_menu));
         }
 
         return $input;

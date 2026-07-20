@@ -94,5 +94,26 @@ final class TagTest extends TagTestCase
             sprintf("AND `ITEM_0` LIKE %s", $DB->quote('%' . $val . '%')),
             $having,
         );
+    public function testUpdateAcceptsScalarTypeMenu(): void
+    {
+        $tag = new PluginTagTag();
+
+        $tagId = $tag->add([
+            'name' => 'Massive update test',
+            'is_active' => 1,
+            'type_menu' => ['Ticket', 'Problem'],
+        ]);
+
+        $this->assertGreaterThan(0, $tagId);
+
+        $this->assertTrue(
+            $tag->update([
+                'id' => $tagId,
+                'type_menu' => 'Ticket',
+            ]),
+        );
+
+        $this->assertTrue($tag->getFromDB($tagId));
+        $this->assertSame('["Ticket"]', $tag->fields['type_menu']);
     }
 }
