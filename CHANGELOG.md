@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Harden tag input handling and rendering across a few endpoints and templates
+
 ## [2.14.5] - 2026-06-25
 
 ### Fixed
