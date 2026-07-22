@@ -30,6 +30,7 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use DBmysql;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
 
@@ -67,7 +68,7 @@ final class TagTest extends TagTestCase
 
     public function testAddWhereEscapesValue(): void
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $val = '" OR "1"="1';
@@ -82,7 +83,7 @@ final class TagTest extends TagTestCase
 
     public function testAddHavingEscapesValue(): void
     {
-        /** @var \DBmysql $DB */
+        /** @var DBmysql $DB */
         global $DB;
 
         $val = 'Ticket" OR "1"="1';
