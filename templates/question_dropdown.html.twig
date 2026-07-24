@@ -47,7 +47,7 @@
         if (type === 'PluginTagQuestionType') {
             import("plugins/js/modules/TagDropdownColorizer.js").then((m) => {
                 new m.GlpiPluginTagTagDropdownColorizer(
-                    {{ tags_color|json_encode|raw }},
+                    {{ tags_color|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP'))|raw }},
                     'select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]',
                     question
                 );

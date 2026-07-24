@@ -94,7 +94,7 @@
     import(GLPI_PLUGINS_PATH.tag + "/js/modules/TagDropdownColorizer.js").then((m) => {
         $(document).ready(function() {
             new m.GlpiPluginTagTagDropdownColorizer(
-                {{ tags_color|json_encode|raw }},
+                {{ tags_color|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP'))|raw }},
                 'select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]',
                 $(document)
             );

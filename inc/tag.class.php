@@ -433,7 +433,10 @@ SQL;
                 return implode(", ", $itemtype_names);
             case 'color':
                 $color = $values[$field] ?: '#DDDDDD';
-                return sprintf("<div style='background-color: %s;'>&nbsp;</div>", $color);
+                return sprintf(
+                    "<div style='background-color: %s;'>&nbsp;</div>",
+                    htmlspecialchars((string) $color, ENT_QUOTES, 'UTF-8'),
+                );
         }
 
         return parent::getSpecificValueToDisplay($field, $values, $options);
@@ -539,11 +542,11 @@ SQL;
 
             $content = "<div style='display: flex; flex-wrap: wrap;'>";
             foreach ($iterator as $data) {
-                $title = $data['comment'];
+                $title = htmlentities((string) $data['comment'], ENT_QUOTES, "UTF-8");
                 $name = $data['name'];
                 $color = $data['color'] ?: '#DDDDDD';
                 $textcolor = idealTextColor($color);
-                $style = sprintf('background-color: %s; color: %s;', $color, $textcolor);
+                $style = sprintf('background-color: %s; color: %s;', htmlentities((string) $color, ENT_QUOTES, "UTF-8"), $textcolor);
                 $content .= sprintf("<span class='tag_choice' style='%s' title='%s'>%s</span>&nbsp;&nbsp;", $style, $title, htmlentities((string) $name, ENT_QUOTES, "UTF-8"));
             }
 
@@ -747,12 +750,12 @@ SQL;
 
         return "<span class='select2-search-choice tag_choice'
                     style='padding-left:5px;{$style}'>"
-              . $separator . $plugintagtag->fields['name'] . '</span>';
+              . $separator . htmlentities((string) $plugintagtag->fields['name'], ENT_QUOTES, "UTF-8") . '</span>';
     }
 
     public function prepareInputForAdd($input)
     {
-        if (!$this->checkMandatoryFields($input)) {
+        if (!$this->checkMandatoryFields($input) || !$this->checkColorField($input)) {
             return false;
         }
 
@@ -761,11 +764,27 @@ SQL;
 
     public function prepareInputForUpdate($input)
     {
-        if (!$this->checkMandatoryFields($input)) {
+        if (!$this->checkMandatoryFields($input) || !$this->checkColorField($input)) {
             return false;
         }
 
         return $this->encodeSubtypes($input);
+    }
+
+    /**
+     * Check that the color field, if provided, is a valid hexadecimal color
+     *
+     * @param array $input
+     * @return boolean
+     */
+    public function checkColorField($input = [])
+    {
+        if (!empty($input['color']) && !preg_match('/^#[0-9A-Fa-f]{6}$/', (string) $input['color'])) {
+            Session::addMessageAfterRedirect(__s('Invalid color format', 'tag'), true, ERROR);
+            return false;
+        }
+
+        return true;
     }
 
     /**

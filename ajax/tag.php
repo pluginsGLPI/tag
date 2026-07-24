@@ -41,12 +41,15 @@ if (isset($_POST['itemtype'], $_POST['items_id'])) {
     $itemType = $_POST['itemtype'];
     $itemId = $_POST['items_id'];
 
-    if (!is_a($itemType, CommonDBTM::class, true)) {
+    if (!is_a($itemType, CommonDBTM::class, true) || !PluginTagTag::canItemtype($itemType)) {
         throw new BadRequestHttpException(__s('Invalid item type', 'tag'));
     }
 
     $obj = new $itemType();
-    $obj->getFromDB($itemId);
+    if (!$obj->getFromDB($itemId) || !$obj->canUpdateItem()) {
+        throw new BadRequestHttpException(__s('Invalid item', 'tag'));
+    }
+
     $obj->input = $_POST;
     $success = PluginTagTagItem::updateItem($obj);
 
