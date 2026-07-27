@@ -98,11 +98,15 @@ final class TagTest extends TagTestCase
 
     public function testUpdateAcceptsScalarTypeMenu(): void
     {
-        $tag = $this->createItem(PluginTagTag::class, [
-            'name' => 'Massive update test',
-            'is_active' => 1,
-            'type_menu' => ['Ticket', 'Problem'],
-        ]);
+        $tag = $this->createItem(
+            PluginTagTag::class,
+            [
+                'name' => 'Massive update test',
+                'is_active' => 1,
+                'type_menu' => ['Ticket', 'Problem'],
+            ],
+            ['type_menu'],
+        );
 
         $tag = $this->updateItem(
             PluginTagTag::class,
