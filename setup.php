@@ -153,6 +153,11 @@ function plugin_init_tag()
         // plugin datainjection
         $PLUGIN_HOOKS['plugin_datainjection_populate']['tag'] = "plugin_datainjection_populate_tag";
 
+        $PLUGIN_HOOKS[Hooks::REDEFINE_API_SCHEMAS]['tag'] = 'plugin_tag_redefine_api_schemas';
+        $PLUGIN_HOOKS[Hooks::API_CONTROLLERS]['tag'] = [
+            PluginTagApicontroller::class
+        ];
+
         // add needed javascript & css files
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/common.js';
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/kanban.js';
