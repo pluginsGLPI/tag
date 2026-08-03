@@ -475,14 +475,7 @@ SQL;
         if (
             $item->getID()
             && !isset($item->input["_plugin_tag_tag_process_form"])
-            && !(
-                // Always trigger on newly created tickets, as they may come from
-                // the mail collector which wont set the _plugin_tag_tag_process_form
-                // flag
-                $item::getType() == Ticket::getType()
-                // Allow a few seconds difference if glpi_currenttime changed
-                && abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) < 5
-            )
+            && ($item::getType() != Ticket::getType() || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
         ) {
             return true;
         }
