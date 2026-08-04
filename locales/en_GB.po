@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-15 01:55+0000\n"
-"PO-Revision-Date: 2026-05-15 01:55+0000\n"
+"POT-Creation-Date: 2026-08-04 01:17+0000\n"
+"PO-Revision-Date: 2026-08-04 01:17+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -21,19 +21,59 @@ msgstr ""
 msgid "Tags"
 msgstr "Tags"
 
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "Tag Management"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Tags location"
+
+#: inc/destinationfield.class.php:44 inc/tag.class.php:51
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Tag"
+msgstr[1] "Tags"
+
+#: inc/tag.class.php:376
+msgid "HTML color"
+msgstr "HTML color"
+
+#: inc/tag.class.php:826
+msgid "Invalid color format"
+msgstr "Invalid color format"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Tag management"
+
+#: hook.php:247 hook.php:378
+msgid "Add tags"
+msgstr "Add tags"
+
+#: hook.php:249
+msgid "Remove tags"
+msgstr "Remove tags"
+
 #: ajax/tag.php:45
 msgid "Invalid item type"
 msgstr "Invalid item type"
 
-#: ajax/tag.php:55
+#: ajax/tag.php:50
+msgid "Invalid item"
+msgstr "Invalid item"
+
+#: ajax/tag.php:58
 msgid "Tags have been updated"
 msgstr "Tags have been updated"
 
-#: ajax/tag.php:61
+#: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr "Tags have not been updated"
 
-#: ajax/tag.php:64
+#: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Missing parameters"
 
@@ -46,35 +86,3 @@ msgstr "If the item has a tag"
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "If the item is tagged"
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "Tag Management"
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr "Add tags"
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr "Remove tags"
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Tag"
-msgstr[1] "Tags"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Tags location"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "HTML color"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Tag management"
