@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-15 01:55+0000\n"
+"POT-Creation-Date: 2026-07-29 01:21+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022,2026\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/hr_HR/)\n"
@@ -23,19 +23,60 @@ msgstr ""
 msgid "Tags"
 msgstr "Oznake"
 
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "Upravljanje oznakama"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Lokacija oznaka"
+
+#: inc/destinationfield.class.php:44 inc/tag.class.php:51
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Oznaka"
+msgstr[1] "Oznake"
+msgstr[2] "Oznaka"
+
+#: inc/tag.class.php:376
+msgid "HTML color"
+msgstr "HTML boja"
+
+#: inc/tag.class.php:826
+msgid "Invalid color format"
+msgstr ""
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Upravljanje oznakama"
+
+#: hook.php:247 hook.php:378
+msgid "Add tags"
+msgstr "Dodaj oznake"
+
+#: hook.php:249
+msgid "Remove tags"
+msgstr "Ukloni oznake"
+
 #: ajax/tag.php:45
 msgid "Invalid item type"
 msgstr "Neispravna vrsta predmeta"
 
-#: ajax/tag.php:55
+#: ajax/tag.php:50
+msgid "Invalid item"
+msgstr ""
+
+#: ajax/tag.php:58
 msgid "Tags have been updated"
 msgstr "Oznake su aktualizirane"
 
-#: ajax/tag.php:61
+#: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr "Oznake nisu aktualizirane"
 
-#: ajax/tag.php:64
+#: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Nedostajući parametri"
 
@@ -48,36 +89,3 @@ msgstr "Ako predmet ima oznaku"
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Ako je predmet označen"
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "Upravljanje oznakama"
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr "Dodaj oznake"
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr "Ukloni oznake"
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Oznaka"
-msgstr[1] "Oznake"
-msgstr[2] "Oznaka"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Lokacija oznaka"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "HTML boja"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Upravljanje oznakama"

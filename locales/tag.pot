@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-15 01:55+0000\n"
+"POT-Creation-Date: 2026-08-04 01:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,19 +22,59 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr ""
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr ""
+
+#: inc/destinationfield.class.php:44 inc/tag.class.php:51
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/tag.class.php:376
+msgid "HTML color"
+msgstr ""
+
+#: inc/tag.class.php:826
+msgid "Invalid color format"
+msgstr ""
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr ""
+
+#: hook.php:247 hook.php:378
+msgid "Add tags"
+msgstr ""
+
+#: hook.php:249
+msgid "Remove tags"
+msgstr ""
+
 #: ajax/tag.php:45
 msgid "Invalid item type"
 msgstr ""
 
-#: ajax/tag.php:55
+#: ajax/tag.php:50
+msgid "Invalid item"
+msgstr ""
+
+#: ajax/tag.php:58
 msgid "Tags have been updated"
 msgstr ""
 
-#: ajax/tag.php:61
+#: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr ""
 
-#: ajax/tag.php:64
+#: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr ""
 
@@ -46,36 +86,4 @@ msgstr ""
 #: setup.php:141
 msgctxt "filters"
 msgid "If the item is tagged"
-msgstr ""
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr ""
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr ""
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr ""
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr ""
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr ""
-
-#: inc/profile.class.php:68
-msgid "Tag management"
 msgstr ""

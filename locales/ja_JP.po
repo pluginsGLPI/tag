@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-13 01:54+0000\n"
+"POT-Creation-Date: 2026-07-29 01:21+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: INOUE Daisuke, 2023,2025\n"
 "Language-Team: Japanese (Japan) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ja_JP/)\n"
@@ -22,19 +22,58 @@ msgstr ""
 msgid "Tags"
 msgstr "タグ"
 
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "タグ管理"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "タグの表示位置"
+
+#: inc/destinationfield.class.php:44 inc/tag.class.php:51
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "タグ"
+
+#: inc/tag.class.php:376
+msgid "HTML color"
+msgstr "HTML カラー"
+
+#: inc/tag.class.php:826
+msgid "Invalid color format"
+msgstr ""
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "タグ管理"
+
+#: hook.php:247 hook.php:378
+msgid "Add tags"
+msgstr "タグを追加"
+
+#: hook.php:249
+msgid "Remove tags"
+msgstr "タグを削除"
+
 #: ajax/tag.php:45
 msgid "Invalid item type"
 msgstr ""
 
-#: ajax/tag.php:55
+#: ajax/tag.php:50
+msgid "Invalid item"
+msgstr ""
+
+#: ajax/tag.php:58
 msgid "Tags have been updated"
 msgstr "タグを更新しました"
 
-#: ajax/tag.php:61
+#: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr "タグを更新していません"
 
-#: ajax/tag.php:64
+#: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "パラメーターがありません"
 
@@ -47,34 +86,3 @@ msgstr "アイテムにタグがあったら"
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "アイテムにタグがついたら"
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "タグ管理"
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr "タグを追加"
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr "タグを削除"
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "タグ"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "タグの表示位置"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "HTML カラー"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "タグ管理"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-13 01:54+0000\n"
+"POT-Creation-Date: 2026-07-29 01:21+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Jonathan Sanchez <jonsanmalqui@gmail.com>, 2026\n"
 "Language-Team: Spanish (Latin America) (http://app.transifex.com/teclib/glpi-plugin-tag/language/es_419/)\n"
@@ -23,19 +23,60 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiquetas"
 
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "Gestión de etiquetas"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Ubicación de etiquetas"
+
+#: inc/destinationfield.class.php:44 inc/tag.class.php:51
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiquetas"
+msgstr[2] "Etiquetas"
+
+#: inc/tag.class.php:376
+msgid "HTML color"
+msgstr "Color HTML"
+
+#: inc/tag.class.php:826
+msgid "Invalid color format"
+msgstr ""
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Gestión de etiquetas"
+
+#: hook.php:247 hook.php:378
+msgid "Add tags"
+msgstr "Añadir etiquetas"
+
+#: hook.php:249
+msgid "Remove tags"
+msgstr "Quitar etiquetas"
+
 #: ajax/tag.php:45
 msgid "Invalid item type"
 msgstr "Tipo de elemento no válido"
 
-#: ajax/tag.php:55
+#: ajax/tag.php:50
+msgid "Invalid item"
+msgstr ""
+
+#: ajax/tag.php:58
 msgid "Tags have been updated"
 msgstr "Se han actualizado las etiquetas"
 
-#: ajax/tag.php:61
+#: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr "No se actualizaron las etiquetas"
 
-#: ajax/tag.php:64
+#: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Faltan parámetros"
 
@@ -48,36 +89,3 @@ msgstr "Si el elemento tiene una etiqueta"
 msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Si el elemento está etiquetado"
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "Gestión de etiquetas"
-
-#: hook.php:239 hook.php:366
-msgid "Add tags"
-msgstr "Añadir etiquetas"
-
-#: hook.php:241
-msgid "Remove tags"
-msgstr "Quitar etiquetas"
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiqueta"
-msgstr[1] "Etiquetas"
-msgstr[2] "Etiquetas"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Ubicación de etiquetas"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "Color HTML"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Gestión de etiquetas"
