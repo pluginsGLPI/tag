@@ -96,6 +96,35 @@ final class TagTest extends TagTestCase
         );
     }
 
+    public function testGiveItemRendersColorFromSearchDataWithoutDbLookup(): void
+    {
+        // Tag ids intentionally do not exist in DB: if plugin_tag_giveItem()
+        // ever falls back to a getFromDB() call per tag, this fails because
+        // the lookup returns nothing and the fallback color/empty name show up instead.
+        $data = [
+            0 => [
+                'count' => 2,
+                0 => [
+                    'id'    => 999998,
+                    'name'  => 'First tag',
+                    'color' => '#123456',
+                ],
+                1 => [
+                    'id'    => 999999,
+                    'name'  => 'Second tag',
+                    'color' => '#abcdef',
+                ],
+            ],
+        ];
+
+        $out = plugin_tag_giveItem('Ticket', PluginTagTag::S_OPTION, $data, 0);
+
+        $this->assertStringContainsString('#123456', $out);
+        $this->assertStringContainsString('First tag', $out);
+        $this->assertStringContainsString('#abcdef', $out);
+        $this->assertStringContainsString('Second tag', $out);
+    }
+
     public function testUpdateAcceptsScalarTypeMenu(): void
     {
         $tag = $this->createItem(

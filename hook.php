@@ -99,6 +99,9 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
         'searchtype'    => ['equals','notequals','contains'],
         'massiveaction' => false,
         'forcegroupby'  => true,
+        // Fetch the color alongside the name in the same grouped query,
+        // avoiding a getFromDB() call per tag per row in plugin_tag_giveItem().
+        'additionalfields' => ['color'],
         'joinparams'    =>  [
             'beforejoin' => [
                 'table'      => 'glpi_plugin_tag_tagitems',
@@ -163,7 +166,15 @@ function plugin_tag_giveItem($type, $field, $data, $num, $linkfield = "")
             $separator = '';
             foreach ($data[$num] as $tag) {
                 if (isset($tag['id']) && isset($tag['name'])) {
-                    $out .= PluginTagTag::getSingleTag($tag['id'], $separator);
+                    $color = $tag['color'] ?: '#DDDDDD';
+                    $textcolor = idealTextColor($color);
+                    $out .= sprintf(
+                        "<span class='select2-search-choice tag_choice' style='padding-left:5px;background-color: %s; color: %s'>%s%s</span>",
+                        htmlentities((string) $color, ENT_QUOTES, "UTF-8"),
+                        $textcolor,
+                        $separator,
+                        htmlentities((string) $tag['name'], ENT_QUOTES, "UTF-8"),
+                    );
                     //For export (CSV, PDF) of GLPI core
                     $separator = '<span style="display:none">, </span>';
                 }
