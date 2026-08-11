@@ -136,6 +136,7 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                 'massiveaction' => false,
                 'forcegroupby'  => true,
                 'usehaving'     => true,
+                'additionalfields' => ['color'],
                 'joinparams'    =>  [
                     'condition'  => "AND 1=1", // to force distinct complex id than the previous option
                     'beforejoin' => [
