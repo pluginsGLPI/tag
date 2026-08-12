@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# INOUE Daisuke, 2023,2025
+# Daisuke INOUE, 2023,2025
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-29 01:21+0000\n"
+"POT-Creation-Date: 2026-08-12 00:54+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: INOUE Daisuke, 2023,2025\n"
+"Last-Translator: Daisuke INOUE, 2023,2025\n"
 "Language-Team: Japanese (Japan) (http://app.transifex.com/teclib/glpi-plugin-tag/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,11 +49,11 @@ msgstr ""
 msgid "Tag management"
 msgstr "タグ管理"
 
-#: hook.php:247 hook.php:378
+#: hook.php:259 hook.php:390
 msgid "Add tags"
 msgstr "タグを追加"
 
-#: hook.php:249
+#: hook.php:261
 msgid "Remove tags"
 msgstr "タグを削除"
 

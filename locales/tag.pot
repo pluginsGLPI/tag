@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 00:47+0000\n"
+"POT-Creation-Date: 2026-08-12 00:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,11 +50,11 @@ msgstr ""
 msgid "Tag management"
 msgstr ""
 
-#: hook.php:247 hook.php:378
+#: hook.php:259 hook.php:390
 msgid "Add tags"
 msgstr ""
 
-#: hook.php:249
+#: hook.php:261
 msgid "Remove tags"
 msgstr ""
 
