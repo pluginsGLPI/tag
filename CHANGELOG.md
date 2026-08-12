@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.14.4] - 2026-06-24
 
+### Changed
+
+- Migrate config form to Twig template (Bootstrap 5 card layout)
+
 ### Fixed
 
 - Fix tag search
