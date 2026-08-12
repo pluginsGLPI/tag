@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 00:47+0000\n"
-"PO-Revision-Date: 2026-08-10 00:47+0000\n"
+"POT-Creation-Date: 2026-08-12 00:54+0000\n"
+"PO-Revision-Date: 2026-08-12 00:54+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -49,11 +49,11 @@ msgstr "Invalid color format"
 msgid "Tag management"
 msgstr "Tag management"
 
-#: hook.php:247 hook.php:378
+#: hook.php:259 hook.php:390
 msgid "Add tags"
 msgstr "Add tags"
 
-#: hook.php:249
+#: hook.php:261
 msgid "Remove tags"
 msgstr "Remove tags"
 

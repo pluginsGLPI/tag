@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-29 01:21+0000\n"
+"POT-Creation-Date: 2026-08-12 00:54+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Alan Lehoux, 2025\n"
 "Language-Team: Spanish (Argentina) (http://app.transifex.com/teclib/glpi-plugin-tag/language/es_AR/)\n"
@@ -51,11 +51,11 @@ msgstr ""
 msgid "Tag management"
 msgstr "Gestión de etiquetas"
 
-#: hook.php:247 hook.php:378
+#: hook.php:259 hook.php:390
 msgid "Add tags"
 msgstr "Agregar etiquetas"
 
-#: hook.php:249
+#: hook.php:261
 msgid "Remove tags"
 msgstr "Quitar etiquetas"
 
