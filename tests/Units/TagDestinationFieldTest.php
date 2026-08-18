@@ -44,7 +44,7 @@ use PluginTagTag;
 use PluginTagTagItem;
 use User;
 
-include_once __DIR__ . '/../../../../tests/abstracts/AbstractDestinationFieldTest.php';
+include_once __DIR__ . '/../../../../tests/src/AbstractDestinationFieldTest.php';
 
 final class TagDestinationFieldTest extends AbstractDestinationFieldTest
 {

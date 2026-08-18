@@ -65,17 +65,17 @@ use function Safe\strtotime;
 class PluginTagTagItem extends CommonDBRelation
 {
     // From CommonDBRelation
-    public static $itemtype_1    = 'PluginTagTag';
+    public static ?string $itemtype_1    = 'PluginTagTag';
 
-    public static $items_id_1    = 'plugin_tag_tags_id';
+    public static ?string $items_id_1    = 'plugin_tag_tags_id';
 
-    public static $take_entity_1 = true;
+    public static bool $take_entity_1 = true;
 
-    public static $itemtype_2    = 'itemtype';
+    public static ?string $itemtype_2    = 'itemtype';
 
-    public static $items_id_2    = 'items_id';
+    public static ?string $items_id_2    = 'items_id';
 
-    public static $take_entity_2 = false;
+    public static bool $take_entity_2 = false;
 
 
     public static function getTypeName($nb = 1)

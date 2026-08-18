@@ -58,15 +58,10 @@ abstract class QuestionTypeTestCase extends TagTestCase
     {
         $this->login();
         $controller = new RendererController();
-        $response = $controller->__invoke(
-            Request::create(
-                '',
-                'GET',
-                [
-                    'id' => $form->getID(),
-                ],
-            ),
-        );
+        $request = Request::create('', 'GET');
+        $request->attributes->set('id', $form->getID());
+
+        $response = $controller->__invoke($request);
         return new Crawler($response->getContent());
     }
 }
