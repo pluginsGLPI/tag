@@ -42,9 +42,9 @@ use function Safe\define;
 define('PLUGIN_TAG_VERSION', '2.14.6');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "11.0.1");
+define("PLUGIN_TAG_MIN_GLPI", "12.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "11.0.99");
+define("PLUGIN_TAG_MAX_GLPI", "12.0.99");
 
 /**
  * Init hooks of the plugin.

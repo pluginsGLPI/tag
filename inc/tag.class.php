@@ -40,11 +40,11 @@ use function Safe\preg_match;
 class PluginTagTag extends CommonDropdown
 {
     // From CommonDBTM
-    public $dohistory = true;
+    public bool $dohistory = true;
 
     public const S_OPTION = 10500;
 
-    public static $rightname = 'plugin_tag_tag';
+    public static string $rightname = 'plugin_tag_tag';
 
     public static function getTypeName($nb = 1)
     {
@@ -194,11 +194,9 @@ SQL;
             $migration->migrationOneTable($table);
 
             $datas = getAllDataFromTable($table, ['NOT' => ['type_menu' => null]]);
-            if (!empty($datas)) {
-                foreach ($datas as $data) {
-                    $itemtypes = $CFG_GLPI['plugin_tag_itemtypes'][$data['type_menu']] ?? [];
-                    $DB->update($table, ['type_menu' => json_encode($itemtypes)], ['id' => $data['id']]);
-                }
+            foreach ($datas as $data) {
+                $itemtypes = $CFG_GLPI['plugin_tag_itemtypes'][$data['type_menu']] ?? [];
+                $DB->update($table, ['type_menu' => json_encode($itemtypes)], ['id' => $data['id']]);
             }
         }
 
@@ -924,6 +922,6 @@ SQL;
 
     public static function getIcon()
     {
-        return "fas fa-tags";
+        return "ti ti-tags";
     }
 }

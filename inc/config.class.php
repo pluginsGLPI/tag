@@ -30,7 +30,7 @@
 
 class PluginTagConfig extends CommonDBTM
 {
-    protected static $notable = true;
+    protected static bool $notable = true;
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
@@ -44,7 +44,7 @@ class PluginTagConfig extends CommonDBTM
 
     public function showConfigForm()
     {
-        if (!Session::haveRight('config', UPDATE)) {
+        if (!Session::haveRight(Config::$rightname, UPDATE)) {
             return false;
         }
 
