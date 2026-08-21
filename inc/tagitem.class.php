@@ -197,7 +197,7 @@ SQL;
         if ($canedit) {
             echo "<div class='firstbloc'>";
             echo "<form name='tagitem_form{$rand}' id='tagitem_form{$rand}' method='post'
-               action='" . Toolbox::getItemTypeFormURL('PluginTagTag') . "'>";
+               action='" . plugin_tag_geturl() . "/ajax/add_item_to_tag.php'>";
 
             echo "<table class='tab_cadre_fixe'>";
             echo "<tr class='tab_bg_2'><th colspan='2'>" . __s('Add an item') . "</th></tr>";
