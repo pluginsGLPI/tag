@@ -28,30 +28,28 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\BadRequestHttpException;
+use Glpi\Exception\Http\AccessDeniedHttpException;
 
 Session::checkLoginUser();
 
 if (!isset($_POST['plugin_tag_tags_id'], $_POST['itemtype'], $_POST['items_id'])) {
-    http_response_code(400);
-    exit;
+    throw new BadRequestHttpException(__s('Missing parameters', 'tag'));
 }
 
 $tag = new PluginTagTag();
 if (!$tag->getFromDB($_POST['plugin_tag_tags_id']) || !$tag->can($tag->getID(), UPDATE)) {
-    http_response_code(403);
-    exit;
+    throw new AccessDeniedHttpException(__s('You do not have permission to update this tag', 'tag'));
 }
 
 $itemtype = $_POST['itemtype'];
 if (!is_a($itemtype, CommonDBTM::class, true) || !PluginTagTag::canItemtype($itemtype)) {
-    http_response_code(400);
-    exit;
+    throw new BadRequestHttpException(__s('Invalid item type', 'tag'));
 }
 
 $item = new $itemtype();
 if (!$item->getFromDB($_POST['items_id']) || !$item->canUpdateItem()) {
-    http_response_code(403);
-    exit;
+    throw new AccessDeniedHttpException(__s('You do not have permission to update this item', 'tag'));
 }
 
 $tag_item = new PluginTagTagItem();

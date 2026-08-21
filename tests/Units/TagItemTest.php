@@ -30,10 +30,15 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+use Exception;
 use Computer;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTagItem;
 use Ticket;
+
+use function Safe\ob_end_clean;
+use function Safe\ob_start;
 
 final class TagItemTest extends TagTestCase
 {
@@ -120,9 +125,8 @@ final class TagItemTest extends TagTestCase
         $_POST['itemtype'] = Ticket::class;
         $_POST['items_id'] = $ticket->getID();
 
+        $this->expectException(AccessDeniedHttpException::class);
         $this->callAjax('plugins/tag/ajax/add_item_to_tag.php');
-
-        $this->isItemNotTagged($ticket, 999999);
     }
 
     public function testAddItemToTagViaAjaxFailsWhenUserLacksTagUpdateRight(): void
@@ -141,9 +145,8 @@ final class TagItemTest extends TagTestCase
         $_POST['itemtype'] = Ticket::class;
         $_POST['items_id'] = $ticket->getID();
 
+        $this->expectException(AccessDeniedHttpException::class);
         $this->callAjax('plugins/tag/ajax/add_item_to_tag.php');
-
-        $this->isItemNotTagged($ticket, $tagID);
     }
 
     public function testAddItemToTagViaAjaxFailsWhenUserLacksItemUpdateRight(): void
@@ -161,9 +164,8 @@ final class TagItemTest extends TagTestCase
         $_POST['itemtype'] = Computer::class;
         $_POST['items_id'] = $computer->getID();
 
+        $this->expectException(AccessDeniedHttpException::class);
         $this->callAjax('plugins/tag/ajax/add_item_to_tag.php');
-
-        $this->isItemNotTagged($computer, $tagID);
     }
 
     private function callAjax(string $path): void
@@ -171,10 +173,11 @@ final class TagItemTest extends TagTestCase
         ob_start();
         try {
             include GLPI_ROOT . '/' . $path;
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             ob_end_clean();
-            throw $e;
+            throw $exception;
         }
+
         ob_end_clean();
     }
 
