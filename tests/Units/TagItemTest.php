@@ -32,7 +32,6 @@ namespace GlpiPlugin\Tag\Tests\Units;
 
 use Computer;
 use GlpiPlugin\Tag\Tests\TagTestCase;
-use PluginTagTag;
 use PluginTagTagItem;
 use Ticket;
 
