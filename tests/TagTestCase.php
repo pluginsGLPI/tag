@@ -74,15 +74,11 @@ abstract class TagTestCase extends DbTestCase
 
     public function createTag(string $tagName, array $typeMenu = ['Ticket']): int
     {
-        $tag = new PluginTagTag();
-        $tag->add(
-            [
-                'name' => $tagName,
-                'is_active' => 1,
-                'type_menu' => $typeMenu,
-            ],
-        );
-        $this->assertGreaterThan(0, $tag->getID());
+        $tag = $this->createItem(PluginTagTag::class, [
+            'name' => $tagName,
+            'is_active' => 1,
+            'type_menu' => $typeMenu,
+        ], ['type_menu']);
 
         return $tag->getID();
     }
