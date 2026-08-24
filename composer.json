@@ -15,6 +15,7 @@
     },
     "autoload": {
         "psr-4": {
+            "GlpiPlugin\\Tag\\": "src/",
             "GlpiPlugin\\Tag\\Tests\\": "tests"
         }
     },
