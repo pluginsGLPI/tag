@@ -69,8 +69,7 @@ final class TagItemTest extends TagTestCase
             'entities_id' => 0,
         ]);
 
-        $tagItem = new PluginTagTagItem();
-        $tagItem->add([
+        $this->createItem(PluginTagTagItem::class, [
             'plugin_tag_tags_id' => $tag,
             'itemtype' => Computer::class,
             'items_id' => $computer->getID(),
