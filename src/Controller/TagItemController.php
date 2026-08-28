@@ -34,6 +34,7 @@ use CommonDBTM;
 use Glpi\Controller\GenericFormController;
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\Exception\Http\BadRequestHttpException;
+use Glpi\Http\RedirectResponse;
 use Html;
 use PluginTagTag;
 use PluginTagTagItem;
@@ -86,6 +87,6 @@ final class TagItemController extends GenericFormController
             ]);
         }
 
-        Html::back();
+        return new RedirectResponse(Html::getBackUrl());
     }
 }
