@@ -31,8 +31,9 @@
 namespace GlpiPlugin\Tag\Tests\Units;
 
 use Computer;
+use GlpiPlugin\Tag\Controller\TagItemController;
 use GlpiPlugin\Tag\Tests\TagTestCase;
-use PluginTagTagItem;
+use Symfony\Component\HttpFoundation\Request;
 use Ticket;
 
 final class TagItemTest extends TagTestCase
@@ -69,11 +70,14 @@ final class TagItemTest extends TagTestCase
             'entities_id' => 0,
         ]);
 
-        $this->createItem(PluginTagTagItem::class, [
+        $controller = new TagItemController();
+        $request = Request::create('/plugins/tag/associate', 'POST', [
             'plugin_tag_tags_id' => $tag,
-            'itemtype' => Computer::class,
-            'items_id' => $computer->getID(),
+            'itemtype'           => Computer::class,
+            'items_id'           => $computer->getID(),
         ]);
+
+        $controller->associate($request);
 
         $this->isItemTagged($computer, $tag);
     }
