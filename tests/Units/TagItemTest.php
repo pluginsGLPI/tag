@@ -40,7 +40,6 @@ final class TagItemTest extends TagTestCase
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
-
         $ticket = new Ticket();
         $ticket->add([
             'name' => 'Ticket add Tag',

@@ -63,8 +63,8 @@ export class GlpiPluginTagTagDropdownColorizer {
 
     /**
      * Get style for a given tag options.
-     * 
-     * @param {object} options 
+     *
+     * @param {object} options
      * @returns {object}
      */
     tagStyle(options) {
@@ -72,7 +72,6 @@ export class GlpiPluginTagTagDropdownColorizer {
         return {
             'background-color': backgroundColor,
             'color': this.isDark(backgroundColor) ? '#fff' : '',
-            'padding': '2px 4px',
             'border-radius': '2px',
         }
     }

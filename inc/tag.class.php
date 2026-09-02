@@ -256,7 +256,7 @@ SQL;
             ]);
         }
 
-        $tab[2] = self::createTabEntry(_sn('Associated item', 'Associated items', 2), $nb, $item::getType(), 'ti ti-list');
+        $tab[2] = self::createTabEntry(_sn('Associated item', 'Associated items', 2), $nb, $item::class, 'ti ti-list');
         return $tab;
     }
 
@@ -556,9 +556,7 @@ SQL;
         }
 
         if (isset($params['itemtype']) && isset($params['items_id'])) {
-            if (!isset($params['content'])) {
-                $params['content'] = "";
-            }
+            $params['content'] ??= "";
 
             $iterator = $DB->request([
                 'SELECT'    => [
@@ -913,7 +911,7 @@ SQL;
 
         $item = getItemForItemtype($itemtype);
         if ($item instanceof CommonDBTM) {
-            return $item->getType();
+            return $item::class;
         }
 
         return false;

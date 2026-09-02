@@ -35,8 +35,8 @@ class PluginTagConfig extends CommonDBTM
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
-        if (!$withtemplate && $item->getType() === 'Config') {
-            return self::createTabEntry(__('Tag Management', 'tag'), 0, $item::getType(), PluginTagTag::getIcon());
+        if (!$withtemplate && $item::class === 'Config') {
+            return self::createTabEntry(__('Tag Management', 'tag'), 0, $item::class, PluginTagTag::getIcon());
         }
 
         return '';
@@ -83,7 +83,7 @@ class PluginTagConfig extends CommonDBTM
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        if ($item->getType() == 'Config') {
+        if ($item::class == 'Config') {
             $config = new self();
             $config->showConfigForm();
         }
