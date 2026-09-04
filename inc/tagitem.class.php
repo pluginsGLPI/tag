@@ -223,7 +223,7 @@ SQL;
             ]);
             echo "</td><td width='20%'>";
             echo sprintf("<input type='hidden' name='plugin_tag_tags_id' value='%s'>", $instID);
-            echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='btn btn-primary'>";
+            echo "<input type='submit' name='associate' value=\"" . _sx('button', 'Add') . "\" class='btn btn-primary'>";
             echo "</td></tr>";
 
             echo "</table>";
