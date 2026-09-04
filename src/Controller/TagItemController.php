@@ -45,7 +45,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class TagItemController extends GenericFormController
 {
-    #[Route('/associate', methods: ['POST'])]
+    #[ItemtypeFormRoute(PluginTagTagItem::class)]
 public function associate(Request $request): Response
     {
         if ($request->query->getInt('associate') === 1) {
