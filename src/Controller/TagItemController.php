@@ -39,56 +39,54 @@ use Html;
 use PluginTagTag;
 use PluginTagTagItem;
 use Session;
+use Glpi\Routing\Attribute\ItemtypeFormRoute;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 
 final class TagItemController extends GenericFormController
 {
     #[ItemtypeFormRoute(PluginTagTagItem::class)]
-public function associate(Request $request): Response
+    public function associate(Request $request): Response
     {
-        if ($request->query->getInt('associate') === 1) {
-            Session::checkLoginUser();
+        Session::checkLoginUser();
 
-            $tag_id = $request->request->getInt('plugin_tag_tags_id');
-            $itemtype = $request->request->get('itemtype');
-            $item_id = $request->request->getInt('items_id');
+        $tag_id = $request->request->getInt('plugin_tag_tags_id');
+        $itemtype = $request->request->get('itemtype');
+        $item_id = $request->request->getInt('items_id');
 
-            if (!$tag_id || !$itemtype || !$item_id) {
-                throw new BadRequestHttpException(__s('Missing parameters', 'tag'));
-            }
+        if (!$tag_id || !$itemtype || !$item_id) {
+            throw new BadRequestHttpException(__s('Missing parameters', 'tag'));
+        }
 
-            $tag = new PluginTagTag();
-            if (!$tag->getFromDB($tag_id) || !$tag->can($tag_id, UPDATE)) {
-                throw new AccessDeniedHttpException(__s('You do not have permission to update this tag', 'tag'));
-            }
+        $tag = new PluginTagTag();
+        if (!$tag->getFromDB($tag_id) || !$tag->can($tag_id, UPDATE)) {
+            throw new AccessDeniedHttpException(__s('You do not have permission to update this tag', 'tag'));
+        }
 
-            if (!is_a($itemtype, CommonDBTM::class, true) || !PluginTagTag::canItemtype($itemtype)) {
-                throw new BadRequestHttpException(__s('Invalid item type', 'tag'));
-            }
+        if (!is_a($itemtype, CommonDBTM::class, true) || !PluginTagTag::canItemtype($itemtype)) {
+            throw new BadRequestHttpException(__s('Invalid item type', 'tag'));
+        }
 
-            $item = new $itemtype();
-            if (!$item->getFromDB($item_id) || !$item->canUpdateItem()) {
-                throw new AccessDeniedHttpException(__s('You do not have permission to update this item', 'tag'));
-            }
+        $item = new $itemtype();
+        if (!$item->getFromDB($item_id) || !$item->canUpdateItem()) {
+            throw new AccessDeniedHttpException(__s('You do not have permission to update this item', 'tag'));
+        }
 
-            $tag_item = new PluginTagTagItem();
-            $found = $tag_item->find([
+        $tag_item = new PluginTagTagItem();
+        $found = $tag_item->find([
+            'plugin_tag_tags_id' => $tag_id,
+            'items_id'           => $item_id,
+            'itemtype'           => $itemtype,
+        ]);
+
+        if (count($found) === 0) {
+            $tag_item->add([
                 'plugin_tag_tags_id' => $tag_id,
                 'items_id'           => $item_id,
                 'itemtype'           => $itemtype,
             ]);
-
-            if (count($found) === 0) {
-                $tag_item->add([
-                    'plugin_tag_tags_id' => $tag_id,
-                    'items_id'           => $item_id,
-                    'itemtype'           => $itemtype,
-                ]);
-            }
-
-            return new RedirectResponse(Html::getBackUrl());
         }
+
+        return new RedirectResponse(Html::getBackUrl());
     }
 }
