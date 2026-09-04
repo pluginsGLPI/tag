@@ -46,7 +46,7 @@ abstract class TagTestCase extends DbTestCase
         $_SESSION['glpi_currenttime'] = $ctime;
     }
 
-    public function loginAs(array $credentials): int
+    public function loginAs(array $credentials, int $rights = CREATE | UPDATE | PURGE): int
     {
         global $DB;
 
@@ -59,7 +59,7 @@ abstract class TagTestCase extends DbTestCase
         $DB->update(
             'glpi_profilerights',
             [
-                'rights' => CREATE | UPDATE | PURGE,
+                'rights' => $rights,
             ],
             [
                 'profiles_id' => $user_profile,
@@ -72,17 +72,13 @@ abstract class TagTestCase extends DbTestCase
         return $user->getID();
     }
 
-    public function createTag(string $tagName): int
+    public function createTag(string $tagName, array $typeMenu = ['Ticket']): int
     {
-        $tag = new PluginTagTag();
-        $tag->add(
-            [
-                'name' => $tagName,
-                'is_active' => 1,
-                'type_menu' => ['Ticket'],
-            ],
-        );
-        $this->assertGreaterThan(0, $tag->getID());
+        $tag = $this->createItem(PluginTagTag::class, [
+            'name' => $tagName,
+            'is_active' => 1,
+            'type_menu' => $typeMenu,
+        ], ['type_menu']);
 
         return $tag->getID();
     }

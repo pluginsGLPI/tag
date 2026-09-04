@@ -30,16 +30,20 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use Computer;
+use GlpiPlugin\Tag\Controller\TagItemController;
 use GlpiPlugin\Tag\Tests\TagTestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Ticket;
 
 final class TagItemTest extends TagTestCase
 {
+    private const TECH_USER = ['login' => 'tech', 'pass' => 'tech'];
+
     public function testTagsFromTicket(): void
     {
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
-
 
         $ticket = new Ticket();
         $ticket->add([
@@ -56,4 +60,25 @@ final class TagItemTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID2);
     }
 
+    public function testTagAssociationCreatesLink(): void
+    {
+        $this->loginAs(self::TECH_USER);
+
+        $tag = $this->createTag('MyTag', ['Computer']);
+        $computer = $this->createItem(Computer::class, [
+            'name' => 'Computer to tag',
+            'entities_id' => 0,
+        ]);
+
+        $controller = new TagItemController();
+        $request = Request::create('/plugins/tag/associate', 'POST', [
+            'plugin_tag_tags_id' => $tag,
+            'itemtype'           => Computer::class,
+            'items_id'           => $computer->getID(),
+        ]);
+
+        $controller->associate($request);
+
+        $this->isItemTagged($computer, $tag);
+    }
 }
