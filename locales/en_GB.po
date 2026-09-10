@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-12 00:54+0000\n"
-"PO-Revision-Date: 2026-08-12 00:54+0000\n"
+"POT-Creation-Date: 2026-09-10 01:47+0000\n"
+"PO-Revision-Date: 2026-09-10 01:47+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -21,17 +21,35 @@ msgstr ""
 msgid "Tags"
 msgstr "Tags"
 
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "If the item has a tag"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "If the item is tagged"
+
+#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
 msgid "Tag Management"
 msgstr "Tag Management"
+
+#: hook.php:259 hook.php:390
+msgid "Add tags"
+msgstr "Add tags"
+
+#: hook.php:261
+msgid "Remove tags"
+msgstr "Remove tags"
 
 #: inc/config.class.php:59
 msgid "Tags location"
 msgstr "Tags location"
 
-#: inc/destinationfield.class.php:44 inc/tag.class.php:51
-#: inc/questiontypecategory.class.php:37
+#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
@@ -48,14 +66,6 @@ msgstr "Invalid color format"
 #: inc/profile.class.php:68
 msgid "Tag management"
 msgstr "Tag management"
-
-#: hook.php:259 hook.php:390
-msgid "Add tags"
-msgstr "Add tags"
-
-#: hook.php:261
-msgid "Remove tags"
-msgstr "Remove tags"
 
 #: ajax/tag.php:45
 msgid "Invalid item type"
@@ -76,13 +86,3 @@ msgstr "Tags have not been updated"
 #: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Missing parameters"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "If the item has a tag"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "If the item is tagged"
