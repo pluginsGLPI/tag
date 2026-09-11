@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix missing check for `Entity` tag visibility
 - Prevent update of tags when the user has no update rights
 - Prevent the tag field from appearing in the satisfaction survey.
+- Ignore submitted tags that are not visible in the user entities when saving an item
 
 ## [2.12.5] - 2025-09-29
 

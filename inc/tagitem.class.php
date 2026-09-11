@@ -471,6 +471,11 @@ SQL;
             // Business rule engine will add value as a unique string that must be converted to array.
             $tag_values = [$tag_values];
         }
+
+        if (!Session::isCron()) {
+            $tag_values = self::keepVisibleTags($tag_values);
+        }
+
         $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
 
         foreach ($tag_values as &$tag_value) {
@@ -489,6 +494,9 @@ SQL;
         );
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
         $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
+        if (!Session::isCron()) {
+            $removed_tags_ids = self::keepVisibleTags($removed_tags_ids);
+        }
 
         // link tags with the current item
         foreach ($added_tags_ids as $tag_id) {
@@ -507,6 +515,26 @@ SQL;
         }
 
         return true;
+    }
+
+    private static function keepVisibleTags(array $tag_values): array
+    {
+        // Values prefixed with "newtag_" are not persisted yet and are created in the current entity.
+        $submitted_ids = array_filter($tag_values, 'is_numeric');
+        if (empty($submitted_ids)) {
+            return array_values($tag_values);
+        }
+
+        $tag = new PluginTagTag();
+        $visible_ids = array_column(
+            $tag->find(['id' => $submitted_ids] + getEntitiesRestrictCriteria($tag::getTable(), '', '', true)),
+            'id',
+        );
+
+        return array_values(array_filter(
+            $tag_values,
+            static fn($tag_value): bool => !is_numeric($tag_value) || in_array((int) $tag_value, $visible_ids),
+        ));
     }
 
     /**

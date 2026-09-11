@@ -30,7 +30,10 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use Entity;
 use GlpiPlugin\Tag\Tests\TagTestCase;
+use PluginTagTag;
+use Session;
 use Ticket;
 
 final class TagItemTest extends TagTestCase
@@ -56,4 +59,46 @@ final class TagItemTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID2);
     }
 
+    public function testTagOutOfEntityScopeIsNotLinked(): void
+    {
+        $this->login();
+
+        $entity = new Entity();
+        $visible_entity_id = $entity->add([
+            'name' => 'TagVisibleEntity',
+            'entities_id' => 0,
+        ]);
+        $this->assertGreaterThan(0, $visible_entity_id);
+        $out_of_scope_entity_id = $entity->add([
+            'name' => 'TagOutOfScopeEntity',
+            'entities_id' => 0,
+        ]);
+        $this->assertGreaterThan(0, $out_of_scope_entity_id);
+
+        $tag = new PluginTagTag();
+        $tagID = $tag->add([
+            'name' => 'OutOfScopeTag',
+            'is_active' => 1,
+            'type_menu' => ['Ticket'],
+            'entities_id' => $out_of_scope_entity_id,
+            'is_recursive' => 0,
+        ]);
+        $this->assertGreaterThan(0, $tagID);
+
+        $this->assertTrue(Session::changeActiveEntities($visible_entity_id, false));
+
+        $ticket = new Ticket();
+        $ticket->add([
+            'name' => 'Ticket out of scope tag',
+            'content' => 'Ticket out of scope tag',
+            'entities_id' => $visible_entity_id,
+            '_plugin_tag_tag_process_form' => 1,
+            '_plugin_tag_tag_values' => [
+                $tagID,
+            ],
+        ]);
+        $this->assertGreaterThan(0, $ticket->getID());
+
+        $this->isItemNotTagged($ticket, $tagID);
+    }
 }
