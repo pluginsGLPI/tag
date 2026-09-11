@@ -50,6 +50,12 @@ final class TagDestinationFieldTest extends AbstractDestinationFieldTest
 {
     use FormTesterTrait;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->login();
+    }
+
     public function testNoTags(): void
     {
         $form = $this->createAndGetFormWithMultipleTagQuestions();
