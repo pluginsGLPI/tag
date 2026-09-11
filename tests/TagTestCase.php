@@ -59,7 +59,7 @@ abstract class TagTestCase extends DbTestCase
         $DB->update(
             'glpi_profilerights',
             [
-                'rights' => CREATE | UPDATE | PURGE,
+                'rights' => READ | CREATE | UPDATE | PURGE,
             ],
             [
                 'profiles_id' => $user_profile,

@@ -38,6 +38,8 @@ final class TagItemTest extends TagTestCase
 {
     public function testTagsFromTicket(): void
     {
+        $this->login();
+
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 
