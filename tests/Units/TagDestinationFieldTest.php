@@ -30,7 +30,9 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use CommonDBTM;
 use Glpi\Form\AnswersHandler\AnswersHandler;
+use Glpi\Form\Destination\FormDestination;
 use Glpi\Form\Form;
 use Glpi\Tests\AbstractDestinationFieldTest;
 use Glpi\Tests\FormBuilder;
@@ -44,7 +46,7 @@ use PluginTagTag;
 use PluginTagTagItem;
 use User;
 
-include_once __DIR__ . '/../../../../tests/abstracts/AbstractDestinationFieldTest.php';
+include_once __DIR__ . '/../../../../tests/src/AbstractDestinationFieldTest.php';
 
 final class TagDestinationFieldTest extends AbstractDestinationFieldTest
 {
@@ -203,8 +205,9 @@ final class TagDestinationFieldTest extends AbstractDestinationFieldTest
         $destinations = $form->getDestinations();
         $this->assertCount(1, $destinations);
         $destination = current($destinations);
+        $this->assertTrue($destination instanceof FormDestination);
         $this->updateItem(
-            $destination::getType(),
+            $destination::class,
             $destination->getId(),
             ['config' => [PluginTagDestinationField::getKey() => $config->jsonSerialize()]],
             ["config"],
@@ -230,12 +233,13 @@ final class TagDestinationFieldTest extends AbstractDestinationFieldTest
         $created_items = $answers->getCreatedItems();
         $this->assertCount(1, $created_items);
         $ticket = current($created_items);
+        $this->assertTrue($ticket instanceof CommonDBTM);
 
         // Check ticket tags
         $tag_item = new PluginTagTagItem();
-        $tags = $tag_item->find(['items_id' => $ticket->getId(), 'itemtype' => $ticket::getType()]);
+        $tags = $tag_item->find(['items_id' => $ticket->getId(), 'itemtype' => $ticket::class]);
         $this->assertCount(count($expected_tag_ids), $tags);
-        $tag_ids = array_map(fn($tag) => $tag['plugin_tag_tags_id'], $tags);
+        $tag_ids = array_values(array_map(fn($tag) => $tag['plugin_tag_tags_id'], $tags));
         $this->assertEqualsCanonicalizing($expected_tag_ids, $tag_ids);
     }
 
