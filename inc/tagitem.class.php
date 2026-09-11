@@ -519,6 +519,10 @@ SQL;
             $tag_values = [$tag_values];
         }
 
+        if (!Session::isCron()) {
+            $tag_values = self::keepVisibleTags($tag_values);
+        }
+
         $tag_values = array_merge($tag_values, $tag_from_rules, $additional_tags_from_rules);
 
         foreach ($tag_values as &$tag_value) {
@@ -537,6 +541,9 @@ SQL;
         );
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
         $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
+        if (!Session::isCron()) {
+            $removed_tags_ids = self::keepVisibleTags($removed_tags_ids);
+        }
 
         // link tags with the current item
         foreach ($added_tags_ids as $tag_id) {
@@ -556,6 +563,22 @@ SQL;
         }
 
         return true;
+    }
+
+    /**
+     * Discard tag ids the current user is not allowed to see (entity scope, rights)
+     *
+     *
+     */
+    private static function keepVisibleTags(array $tag_values): array
+    {
+        $tag = new PluginTagTag();
+
+        // Values prefixed with "newtag_" are not persisted yet and are created in the current entity.
+        return array_values(array_filter(
+            $tag_values,
+            static fn($tag_value): bool => !is_numeric($tag_value) || $tag->can((int) $tag_value, READ),
+        ));
     }
 
     /**

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Avoid a per-tag database lookup when rendering the tag column in item lists
+- Ignore submitted tags that are not visible in the user entities when saving an item
 
 ## [2.14.6] - 2026-08-04
 
