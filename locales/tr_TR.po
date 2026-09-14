@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-12 00:54+0000\n"
+"POT-Creation-Date: 2026-09-03 01:47+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2022,2024-2026\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-plugin-tag/language/tr_TR/)\n"
@@ -22,17 +22,35 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiketler"
 
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "Ögenin etiketi varsa"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "Öge etiketlenmişse"
+
+#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
 msgid "Tag Management"
 msgstr "Etiket yönetimi"
+
+#: hook.php:259 hook.php:390
+msgid "Add tags"
+msgstr "Etiket ekle"
+
+#: hook.php:261
+msgid "Remove tags"
+msgstr "Etiket sil"
 
 #: inc/config.class.php:59
 msgid "Tags location"
 msgstr "Etiketlerin konumu"
 
-#: inc/destinationfield.class.php:44 inc/tag.class.php:51
-#: inc/questiontypecategory.class.php:37
+#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiket"
@@ -49,14 +67,6 @@ msgstr "Renk biçimi geçersiz"
 #: inc/profile.class.php:68
 msgid "Tag management"
 msgstr "Etiket yönetimi"
-
-#: hook.php:259 hook.php:390
-msgid "Add tags"
-msgstr "Etiket ekle"
-
-#: hook.php:261
-msgid "Remove tags"
-msgstr "Etiket sil"
 
 #: ajax/tag.php:45
 msgid "Invalid item type"
@@ -77,13 +87,3 @@ msgstr "Etiketler güncellenmedi"
 #: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Parametreler eksik"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "Ögenin etiketi varsa"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "Öge etiketlenmişse"
