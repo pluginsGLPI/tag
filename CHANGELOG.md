@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- Avoid loading the entity tag script for profiles without the tag read right
+
 ## [2.14.7] - 2026-08-11
 
 ### Fixed

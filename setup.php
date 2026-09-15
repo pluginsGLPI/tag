@@ -157,7 +157,7 @@ function plugin_init_tag()
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/common.js';
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/kanban.js';
         $PLUGIN_HOOKS[Hooks::ADD_CSS]['tag'][]        = 'css/tag.css';
-        if (Session::isMultiEntitiesMode()) {
+        if (Session::isMultiEntitiesMode() && Session::haveRight(PluginTagTag::$rightname, READ)) {
             $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/entity.js';
         }
 
