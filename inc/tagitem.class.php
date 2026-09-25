@@ -65,17 +65,17 @@ use function Safe\strtotime;
 class PluginTagTagItem extends CommonDBRelation
 {
     // From CommonDBRelation
-    public static $itemtype_1    = 'PluginTagTag';
+    public static ?string $itemtype_1    = 'PluginTagTag';
 
-    public static $items_id_1    = 'plugin_tag_tags_id';
+    public static ?string $items_id_1    = 'plugin_tag_tags_id';
 
-    public static $take_entity_1 = true;
+    public static bool $take_entity_1 = true;
 
-    public static $itemtype_2    = 'itemtype';
+    public static ?string $itemtype_2    = 'itemtype';
 
-    public static $items_id_2    = 'items_id';
+    public static ?string $items_id_2    = 'items_id';
 
-    public static $take_entity_2 = false;
+    public static bool $take_entity_2 = false;
 
 
     public static function getTypeName($nb = 1)
@@ -475,7 +475,7 @@ SQL;
         if (
             $item->getID()
             && !isset($item->input["_plugin_tag_tag_process_form"])
-            && ($item::getType() != Ticket::getType() || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
+            && ($item::class != Ticket::class || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
         ) {
             return true;
         }
@@ -536,7 +536,7 @@ SQL;
 
         // process actions
         $existing_tags_ids = array_column(
-            $tag_item->find(['items_id' => $item->getID(), 'itemtype' => $item->getType()]),
+            $tag_item->find(['items_id' => $item->getID(), 'itemtype' => $item::class]),
             'plugin_tag_tags_id',
         );
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
@@ -550,7 +550,7 @@ SQL;
             $tag_item->add([
                 'plugin_tag_tags_id' => $tag_id,
                 'items_id' => $item->getID(),
-                'itemtype' => $item->getType(),
+                'itemtype' => $item::class,
             ]);
         }
 
@@ -558,7 +558,7 @@ SQL;
             $tag_item->deleteByCriteria([
                 'plugin_tag_tags_id' => $tag_id,
                 "items_id" => $item->getID(),
-                "itemtype" => $item->getType(),
+                "itemtype" => $item::class,
             ]);
         }
 
@@ -591,7 +591,7 @@ SQL;
         $tagitem = new self();
         return $tagitem->deleteByCriteria([
             "items_id" => $item->getID(),
-            "itemtype" => $item->getType(),
+            "itemtype" => $item::class,
         ]);
     }
 
@@ -627,9 +627,9 @@ SQL;
                             $object->fields['id'] = $items_id;
                             $object->input        = $input;
                             if (self::updateItem($object, false)) {
-                                $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                                $ma->itemDone($item::class, $items_id, MassiveAction::ACTION_OK);
                             } else {
-                                $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                                $ma->itemDone($item::class, $items_id, MassiveAction::ACTION_KO);
                                 $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
                             }
                         }
@@ -648,9 +648,9 @@ SQL;
                                 'plugin_tag_tags_id' => $input['_plugin_tag_tag_values'],
                             ])
                         ) {
-                            $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_OK);
+                            $ma->itemDone($item::class, $items_id, MassiveAction::ACTION_OK);
                         } else {
-                            $ma->itemDone($item->getType(), $items_id, MassiveAction::ACTION_KO);
+                            $ma->itemDone($item::class, $items_id, MassiveAction::ACTION_KO);
                             $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
                         }
                     }

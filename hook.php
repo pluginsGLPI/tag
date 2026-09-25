@@ -346,10 +346,10 @@ function plugin_tag_post_init()
     // Always define hook for tickets
     // Needed for rules to function properly when a ticket is created from a mail
     // collector
-    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][Ticket::getType()]        = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][Ticket::getType()]     = ['PluginTagTagItem', 'updateItem'];
-    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][Ticket::getType()]  = ['PluginTagTagItem', 'purgeItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_ADD]['tag'][Ticket::class]        = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['tag'][Ticket::class]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['tag'][Ticket::class]     = ['PluginTagTagItem', 'updateItem'];
+    $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['tag'][Ticket::class]  = ['PluginTagTagItem', 'purgeItem'];
 
     // Always define hook for Form (GLPI 11 namespace class)
     // Needed because getCurrentItemtype() doesn't handle namespaces correctly

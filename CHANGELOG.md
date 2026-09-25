@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- GLPI 12 compatibility
+
 ### Fixed
 
 - Avoid loading the entity tag script for profiles without the tag read right
