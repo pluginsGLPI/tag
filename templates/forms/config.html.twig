@@ -1,0 +1,60 @@
+{#
+ # -------------------------------------------------------------------------
+ # Tag plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of Tag.
+ #
+ # Tag is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #
+ # Tag is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with Tag. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2014-2023 by Teclib'.
+ # @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ # @link      https://github.com/pluginsGLPI/tag
+ # -------------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ __('Tag Management', 'tag') }}</h3>
+    </div>
+
+    <form method="post" action="{{ form_action }}">
+        <input type="hidden" name="config_class"   value="{{ config_class }}">
+        <input type="hidden" name="config_context" value="{{ config_context }}">
+        <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+
+        <div class="card-body row">
+            {{ fields.dropdownArrayField(
+                'tags_location',
+                tags_location,
+                {
+                    0: __('Top'),
+                    1: __('Bottom')
+                },
+                __('Tags location', 'tag')
+            ) }}
+        </div>
+
+        <div class="card-footer mx-n2 mb-n3 d-flex">
+            <button type="submit" name="update" class="btn btn-primary ms-auto">
+                <i class="ti ti-device-floppy me-1"></i>
+                {{ __('Save') }}
+            </button>
+        </div>
+    </form>
+</div>
