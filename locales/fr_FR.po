@@ -7,15 +7,15 @@
 # Cédric Anne, 2023
 # Manu1400 <ehaguet@teclib.com>, 2016
 # Jérémy MOREAU <jmoreau@teclib.com>, 2014
-# EpicIT33, 2025
+# EpicIT33, 2025-2026
 # Pierre <plebel@teclib.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-13 01:54+0000\n"
+"POT-Creation-Date: 2026-09-25 02:11+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
-"Last-Translator: EpicIT33, 2025\n"
+"Last-Translator: EpicIT33, 2025-2026\n"
 "Language-Team: French (France) (http://app.transifex.com/teclib/glpi-plugin-tag/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,23 +25,36 @@ msgstr ""
 
 #: templates/dropdown.html.twig
 msgid "Tags"
-msgstr ""
+msgstr "Etiquettes"
 
-#: ajax/tag.php:45
-msgid "Invalid item type"
-msgstr ""
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
+#: inc/tag.class.php:51
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiquette"
+msgstr[1] "Etiquettes"
+msgstr[2] "Etiquettes"
 
-#: ajax/tag.php:55
-msgid "Tags have been updated"
-msgstr "Les tags ont été mis à jour"
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "Gestion des tags"
 
-#: ajax/tag.php:61
-msgid "Tags have not been updated"
-msgstr "Les tags n'ont pas été mis à jour"
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Localisation des tags"
 
-#: ajax/tag.php:64
-msgid "Missing parameters"
-msgstr "Paramètres manquants"
+#: inc/tag.class.php:376
+msgid "HTML color"
+msgstr "Couleur HTML"
+
+#: inc/tag.class.php:826
+msgid "Invalid color format"
+msgstr "Format de couleur invalide"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Gestion des tags"
 
 #: setup.php:137
 msgctxt "filters"
@@ -53,35 +66,30 @@ msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Si l'élément est tagué"
 
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "Gestion des tags"
+#: ajax/tag.php:45
+msgid "Invalid item type"
+msgstr "Type d'élément non valide"
 
-#: hook.php:239 hook.php:366
+#: ajax/tag.php:50
+msgid "Invalid item"
+msgstr "Elément non valide"
+
+#: ajax/tag.php:58
+msgid "Tags have been updated"
+msgstr "Les tags ont été mis à jour"
+
+#: ajax/tag.php:64
+msgid "Tags have not been updated"
+msgstr "Les tags n'ont pas été mis à jour"
+
+#: ajax/tag.php:67
+msgid "Missing parameters"
+msgstr "Paramètres manquants"
+
+#: hook.php:259 hook.php:390
 msgid "Add tags"
 msgstr "Ajouter des étiquettes"
 
-#: hook.php:241
+#: hook.php:261
 msgid "Remove tags"
 msgstr "Supprimer des étiquettes"
-
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiquette"
-msgstr[1] "Etiquettes"
-msgstr[2] "Etiquettes"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Localisation des tags"
-
-#: inc/tag.class.php:373
-msgid "HTML color"
-msgstr "Couleur HTML"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Gestion des tags"

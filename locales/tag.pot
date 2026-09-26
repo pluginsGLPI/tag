@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 02:01+0000\n"
+"POT-Creation-Date: 2026-09-25 02:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,39 +22,21 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr ""
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr ""
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr ""
-
-#: hook.php:259 hook.php:390
-msgid "Add tags"
-msgstr ""
-
-#: hook.php:261
-msgid "Remove tags"
-msgstr ""
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr ""
-
-#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
 #: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
+
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr ""
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr ""
 
 #: inc/tag.class.php:376
 msgid "HTML color"
@@ -66,6 +48,16 @@ msgstr ""
 
 #: inc/profile.class.php:68
 msgid "Tag management"
+msgstr ""
+
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr ""
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
 msgstr ""
 
 #: ajax/tag.php:45
@@ -86,4 +78,12 @@ msgstr ""
 
 #: ajax/tag.php:67
 msgid "Missing parameters"
+msgstr ""
+
+#: hook.php:259 hook.php:390
+msgid "Add tags"
+msgstr ""
+
+#: hook.php:261
+msgid "Remove tags"
 msgstr ""
