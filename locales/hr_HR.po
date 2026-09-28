@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 01:47+0000\n"
+"POT-Creation-Date: 2026-09-24 01:55+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022,2026\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/teclib/glpi-plugin-tag/language/hr_HR/)\n"
@@ -23,40 +23,22 @@ msgstr ""
 msgid "Tags"
 msgstr "Oznake"
 
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "Ako predmet ima oznaku"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "Ako je predmet označen"
-
-#: setup.php:185 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "Upravljanje oznakama"
-
-#: hook.php:259 hook.php:390
-msgid "Add tags"
-msgstr "Dodaj oznake"
-
-#: hook.php:261
-msgid "Remove tags"
-msgstr "Ukloni oznake"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Lokacija oznaka"
-
-#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
+#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
 #: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Oznaka"
 msgstr[1] "Oznake"
 msgstr[2] "Oznaka"
+
+#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
+#: setup.php:185
+msgid "Tag Management"
+msgstr "Upravljanje oznakama"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Lokacija oznaka"
 
 #: inc/tag.class.php:376
 msgid "HTML color"
@@ -69,6 +51,16 @@ msgstr ""
 #: inc/profile.class.php:68
 msgid "Tag management"
 msgstr "Upravljanje oznakama"
+
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "Ako predmet ima oznaku"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "Ako je predmet označen"
 
 #: ajax/tag.php:45
 msgid "Invalid item type"
@@ -89,3 +81,11 @@ msgstr "Oznake nisu aktualizirane"
 #: ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Nedostajući parametri"
+
+#: hook.php:259 hook.php:390
+msgid "Add tags"
+msgstr "Dodaj oznake"
+
+#: hook.php:261
+msgid "Remove tags"
+msgstr "Ukloni oznake"
