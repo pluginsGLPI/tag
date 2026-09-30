@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Avoid loading the entity tag script for profiles without the tag read right
+- Avoid a fatal error in the search options hook when the plugin class is not yet loaded
 
 ## [2.14.7] - 2026-08-11
 
