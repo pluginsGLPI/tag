@@ -121,6 +121,10 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
         $so_param['joinparams']['beforejoin']['joinparams']['field'] = 'items_id';
     }
 
+    $options[] = [
+        'id'        => 'tag',
+        'name'      =>  __('Tag Management', 'tag'),
+    ];
     $options[] = $so_param;
 
     if (!is_a($itemtype, AllAssets::class, true) && is_a($itemtype, CommonDBTM::class, true)) {
