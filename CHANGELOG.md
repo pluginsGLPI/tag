@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Avoid loading the entity tag script for profiles without the tag read right
 - Avoid a fatal error in the search options hook when the plugin class is not yet loaded
+- Search options defined in the plugin are grouped under the "Tag Management" label, preventing them from being displayed in the group of an other plugin.
 
 ## [2.14.7] - 2026-08-11
 
