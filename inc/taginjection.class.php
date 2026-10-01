@@ -64,9 +64,9 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
             $options['displaytype']   = ["dropdown" => [12]];
 
             return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -88,8 +88,8 @@ class PluginTagTagInjection extends PluginTagTag implements PluginDatainjectionI
             }
 
             return $results;
-        } else {
-            return [];
         }
+
+        return [];
     }
 }

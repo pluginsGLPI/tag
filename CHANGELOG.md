@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.14.7] - 2026-08-11
 
+### Added
+
+- GLPI 12 compatibility
+
 ### Fixed
 
 - Avoid a per-tag database lookup when rendering the tag column in item lists
