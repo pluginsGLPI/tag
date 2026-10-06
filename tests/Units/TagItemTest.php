@@ -42,6 +42,8 @@ final class TagItemTest extends TagTestCase
 
     public function testTagsFromTicket(): void
     {
+        $this->loginAs(self::TECH_USER);
+
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
 

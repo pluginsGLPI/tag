@@ -46,7 +46,7 @@ abstract class TagTestCase extends DbTestCase
         $_SESSION['glpi_currenttime'] = $ctime;
     }
 
-    public function loginAs(array $credentials, int $rights = CREATE | UPDATE | PURGE): int
+    public function loginAs(array $credentials, int $rights = READ | CREATE | UPDATE | PURGE): int
     {
         global $DB;
 
