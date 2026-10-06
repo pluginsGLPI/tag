@@ -39,12 +39,12 @@ use GlpiPlugin\Webapplications\Webapplication;
 
 use function Safe\define;
 
-define('PLUGIN_TAG_VERSION', '2.14.8');
+define('PLUGIN_TAG_VERSION', '2.15.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_TAG_MIN_GLPI", "11.0.1");
+define("PLUGIN_TAG_MIN_GLPI", "12.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_TAG_MAX_GLPI", "11.0.99");
+define("PLUGIN_TAG_MAX_GLPI", "12.0.99");
 
 /**
  * Init hooks of the plugin.
@@ -182,7 +182,7 @@ function plugin_init_tag()
 function plugin_version_tag()
 {
     return [
-        'name'       => __('Tag Management', 'tag'),
+        'name'           => 'Tag',
         'version'        => PLUGIN_TAG_VERSION,
         'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
         'homepage'       => 'https://github.com/pluginsGLPI/tag',
