@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix search crash when the "Tags - Entity" column is displayed
+- Fix tag associate item
 
 ## [2.15.0] - 2026-10-06
 
