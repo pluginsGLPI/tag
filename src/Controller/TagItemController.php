@@ -72,6 +72,17 @@ final class TagItemController extends GenericFormController
             throw new AccessDeniedHttpException(__s('You do not have permission to update this item', 'tag'));
         }
 
+        if (
+            isset($item->fields['entities_id'])
+            && $tag->fields['entities_id'] != $item->fields['entities_id']
+            && (
+                !$tag->fields['is_recursive']
+                || !in_array($tag->fields['entities_id'], getAncestorsOf('glpi_entities', (int) $item->fields['entities_id']))
+            )
+        ) {
+            throw new AccessDeniedHttpException(__s('This tag is not available in the item entity', 'tag'));
+        }
+
         $tag_item = new PluginTagTagItem();
         $found = $tag_item->find([
             'plugin_tag_tags_id' => $tag_id,
