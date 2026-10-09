@@ -33,6 +33,9 @@ namespace GlpiPlugin\Tag\Tests\Units;
 use DBmysql;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
+use Glpi\Search\SearchOption;
+use Search;
+use Ticket;
 
 final class TagTest extends TagTestCase
 {
@@ -123,6 +126,18 @@ final class TagTest extends TagTestCase
         $this->assertStringContainsString('First tag', $out);
         $this->assertStringContainsString('#abcdef', $out);
         $this->assertStringContainsString('Second tag', $out);
+    }
+
+    public function testSearchWithEntityTagOptionBuildsQuery(): void
+    {
+        $this->login();
+        $this->createTag('Entity tag search');
+        SearchOption::clearSearchOptionCache(Ticket::class);
+
+        $data = Search::getDatas(Ticket::class, ['criteria' => []], [PluginTagTag::S_OPTION + 1]);
+
+        $this->assertArrayHasKey('sql', $data);
+        $this->assertStringContainsString('glpi_plugin_tag_tags', $data['sql']['search']);
     }
 
     public function testUpdateAcceptsScalarTypeMenu(): void
