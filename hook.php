@@ -29,6 +29,7 @@
  */
 
 use Glpi\Cache\CacheManager;
+use Glpi\DBAL\QueryExpression;
 use Glpi\Form\Form;
 use Glpi\Plugin\Hooks;
 
@@ -142,7 +143,7 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                 'usehaving'     => true,
                 'additionalfields' => ['color'],
                 'joinparams'    =>  [
-                    'condition'  => "AND 1=1", // to force distinct complex id than the previous option
+                    'condition'  => [new QueryExpression('true')], // to force distinct complex id than the previous option
                     'beforejoin' => [
                         'table'      => 'glpi_plugin_tag_tagitems',
                         'joinparams' => [
