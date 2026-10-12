@@ -290,6 +290,76 @@ final class TagRuleTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID1);
     }
 
+    public function testAssignTagRuleAction(): void
+    {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+        $tag2 = $this->createTag('Tag2');
+
+        $ticket = $this->createTicket([
+            'name' => 'Older ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+        $this->isItemNotTagged($ticket, $tag2);
+
+        $this->createTagRule($tag2, 'content', 'Updated content', 'assign', RuleTicket::ONUPDATE);
+
+        $this->updateTicket($ticket->getID(), [
+            'content' => 'Updated content',
+        ]);
+
+        $this->isItemNotTagged($ticket, $tag1);
+        $this->isItemTagged($ticket, $tag2);
+    }
+
+    public function testAppendTagRuleAction(): void
+    {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+        $tag2 = $this->createTag('Tag2');
+
+        $ticket = $this->createTicket([
+            'name' => 'Older ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+        $this->isItemNotTagged($ticket, $tag2);
+
+        $this->createTagRule($tag2, 'content', 'Updated content', 'append', RuleTicket::ONUPDATE);
+
+        $this->updateTicket($ticket->getID(), [
+            'content' => 'Updated content',
+        ]);
+
+        $this->isItemTagged($ticket, $tag1);
+        $this->isItemTagged($ticket, $tag2);
+    }
+
+    public function testUpdateWithoutTagInputKeepsTags(): void
+    {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+
+        $ticket = $this->createTicket([
+            'name' => 'Ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+
+        $this->updateTicket($ticket->getID(), [
+            'content' => 'Updated content',
+        ]);
+
+        $this->isItemTagged($ticket, $tag1);
+    }
+
     private function createTagRule(
         int $tagID,
         string $criteria_field = 'name',
