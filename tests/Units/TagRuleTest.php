@@ -305,6 +305,8 @@ final class TagRuleTest extends TagTestCase
         $this->isItemTagged($ticket, $tag1);
         $this->isItemNotTagged($ticket, $tag2);
 
+        $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s', strtotime($_SESSION['glpi_currenttime']) + 60);
+
         $this->createTagRule($tag2, 'content', 'Updated content', 'assign', RuleTicket::ONUPDATE);
 
         $this->updateTicket($ticket->getID(), [
