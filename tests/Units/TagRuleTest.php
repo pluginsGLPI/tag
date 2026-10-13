@@ -39,6 +39,8 @@ use RuleCriteria;
 use RuleTicket;
 use Ticket;
 
+use function Safe\strtotime;
+
 final class TagRuleTest extends TagTestCase
 {
     private const SELF_SERVICE_USER = ['login' => 'post-only', 'pass' => 'postonly'];
@@ -331,6 +333,8 @@ final class TagRuleTest extends TagTestCase
         ]);
         $this->isItemTagged($ticket, $tag1);
         $this->isItemNotTagged($ticket, $tag2);
+
+        $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s', strtotime($_SESSION['glpi_currenttime']) + 60);
 
         $this->createTagRule($tag2, 'content', 'Updated content', 'append', RuleTicket::ONUPDATE);
 
