@@ -506,11 +506,10 @@ SQL;
             return true;
         }
 
-        // Only tags appended by rules: existing tags must be kept
+        // Tags coming only from rules ("assign" or "append") are added to existing ones, like actors in core
         if (
             !isset($item->input["_plugin_tag_tag_process_form"])
             && !isset($item->input["_plugin_tag_tag_values"])
-            && !isset($item->input["_plugin_tag_tag_from_rules"])
         ) {
             $delete_existing_tags = false;
         }
