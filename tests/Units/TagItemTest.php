@@ -30,19 +30,24 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use Computer;
+use Glpi\Exception\Http\AccessDeniedHttpException;
+use GlpiPlugin\Tag\Controller\TagItemController;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
+use Symfony\Component\HttpFoundation\Request;
 use Ticket;
 
 final class TagItemTest extends TagTestCase
 {
+    private const TECH_USER = ['login' => 'tech', 'pass' => 'tech'];
+
     public function testTagsFromTicket(): void
     {
-        $this->login();
+        $this->loginAs(self::TECH_USER);
 
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
-
 
         $ticket = new Ticket();
         $ticket->add([
@@ -90,5 +95,59 @@ final class TagItemTest extends TagTestCase
         $this->assertGreaterThan(0, $ticket->getID());
 
         $this->isItemNotTagged($ticket, $tagID);
+    }
+
+    public function testTagAssociationCreatesLink(): void
+    {
+        $this->loginAs(self::TECH_USER);
+
+        $tag = $this->createTag('MyTag', ['Computer']);
+        $computer = $this->createItem(Computer::class, [
+            'name' => 'Computer to tag',
+            'entities_id' => 0,
+        ]);
+
+        $controller = new TagItemController();
+        $request = Request::create('/plugins/tag/associate', 'POST', [
+            'plugin_tag_tags_id' => $tag,
+            'itemtype'           => Computer::class,
+            'items_id'           => $computer->getID(),
+        ]);
+
+        $controller->associate($request);
+
+        $this->isItemTagged($computer, $tag);
+    }
+
+    //test takes a non-recursive tag associated with _test_child_2 and a computer in _test_child_1. It calls
+    //associate() with these two elements and waits for an exception. It logs in as a superadmin with the root entity
+    //set to recursive, to ensure that it is indeed the entity validation that is causing the block, and not a lack of
+    // permissions.
+    public function testTagAssociationOutOfEntityScopeIsDenied(): void
+    {
+        $this->login();
+        $this->setEntity('_test_root_entity', true);
+
+        $tag = $this->createItem(PluginTagTag::class, [
+            'name' => 'OutOfScopeTag',
+            'is_active' => 1,
+            'type_menu' => ['Computer'],
+            'entities_id' => getItemByTypeName('Entity', '_test_child_2', true),
+            'is_recursive' => 0,
+        ], ['type_menu']);
+        $computer = $this->createItem(Computer::class, [
+            'name' => 'Computer out of tag scope',
+            'entities_id' => getItemByTypeName('Entity', '_test_child_1', true),
+        ]);
+
+        $controller = new TagItemController();
+        $request = Request::create('/plugins/tag/associate', 'POST', [
+            'plugin_tag_tags_id' => $tag->getID(),
+            'itemtype'           => Computer::class,
+            'items_id'           => $computer->getID(),
+        ]);
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $controller->associate($request);
     }
 }
