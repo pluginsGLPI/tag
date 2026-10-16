@@ -33,11 +33,14 @@ namespace GlpiPlugin\Tag\Tests\Units;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use Group;
 use Group_User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Rule;
 use RuleAction;
 use RuleCriteria;
 use RuleTicket;
 use Ticket;
+
+use function Safe\strtotime;
 
 final class TagRuleTest extends TagTestCase
 {
@@ -290,6 +293,159 @@ final class TagRuleTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID1);
     }
 
+    public static function tagRuleActionOnUpdateKeepsExistingTagsProvider(): iterable
+    {
+        yield 'assign' => [
+            'action_type' => 'assign',
+        ];
+
+        yield 'append' => [
+            'action_type' => 'append',
+        ];
+    }
+
+    #[DataProvider('tagRuleActionOnUpdateKeepsExistingTagsProvider')]
+    public function testTagRuleActionOnUpdateKeepsExistingTags(string $action_type): void
+    {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+        $tag2 = $this->createTag('Tag2');
+
+        $ticket = $this->createTicket([
+            'name' => 'Older ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+        $this->isItemNotTagged($ticket, $tag2);
+
+        $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s', strtotime($_SESSION['glpi_currenttime']) + 60);
+
+        $this->createTagRule($tag2, 'content', 'Updated content', $action_type, RuleTicket::ONUPDATE);
+
+        $this->updateTicket($ticket->getID(), [
+            'content' => 'Updated content',
+        ]);
+
+        $this->isItemTagged($ticket, $tag1);
+        $this->isItemTagged($ticket, $tag2);
+    }
+
+    public static function multipleTagRuleActionsOnUpdateProvider(): iterable
+    {
+        yield 'append then append keeps both rule tags' => [
+            'first_action_type'      => 'append',
+            'second_action_type'     => 'append',
+        ];
+
+        yield 'append then assign keeps only the assigned tag' => [
+            'first_action_type'      => 'append',
+            'second_action_type'     => 'assign',
+        ];
+
+        yield 'assign then append keeps both rule tags' => [
+            'first_action_type'      => 'assign',
+            'second_action_type'     => 'append',
+        ];
+
+        yield 'assign then assign keeps only the last assigned tag' => [
+            'first_action_type'      => 'assign',
+            'second_action_type'     => 'assign',
+        ];
+    }
+
+    #[DataProvider('multipleTagRuleActionsOnUpdateProvider')]
+    public function testMultipleTagRuleActionsOnUpdate(
+        string $first_action_type,
+        string $second_action_type,
+    ): void {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+        $tag2 = $this->createTag('Tag2');
+        $tag3 = $this->createTag('Tag3');
+
+        $ticket = $this->createTicket([
+            'name' => 'Older ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+
+        $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s', strtotime($_SESSION['glpi_currenttime']) + 60);
+
+        // "assign" replaces the tags set by previous rule actions, "append" adds to them
+        $rules_id = $this->createTagRule($tag2, 'content', 'Updated content', $first_action_type, RuleTicket::ONUPDATE);
+        $this->createItem(RuleAction::class, [
+            'rules_id'    => $rules_id,
+            'action_type' => $second_action_type,
+            'field'       => '_plugin_tag_tag_from_rules',
+            'value'       => $tag3,
+        ]);
+
+        $this->updateTicket($ticket->getID(), [
+            'content' => 'Updated content',
+        ]);
+
+        $this->isItemTagged($ticket, $tag1);
+        if ($second_action_type === 'append') {
+            $this->isItemTagged($ticket, $tag2);
+        } else {
+            $this->isItemNotTagged($ticket, $tag2);
+        }
+
+        $this->isItemTagged($ticket, $tag3);
+    }
+
+    public function testUpdateWithoutTagInputKeepsTags(): void
+    {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+
+        $ticket = $this->createTicket([
+            'name' => 'Ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+
+        $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s', strtotime($_SESSION['glpi_currenttime']) + 60);
+
+        $this->updateTicket($ticket->getID(), [
+            'content' => 'Updated content',
+        ]);
+
+        $this->isItemTagged($ticket, $tag1);
+    }
+
+    public function testUpdateFromFormRemovesTags(): void
+    {
+        $this->login();
+
+        $tag1 = $this->createTag('Tag1');
+        $tag2 = $this->createTag('Tag2');
+
+        $ticket = $this->createTicket([
+            'name' => 'Ticket',
+            'content' => 'Initial content',
+            '_plugin_tag_tag_values' => [$tag1, $tag2],
+        ]);
+        $this->isItemTagged($ticket, $tag1);
+        $this->isItemTagged($ticket, $tag2);
+
+        $_SESSION['glpi_currenttime'] = date('Y-m-d H:i:s', strtotime($_SESSION['glpi_currenttime']) + 60);
+
+        $this->updateTicket($ticket->getID(), [
+            '_plugin_tag_tag_process_form' => 1,
+            '_plugin_tag_tag_values' => [$tag2],
+        ]);
+
+        $this->isItemNotTagged($ticket, $tag1);
+        $this->isItemTagged($ticket, $tag2);
+    }
+
     private function createTagRule(
         int $tagID,
         string $criteria_field = 'name',
@@ -297,7 +453,7 @@ final class TagRuleTest extends TagTestCase
         string $action_type = 'assign',
         int $condition = RuleTicket::ONADD,
         int $criteria_condition = Rule::PATTERN_CONTAIN,
-    ): void {
+    ): int {
         $rule       = new Rule();
         $criteria   = new RuleCriteria();
         $action     = new RuleAction();
@@ -336,6 +492,8 @@ final class TagRuleTest extends TagTestCase
         $this->assertTrue($rule->getRuleWithCriteriasAndActions($rules_id, true, true));
         $this->assertCount(1, $rule->criterias);
         $this->assertCount(1, $rule->actions);
+
+        return $rules_id;
     }
 
     private function createTicket(array $data): Ticket

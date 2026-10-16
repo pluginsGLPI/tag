@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - CI: fix Psalm cache directory, declare a unique composer autoloader suffix
+- Fix tags from rules not applied on ticket update
 
 ## [2.14.8] - 2026-09-30
 

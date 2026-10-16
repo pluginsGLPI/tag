@@ -475,6 +475,8 @@ SQL;
         if (
             $item->getID()
             && !isset($item->input["_plugin_tag_tag_process_form"])
+            && !isset($item->input["_plugin_tag_tag_from_rules"])
+            && !isset($item->input["_additional_tags_from_rules"])
             && ($item::getType() != Ticket::getType() || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
         ) {
             return true;
@@ -502,6 +504,14 @@ SQL;
             && empty($item->input["_plugin_tag_tag_process_form"])
         ) {
             return true;
+        }
+
+        // Tags coming only from rules ("assign" or "append") are added to existing ones, like actors in core
+        if (
+            !isset($item->input["_plugin_tag_tag_process_form"])
+            && !isset($item->input["_plugin_tag_tag_values"])
+        ) {
+            $delete_existing_tags = false;
         }
 
         // create new values
