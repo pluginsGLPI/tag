@@ -30,15 +30,19 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use Computer;
+use GlpiPlugin\Tag\Controller\TagItemController;
 use GlpiPlugin\Tag\Tests\TagTestCase;
-use PluginTagTag;
+use Symfony\Component\HttpFoundation\Request;
 use Ticket;
 
 final class TagItemTest extends TagTestCase
 {
+    private const TECH_USER = ['login' => 'tech', 'pass' => 'tech'];
+
     public function testTagsFromTicket(): void
     {
-        $this->login();
+        $this->loginAs(self::TECH_USER);
 
         $tagID1 = $this->createTag('TicketTag1');
         $tagID2 = $this->createTag('TicketTag2');
@@ -58,36 +62,25 @@ final class TagItemTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID2);
     }
 
-    public function testTagOutOfEntityScopeIsNotLinked(): void
+    public function testTagAssociationCreatesLink(): void
     {
-        $this->login();
+        $this->loginAs(self::TECH_USER);
 
-        $out_of_scope_entity = getItemByTypeName('Entity', '_test_child_2', true);
-        $tag = new PluginTagTag();
-        $tag->add([
-            'name' => 'OutOfScopeTag',
-            'is_active' => 1,
-            'type_menu' => ['Ticket'],
-            'entities_id' => $out_of_scope_entity,
-            'is_recursive' => 0,
+        $tag = $this->createTag('MyTag', ['Computer']);
+        $computer = $this->createItem(Computer::class, [
+            'name' => 'Computer to tag',
+            'entities_id' => 0,
         ]);
-        $tagID = $tag->getID();
-        $this->assertGreaterThan(0, $tagID);
 
-        $this->setEntity('_test_child_1', false);
-
-        $ticket = new Ticket();
-        $ticket->add([
-            'name' => 'Ticket out of scope tag',
-            'content' => 'Ticket out of scope tag',
-            'entities_id' => getItemByTypeName('Entity', '_test_child_1', true),
-            '_plugin_tag_tag_process_form' => 1,
-            '_plugin_tag_tag_values'   => [
-                $tagID,
-            ],
+        $controller = new TagItemController();
+        $request = Request::create('/plugins/tag/associate', 'POST', [
+            'plugin_tag_tags_id' => $tag,
+            'itemtype'           => Computer::class,
+            'items_id'           => $computer->getID(),
         ]);
-        $this->assertGreaterThan(0, $ticket->getID());
 
-        $this->isItemNotTagged($ticket, $tagID);
+        $controller->associate($request);
+
+        $this->isItemTagged($computer, $tag);
     }
 }

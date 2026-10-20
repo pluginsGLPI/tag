@@ -197,7 +197,7 @@ SQL;
         if ($canedit) {
             echo "<div class='firstbloc'>";
             echo "<form name='tagitem_form{$rand}' id='tagitem_form{$rand}' method='post'
-               action='" . Toolbox::getItemTypeFormURL('PluginTagTag') . "'>";
+               action='" . Toolbox::getItemTypeFormURL('PluginTagTagItem') . "'>";
 
             echo "<table class='tab_cadre_fixe'>";
             echo "<tr class='tab_bg_2'><th colspan='2'>" . __s('Add an item') . "</th></tr>";
@@ -223,7 +223,7 @@ SQL;
             ]);
             echo "</td><td width='20%'>";
             echo sprintf("<input type='hidden' name='plugin_tag_tags_id' value='%s'>", $instID);
-            echo "<input type='submit' name='add' value=\"" . _sx('button', 'Add') . "\" class='btn btn-primary'>";
+            echo "<input type='submit' name='associate' value=\"" . _sx('button', 'Add') . "\" class='btn btn-primary'>";
             echo "</td></tr>";
 
             echo "</table>";
