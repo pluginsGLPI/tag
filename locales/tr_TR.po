@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 01:55+0000\n"
+"POT-Creation-Date: 2026-10-21 02:17+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019-2022,2024-2026\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-plugin-tag/language/tr_TR/)\n"
@@ -22,45 +22,7 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiketler"
 
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiket"
-msgstr[1] "Etiket"
-
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
-msgid "Tag Management"
-msgstr "Etiket yönetimi"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Etiketlerin konumu"
-
-#: inc/tag.class.php:376
-msgid "HTML color"
-msgstr "HTML rengi"
-
-#: inc/tag.class.php:826
-msgid "Invalid color format"
-msgstr "Renk biçimi geçersiz"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Etiket yönetimi"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "Ögenin etiketi varsa"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "Öge etiketlenmişse"
-
-#: ajax/tag.php:45
+#: ajax/tag.php:45 src/Controller/TagItemController.php:67
 msgid "Invalid item type"
 msgstr "Öge türü geçersiz"
 
@@ -76,14 +38,60 @@ msgstr "Etiketler güncellendi"
 msgid "Tags have not been updated"
 msgstr "Etiketler güncellenmedi"
 
-#: ajax/tag.php:67
+#: ajax/tag.php:67 src/Controller/TagItemController.php:58
 msgid "Missing parameters"
 msgstr "Parametreler eksik"
 
-#: hook.php:259 hook.php:390
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "Ögenin etiketi varsa"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "Öge etiketlenmişse"
+
+#: hook.php:127 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
+msgid "Tag Management"
+msgstr "Etiket yönetimi"
+
+#: hook.php:264 hook.php:395
 msgid "Add tags"
 msgstr "Etiket ekle"
 
-#: hook.php:261
+#: hook.php:266
 msgid "Remove tags"
 msgstr "Etiket sil"
+
+#: inc/tag.class.php:51 inc/destinationfield.class.php:44
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiket"
+msgstr[1] "Etiket"
+
+#: inc/tag.class.php:374
+msgid "HTML color"
+msgstr "HTML rengi"
+
+#: inc/tag.class.php:822
+msgid "Invalid color format"
+msgstr "Renk biçimi geçersiz"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Etiketlerin konumu"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Etiket yönetimi"
+
+#: src/Controller/TagItemController.php:63
+msgid "You do not have permission to update this tag"
+msgstr "Bu etiketi güncelleme izniniz yok"
+
+#: src/Controller/TagItemController.php:72
+msgid "You do not have permission to update this item"
+msgstr "Bu ögeyi güncelleme izniniz yok"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 01:55+0000\n"
+"POT-Creation-Date: 2026-10-21 02:17+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Portugal) (http://app.transifex.com/teclib/glpi-plugin-tag/language/pt_PT/)\n"
@@ -21,46 +21,7 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Marcador"
-msgstr[1] "Etiquetas"
-msgstr[2] "Etiquetas"
-
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
-msgid "Tag Management"
-msgstr "Gestão de Etiquetas"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Localização das etiquetas"
-
-#: inc/tag.class.php:376
-msgid "HTML color"
-msgstr "Cor HTML"
-
-#: inc/tag.class.php:826
-msgid "Invalid color format"
-msgstr "Formato de cor inválido"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Gestão de Etiquetas"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "Se o item tem uma etiqueta"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "Se o item está etiquetado"
-
-#: ajax/tag.php:45
+#: ajax/tag.php:45 src/Controller/TagItemController.php:67
 msgid "Invalid item type"
 msgstr "Tipo de item inválido"
 
@@ -76,14 +37,61 @@ msgstr "As etiquetas foram atualizadas"
 msgid "Tags have not been updated"
 msgstr "As etiquetas não foram atualizadas"
 
-#: ajax/tag.php:67
+#: ajax/tag.php:67 src/Controller/TagItemController.php:58
 msgid "Missing parameters"
 msgstr "Parâmetros em falta"
 
-#: hook.php:259 hook.php:390
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "Se o item tem uma etiqueta"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "Se o item está etiquetado"
+
+#: hook.php:127 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
+msgid "Tag Management"
+msgstr "Gestão de Etiquetas"
+
+#: hook.php:264 hook.php:395
 msgid "Add tags"
 msgstr "Adicionar etiquetas"
 
-#: hook.php:261
+#: hook.php:266
 msgid "Remove tags"
 msgstr "Remover etiquetas"
+
+#: inc/tag.class.php:51 inc/destinationfield.class.php:44
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Marcador"
+msgstr[1] "Etiquetas"
+msgstr[2] "Etiquetas"
+
+#: inc/tag.class.php:374
+msgid "HTML color"
+msgstr "Cor HTML"
+
+#: inc/tag.class.php:822
+msgid "Invalid color format"
+msgstr "Formato de cor inválido"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Localização das etiquetas"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Gestão de Etiquetas"
+
+#: src/Controller/TagItemController.php:63
+msgid "You do not have permission to update this tag"
+msgstr ""
+
+#: src/Controller/TagItemController.php:72
+msgid "You do not have permission to update this item"
+msgstr ""

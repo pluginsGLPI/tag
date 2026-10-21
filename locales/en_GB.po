@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 02:16+0000\n"
-"PO-Revision-Date: 2026-09-28 02:16+0000\n"
+"POT-Creation-Date: 2026-10-21 02:17+0000\n"
+"PO-Revision-Date: 2026-10-21 02:17+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -21,45 +21,7 @@ msgstr ""
 msgid "Tags"
 msgstr "Tags"
 
-#: inc/questiontypecategory.class.php:37 inc/destinationfield.class.php:44
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Tag"
-msgstr[1] "Tags"
-
-#: inc/config.class.php:39 inc/config.class.php:58 inc/profile.class.php:35
-#: setup.php:185
-msgid "Tag Management"
-msgstr "Tag Management"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Tags location"
-
-#: inc/tag.class.php:376
-msgid "HTML color"
-msgstr "HTML color"
-
-#: inc/tag.class.php:826
-msgid "Invalid color format"
-msgstr "Invalid color format"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Tag management"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "If the item has a tag"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "If the item is tagged"
-
-#: ajax/tag.php:45
+#: ajax/tag.php:45 src/Controller/TagItemController.php:67
 msgid "Invalid item type"
 msgstr "Invalid item type"
 
@@ -75,14 +37,60 @@ msgstr "Tags have been updated"
 msgid "Tags have not been updated"
 msgstr "Tags have not been updated"
 
-#: ajax/tag.php:67
+#: ajax/tag.php:67 src/Controller/TagItemController.php:58
 msgid "Missing parameters"
 msgstr "Missing parameters"
 
-#: hook.php:259 hook.php:390
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "If the item has a tag"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "If the item is tagged"
+
+#: hook.php:127 inc/config.class.php:39 inc/config.class.php:58
+#: inc/profile.class.php:35
+msgid "Tag Management"
+msgstr "Tag Management"
+
+#: hook.php:264 hook.php:395
 msgid "Add tags"
 msgstr "Add tags"
 
-#: hook.php:261
+#: hook.php:266
 msgid "Remove tags"
 msgstr "Remove tags"
+
+#: inc/tag.class.php:51 inc/destinationfield.class.php:44
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Tag"
+msgstr[1] "Tags"
+
+#: inc/tag.class.php:374
+msgid "HTML color"
+msgstr "HTML color"
+
+#: inc/tag.class.php:822
+msgid "Invalid color format"
+msgstr "Invalid color format"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Tags location"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Tag management"
+
+#: src/Controller/TagItemController.php:63
+msgid "You do not have permission to update this tag"
+msgstr "You do not have permission to update this tag"
+
+#: src/Controller/TagItemController.php:72
+msgid "You do not have permission to update this item"
+msgstr "You do not have permission to update this item"
