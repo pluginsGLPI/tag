@@ -18,16 +18,3 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: "development"
-
-  # Strategy for npm dependencies
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    allow:
-      - dependency-type: "development"
-    open-pull-requests-limit: 100
-    versioning-strategy: "increase"
-    groups:
-      dev-dependencies:
-        dependency-type: "development"
