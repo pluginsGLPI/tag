@@ -64,7 +64,7 @@
 
 {% if show_save_button is defined and show_save_button %}
     {% set tooltip_parts = tooltip_parts|merge([
-        '<button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary"><i class="far fa-save"></i></button>'
+        '<button type="submit" name="save_tag" id="save_tag" class="btn btn-outline-primary" title="' ~ __('Save')|e('html_attr') ~ '" aria-label="' ~ __('Save')|e('html_attr') ~ '"><i class="far fa-save"></i></button>'
     ]) %}
 {% endif %}
 
@@ -113,12 +113,13 @@
                     data: {
                         'itemtype': '{{ itemtype }}',
                         'items_id': {{ items_id }},
-                        '_plugin_tag_tag_values': $('#dropdown__plugin_tag_tag_values{{ rand }}').val(),
+                        '_plugin_tag_tag_values': $('select[data-glpi-plugin-tag-dropdown-uuid="{{ rand }}"]').val(),
                         '_plugin_tag_tag_process_form': 1,
                     }
+                }).done(function () {
+                    displayAjaxMessageAfterRedirect();
+                    window.glpiUnsavedFormChanges = false;
                 });
-                displayAjaxMessageAfterRedirect();
-                window.glpiUnsavedFormChanges = false;
             });
         });
     </script>

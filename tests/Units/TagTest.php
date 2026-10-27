@@ -30,9 +30,16 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use CommonITILObject;
 use DBmysql;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
+use Symfony\Component\DomCrawler\Crawler;
+use Ticket;
+
+use function Safe\ob_get_clean;
+use function Safe\ob_start;
+use function Safe\preg_match;
 
 final class TagTest extends TagTestCase
 {
@@ -145,5 +152,33 @@ final class TagTest extends TagTestCase
         );
 
         $this->assertSame('["Ticket"]', $tag->fields['type_menu']);
+    }
+
+    public function testSaveButtonOnClosedTicketTargetsTagDropdown(): void
+    {
+        $this->loginAs(['login' => 'glpi', 'pass' => 'glpi']);
+
+        $ticket = $this->createItem(Ticket::class, [
+            'name'        => 'Closed ticket',
+            'content'     => 'Closed ticket',
+            'entities_id' => $this->getTestRootEntity(true),
+        ]);
+        $ticket = $this->updateItem(Ticket::class, $ticket->getID(), ['status' => CommonITILObject::CLOSED]);
+
+        ob_start();
+        PluginTagTag::showTagDropdown([
+            'itemtype' => Ticket::class,
+            'id'       => $ticket->getID(),
+        ]);
+        $html = ob_get_clean();
+
+        $crawler = new Crawler($html);
+        $this->assertCount(1, $crawler->filter('#save_tag'));
+
+        // The save button JS must read the values from the rendered tags select
+        $this->assertSame(1, preg_match('/\'_plugin_tag_tag_values\': \$\(\'([^\']+)\'\)\.val\(\)/', $html, $matches));
+        $select = $crawler->filter($matches[1]);
+        $this->assertCount(1, $select);
+        $this->assertSame('_plugin_tag_tag_values[]', $select->attr('name'));
     }
 }
