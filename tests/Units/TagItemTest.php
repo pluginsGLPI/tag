@@ -35,8 +35,12 @@ use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Tag\Controller\TagItemController;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
+use PluginTagTagItem;
 use Symfony\Component\HttpFoundation\Request;
 use Ticket;
+
+use function Safe\ob_get_clean;
+use function Safe\ob_start;
 
 final class TagItemTest extends TagTestCase
 {
@@ -97,6 +101,32 @@ final class TagItemTest extends TagTestCase
         $this->isItemNotTagged($ticket, $tagID);
     }
 
+    public function testShowForTagEncodesLinkedItemValues(): void
+    {
+        $this->login();
+
+        $tagID = $this->createTag('EncodedTag');
+        $raw_name = '<img src=x onerror="alert(1)">';
+
+        $ticket = new Ticket();
+        $ticket->add([
+            'name' => $raw_name,
+            'content' => 'Ticket with markup in name',
+            'entities_id' => getItemByTypeName('Entity', '_test_root_entity', true),
+            '_plugin_tag_tag_process_form' => 1,
+            '_plugin_tag_tag_values'   => [$tagID],
+        ]);
+        $this->isItemTagged($ticket, $tagID);
+
+        $tag = new PluginTagTag();
+        $this->assertTrue($tag->getFromDB($tagID));
+
+        ob_start();
+        PluginTagTagItem::showForTag($tag);
+        $output = ob_get_clean();
+
+        $this->assertStringNotContainsString($raw_name, $output);
+        $this->assertStringContainsString(htmlescape($raw_name), $output);
     public function testTagAssociationCreatesLink(): void
     {
         $this->loginAs(self::TECH_USER);

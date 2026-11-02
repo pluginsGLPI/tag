@@ -371,7 +371,7 @@ SQL;
                         );
                     }
 
-                    $linkname = $data[$column] ?? "";
+                    $linkname = htmlescape($data[$column] ?? "");
 
                     if ($_SESSION["glpiis_ids_visible"] || empty($data[$column])) {
                         $linkname = sprintf(__s('%1$s (%2$s)'), $linkname, $data["id"]);
@@ -441,11 +441,11 @@ SQL;
                         }
                     }
 
-                    echo Dropdown::getDropdownName("glpi_entities", $entity);
+                    echo htmlescape(Dropdown::getDropdownName("glpi_entities", $entity));
 
                     echo "</td>";
-                    echo "<td class='center'>" . (isset($data["serial"]) ? "" . $data["serial"] . "" : "-") . "</td>";
-                    echo "<td class='center'>" . (isset($data["otherserial"]) ? "" . $data["otherserial"] . "" : "-") . "</td>";
+                    echo "<td class='center'>" . (isset($data["serial"]) ? htmlescape($data["serial"]) : "-") . "</td>";
+                    echo "<td class='center'>" . (isset($data["otherserial"]) ? htmlescape($data["otherserial"]) : "-") . "</td>";
                     echo "</tr>";
                 }
             }
