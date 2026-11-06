@@ -35,7 +35,6 @@ namespace GlpiPlugin\Tag\Tests;
 use Glpi\Controller\Form\RendererController;
 use Glpi\Form\Form;
 use Glpi\Tests\FormTesterTrait;
-use GlpiPlugin\Tag\Tests\TagTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 

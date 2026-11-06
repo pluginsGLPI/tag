@@ -48,6 +48,7 @@ $baseline = require $baseline_file;
 $config = $baseline([
     __DIR__ . '/ajax',
     __DIR__ . '/inc',
+    __DIR__ . '/src',
     __DIR__ . '/stubs',
     __DIR__ . '/tests',
 ]);

@@ -35,11 +35,11 @@ use Glpi\Controller\GenericFormController;
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\Exception\Http\BadRequestHttpException;
 use Glpi\Http\RedirectResponse;
+use Glpi\Routing\Attribute\ItemtypeFormRoute;
 use Html;
 use PluginTagTag;
 use PluginTagTagItem;
 use Session;
-use Glpi\Routing\Attribute\ItemtypeFormRoute;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

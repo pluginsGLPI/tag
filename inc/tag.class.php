@@ -814,7 +814,7 @@ SQL;
      * Check that the color field, if provided, is a valid hexadecimal color
      *
      * @param array $input
-     * @return boolean
+     * @return bool
      */
     public function checkColorField($input = [])
     {
@@ -850,7 +850,7 @@ SQL;
      * Check all mandatory field are filled
      *
      * @param array $input
-     * @return boolean
+     * @return bool
      */
     public function checkMandatoryFields($input = [])
     {
@@ -876,7 +876,7 @@ SQL;
     /**
      * Retrieve the current itemtype from the current page url
      *
-     * @return string|boolean false if not itemtype found, the string itemtype if found
+     * @return string|bool false if not itemtype found, the string itemtype if found
      */
     public static function getCurrentItemtype()
     {
