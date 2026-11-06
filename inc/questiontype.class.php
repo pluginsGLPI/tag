@@ -137,7 +137,7 @@ final class PluginTagQuestionType extends AbstractQuestionType implements FormQu
     public function getAvailableTags(?Form $form = null): array
     {
         $active_entities_ids = Session::getActiveEntities();
-        if ($active_entities_ids === [] && $form) {
+        if ($active_entities_ids === [] && $form instanceof Form) {
             $active_entities_ids = [$form->getEntityID()];
         }
 

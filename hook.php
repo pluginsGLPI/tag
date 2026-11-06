@@ -273,7 +273,7 @@ function plugin_tag_MassiveActions($itemtype = '')
 /**
  * Plugin install process
  *
- * @return boolean
+ * @return bool
  */
 function plugin_tag_install()
 {
@@ -309,7 +309,7 @@ function plugin_tag_install()
 /**
  * Plugin uninstall process
  *
- * @return boolean
+ * @return bool
  */
 function plugin_tag_uninstall()
 {

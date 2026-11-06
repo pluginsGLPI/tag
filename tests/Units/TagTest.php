@@ -31,9 +31,9 @@
 namespace GlpiPlugin\Tag\Tests\Units;
 
 use DBmysql;
+use Glpi\Search\SearchOption;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
-use Glpi\Search\SearchOption;
 use Search;
 use Ticket;
 

@@ -152,7 +152,7 @@ SQL;
     /**
      * Display the list of available itemtype
      *
-     * @return boolean
+     * @return bool
      */
     public static function showForTag(PluginTagTag $tag)
     {
@@ -467,7 +467,7 @@ SQL;
      * Add tags to an item
      *
      *
-     * @return boolean
+     * @return bool
      */
     public static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true)
     {
@@ -584,7 +584,7 @@ SQL;
     /**
      * Delete all tags associated to an item
      *
-     * @return boolean
+     * @return bool
      */
     public static function purgeItem(CommonDBTM $item)
     {

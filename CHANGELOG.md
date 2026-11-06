@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix search crash when the "Tags - Entity" column is displayed
 - Fix tag associate item
+- Fix lint by applying GLPI shared coding standards
 
 ## [2.15.0] - 2026-10-06
 
