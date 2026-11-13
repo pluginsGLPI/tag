@@ -127,6 +127,8 @@ final class TagItemTest extends TagTestCase
 
         $this->assertStringNotContainsString($raw_name, $output);
         $this->assertStringContainsString(htmlescape($raw_name), $output);
+    }
+
     public function testTagAssociationCreatesLink(): void
     {
         $this->loginAs(self::TECH_USER);
