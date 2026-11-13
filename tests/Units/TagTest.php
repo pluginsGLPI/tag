@@ -205,8 +205,8 @@ final class TagTest extends TagTestCase
         $tag_id = $this->createTag('Search itemtype tag', ['Computer']);
 
         $prefix = uniqid('tagsearch-');
-        $tagged = $this->createItem(Computer::class, ['name' => "$prefix tagged", 'entities_id' => $entity]);
-        $untagged = $this->createItem(Computer::class, ['name' => "$prefix untagged", 'entities_id' => $entity]);
+        $tagged = $this->createItem(Computer::class, ['name' => $prefix . ' tagged', 'entities_id' => $entity]);
+        $untagged = $this->createItem(Computer::class, ['name' => $prefix . ' untagged', 'entities_id' => $entity]);
         $links = [
             [Computer::class, $tagged->getID()],
             // Another itemtype sharing the untagged computer ID must not match
@@ -233,6 +233,6 @@ final class TagTest extends TagTestCase
         ], [1]);
 
         $names = array_column(array_column($data['data']['rows'], 'raw'), 'ITEM_Computer_1');
-        $this->assertSame(array_map(fn($name) => "$prefix $name", $expected), $names);
+        $this->assertSame(array_map(fn($name) => sprintf('%s %s', $prefix, $name), $expected), $names);
     }
 }
