@@ -282,6 +282,7 @@ SQL;
                     $itemtypes = $CFG_GLPI['plugin_tag_itemtypes'][$data['type_menu']] ?? [];
                     $DB->update($table, ['type_menu' => json_encode($itemtypes)], ['id' => $data['id']]);
                 }
+
                 self::resetActiveTagsItemtypes();
             }
         }
@@ -824,6 +825,7 @@ SQL;
                 self::$available_tags_colors[$available_tags_key][$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
             }
         }
+
         $available_tags_color = self::$available_tags_colors[$available_tags_key];
 
         // Tags linked to the item, ignoring links to tags that no longer exist, in one query (none for a new item)
@@ -941,8 +943,6 @@ SQL;
      * Render a tag badge.
      *
      * @param array $tag_data tag fields, at least `name` and `color`
-     *
-     * @return string
      */
     private static function renderSingleTag(array $tag_data): string
     {

@@ -362,6 +362,7 @@ SQL;
                                 $type_label = $tab["name"] . " : ";
                             }
                         }
+
                         $type_label .= $item->getTypeName(1);
                     }
 
@@ -551,6 +552,7 @@ SQL;
         foreach ($existing_iterator as $existing_tag) {
             $existing_tags_ids[] = $existing_tag['plugin_tag_tags_id'];
         }
+
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
         $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
         if (!Session::isCron()) {

@@ -226,7 +226,7 @@ function plugin_tag_is_plugin_active(string $plugin_key): bool
         return Plugin::isPluginActive($plugin_key);
     }
 
-    return in_array(strtolower($plugin_key), array_map('strtolower', $activated_plugins), true);
+    return in_array(strtolower($plugin_key), array_map(strtolower(...), $activated_plugins), true);
 }
 
 function plugin_tag_geturl(): string
