@@ -235,4 +235,29 @@ final class TagTest extends TagTestCase
         $names = array_column(array_column($data['data']['rows'], 'raw'), 'ITEM_Computer_1');
         $this->assertSame(array_map(fn($name) => sprintf('%s %s', $prefix, $name), $expected), $names);
     }
+
+    public function testShowForItemDisplaysTheTagsFieldOncePerItem(): void
+    {
+        $this->loginAs(['login' => 'glpi', 'pass' => 'glpi']);
+        $this->createTag('OncePerItemTag');
+
+        $ticket = $this->createItem(Ticket::class, [
+            'name'        => 'Ticket with a form hook called twice',
+            'content'     => 'Ticket with a form hook called twice',
+            'entities_id' => $this->getTestRootEntity(true),
+        ]);
+        $other_ticket = Ticket::getById($ticket->getID());
+
+        ob_start();
+        PluginTagTag::showForItem(['item' => $ticket]);
+        PluginTagTag::showForItem(['item' => $ticket]);
+        $same_item_html = ob_get_clean();
+
+        ob_start();
+        PluginTagTag::showForItem(['item' => $other_ticket]);
+        $other_item_html = ob_get_clean();
+
+        $this->assertCount(1, (new Crawler($same_item_html))->filter('select[name="_plugin_tag_tag_values[]"]'));
+        $this->assertCount(1, (new Crawler($other_item_html))->filter('select[name="_plugin_tag_tag_values[]"]'));
+    }
 }

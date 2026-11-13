@@ -32,6 +32,7 @@ namespace GlpiPlugin\Tag\Tests;
 
 use CommonDBTM;
 use Glpi\Tests\DbTestCase;
+use PluginTagConfig;
 use PluginTagTag;
 use PluginTagTagItem;
 use Profile_User;
@@ -39,6 +40,15 @@ use Session;
 
 abstract class TagTestCase extends DbTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // Each test rolls back its transaction: forget what the previous one memoized
+        PluginTagTag::resetActiveTagsItemtypes();
+        PluginTagConfig::resetTagsLocation();
+    }
+
     protected function logOut()
     {
         $ctime = $_SESSION['glpi_currenttime'];

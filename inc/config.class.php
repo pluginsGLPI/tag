@@ -32,6 +32,41 @@ class PluginTagConfig extends CommonDBTM
 {
     protected static $notable = true;
 
+    /**
+     * Configured location of the tags field, memoized for the current request.
+     */
+    private static ?string $tags_location = null;
+
+    /**
+     * Get the configured location of the tags field in item forms.
+     *
+     * @return string '1' for the bottom of the form, '0' for the top (default)
+     */
+    public static function getTagsLocation(): string
+    {
+        return self::$tags_location ??= (string) (Config::getConfigurationValues('plugin:Tag', ['tags_location'])['tags_location'] ?? '0');
+    }
+
+    /**
+     * Forget the memoized location.
+     */
+    public static function resetTagsLocation(): void
+    {
+        self::$tags_location = null;
+    }
+
+    /**
+     * Called by core when the configuration form of the plugin is saved (`config_class` input).
+     *
+     * @param array $input submitted configuration values
+     * @return array
+     */
+    public static function configUpdate($input)
+    {
+        self::resetTagsLocation();
+        return $input;
+    }
+
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
@@ -95,6 +130,7 @@ class PluginTagConfig extends CommonDBTM
     {
         $config = Config::getConfigurationValues('plugin:Tag');
         Config::deleteConfigurationValues('plugin:Tag', array_keys($config));
+        self::resetTagsLocation();
         return true;
     }
 }

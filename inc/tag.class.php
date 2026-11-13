@@ -46,6 +46,27 @@ class PluginTagTag extends CommonDropdown
 
     public static $rightname = 'plugin_tag_tag';
 
+    /**
+     * Itemtypes of the active tags, memoized for the current request.
+     *
+     * @var array{use_global_tag: bool, itemtypes: array<string, true>}|null
+     */
+    private static ?array $active_tags_itemtypes = null;
+
+    /**
+     * Items whose form already displays the tags field in the current request.
+     *
+     * @var WeakMap<CommonDBTM, true>|null
+     */
+    private static ?WeakMap $displayed_items = null;
+
+    /**
+     * Colors of the tags available in the tags field, by search criteria (itemtype and entity restriction), memoized for the current request.
+     *
+     * @var array<string, array<int, string>>
+     */
+    private static array $available_tags_colors = [];
+
     public static function getTypeName($nb = 1)
     {
         return _sn('Tag', 'Tags', $nb, 'tag');
@@ -88,19 +109,81 @@ class PluginTagTag extends CommonDropdown
             return false;
         }
 
-        $tags = new self();
-        $types_menu = [];
+        $active_itemtypes = self::getActiveTagsItemtypes();
+
+        return $active_itemtypes['use_global_tag'] || isset($active_itemtypes['itemtypes'][$itemtype]);
+    }
+
+    /**
+     * Get the itemtypes the active tags apply to, read once per request.
+     *
+     * @return array{use_global_tag: bool, itemtypes: array<string, true>}
+     */
+    private static function getActiveTagsItemtypes(): array
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        if (self::$active_tags_itemtypes !== null) {
+            return self::$active_tags_itemtypes;
+        }
+
+        $itemtypes      = [];
         $use_global_tag = false;
 
-        foreach ($tags->find(['is_active' => 1]) as $tag) {
-            if (!empty($tag['type_menu'])) {
-                $types_menu = array_merge($types_menu, json_decode((string) $tag['type_menu']));
-            } else {
+        $iterator = $DB->request([
+            'SELECT' => ['type_menu'],
+            'FROM'   => self::getTable(),
+            'WHERE'  => ['is_active' => 1],
+        ]);
+        foreach ($iterator as $tag) {
+            if (empty($tag['type_menu'])) {
                 $use_global_tag = true;
+                continue;
+            }
+
+            foreach ((array) json_decode((string) $tag['type_menu'], true) as $tag_itemtype) {
+                // Only itemtype names: nested or malformed values can never match an itemtype
+                if (is_scalar($tag_itemtype)) {
+                    $itemtypes[(string) $tag_itemtype] = true;
+                }
             }
         }
 
-        return $use_global_tag || in_array($itemtype, $types_menu);
+        return self::$active_tags_itemtypes = [
+            'use_global_tag' => $use_global_tag,
+            'itemtypes'      => $itemtypes,
+        ];
+    }
+
+    /**
+     * Forget the itemtypes of the active tags and the tags available in the tags fields.
+     *
+     * Called after a tag is added, updated or purged through PluginTagTag; code writing
+     * `glpi_plugin_tag_tags` directly (migration, tests rolling back a transaction) must call it.
+     */
+    public static function resetActiveTagsItemtypes(): void
+    {
+        self::$active_tags_itemtypes = null;
+        self::$available_tags_colors = [];
+    }
+
+    public function post_addItem()
+    {
+        self::resetActiveTagsItemtypes();
+        parent::post_addItem();
+    }
+
+    public function post_updateItem($history = true)
+    {
+        self::resetActiveTagsItemtypes();
+        parent::post_updateItem($history);
+    }
+
+    public function post_purgeItem()
+    {
+        self::resetActiveTagsItemtypes();
+        parent::post_purgeItem();
     }
 
     public function showForm($ID, $options = [])
@@ -199,6 +282,8 @@ SQL;
                     $itemtypes = $CFG_GLPI['plugin_tag_itemtypes'][$data['type_menu']] ?? [];
                     $DB->update($table, ['type_menu' => json_encode($itemtypes)], ['id' => $data['id']]);
                 }
+
+                self::resetActiveTagsItemtypes();
             }
         }
 
@@ -243,6 +328,8 @@ SQL;
 
         $migration = new Migration(PLUGIN_TAG_VERSION);
         $migration->dropTable(getTableForItemType(self::class));
+
+        self::resetActiveTagsItemtypes();
 
         return true;
     }
@@ -504,11 +591,13 @@ SQL;
      *
      * Depending on the config settings, this will either show at the top or bottom of the forms.
      *
-     * @param  array $params should contains theses keys:
-     *                          - item the CommonDBTM object
+     * @param  array     $params should contains theses keys:
+     *                             - item the CommonDBTM object
+     * @param  bool|null $at_bottom true or false to display the field only when it is configured at the bottom
+     *                             or at the top of the forms, null to display it whatever the configuration
      * @return bool|null False if the form was not shown. Otherwise nothing is returned and the form is displayed.
      */
-    public static function showForItem($params = [])
+    public static function showForItem($params = [], ?bool $at_bottom = null)
     {
         if (!self::canView()) {
             return false;
@@ -521,22 +610,60 @@ SQL;
             $item     = $params['item'];
             $itemtype = $item::class;
 
-            if (self::canItemtype($itemtype)) {
-                // manage values after a redirect (ex ticket creation, after a cat change)
-                $value = '';
-                if (isset($item->input['_plugin_tag_tag_values'])) {
-                    $value = $item->input['_plugin_tag_tag_values'];
-                }
-
-                self::showTagDropdown([
-                    'itemtype' => $itemtype,
-                    'id'       => $item->getId(),
-                    'value'    => $value,
-                ]);
+            if (!self::canItemtype($itemtype)) {
+                return null;
             }
+
+            // Read the configured location only for forms that can show tags
+            if ($at_bottom !== null && (PluginTagConfig::getTagsLocation() === '1') !== $at_bottom) {
+                return null;
+            }
+
+            // A form calling the same hook twice (core template branches, other plugins)
+            // must not get a second tags field with the same input name
+            self::$displayed_items ??= new WeakMap();
+            if (isset(self::$displayed_items[$item])) {
+                return null;
+            }
+
+            self::$displayed_items[$item] = true;
+
+            // manage values after a redirect (ex ticket creation, after a cat change)
+            $value = '';
+            if (isset($item->input['_plugin_tag_tag_values'])) {
+                $value = $item->input['_plugin_tag_tag_values'];
+            }
+
+            self::showTagDropdown([
+                'itemtype' => $itemtype,
+                'id'       => $item->getId(),
+                'value'    => $value,
+            ]);
         }
 
         return null;
+    }
+
+    /**
+     * `pre_item_form` hook: display the tags field when it is configured at the top of the forms.
+     *
+     * @param  array $params see showForItem()
+     * @return bool|null
+     */
+    public static function showForItemAtTop($params = [])
+    {
+        return self::showForItem($params, false);
+    }
+
+    /**
+     * `post_item_form` hook: display the tags field when it is configured at the bottom of the forms.
+     *
+     * @param  array $params see showForItem()
+     * @return bool|null
+     */
+    public static function showForItemAtBottom($params = [])
+    {
+        return self::showForItem($params, true);
     }
 
     /**
@@ -664,8 +791,7 @@ SQL;
 
         $obj = new $itemtype();
 
-        $tag      = new self();
-        $tag_item = new PluginTagTagItem();
+        $tag = new self();
 
         if (isset($params['id'])) {
             $obj->getFromDB($params['id']);
@@ -673,19 +799,6 @@ SQL;
 
         if ($obj->isNewItem()) {
             $obj->getEmpty();
-        }
-
-        $values = [];
-        if (!$obj->isNewItem()) {
-            foreach (
-                $tag_item->find(['items_id' => $params['id'], 'itemtype' => $itemtype]) as $found_item
-            ) {
-                $values[] = $found_item['plugin_tag_tags_id'];
-            }
-        } elseif (is_string($params['value'])) {
-            $values = empty($params['value']) ? [] : explode(',', $params['value']);
-        } elseif (is_array($params['value'])) {
-            $values = $params['value'];
         }
 
         /** @var DBmysql $DB */
@@ -704,26 +817,53 @@ SQL;
             $where += getEntitiesRestrictCriteria('', '', '', true);
         }
 
-        $available_tags = $tag->find($where, 'name');
-        foreach ($available_tags as $tag_data) {
-            $available_tags_color[$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
+        // Several tags fields with the same criteria on one page (item and sub-forms) share the same list
+        $available_tags_key = md5(serialize($where));
+        if (!isset(self::$available_tags_colors[$available_tags_key])) {
+            self::$available_tags_colors[$available_tags_key] = [];
+            foreach ($tag->find($where, 'name') as $tag_data) {
+                self::$available_tags_colors[$available_tags_key][$tag_data['id']] = $tag_data['color'] ?: '#DDDDDD';
+            }
         }
 
+        $available_tags_color = self::$available_tags_colors[$available_tags_key];
+
+        // Tags linked to the item, ignoring links to tags that no longer exist, in one query (none for a new item)
         $selected_tags = [];
-        $select_tags = $tag_item->find(['items_id' => $params['id'], 'itemtype' => $itemtype]);
-        foreach ($select_tags as $tag_item_data) {
-            $tag_data = $tag->getFromDB($tag_item_data['plugin_tag_tags_id']);
-            if ($tag_data) {
+        if (!$obj->isNewItem()) {
+            $selected_iterator = $DB->request([
+                'SELECT'     => [PluginTagTagItem::getTable() . '.plugin_tag_tags_id'],
+                'FROM'       => PluginTagTagItem::getTable(),
+                'INNER JOIN' => [
+                    self::getTable() => [
+                        'FKEY' => [
+                            self::getTable()             => 'id',
+                            PluginTagTagItem::getTable() => 'plugin_tag_tags_id',
+                        ],
+                    ],
+                ],
+                'WHERE'      => [
+                    PluginTagTagItem::getTable() . '.items_id' => $params['id'],
+                    PluginTagTagItem::getTable() . '.itemtype' => $itemtype,
+                ],
+                'ORDERBY'    => PluginTagTagItem::getTable() . '.id',
+            ]);
+            foreach ($selected_iterator as $tag_item_data) {
                 $selected_tags[] = $tag_item_data['plugin_tag_tags_id'];
             }
         }
 
         $rand = mt_rand();
 
-        $can_update_all = array_filter($params['items_ids'], function ($value) use ($obj) {
-            $obj->getFromDB($value);
-            return !$obj->canUpdateItem();
-        }) === [];
+        // Massive action: stop at the first selected item that cannot be updated
+        $can_update_all = true;
+        foreach ($params['items_ids'] as $selected_id) {
+            $obj->getFromDB($selected_id);
+            if (!$obj->canUpdateItem()) {
+                $can_update_all = false;
+                break;
+            }
+        }
 
         $readOnly = !$tag::canUpdate()
             || ($obj->isNewItem() && !$obj->canCreateItem())
@@ -741,13 +881,11 @@ SQL;
             $extra_class = "mb-3";
         }
 
-        $tag_location = Config::getConfigurationValues('plugin:Tag')['tags_location'] ?? 0;
-
         TemplateRenderer::getInstance()->display('@tag/tag_dropdown.html.twig', [
             'extra_class'       => $extra_class ?? '',
             'selected_tags'     => $selected_tags,
             'condition'         => $where,
-            'tags_color'        => $available_tags_color ?? [],
+            'tags_color'        => $available_tags_color,
             'rand'              => $rand,
             'readOnly'          => $readOnly,
             'can_create'        => $can_create,
@@ -761,7 +899,6 @@ SQL;
             'is_form'           => $obj instanceof Form,
             'is_new_item'       => $obj->isNewItem(),
             'tag_search_url'    => self::getSearchURL(),
-            'tag_location'      => $tag_location,
         ]);
     }
 
@@ -773,27 +910,49 @@ SQL;
 
         $out = "";
         if ($entities_id >= 0) {
-            $tag_item = new PluginTagTagItem();
-            foreach ($tag_item->find(['items_id' => $entities_id, 'itemtype' => 'Entity']) as $found_item) {
-                $out .= PluginTagTag::getSingleTag($found_item['plugin_tag_tags_id']);
+            /** @var DBmysql $DB */
+            global $DB;
+
+            // Tags of the entity with their name and color, in one query
+            $iterator = $DB->request([
+                'SELECT'     => [self::getTable() . '.name', self::getTable() . '.color'],
+                'FROM'       => PluginTagTagItem::getTable(),
+                'INNER JOIN' => [
+                    self::getTable() => [
+                        'FKEY' => [
+                            self::getTable()             => 'id',
+                            PluginTagTagItem::getTable() => 'plugin_tag_tags_id',
+                        ],
+                    ],
+                ],
+                'WHERE'      => [
+                    PluginTagTagItem::getTable() . '.items_id' => $entities_id,
+                    PluginTagTagItem::getTable() . '.itemtype' => 'Entity',
+                ],
+                'ORDERBY'    => PluginTagTagItem::getTable() . '.id',
+            ]);
+            foreach ($iterator as $tag_data) {
+                $out .= self::renderSingleTag($tag_data);
             }
         }
 
         return $out;
     }
 
-    public static function getSingleTag($tag_id, $separator = '')
+    /**
+     * Render a tag badge.
+     *
+     * @param array $tag_data tag fields, at least `name` and `color`
+     */
+    private static function renderSingleTag(array $tag_data): string
     {
-        $plugintagtag = new self();
-        $plugintagtag->getFromDB($tag_id);
-
-        $color = $plugintagtag->fields["color"] ?: '#DDDDDD';
+        $color = ($tag_data['color'] ?? '') ?: '#DDDDDD';
         $inv_color = idealTextColor($color);
         $style = sprintf('background-color: %s; color: %s', $color, $inv_color);
 
         return "<span class='select2-search-choice tag_choice'
                     style='padding-left:5px;{$style}'>"
-              . $separator . htmlentities((string) $plugintagtag->fields['name'], ENT_QUOTES, "UTF-8") . '</span>';
+              . htmlentities((string) ($tag_data['name'] ?? ''), ENT_QUOTES, "UTF-8") . '</span>';
     }
 
     public function prepareInputForAdd($input)
