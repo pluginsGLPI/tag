@@ -38,4 +38,7 @@ if (!isset($_REQUEST['name'])) {
     throw new BadRequestHttpException();
 }
 
+// Only reads the session: release its lock so the other calls of the page are not serialized behind this one
+Session::writeClose();
+
 echo PluginTagTag::getTagForEntityName($_REQUEST['name']);

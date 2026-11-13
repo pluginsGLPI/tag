@@ -31,11 +31,14 @@
 namespace GlpiPlugin\Tag\Tests\Units;
 
 use Computer;
+use Dropdown;
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Tag\Controller\TagItemController;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
 use PluginTagTagItem;
+use RuleTicket;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Ticket;
 
@@ -127,6 +130,47 @@ final class TagItemTest extends TagTestCase
 
         $this->assertStringNotContainsString($raw_name, $output);
         $this->assertStringContainsString(htmlescape($raw_name), $output);
+    }
+
+    public function testShowForTagDisplaysEntityOfLinkedRules(): void
+    {
+        global $DB;
+
+        $this->login();
+
+        $tagID = $this->createTag('RuleTag', ['RuleTicket']);
+        $entity_id = getItemByTypeName('Entity', '_test_child_1', true);
+        $rule = $this->createItem(RuleTicket::class, [
+            'name'        => 'Tagged rule',
+            'sub_type'    => RuleTicket::class,
+            'match'       => 'AND',
+            'is_active'   => 1,
+            'entities_id' => $entity_id,
+        ]);
+        // Rules share the glpi_rules table: the entity column is read from it
+        $DB->insert(PluginTagTagItem::getTable(), [
+            'plugin_tag_tags_id' => $tagID,
+            'itemtype'           => RuleTicket::class,
+            'items_id'           => $rule->getID(),
+        ]);
+
+        $tag = new PluginTagTag();
+        $this->assertTrue($tag->getFromDB($tagID));
+
+        ob_start();
+        PluginTagTagItem::showForTag($tag);
+        $output = ob_get_clean();
+
+        $row = (new Crawler($output))->filter('tr')->reduce(
+            fn(Crawler $tr) => str_contains($tr->text(), 'Tagged rule'),
+        );
+        $this->assertCount(1, $row);
+        $this->assertStringContainsString(
+            Dropdown::getDropdownName('glpi_entities', $entity_id),
+            $row->text(),
+        );
+    }
+
     public function testTagAssociationCreatesLink(): void
     {
         $this->loginAs(self::TECH_USER);
