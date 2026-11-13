@@ -31,9 +31,14 @@
 namespace GlpiPlugin\Tag\Tests\Units;
 
 use CommonITILObject;
+use Computer;
 use DBmysql;
 use GlpiPlugin\Tag\Tests\TagTestCase;
+use Phone;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PluginTagTag;
+use PluginTagTagItem;
+use Search;
 use Symfony\Component\DomCrawler\Crawler;
 use Ticket;
 
@@ -180,5 +185,54 @@ final class TagTest extends TagTestCase
         $select = $crawler->filter($matches[1]);
         $this->assertCount(1, $select);
         $this->assertSame('_plugin_tag_tag_values[]', $select->attr('name'));
+    }
+
+    public static function searchOnTagIgnoresOtherItemtypesProvider(): iterable
+    {
+        yield 'equals' => ['equals', true, ['tagged']];
+        yield 'notequals' => ['notequals', true, ['untagged']];
+        yield 'contains' => ['contains', false, ['tagged']];
+    }
+
+    #[DataProvider('searchOnTagIgnoresOtherItemtypesProvider')]
+    public function testSearchOnTagIgnoresOtherItemtypes(string $searchtype, bool $by_id, array $expected): void
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        $this->loginAs(['login' => 'glpi', 'pass' => 'glpi']);
+        $entity = $this->getTestRootEntity(true);
+        $tag_id = $this->createTag('Search itemtype tag', ['Computer']);
+
+        $prefix = uniqid('tagsearch-');
+        $tagged = $this->createItem(Computer::class, ['name' => "$prefix tagged", 'entities_id' => $entity]);
+        $untagged = $this->createItem(Computer::class, ['name' => "$prefix untagged", 'entities_id' => $entity]);
+        $links = [
+            [Computer::class, $tagged->getID()],
+            // Another itemtype sharing the untagged computer ID must not match
+            [Phone::class, $untagged->getID()],
+        ];
+        foreach ($links as [$itemtype, $items_id]) {
+            $DB->insert(PluginTagTagItem::getTable(), [
+                'plugin_tag_tags_id' => $tag_id,
+                'itemtype'           => $itemtype,
+                'items_id'           => $items_id,
+            ]);
+        }
+
+        $data = Search::getDatas(Computer::class, [
+            'criteria' => [
+                ['field' => 1, 'searchtype' => 'contains', 'value' => $prefix],
+                [
+                    'link'       => 'AND',
+                    'field'      => PluginTagTag::S_OPTION,
+                    'searchtype' => $searchtype,
+                    'value'      => $by_id ? $tag_id : 'Search itemtype tag',
+                ],
+            ],
+        ], [1]);
+
+        $names = array_column(array_column($data['data']['rows'], 'raw'), 'ITEM_Computer_1');
+        $this->assertSame(array_map(fn($name) => "$prefix $name", $expected), $names);
     }
 }
