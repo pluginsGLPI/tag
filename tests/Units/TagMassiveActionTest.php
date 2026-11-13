@@ -30,8 +30,10 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+use Computer;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
+use Symfony\Component\DomCrawler\Crawler;
 
 use function Safe\ob_get_clean;
 use function Safe\ob_start;
@@ -98,5 +100,30 @@ final class TagMassiveActionTest extends TagTestCase
 
         $this->assertFalse($handled);
         $this->assertSame('', $html);
+    }
+
+    public function testMassiveActionTagDropdownIsBuiltForTheSelectedItems(): void
+    {
+        $this->login();
+        $this->createTag('MassiveActionTag', ['Computer']);
+        $computer = $this->createItem(Computer::class, [
+            'name'        => 'Computer updated through a massive action',
+            'entities_id' => $this->getTestRootEntity(true),
+        ]);
+
+        ob_start();
+        PluginTagTag::showTagDropdown([
+            'itemtype'  => Computer::class,
+            'items_ids' => [$computer->getID()],
+        ]);
+        $html = ob_get_clean();
+
+        // The rights and the layout come from the selected items (update), not from an empty new item (create)
+        $crawler = new Crawler($html);
+        $select = $crawler->filter('select[name="_plugin_tag_tag_values[]"]');
+        $this->assertCount(1, $select);
+        $this->assertNull($select->attr('disabled'));
+        $this->assertCount(1, $crawler->filter('div.col-xxl-9'));
+        $this->assertCount(0, $crawler->filter('div.col-xxl-12'));
     }
 }

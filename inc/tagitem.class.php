@@ -102,7 +102,8 @@ class PluginTagTagItem extends CommonDBRelation
                     `items_id` INT {$default_key_sign} NOT NULL DEFAULT '1',
                     `itemtype` VARCHAR(255) NOT NULL DEFAULT '',
                     PRIMARY KEY (`id`),
-                    UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`)
+                    UNIQUE INDEX `unicity` (`itemtype`, `items_id`, `plugin_tag_tags_id`),
+                    KEY `plugin_tag_tags_id` (`plugin_tag_tags_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;
 SQL;
             $DB->doQuery($query);
@@ -116,6 +117,8 @@ SQL;
             'unicity',
             'UNIQUE INDEX',
         );
+        // lookups by tag (associated items, tab counter, tag purge) must not scan the whole table
+        $migration->addKey($table, 'plugin_tag_tags_id');
         $migration->migrationOneTable($table);
 
         self::updateRuleActionTable($migration);
@@ -181,18 +184,9 @@ SQL;
             $result[] = $data;
         }
 
-        $it2 = $DB->request([
-            'SELECT' => ['itemtype', 'items_id'],
-            'FROM'   => $table,
-            'WHERE'  => ['plugin_tag_tags_id' => $instID],
-        ]);
-        $result2 = [];
-        foreach ($it2 as $data) {
-            $result2[] = $data;
-        }
-
-        $number = count($result);
-        $rand   = mt_rand();
+        $number       = count($result);
+        $rand         = mt_rand();
+        $entity_names = [];
 
         if ($canedit) {
             echo "<div class='firstbloc'>";
@@ -261,8 +255,6 @@ SQL;
             if (!($item = getItemForItemtype($itemtype))) {
                 continue;
             }
-
-            $item_id = $result2[$i]['items_id'];
 
             if ($item->canView()) {
                 $column = (stripos((string) $itemtype, 'item_device') !== false)
@@ -333,10 +325,8 @@ SQL;
                         break;
                     default:
                         if (is_a($itemtype, CommonDBTM::class, true)) {
-                            $obj = new $itemtype();
-                            $obj->getFromDB($item_id);
-
-                            if (isset($obj->fields['entities_id'])) {
+                            // Read the entity from the item table when it has one, instead of loading an item
+                            if ($DB->fieldExists($itemtable, 'entities_id')) {
                                 $criteria['SELECT'][] = 'glpi_entities.id AS entity';
                                 $criteria['LEFT JOIN'] = [
                                     'glpi_entities' => [
@@ -357,7 +347,24 @@ SQL;
 
                 $linked_iterator = $DB->request($criteria);
 
+                // Type label, the same for every row of this itemtype, computed on the first displayed row
+                $type_label = null;
+
                 foreach ($linked_iterator as $data) {
+                    if ($type_label === null) {
+                        // Show plugin name (is to delete remove any ambiguity)
+                        $type_label = '';
+                        $pieces = preg_split('/(?=[A-Z])/', (string) $itemtype);
+                        if ($pieces[1] == 'Plugin') {
+                            $plugin_name = $pieces[2];
+                            if (function_exists("plugin_version_" . $plugin_name)) { // For security
+                                $tab = call_user_func("plugin_version_" . $plugin_name);
+                                $type_label = $tab["name"] . " : ";
+                            }
+                        }
+                        $type_label .= $item->getTypeName(1);
+                    }
+
                     if ($itemtype == 'Softwarelicense') {
                         $soft = new Software();
                         $soft->getFromDB($data['softwares_id']);
@@ -415,33 +422,21 @@ SQL;
                         echo "</td>";
                     }
 
-                    echo "<td class='center'>";
-
-                    // Show plugin name (is to delete remove any ambiguity) :
-                    $pieces = preg_split('/(?=[A-Z])/', (string) $itemtype);
-                    if ($pieces[1] == 'Plugin') {
-                        $plugin_name = $pieces[2];
-                        if (function_exists("plugin_version_" . $plugin_name)) { // For security
-                            $tab = call_user_func("plugin_version_" . $plugin_name);
-                            echo $tab["name"] . " : ";
-                        }
-                    }
-
-                    echo $item->getTypeName(1) . "</td>";
+                    echo "<td class='center'>" . $type_label . "</td>";
                     echo "<td " . (isset($data['is_deleted']) && $data['is_deleted'] ? "class='tab_bg_2_2'" : "") . ">" . $name . "</td>";
                     echo "<td class='center'>";
 
                     $entity = $data['entity'];
 
-                    //for Plugins :
-                    if ($data["entity"] == -1) {
-                        $item->getFromDB($data['id']);
-                        if (isset($item->fields["entities_id"])) {
-                            $entity = $item->fields["entities_id"];
-                        }
+                    // Rows selected with "-1 AS entity": the row already holds the item columns ($itemtable.*),
+                    // read entities_id from it instead of loading the item
+                    if ($entity == -1 && isset($data['entities_id'])) {
+                        $entity = $data['entities_id'];
                     }
 
-                    echo htmlescape(Dropdown::getDropdownName("glpi_entities", $entity));
+                    // Many linked items share a few entities: resolve each entity name once
+                    $entity_names[$entity] ??= Dropdown::getDropdownName("glpi_entities", $entity);
+                    echo htmlescape($entity_names[$entity]);
 
                     echo "</td>";
                     echo "<td class='center'>" . (isset($data["serial"]) ? htmlescape($data["serial"]) : "-") . "</td>";
@@ -471,6 +466,8 @@ SQL;
      */
     public static function updateItem(CommonDBTM $item, bool $delete_existing_tags = true)
     {
+        /** @var DBmysql $DB */
+        global $DB;
 
         if (
             $item->getID()
@@ -545,10 +542,15 @@ SQL;
         }
 
         // process actions
-        $existing_tags_ids = array_column(
-            $tag_item->find(['items_id' => $item->getID(), 'itemtype' => $item->getType()]),
-            'plugin_tag_tags_id',
-        );
+        $existing_tags_ids = [];
+        $existing_iterator = $DB->request([
+            'SELECT' => ['plugin_tag_tags_id'],
+            'FROM'   => self::getTable(),
+            'WHERE'  => ['items_id' => $item->getID(), 'itemtype' => $item->getType()],
+        ]);
+        foreach ($existing_iterator as $existing_tag) {
+            $existing_tags_ids[] = $existing_tag['plugin_tag_tags_id'];
+        }
         $added_tags_ids   = array_diff($tag_values, $existing_tags_ids);
         $removed_tags_ids = $delete_existing_tags ? array_diff($existing_tags_ids, $tag_values) : [];
         if (!Session::isCron()) {
@@ -564,9 +566,10 @@ SQL;
             ]);
         }
 
-        foreach ($removed_tags_ids as $tag_id) {
+        // unlink all the removed tags with one lookup
+        if ($removed_tags_ids !== []) {
             $tag_item->deleteByCriteria([
-                'plugin_tag_tags_id' => $tag_id,
+                'plugin_tag_tags_id' => array_values($removed_tags_ids),
                 "items_id" => $item->getID(),
                 "itemtype" => $item->getType(),
             ]);

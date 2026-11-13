@@ -63,7 +63,7 @@ function plugin_init_tag()
 
     $PLUGIN_HOOKS['csrf_compliant']['tag'] = true;
 
-    if (Plugin::isPluginActive("tag")) {
+    if (plugin_tag_is_plugin_active("tag")) {
         // define list of itemtype which can be associated with tags
         $CFG_GLPI['plugin_tag_itemtypes'] = [
             __s('Assets')         => [
@@ -88,17 +88,17 @@ function plugin_init_tag()
             $CFG_GLPI['plugin_tag_itemtypes'][__s('Setup')][] = 'Webhook';
         }
 
-        if (Plugin::isPluginActive('appliances')) {
+        if (plugin_tag_is_plugin_active('appliances')) {
             $CFG_GLPI['plugin_tag_itemtypes'][__s('Assets')][] = 'PluginAppliancesAppliance';
         }
 
         // Plugin Webapplication
-        if (Plugin::isPluginActive('webapplications') && class_exists(Webapplication::class)) {
+        if (plugin_tag_is_plugin_active('webapplications') && class_exists(Webapplication::class)) {
             $CFG_GLPI['plugin_tag_itemtypes'][__s('Assets')][] = Webapplication::class;
         }
 
         // Plugin fusioninventory
-        if (Plugin::isPluginActive('fusioninventory')) {
+        if (plugin_tag_is_plugin_active('fusioninventory')) {
             $CFG_GLPI['plugin_tag_itemtypes'][__s('FusionInventory')][] = 'PluginFusioninventoryTask';
         }
 
@@ -112,7 +112,7 @@ function plugin_init_tag()
         $PLUGIN_HOOKS['use_massive_action']['tag'] = true;
 
         // Plugin uninstall : after uninstall action
-        if (Plugin::isPluginActive("uninstall")) {
+        if (plugin_tag_is_plugin_active("uninstall")) {
             //to prevent null global variable load plugin if needed
             if ($UNINSTALL_TYPES == null) {
                 Plugin::load('uninstall');
@@ -123,13 +123,10 @@ function plugin_init_tag()
             }
         }
 
-        // insert tag dropdown into all possible itemtypes
-        $location = Config::getConfigurationValues('plugin:Tag')['tags_location'] ?? 0;
-        if ($location === '1') {
-            $PLUGIN_HOOKS['post_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
-        } else {
-            $PLUGIN_HOOKS['pre_item_form']['tag'] = ['PluginTagTag', 'showForItem'];
-        }
+        // insert tag dropdown into all possible itemtypes, at the top or at the bottom of the form:
+        // the configured location is read only when a form is displayed, not on every request
+        $PLUGIN_HOOKS['pre_item_form']['tag']  = ['PluginTagTag', 'showForItemAtTop'];
+        $PLUGIN_HOOKS['post_item_form']['tag'] = ['PluginTagTag', 'showForItemAtBottom'];
 
         $PLUGIN_HOOKS['pre_kanban_content']['tag'] = ['PluginTagTag', 'preKanbanContent'];
         $common_kanban_filters = [
@@ -211,6 +208,25 @@ function idealTextColor($hexTripletColor)
             + ($components['G'] * 0.587)
             + ($components['B'] * 0.114);
     return (((255 - $bgDelta) < $nThreshold) ? "#000000" : "#ffffff");
+}
+
+/**
+ * Check whether a plugin is active, without querying the database once GLPI has booted its plugins.
+ *
+ * While plugins initialize, `Plugin::isPluginActive()` reads `glpi_plugins` on each call (2 queries).
+ * `Plugin::getPlugins()` holds the plugins booted in the ACTIVATED state, already filtered with
+ * `Plugin::isLoadable()`, and core removes a plugin from it when it is unloaded: it is the state
+ * `isPluginActive()` reads from the database. When no plugin has been booted (contexts that load
+ * plugins without booting them), fall back to `Plugin::isPluginActive()`.
+ */
+function plugin_tag_is_plugin_active(string $plugin_key): bool
+{
+    $activated_plugins = Plugin::getPlugins();
+    if ($activated_plugins === []) {
+        return Plugin::isPluginActive($plugin_key);
+    }
+
+    return in_array(strtolower($plugin_key), array_map('strtolower', $activated_plugins), true);
 }
 
 function plugin_tag_geturl(): string
