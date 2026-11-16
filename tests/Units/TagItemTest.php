@@ -68,6 +68,33 @@ final class TagItemTest extends TagTestCase
         $this->isItemTagged($ticket, $tagID2);
     }
 
+    public function testUpdateTicketWithoutCreationDate(): void
+    {
+        global $DB;
+
+        $this->loginAs(self::TECH_USER);
+
+        $tagID = $this->createTag('LegacyTicketTag');
+
+        $ticket = new Ticket();
+        $ticket->add([
+            'name' => 'Legacy ticket',
+            'content' => 'Legacy ticket',
+            '_plugin_tag_tag_process_form' => 1,
+            '_plugin_tag_tag_values'   => [$tagID],
+        ]);
+        $this->assertGreaterThan(0, $ticket->getID());
+
+        $DB->update(Ticket::getTable(), ['date_creation' => null], ['id' => $ticket->getID()]);
+
+        $this->assertTrue($ticket->update([
+            'id' => $ticket->getID(),
+            'name' => 'Legacy ticket updated',
+        ]));
+
+        $this->isItemTagged($ticket, $tagID);
+    }
+
     public function testTagOutOfEntityScopeIsNotLinked(): void
     {
         $this->login();
@@ -127,6 +154,8 @@ final class TagItemTest extends TagTestCase
 
         $this->assertStringNotContainsString($raw_name, $output);
         $this->assertStringContainsString(htmlescape($raw_name), $output);
+    }
+
     public function testTagAssociationCreatesLink(): void
     {
         $this->loginAs(self::TECH_USER);

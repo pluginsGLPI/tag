@@ -477,7 +477,8 @@ SQL;
             && !isset($item->input["_plugin_tag_tag_process_form"])
             && !isset($item->input["_plugin_tag_tag_from_rules"])
             && !isset($item->input["_additional_tags_from_rules"])
-            && ($item::getType() != Ticket::getType() || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
+            // 'date_creation' is nullable (legacy tickets), empty means not just created
+            && ($item::getType() != Ticket::getType() || empty($item->fields['date_creation']) || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
         ) {
             return true;
         }
