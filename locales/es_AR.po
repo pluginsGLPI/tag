@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 02:17+0000\n"
+"POT-Creation-Date: 2026-11-06 03:56+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Alan Lehoux, 2025-2026\n"
 "Language-Team: Spanish (Argentina) (http://app.transifex.com/teclib/glpi-plugin-tag/language/es_AR/)\n"
@@ -22,9 +22,31 @@ msgstr ""
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: ajax/tag.php:45 src/Controller/TagItemController.php:67
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr "Si el elemento tiene una etiqueta"
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr "Si el elemento está etiquetado"
+
+#: src/Controller/TagItemController.php:58 ajax/tag.php:67
+msgid "Missing parameters"
+msgstr "Faltan parámetros"
+
+#: src/Controller/TagItemController.php:63
+msgid "You do not have permission to update this tag"
+msgstr ""
+
+#: src/Controller/TagItemController.php:67 ajax/tag.php:45
 msgid "Invalid item type"
 msgstr "Tipo de elemento inválido"
+
+#: src/Controller/TagItemController.php:72
+msgid "You do not have permission to update this item"
+msgstr ""
 
 #: ajax/tag.php:50
 msgid "Invalid item"
@@ -37,20 +59,6 @@ msgstr "Las etiquetas han sido actualizadas"
 #: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr "Las etiquetas no han sido actualizadas"
-
-#: ajax/tag.php:67 src/Controller/TagItemController.php:58
-msgid "Missing parameters"
-msgstr "Faltan parámetros"
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr "Si el elemento tiene una etiqueta"
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
-msgstr "Si el elemento está etiquetado"
 
 #: hook.php:127 inc/config.class.php:39 inc/config.class.php:58
 #: inc/profile.class.php:35
@@ -65,21 +73,13 @@ msgstr "Agregar etiquetas"
 msgid "Remove tags"
 msgstr "Quitar etiquetas"
 
-#: inc/tag.class.php:51 inc/destinationfield.class.php:44
-#: inc/questiontypecategory.class.php:37
+#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiqueta"
 msgstr[1] "Etiquetas"
 msgstr[2] "Etiquetas"
-
-#: inc/tag.class.php:374
-msgid "HTML color"
-msgstr "Color HTML"
-
-#: inc/tag.class.php:822
-msgid "Invalid color format"
-msgstr "Formato de color inválido"
 
 #: inc/config.class.php:59
 msgid "Tags location"
@@ -89,10 +89,10 @@ msgstr "Ubicación de etiquetas"
 msgid "Tag management"
 msgstr "Gestión de etiquetas"
 
-#: src/Controller/TagItemController.php:63
-msgid "You do not have permission to update this tag"
-msgstr ""
+#: inc/tag.class.php:374
+msgid "HTML color"
+msgstr "Color HTML"
 
-#: src/Controller/TagItemController.php:72
-msgid "You do not have permission to update this item"
-msgstr ""
+#: inc/tag.class.php:822
+msgid "Invalid color format"
+msgstr "Formato de color inválido"
