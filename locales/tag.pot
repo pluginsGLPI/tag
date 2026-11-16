@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 02:17+0000\n"
+"POT-Creation-Date: 2026-11-16 03:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,30 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: ajax/tag.php:45 src/Controller/TagItemController.php:67
+#: setup.php:137
+msgctxt "filters"
+msgid "If the item has a tag"
+msgstr ""
+
+#: setup.php:141
+msgctxt "filters"
+msgid "If the item is tagged"
+msgstr ""
+
+#: src/Controller/TagItemController.php:58 ajax/tag.php:67
+msgid "Missing parameters"
+msgstr ""
+
+#: src/Controller/TagItemController.php:63
+msgid "You do not have permission to update this tag"
+msgstr ""
+
+#: src/Controller/TagItemController.php:67 ajax/tag.php:45
 msgid "Invalid item type"
+msgstr ""
+
+#: src/Controller/TagItemController.php:72
+msgid "You do not have permission to update this item"
 msgstr ""
 
 #: ajax/tag.php:50
@@ -36,20 +58,6 @@ msgstr ""
 
 #: ajax/tag.php:64
 msgid "Tags have not been updated"
-msgstr ""
-
-#: ajax/tag.php:67 src/Controller/TagItemController.php:58
-msgid "Missing parameters"
-msgstr ""
-
-#: setup.php:137
-msgctxt "filters"
-msgid "If the item has a tag"
-msgstr ""
-
-#: setup.php:141
-msgctxt "filters"
-msgid "If the item is tagged"
 msgstr ""
 
 #: hook.php:127 inc/config.class.php:39 inc/config.class.php:58
@@ -65,20 +73,12 @@ msgstr ""
 msgid "Remove tags"
 msgstr ""
 
-#: inc/tag.class.php:51 inc/destinationfield.class.php:44
-#: inc/questiontypecategory.class.php:37
+#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
+#: inc/tag.class.php:51
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
-
-#: inc/tag.class.php:374
-msgid "HTML color"
-msgstr ""
-
-#: inc/tag.class.php:822
-msgid "Invalid color format"
-msgstr ""
 
 #: inc/config.class.php:59
 msgid "Tags location"
@@ -88,10 +88,10 @@ msgstr ""
 msgid "Tag management"
 msgstr ""
 
-#: src/Controller/TagItemController.php:63
-msgid "You do not have permission to update this tag"
+#: inc/tag.class.php:374
+msgid "HTML color"
 msgstr ""
 
-#: src/Controller/TagItemController.php:72
-msgid "You do not have permission to update this item"
+#: inc/tag.class.php:822
+msgid "Invalid color format"
 msgstr ""
