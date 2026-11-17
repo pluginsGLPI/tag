@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Migrate config form to Twig template
+
 ### Added
 
 - Add Transifex translations link to README
