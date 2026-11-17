@@ -187,6 +187,7 @@ function plugin_version_tag()
         'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
         'homepage'       => 'https://github.com/pluginsGLPI/tag',
         'license'        => '<a href="' . plugin_tag_geturl() . '/LICENSE" target="_blank">GPLv2+</a>',
+        'csp_compliant' => true,
         'requirements'   => [
             'glpi' => [
                 'min' => PLUGIN_TAG_MIN_GLPI,
