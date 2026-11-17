@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix tags from rules not applied on ticket update
 - Fix tags being removed when saving them on a closed ticket
 - Fix tag search criterion matching items of other types sharing the same ID
+- Fix error when updating a ticket without creation date (e.g. entity transfer)
 
 ## [2.14.8] - 2026-09-30
 
