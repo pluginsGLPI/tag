@@ -475,7 +475,8 @@ SQL;
         if (
             $item->getID()
             && !isset($item->input["_plugin_tag_tag_process_form"])
-            && ($item::class != Ticket::class || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
+            // 'date_creation' is nullable (legacy tickets), empty means not just created
+            && ($item::class != Ticket::class || empty($item->fields['date_creation']) || abs(strtotime((string) $item->fields['date_creation']) - strtotime((string) $_SESSION['glpi_currenttime'])) >= 5)
         ) {
             return true;
         }
