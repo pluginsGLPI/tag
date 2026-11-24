@@ -175,9 +175,9 @@ final class TagTest extends TagTestCase
         $crawler = new Crawler($html);
         $this->assertCount(1, $crawler->filter('#save_tag'));
 
-        // The save button JS must read the values from the rendered tags select
-        $this->assertSame(1, preg_match('/\'_plugin_tag_tag_values\': \$\(\'([^\']+)\'\)\.val\(\)/', $html, $matches));
-        $select = $crawler->filter($matches[1]);
+        // The save button JS reads the values from the tags select matching its dropdown uuid
+        $uuid = $crawler->filter('#save_tag')->attr('data-tag-dropdown-uuid');
+        $select = $crawler->filter('select[data-glpi-plugin-tag-dropdown-uuid="' . $uuid . '"]');
         $this->assertCount(1, $select);
         $this->assertSame('_plugin_tag_tag_values[]', $select->attr('name'));
     }
