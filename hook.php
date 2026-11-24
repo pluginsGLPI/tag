@@ -108,6 +108,8 @@ function plugin_tag_getAddSearchOptionsNew($itemtype)
                 'joinparams' => [
                     'jointype' => 'itemtype_item',
                     'specific_itemtype' => $itemtype,
+                    // Also applied by the core in the `use_subquery` WHERE clause, which ignores `specific_itemtype`
+                    'condition' => ['NEWTABLE.itemtype' => $itemtype],
                     'beforejoin' => [
                         'table' => getTableForItemType($itemtype),
                     ],
