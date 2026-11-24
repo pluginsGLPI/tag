@@ -26,6 +26,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - CI: fix Psalm cache directory, declare a unique composer autoloader suffix
+<<<<<<< HEAD
+=======
+- Fix tags from rules not applied on ticket update
+- Fix tags being removed when saving them on a closed ticket
+- Fix tag search criterion matching items of other types sharing the same ID
+>>>>>>> 4f80737 (FIX / Tag search criterion matching items of other types (#403))
 - Fix error when updating a ticket without creation date (e.g. entity transfer)
 
 ## [2.14.8] - 2026-09-30
