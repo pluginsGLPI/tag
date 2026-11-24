@@ -91,4 +91,4 @@
 ) }}
 
 <span data-tag-colorizer data-tag-dropdown-uuid="{{ rand }}" data-tag-colors="{{ tags_color|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP')) }}" style="display: none;" aria-hidden="true"></span>
-{{ call('Html::script', ['/plugins/tag/js/dropdown_init.js', {}, false])|raw }}
+{{ call('Html::script', ['/plugins/tag/js/dropdown_init.js', {'version': constant('PLUGIN_TAG_VERSION')}, false])|raw }}
