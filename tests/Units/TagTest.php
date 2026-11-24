@@ -39,7 +39,6 @@ use Ticket;
 
 use function Safe\ob_get_clean;
 use function Safe\ob_start;
-use function Safe\preg_match;
 
 final class TagTest extends TagTestCase
 {
