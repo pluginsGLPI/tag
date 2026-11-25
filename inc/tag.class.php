@@ -846,7 +846,7 @@ SQL;
                     PluginTagTagItem::getTable() . '.items_id' => $params['id'],
                     PluginTagTagItem::getTable() . '.itemtype' => $itemtype,
                 ],
-                'ORDERBY'    => PluginTagTagItem::getTable() . '.id',
+                'ORDERBY'    => PluginTagTagItem::getTable() . '.plugin_tag_tags_id',
             ]);
             foreach ($selected_iterator as $tag_item_data) {
                 $selected_tags[] = $tag_item_data['plugin_tag_tags_id'];
@@ -929,7 +929,7 @@ SQL;
                     PluginTagTagItem::getTable() . '.items_id' => $entities_id,
                     PluginTagTagItem::getTable() . '.itemtype' => 'Entity',
                 ],
-                'ORDERBY'    => PluginTagTagItem::getTable() . '.id',
+                'ORDERBY'    => PluginTagTagItem::getTable() . '.plugin_tag_tags_id',
             ]);
             foreach ($iterator as $tag_data) {
                 $out .= self::renderSingleTag($tag_data);
