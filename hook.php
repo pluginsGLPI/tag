@@ -252,6 +252,20 @@ function plugin_tag_getDropdown()
 }
 
 /**
+ * Declare foreign keys to core tables, so that core usage checks and replacements take them into account
+ *
+ * @return array
+ */
+function plugin_tag_getDatabaseRelations()
+{
+    return [
+        'glpi_entities' => [
+            'glpi_plugin_tag_tags' => 'entities_id',
+        ],
+    ];
+}
+
+/**
  * Define massive actions for other itemtype
  *
  * @param  string $itemtype

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix tags being removed when saving them on a closed ticket
 - Fix tag search criterion matching items of other types sharing the same ID
 - Fix error when updating a ticket without creation date (e.g. entity transfer)
+- Fix tags left in a deleted entity: declare their entity relation so it is checked and replaced on entity deletion
 
 ## [2.14.8] - 2026-09-30
 
