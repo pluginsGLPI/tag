@@ -29,7 +29,8 @@
 (function () {
     'use strict';
 
-    // Loaded once per page through ADD_JAVASCRIPT (setup.php); dropdown_init.js calls initMarkers().
+    // Loaded once per page through ADD_JAVASCRIPT (setup.php), in the page footer.
+    // dropdown_init.js handles markers inserted later (AJAX); markers already in the page are handled below.
     window.PluginTagDropdown = {
         colorize: function (marker, $container) {
             var colors = JSON.parse(marker.getAttribute('data-tag-colors'));
@@ -45,6 +46,9 @@
             });
         }
     };
+
+    // Markers rendered inline before the footer (e.g. /Form/Render) ran dropdown_init.js before this file existed.
+    window.PluginTagDropdown.initMarkers(document);
 
     $(document).on('glpi-form-editor-question-type-changed', function (event, question, type) {
         if (type !== 'PluginTagQuestionType') {

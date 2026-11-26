@@ -26,4 +26,4 @@
  * -------------------------------------------------------------------------
  */
 
-PluginTagDropdown.initMarkers(document);
+window.PluginTagDropdown?.initMarkers(document);
