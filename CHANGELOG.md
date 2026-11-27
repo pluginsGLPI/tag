@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - CI: fix Psalm cache directory, declare a unique composer autoloader suffix
 - Fix error when updating a ticket without creation date (e.g. entity transfer)
+- Fix tags left in a deleted entity: declare their entity relation so it is checked and replaced on entity deletion
 
 ## [2.14.8] - 2026-09-30
 
