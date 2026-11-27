@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix tags being removed when saving them on a closed ticket
 - Fix tag search criterion matching items of other types sharing the same ID
 - Fix error when updating a ticket without creation date (e.g. entity transfer)
+- Improve performance: no more database queries on each page load, fewer queries when displaying an item with many tags, faster "Associated items" tab of a tag (new index on the tag of the links), lighter entity tags and tag save requests
 
 ## [2.14.8] - 2026-09-30
 
