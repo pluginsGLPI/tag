@@ -156,6 +156,7 @@ function plugin_init_tag()
         // add needed javascript & css files
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/common.js';
         $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/kanban.js';
+        $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/dropdown.js';
         $PLUGIN_HOOKS[Hooks::ADD_CSS]['tag'][]        = 'css/tag.css';
         if (Session::isMultiEntitiesMode() && Session::haveRight(PluginTagTag::$rightname, READ)) {
             $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['tag'][] = 'js/entity.js';
@@ -187,6 +188,7 @@ function plugin_version_tag()
         'author'         => '<a href="http://www.teclib.com">Teclib\'</a> - Infotel conseil',
         'homepage'       => 'https://github.com/pluginsGLPI/tag',
         'license'        => '<a href="' . plugin_tag_geturl() . '/LICENSE" target="_blank">GPLv2+</a>',
+        'csp_compliant' => true,
         'requirements'   => [
             'glpi' => [
                 'min' => PLUGIN_TAG_MIN_GLPI,
