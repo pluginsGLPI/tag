@@ -30,11 +30,24 @@
 
 namespace GlpiPlugin\Tag\Tests\Units;
 
+<<<<<<< HEAD
+=======
+use CommonITILObject;
+use Computer;
+>>>>>>> 4f80737 (FIX / Tag search criterion matching items of other types (#403))
 use DBmysql;
 use Glpi\Search\SearchOption;
 use GlpiPlugin\Tag\Tests\TagTestCase;
+use Phone;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PluginTagTag;
+<<<<<<< HEAD
 use Search;
+=======
+use PluginTagTagItem;
+use Search;
+use Symfony\Component\DomCrawler\Crawler;
+>>>>>>> 4f80737 (FIX / Tag search criterion matching items of other types (#403))
 use Ticket;
 
 final class TagTest extends TagTestCase
@@ -161,4 +174,84 @@ final class TagTest extends TagTestCase
 
         $this->assertSame('["Ticket"]', $tag->fields['type_menu']);
     }
+<<<<<<< HEAD
+=======
+
+    public function testSaveButtonOnClosedTicketTargetsTagDropdown(): void
+    {
+        $this->loginAs(['login' => 'glpi', 'pass' => 'glpi']);
+
+        $ticket = $this->createItem(Ticket::class, [
+            'name'        => 'Closed ticket',
+            'content'     => 'Closed ticket',
+            'entities_id' => $this->getTestRootEntity(true),
+        ]);
+        $ticket = $this->updateItem(Ticket::class, $ticket->getID(), ['status' => CommonITILObject::CLOSED]);
+
+        ob_start();
+        PluginTagTag::showTagDropdown([
+            'itemtype' => Ticket::class,
+            'id'       => $ticket->getID(),
+        ]);
+        $html = ob_get_clean();
+
+        $crawler = new Crawler($html);
+        $this->assertCount(1, $crawler->filter('#save_tag'));
+
+        // The save button JS must read the values from the rendered tags select
+        $this->assertSame(1, preg_match('/\'_plugin_tag_tag_values\': \$\(\'([^\']+)\'\)\.val\(\)/', $html, $matches));
+        $select = $crawler->filter($matches[1]);
+        $this->assertCount(1, $select);
+        $this->assertSame('_plugin_tag_tag_values[]', $select->attr('name'));
+    }
+
+    public static function searchOnTagIgnoresOtherItemtypesProvider(): iterable
+    {
+        yield 'equals' => ['equals', true, ['tagged']];
+        yield 'notequals' => ['notequals', true, ['untagged']];
+        yield 'contains' => ['contains', false, ['tagged']];
+    }
+
+    #[DataProvider('searchOnTagIgnoresOtherItemtypesProvider')]
+    public function testSearchOnTagIgnoresOtherItemtypes(string $searchtype, bool $by_id, array $expected): void
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        $this->loginAs(['login' => 'glpi', 'pass' => 'glpi']);
+        $entity = $this->getTestRootEntity(true);
+        $tag_id = $this->createTag('Search itemtype tag', ['Computer']);
+
+        $prefix = uniqid('tagsearch-');
+        $tagged = $this->createItem(Computer::class, ['name' => $prefix . ' tagged', 'entities_id' => $entity]);
+        $untagged = $this->createItem(Computer::class, ['name' => $prefix . ' untagged', 'entities_id' => $entity]);
+        $links = [
+            [Computer::class, $tagged->getID()],
+            // Another itemtype sharing the untagged computer ID must not match
+            [Phone::class, $untagged->getID()],
+        ];
+        foreach ($links as [$itemtype, $items_id]) {
+            $DB->insert(PluginTagTagItem::getTable(), [
+                'plugin_tag_tags_id' => $tag_id,
+                'itemtype'           => $itemtype,
+                'items_id'           => $items_id,
+            ]);
+        }
+
+        $data = Search::getDatas(Computer::class, [
+            'criteria' => [
+                ['field' => 1, 'searchtype' => 'contains', 'value' => $prefix],
+                [
+                    'link'       => 'AND',
+                    'field'      => PluginTagTag::S_OPTION,
+                    'searchtype' => $searchtype,
+                    'value'      => $by_id ? $tag_id : 'Search itemtype tag',
+                ],
+            ],
+        ], [1]);
+
+        $names = array_column(array_column($data['data']['rows'], 'raw'), 'ITEM_Computer_1');
+        $this->assertSame(array_map(fn($name) => sprintf('%s %s', $prefix, $name), $expected), $names);
+    }
+>>>>>>> 4f80737 (FIX / Tag search criterion matching items of other types (#403))
 }
