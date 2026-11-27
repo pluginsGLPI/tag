@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Tag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 03:56+0000\n"
+"POT-Creation-Date: 2026-11-27 05:38+0000\n"
 "PO-Revision-Date: 2015-09-18 12:56+0000\n"
 "Last-Translator: Edwin Elias Alvarez <elias986@yahoo.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (http://app.transifex.com/teclib/glpi-plugin-tag/language/es_MX/)\n"
@@ -33,6 +33,35 @@ msgctxt "filters"
 msgid "If the item is tagged"
 msgstr "Si el elemento está etiquetado"
 
+#: inc/destinationfield.class.php:44 inc/tag.class.php:51
+#: inc/questiontypecategory.class.php:37
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiquetas"
+msgstr[2] "Etiquetas"
+
+#: inc/profile.class.php:35 inc/config.class.php:39 inc/config.class.php:58
+#: hook.php:127
+msgid "Tag Management"
+msgstr "Administración de etiquetas"
+
+#: inc/profile.class.php:68
+msgid "Tag management"
+msgstr "Gestión de etiquetas"
+
+#: inc/tag.class.php:374
+msgid "HTML color"
+msgstr "Color HTML"
+
+#: inc/tag.class.php:822
+msgid "Invalid color format"
+msgstr "Formato de color no válido"
+
+#: inc/config.class.php:59
+msgid "Tags location"
+msgstr "Ubicación de etiquetas"
+
 #: src/Controller/TagItemController.php:58 ajax/tag.php:67
 msgid "Missing parameters"
 msgstr "Faltan parámetros"
@@ -49,6 +78,14 @@ msgstr "Tipo de elemento no válido"
 msgid "You do not have permission to update this item"
 msgstr "No tienes permiso para actualizar este elemento."
 
+#: hook.php:264 hook.php:395
+msgid "Add tags"
+msgstr "Agregar etiquetas"
+
+#: hook.php:266
+msgid "Remove tags"
+msgstr "Eliminar etiquetas"
+
 #: ajax/tag.php:50
 msgid "Invalid item"
 msgstr "Artículo no válido"
@@ -60,40 +97,3 @@ msgstr "Se han actualizado las etiquetas"
 #: ajax/tag.php:64
 msgid "Tags have not been updated"
 msgstr "No se actualizaron las etiquetas"
-
-#: hook.php:127 inc/config.class.php:39 inc/config.class.php:58
-#: inc/profile.class.php:35
-msgid "Tag Management"
-msgstr "Administración de etiquetas"
-
-#: hook.php:264 hook.php:395
-msgid "Add tags"
-msgstr "Agregar etiquetas"
-
-#: hook.php:266
-msgid "Remove tags"
-msgstr "Eliminar etiquetas"
-
-#: inc/destinationfield.class.php:44 inc/questiontypecategory.class.php:37
-#: inc/tag.class.php:51
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiqueta"
-msgstr[1] "Etiquetas"
-msgstr[2] "Etiquetas"
-
-#: inc/config.class.php:59
-msgid "Tags location"
-msgstr "Ubicación de etiquetas"
-
-#: inc/profile.class.php:68
-msgid "Tag management"
-msgstr "Gestión de etiquetas"
-
-#: inc/tag.class.php:374
-msgid "HTML color"
-msgstr "Color HTML"
-
-#: inc/tag.class.php:822
-msgid "Invalid color format"
-msgstr "Formato de color no válido"
