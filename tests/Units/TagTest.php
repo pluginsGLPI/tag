@@ -31,6 +31,7 @@
 namespace GlpiPlugin\Tag\Tests\Units;
 
 use DBmysql;
+use Entity;
 use Glpi\Search\SearchOption;
 use GlpiPlugin\Tag\Tests\TagTestCase;
 use PluginTagTag;
@@ -160,5 +161,26 @@ final class TagTest extends TagTestCase
         );
 
         $this->assertSame('["Ticket"]', $tag->fields['type_menu']);
+    }
+
+    public function testTagIsMovedWhenItsEntityIsReplaced(): void
+    {
+        $this->login();
+        $root_id = getItemByTypeName(Entity::class, '_test_root_entity', true);
+
+        $entity = $this->createItem(Entity::class, [
+            'name'        => __FUNCTION__,
+            'entities_id' => $root_id,
+        ]);
+        $tag = $this->createItem(PluginTagTag::class, [
+            'name'        => __FUNCTION__,
+            'entities_id' => $entity->getID(),
+        ]);
+
+        $this->assertTrue($entity->isUsed());
+
+        $this->assertTrue($entity->delete(['id' => $entity->getID(), '_replace_by' => $root_id], true));
+        $this->assertTrue($tag->getFromDB($tag->getID()));
+        $this->assertSame($root_id, $tag->fields['entities_id']);
     }
 }
